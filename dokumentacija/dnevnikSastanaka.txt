@@ -1,0 +1,17 @@
+DNEVNIK SASTANAKA
+
+1. sastanak (07/10/2020 - FER):
+    - Upoznavanje članova tima
+    - Dogovor o tehnologijama => Postgres - Spring - React
+    - Dogovor o prijedlogu drugog projektnog zadatka - odbijeno
+
+2. sastanak (15/10/2020 - FER):
+    - Razgovor o funkcionalnim zahtjevima sustava i arhitekturi
+       => ostala su nam pitanja pa smo ih postavili klijentu? (tj Ivana Cepetić)
+
+3. sastanak (19/10/2020 - Teams):
+    - Definiranje organizacije baze podataka
+    - Dogovor o raspodjeli poslova
+
+4. sastanak (22/10/2020 - Teams):
+    - Ivana i Luka su sudjelovali => razgovor o optimalnoj organizaciji baze podataka
