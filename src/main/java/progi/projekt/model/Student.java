@@ -1,14 +1,15 @@
 package progi.projekt.model;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table
 public class Student {
     @Id
     @Column(name = "id_student")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     // sekundarni ključ
     @Column(nullable = false, name = "korisnicko_ime")

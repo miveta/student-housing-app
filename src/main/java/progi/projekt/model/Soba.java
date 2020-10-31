@@ -4,13 +4,14 @@ import progi.projekt.model.enums.BrojKreveta;
 import progi.projekt.model.enums.TipKupaonice;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 public class Soba {
     @Id
     @Column(name = "id_soba")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     private int broj;
     private int kat;
