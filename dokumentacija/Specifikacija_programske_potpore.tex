@@ -1,119 +1,276 @@
 \chapter{Specifikacija programske potpore}
-		
-	\section{Funkcionalni zahtjevi}
-			
-			\textbf{\textit{dio 1. revizije}}\\
-			
-			\textit{Navesti \textbf{dionike} koji imaju \textbf{interes u ovom sustavu} ili  \textbf{su nositelji odgovornosti}. To su prije svega korisnici, ali i administratori sustava, naručitelji, razvojni tim.}\\
-				
-			\textit{Navesti \textbf{aktore} koji izravno \textbf{koriste} ili \textbf{komuniciraju sa sustavom}. Oni mogu imati inicijatorsku ulogu, tj. započinju određene procese u sustavu ili samo sudioničku ulogu, tj. obavljaju određeni posao. Za svakog aktora navesti funkcionalne zahtjeve koji se na njega odnose.}\\
-			
-			
-			\noindent \textbf{Dionici:}
-			
-			\begin{packed_enum}
-				
-				\item Dionik 1
-				\item Dionik 2				
-				\item ...
-				
-			\end{packed_enum}
-			
-			\noindent \textbf{Aktori i njihovi funkcionalni zahtjevi:}
-			
-			
-			\begin{packed_enum}
-				\item  \underbar{Aktor 1 (inicijator) može:}
-				
-				\begin{packed_enum}
-					
-					\item funkcionalnost 1
-					\item funkcionalnost 2
-					\begin{packed_enum}
-						
-						\item  podfunkcionalnost 1 
-						\item  podfunkcionalnost 2
-				
-					\end{packed_enum}
-					\item  funkcionalnost 3
-					
-				\end{packed_enum}
-			
-				\item  \underbar{Aktor 2 (sudionik) može:}
-				
-				\begin{packed_enum}
-					
-					\item funkcionalnost 1
-					\item funkcionalnost 2
-					
-				\end{packed_enum}
-			\end{packed_enum}
-			
-			\eject 
-			
-			
-				
-			\subsection{Obrasci uporabe}
-				
-				\textbf{\textit{dio 1. revizije}}
-				
-				\subsubsection{Opis obrazaca uporabe}
-					\textit{Funkcionalne zahtjeve razraditi u obliku obrazaca uporabe. Svaki obrazac je potrebno razraditi prema donjem predlošku. Ukoliko u nekom koraku može doći do odstupanja, potrebno je to odstupanje opisati i po mogućnosti ponuditi rješenje kojim bi se tijek obrasca vratio na osnovni tijek.}\\
-					
 
-					\noindent \underbar{\textbf{UC$<$broj obrasca$>$ -$<$ime obrasca$>$}}
-					\begin{packed_item}
-	
-						\item \textbf{Glavni sudionik: }$<$sudionik$>$
-						\item  \textbf{Cilj:} $<$cilj$>$
-						\item  \textbf{Sudionici:} $<$sudionici$>$
-						\item  \textbf{Preduvjet:} $<$preduvjet$>$
-						\item  \textbf{Opis osnovnog tijeka:}
-						
-						\item[] \begin{packed_enum}
-	
-							\item $<$opis korak jedan$>$
-							\item $<$opis korak dva$>$
-							\item $<$opis korak tri$>$
-							\item $<$opis korak četiri$>$
-							\item $<$opis korak pet$>$
-						\end{packed_enum}
-						
-						\item  \textbf{Opis mogućih odstupanja:}
-						
-						\item[] \begin{packed_item}
-	
-							\item[2.a] $<$opis mogućeg scenarija odstupanja u koraku 2$>$
-							\item[] \begin{packed_enum}
-								
-								\item $<$opis rješenja mogućeg scenarija korak 1$>$
-								\item $<$opis rješenja mogućeg scenarija korak 2$>$
-								
-							\end{packed_enum}
-							\item[2.b] $<$opis mogućeg scenarija odstupanja u koraku 2$>$
-							\item[3.a] $<$opis mogućeg scenarija odstupanja  u koraku 3$>$
-							
-						\end{packed_item}
-					\end{packed_item}
-				
-					
-				\subsubsection{Dijagrami obrazaca uporabe}
-					
-					\textit{Prikazati odnos aktora i obrazaca uporabe odgovarajućim UML dijagramom. Nije nužno nacrtati sve na jednom dijagramu. Modelirati po razinama apstrakcije i skupovima srodnih funkcionalnosti.}
-				\eject		
-				
-			\subsection{Sekvencijski dijagrami}
-				
-				\textbf{\textit{dio 1. revizije}}\\
-				
-				\textit{Nacrtati sekvencijske dijagrame koji modeliraju najvažnije dijelove sustava (max. 4 dijagrama). Ukoliko postoji nedoumica oko odabira, razjasniti s asistentom. Uz svaki dijagram napisati detaljni opis dijagrama.}
-				\eject
-	
-		\section{Ostali zahtjevi}
-		
-			\textbf{\textit{dio 1. revizije}}\\
-		 
-			 \textit{Nefunkcionalni zahtjevi i zahtjevi domene primjene dopunjuju funkcionalne zahtjeve. Oni opisuju \textbf{kako se sustav treba ponašati} i koja \textbf{ograničenja} treba poštivati (performanse, korisničko iskustvo, pouzdanost, standardi kvalitete, sigurnost...). Primjeri takvih zahtjeva u Vašem projektu mogu biti: podržani jezici korisničkog sučelja, vrijeme odziva, najveći mogući podržani broj korisnika, podržane web/mobilne platforme, razina zaštite (protokoli komunikacije, kriptiranje...)... Svaki takav zahtjev potrebno je navesti u jednoj ili dvije rečenice.}
+\section{Funkcionalni zahtjevi}
+
+
+\noindent \textbf{Dionici:}
+
+\begin{packed_enum}
+
+	\item Neregistrirani korisnik
+	\item Registrirani	korisnik
+	\item Djelatnik SC-a
+
+\end{packed_enum}
+
+\noindent \textbf{Aktori i njihovi funkcionalni zahtjevi:}
+
+
+\begin{packed_enum}
+	\item  \underbar{Neregistrirani korisnik (inicijator) može:}
+
+	\begin{packed_enum}
+
+		\item vidjeti sve oglase
+		\item se registrirati, za stvaranje korisničkog računa potrebni su: ime, prezime,korisničko ime, lozinka, e-mail, JMBAG
+
+	\end{packed_enum}
+
+	\item  \underbar{Registrirani korisnik (inicijator) može:}
+
+	\begin{packed_enum}
+
+		\item stvoriti oglas
+		\item vidjeti oglase pojedinačne ili ulančane koji odgovaraju njegovim kriterijima
+		\item pregledati sve svoje oglase (aktivne i neaktivne)
+		\item "lajkati" oglase po stupnjevima:
+		\begin{packed_enum}
+
+			\item 1-sviđa mi se
+			\item 2-sviđa mi se jako
+			\item 3-to je to
+
+		\end{packed_enum}
+
+	\end{packed_enum}
+
+	\item  \underbar{Djelatnik SC-a (inicijator) može:}
+
+	\begin{packed_enum}
+		\item prijaviti u sustav
+		\item pregledati sve zaključane zamjene
+	\end{packed_enum}
+
+	\item  \underbar{Baza podataka (sudionik):}
+
+	\begin{packed_enum}
+		\item pohranjuje sve podatke o korisnicima i njihovim ovlastima
+		\item pohranjuje sve podatke o oglasima i sobama
+	\end{packed_enum}
+
+
+	\item  \underbar{Poslužitelj (sudionik):}
+
+	\begin{packed_enum}
+		\item obrađuje zahtjeve korisnika
+
+	\end{packed_enum}
+
+
+\end{packed_enum}
+
+\eject
+
+
+
+\subsection{Obrasci uporabe}
+
+
+
+
+\noindent \underbar{\textbf{UC1 -PregledOglasa}}
+\begin{packed_item}
+
+	\item \textbf{Glavni sudionik: }Neregistrirani korisnik
+	\item  \textbf{Cilj:}Pregledati oglase soba
+	\item  \textbf{Sudionici:} baza podataka
+	\item  \textbf{Preduvjet:}
+	\item  \textbf{Opis osnovnog tijeka:}
+
+	\item[] \begin{packed_enum}
+
+				\item Oglasi se prikazuju prilikom otvaranja aplikacije
+
+	\end{packed_enum}
+
+
+
+
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC2 -Registracija}}
+\begin{packed_item}
+
+	\item \textbf{Glavni sudionik: }Neregistrirani korisnik
+	\item  \textbf{Cilj:}Registrirati korisnika i pohraniti podatke u bazu podataka
+	\item  \textbf{Sudionici:} baza podataka, poslužitelj
+	\item  \textbf{Preduvjet:} dostupnost poslužitelja
+	\item  \textbf{Opis osnovnog tijeka:}
+
+	\item[] \begin{packed_enum}
+
+				\item Pritiskom na tipku "Registriraj se" otvara se prozor za registraciju
+				\item Korisnik unosi potrebne podatke
+				\item Korisnik prima podatke o uspješnoj registraciji
+
+	\end{packed_enum}
+
+	\item  \textbf{Opis mogućih odstupanja:}
+
+	\item[] \begin{packed_item}
+
+				\item[2.a]Korisnik unosi neispravne podatke ili već zauzeto korisničko ime ili e-mail
+				\item[] \begin{packed_enum}
+
+							\item Sustav obavještava korisnika o pogrešci te ga vraća na stranicu za registraciju
+							\item Korisnik mijenja podatke te završava unos ili odustaje od registracije
+
+				\end{packed_enum}
+
+	\end{packed_item}
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC3 -PrijavaUSustav}}
+\begin{packed_item}
+
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item  \textbf{Cilj:}Prijaviti se u sustav
+	\item  \textbf{Sudionici:} baza podataka
+	\item  \textbf{Preduvjet:} Registracija
+	\item  \textbf{Opis osnovnog tijeka:}
+
+	\item[] \begin{packed_enum}
+
+				\item Unos korisničkog imena i lozinke
+				\item Sustav provjerava ispravnost podataka
+				\item Pristup korisničkim funkcijama
+	\end{packed_enum}
+
+	\item  \textbf{Opis mogućih odstupanja:}
+
+	\item[] \begin{packed_item}
+
+				\item[2.a] Unos neispravnih podataka
+				\item[] \begin{packed_enum}
+
+							\item  Sustav obavještava o neispravnim podacima i vraća na stanicu za prijavu
+
+
+				\end{packed_enum}
+
+	\end{packed_item}
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC4 -ObjavljivanjeOglasa}}
+\begin{packed_item}
+
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item  \textbf{Cilj:}Objaviti oglas
+	\item  \textbf{Sudionici:} baza podataka,poslužitelj
+	\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav
+	\item  \textbf{Opis osnovnog tijeka:}
+
+	\item[] \begin{packed_enum}
+
+				\item Korisnik odabire opciju "Objavi novi oglas"
+				\item Upisuje potrebne podatke za sobu koju nudi i kriterije za sobu koju traži. Sve podatke odabire iz padajućih izbornika osim polja za proizvoljni komentar
+				\item Pritiskom na "objavi" sustav pohranjuje oglas u bazu
+	\end{packed_enum}
+
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC5 -PregledMogucihZamjena }}
+\begin{packed_item}
+
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item  \textbf{Cilj:}Pregledati ponuđene moguće zamjene koje odgovaraju kriterijima korisnika
+	\item  \textbf{Sudionici:} baza podataka, poslužitelj
+	\item  \textbf{Preduvjet:} Korisnik je prijavljen i ima aktivan oglas
+	\item  \textbf{Opis osnovnog tijeka:}
+
+	\item[] \begin{packed_enum}
+
+				\item Korisniku se na početnoj stranici prikazuju svi oglasi koji odgovaraju njegovim kriterijima
+
+	\end{packed_enum}
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC6 -LajkanjeOglasa}}
+\begin{packed_item}
+
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item  \textbf{Cilj:}"Lajkati" oglase soba koje korisnika zanimaju
+	\item  \textbf{Sudionici:} baza podataka, poslužitelj
+	\item  \textbf{Preduvjet:} Korisnik je prijavljen, ima aktivan oglas i barem jedan oglas odgovara njegovim kriterijima
+	\item  \textbf{Opis osnovnog tijeka:}
+
+	\item[] \begin{packed_enum}
+
+				\item Korisnik oglase koji ga zanimaju označava("lajka") po stupnjevima od 1 do 3
+				\item Njegov odabir se sprema u bazu podataka
+
+	\end{packed_enum}
+
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC7 -UređivanjeOglasa}}
+\begin{packed_item}
+
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item  \textbf{Cilj:}Urediti već postojeći oglas
+	\item  \textbf{Sudionici:} baza podataka, poslužitelj
+	\item  \textbf{Preduvjet:} Korisnik je prijavljen i ima aktivan oglas
+	\item  \textbf{Opis osnovnog tijeka:}
+
+	\item[] \begin{packed_enum}
+
+				\item Korisnik odlazi pod "Moji oglasi" gdje uređuje svoj oglas dodavanjem novog kriterija ili brisanjem oglasa
+				\item Promjene se spremaju u bazu podataka
+
+	\end{packed_enum}
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC8 -PotvrđivanjeZamjene}}
+\begin{packed_item}
+
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item  \textbf{Cilj:}Potvrditi zamjenu sobe
+	\item  \textbf{Sudionici:} baza podataka, poslužitelj
+	\item  \textbf{Preduvjet:} Korisnik je prijavljen, sve uključene strane su "lajkale" oglas
+	\item  \textbf{Opis osnovnog tijeka:}
+
+	\item[] \begin{packed_enum}
+
+				\item Korisnik dobiva obavijest da su sve strane "lajkale" zamjenu
+				\item Korisnik potvrđuje zamjenu
+				\item Potvrda se sprema u bazu podataka
+
+	\end{packed_enum}
+\end{packed_item}
+\noindent \underbar{\textbf{UC9 -PregledDjelatnika}}
+\begin{packed_item}
+
+	\item \textbf{Glavni sudionik: }Djelatnik SC-a
+	\item  \textbf{Cilj:}Vidjeti sve zaključane promjene kako bi se mogle provesti u sustavu SC-a
+	\item  \textbf{Sudionici:} baza podataka, poslužitelj
+	\item  \textbf{Preduvjet:}Djelatnik je prijavljen
+	\item  \textbf{Opis osnovnog tijeka:}
+
+	\item[] \begin{packed_enum}
+
+				\item Nakon prijave djelatniku se na početnoj strani prikazuje popis svih zaključanih zamjena
+				\item Poslužitelj iz baze podataka dohvaća popis i prikazuje ga djelatniku
+
+
+	\end{packed_enum}
+
+\end{packed_item}
+
+
+
+
+
+
 			 
 			 
 			 
