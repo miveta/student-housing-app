@@ -1,5 +1,5 @@
 package progi.projekt.model.enums;
 
-public enum TipKupaonice {
+public enum TipKupaoniceEnum {
     PRIVATNA, DIJELJENA
 }

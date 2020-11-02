@@ -3,6 +3,7 @@ package progi.projekt.model;
 import javax.persistence.*;
 import java.util.UUID;
 
+//TODO : WEAK ENTITY
 @Entity
 public class Paviljon {
     @Id

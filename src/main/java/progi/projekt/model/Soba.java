@@ -1,11 +1,13 @@
 package progi.projekt.model;
 
-import progi.projekt.model.enums.BrojKreveta;
-import progi.projekt.model.enums.TipKupaonice;
+import progi.projekt.model.enums.BrojKrevetaEnum;
+import progi.projekt.model.enums.TipKupaoniceEnum;
+import progi.projekt.model.mozdaNetreba.BrojKreveta;
 
 import javax.persistence.*;
 import java.util.UUID;
 
+//TODO: WEAK ENTITY
 @Entity
 public class Soba {
     @Id
@@ -18,9 +20,9 @@ public class Soba {
 
     @Column(name = "broj_kreveta")
     @Enumerated(EnumType.STRING)
-    private BrojKreveta brojKreveta;
+    private BrojKrevetaEnum brojKreveta;
 
     @Column(name = "tip_kupaonice")
     @Enumerated(EnumType.STRING)
-    private TipKupaonice tipKupaonice;
+    private TipKupaoniceEnum tipKupaonice;
 }

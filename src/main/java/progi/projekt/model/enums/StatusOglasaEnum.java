@@ -5,6 +5,6 @@ package progi.projekt.model.enums;
 //ARHIVIRAN- oglas je iz prijasnih godina, vise nije validan. Mozda se nece koristiti
 //POTVRDEN- neki student je potvrdio ovaj oglas, te se ceka da zaposlenik SC-a potvrdi zamjenu
 //IZVEDEN- oglas je proveden od strane SC-a
-public enum StatusOglasa {
+public enum StatusOglasaEnum {
     AKTIVAN, OBRISAN, ARHIVIRAN, POTVRDEN, IZVEDEN
 }

@@ -1,5 +1,5 @@
 package progi.projekt.model.enums;
 
-public enum BrojKreveta {
+public enum BrojKrevetaEnum {
     JEDNOKREVETNA, DVOKREVETNA, TROKREVETNA, VIŠEKREVETNA
 }
