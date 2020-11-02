@@ -27,4 +27,23 @@ public class Student {
 
     @Column(nullable = false, name = "hash_lozinke")
     private String lozinka;
+
+
+    @Column(nullable = false, name = "vise_ovlasti")
+    private boolean elevated;
+    //ako je ovo true user prilikom logina dobije i ROLE_ADMIN uz ROLE_STUDENT
+
+    //bi li studentService, odnosno StudentRepository trebali raditi ovo?
+    public boolean isElevated() {
+        return elevated;
+    }
+
+    public void setElevated(boolean elevated) {
+        this.elevated = elevated;
+    }
+
+    public String getLozinka() { return lozinka; }
+
+    public void setLozinka(String lozinka) { this.lozinka = lozinka; }
+
 }
