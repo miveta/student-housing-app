@@ -21,13 +21,20 @@ public class StudentUserDetailsService implements UserDetailsService {
 	@Value("${progi.projekt.admin.pass}")
 	private String adminPasswordHash;
 
-
 	@Autowired
 	private StudentService studentService;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) {
-		return new User(username, password(username), authorities(username));
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		try {
+			return new User(username, password(username), authorities(username));
+		}
+		catch (Exception e){
+			//ovo ce uloviti exception od password() i authorities(), i ako constructor od Usera nesto baci
+			String originalMessage = e.getMessage();
+			throw new UsernameNotFoundException("No user '" + username + "'");
+		}
+
 	}
 
 	private String password(String username) throws UsernameNotFoundException{
