@@ -3,7 +3,7 @@ package progi.projekt.model;
 import javax.persistence.*;
 import java.util.UUID;
 
-//TODO: CHECK
+//TODO: FINISHED
 @Entity
 public class StudentskiCentar {
     @Id
@@ -30,4 +30,6 @@ public class StudentskiCentar {
         else
             System.err.println("Naziv studentskog centra ne smije biti null!");
     }
+
+    public StudentskiCentar(){ }
 }

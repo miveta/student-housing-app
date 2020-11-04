@@ -1,42 +1,35 @@
 package progi.projekt.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-//TODO: CHECK
-@Entity
+//TODO: INHERITANCE?????
 public class Korisnik {
     @Id
     @Column(name = "id_korisnik")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    protected UUID id;
 
     // Korisnicko ime ne smije biti null, te mora biti unique
     @Column(nullable = false,unique = true, name = "korisnicko_ime")
-    private String korisnickoIme;
+    protected String korisnickoIme;
 
     @Column(nullable = false)
-    private String ime;
+    protected String ime;
 
     @Column(nullable = false)
-    private String prezime;
+    protected String prezime;
 
     @Column(nullable = false)
-    private String email;
+    protected String email;
 
     @Column(nullable = false, name = "hash_lozinke")
-    private String lozinka;
+    protected String lozinka;
 
     @Column(nullable = false)
-    private boolean obavijestiNaMail;
-
-    @ManyToMany(targetEntity = Obavijest.class)
-    private List<Obavijest> obavijesti;
-
-    public void addObavijest(Obavijest obavijest){
-        obavijesti.add(obavijest);
-    }
+    protected boolean obavijestiNaMail;
 
     public String getKorisnickoIme() {
         return korisnickoIme;
@@ -86,11 +79,4 @@ public class Korisnik {
         this.obavijestiNaMail = obavijestiNaMail;
     }
 
-    public List<Obavijest> getObavijesti() {
-        return obavijesti;
-    }
-
-    public void setObavijesti(List<Obavijest> obavijesti) {
-        this.obavijesti = obavijesti;
-    }
 }

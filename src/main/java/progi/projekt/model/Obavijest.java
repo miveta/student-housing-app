@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-//TODO: CHECK
+//TODO: FINISHED
 @Entity
 public class Obavijest {
     @Id
@@ -20,8 +20,8 @@ public class Obavijest {
     private boolean procitana;
     private Date vrijeme;
 
-    @ManyToMany(targetEntity = Korisnik.class, mappedBy = "obavijesti")
-    private List<Korisnik> korisnici;
+    @ManyToMany(targetEntity = Student.class, mappedBy = "obavijesti")
+    private List<Student> studenti;
 
     @ManyToOne
     @JoinColumn(name="id_oglas")
@@ -38,9 +38,9 @@ public class Obavijest {
             System.err.println("Tekst obavijesti ne smije biti null1");
     }
 
-    public void addKorisnik(Korisnik kor){
-        korisnici.add(kor);
-    }
+    public Obavijest(){}
+
+    public void addStudent(Student kor){ studenti.add(kor);}
 
     public String getTekst() {
         return tekst;
@@ -66,12 +66,20 @@ public class Obavijest {
         this.vrijeme = vrijeme;
     }
 
-    public List<Korisnik> getKorisnici() {
-        return korisnici;
+    public UUID getId() {
+        return id;
     }
 
-    public void setKorisnici(List<Korisnik> korisnici) {
-        this.korisnici = korisnici;
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public List<Student> getStudenti() {
+        return studenti;
+    }
+
+    public void setStudenti(List<Student> studenti) {
+        this.studenti = studenti;
     }
 
     public Oglas getOglas() {

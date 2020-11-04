@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-//TODO: CHECK
+//TODO: FINISHED
 @Entity
 public class Grad {
     @Id
@@ -39,6 +39,8 @@ public class Grad {
             System.err.println("Naziv grada ne smije biti null!");
         }
     }
+
+    public Grad(){}
 
     public void addDom(Dom dom){
         this.domovi.add(dom);

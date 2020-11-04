@@ -1,11 +1,14 @@
 package progi.projekt.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
-//TODO: CHECK
+//TODO: FINISHED
 @Entity
-public class Dom {
+public class Dom implements Serializable {
     @Id
     @Column(name = "id_dom")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +23,9 @@ public class Dom {
     @JoinColumn(name = "id_grad")
     private Grad grad;
 
+    @OneToMany(mappedBy = "dom")
+    private Set<Paviljon> paviljoni;
+
     //Naziv i grad ne smiju biti null!
     public Dom(String naziv, Grad grad, boolean imaMenzu){
         if(naziv != null){
@@ -33,6 +39,8 @@ public class Dom {
         else
             System.err.print("Naziv doma ne smije biti null!");
     }
+
+    public Dom(){}
 
     public boolean isImaMenzu() {
         return imaMenzu;

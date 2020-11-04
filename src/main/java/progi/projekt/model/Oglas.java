@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
-//TODO: CHECK
+//TODO: FINISHED
 @Entity
 public class Oglas {
     @Id
@@ -21,7 +21,9 @@ public class Oglas {
     private Date objavljen;
 
     @OneToOne
-    @JoinColumn(name="id_status_oglasa")
+    @JoinColumns({
+            @JoinColumn(name="id_status_oglasa")
+    })
     private StatusOglasa status;
 
     @OneToMany(mappedBy = "oglas")
@@ -37,6 +39,8 @@ public class Oglas {
         } else
             System.err.println("Naslov oglasa ne smije biti null!");
     }
+
+    public Oglas(){}
 
     public void addObavijest(Obavijest obav){
         obavijesti.add(obav);

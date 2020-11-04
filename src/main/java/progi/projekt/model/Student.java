@@ -1,31 +1,32 @@
 package progi.projekt.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
-//TODO: INHERITANCE
+//TODO: INHERITANCE?????
 @Entity
-@Table
-public class Student {
+public class Student{
     @Id
-    @Column(name = "id_student")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
-
-    // sekundarni ključ
-    @Column(nullable = false, name = "korisnicko_ime")
-    private String korisnickoIme;
-
-    // sekundarni ključ
     @Column(nullable = false, length = 10)
     private String jmbag;
 
-    private String ime;
-    private String prezime;
+    @ManyToMany(targetEntity = Obavijest.class)
+    protected List<Obavijest> obavijesti;
 
-    @Column(nullable = false)
-    private String mail;
+    @OneToOne
+    @JoinColumn(name="id_status_oglasa")
+    private Oglas potvrdioOglas;
 
-    @Column(nullable = false, name = "hash_lozinke")
-    private String lozinka;
+    @OneToOne
+    @JoinColumn(name = "id_trazeni_uvjeti")
+    private TrazeniUvjeti uvjeti;
+
+    public List<Obavijest> getObavijesti() {
+        return obavijesti;
+    }
+
+    public void setObavijesti(List<Obavijest> obavijesti) {
+        this.obavijesti = obavijesti;
+    }
 }
