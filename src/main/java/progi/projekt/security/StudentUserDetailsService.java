@@ -26,6 +26,7 @@ public class StudentUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		//try catch se moze rjesiti i preko optional klase
 		try {
 			return new User(username, password(username), authorities(username));
 		}
