@@ -46,7 +46,9 @@
 		\setlength{\itemsep}{0pt}
 		\setlength{\parskip}{0pt}
 		\setlength{\parsep}{0pt}
-	}{\end{enumerate}}
+	}{
+
+\end{enumerate}}
 
 \newenvironment{packed_item}{
 	\begin{itemize}
@@ -65,8 +67,8 @@
 
 \pagestyle{fancy}
 \lhead{Programsko inženjerstvo}
-\rhead{$<$Projektni zadatak$>$}
-\lfoot{$<$Naziv grupe$>$}
+\rhead{Projektni zadatak}
+\lfoot{springRolice}
 \cfoot{stranica \thepage/\pageref{LastPage}}
 \rfoot{\today}
 \renewcommand{\headrulewidth}{0.2pt}
@@ -85,30 +87,30 @@
 			
 			\vspace*{\stretch{3.0}}
 			
-			\huge $<$Naziv projekta$>$\\
-			\Large Dokumentacija, Rev. \textit{$<$1 ili 2$>$}\\
+			\huge Zamjena soba\\
+			\Large Dokumentacija, Rev. \textit{1}\\
 			
 			\vspace*{\stretch{12.0}}
 			\normalsize
-			Grupa: \textit{$<$Naziv grupe$>$}\\
-			Voditelj: \textit{$<$Ime i prezime voditelja$>$}\\
+			Grupa: \textit{springRolice}\\
+			Voditelj: \textit{Mateja Iveta}\\
 			
 			
 			\vspace*{\stretch{1.0}}
 			Datum predaje: \textit{$<$dan$>$. $<$mjesec$>$. $<$godina$>$.}\\
-	
+			
 			\vspace*{\stretch{4.0}}
 			
-			Nastavnik: \textit{$<$Ime i prezime nastavnika zaduženog za vašu grupu$>$}\\
-		
+			Nastavnik: \textit{Ivana Cepetić}\\
+			
 		\end{center}
-
-	
+		
+		
 	\end{titlepage}
-
+	
 	
 	\tableofcontents
-
+	
 	\include{Dnevnik_promjena_dokumentacije}
 	\include{Opis_projektnog_zadatka}
 	\include{Specifikacija_programske_potpore}
@@ -127,14 +129,14 @@
 	%\listoftables
 	\endgroup
 	\addcontentsline{toc}{chapter}{Indeks slika i dijagrama}
-
-
+	
+	
 	
 	\eject 
-		
+	
 	\include{Dodatak}
-
-
+	
+	
 \end{document} %naredbe i tekst nakon ove naredbe ne ulaze u izgrađen dokument 
 
 
