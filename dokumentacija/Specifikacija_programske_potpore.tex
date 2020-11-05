@@ -7,9 +7,10 @@
 
 \begin{packed_enum}
 	
-	\item Neprijavljeni korisnik
-	\item Prijavljeni korisnik			
-	\item Djelatnik SC-a
+	\item Studenti
+	\item Djelatnici Studentskih centara		
+	\item Razvojni tim
+	
 	
 \end{packed_enum}
 
@@ -17,7 +18,7 @@
 
 
 \begin{packed_enum}
-	\item  \underbar{Neprijavljeni korisnik (inicijator) može:}
+	\item  \underbar{Neregistrirani korisnik (inicijator) može:}
 	
 	\begin{packed_enum}
 		
@@ -26,10 +27,11 @@
 		
 	\end{packed_enum}
 	
-	\item  \underbar{Prijavljeni korisnik (inicijator) može:}
+	\item  \underbar{Registrirani korisnik (inicijator) može:}
 	
 	\begin{packed_enum}
 		
+		\item se prijaviti u sustav
 		\item stvoriti oglas
 		\item vidjeti svoj profil i mijenjati podatke
 		\item izbrisati svoj profil
@@ -52,8 +54,15 @@
 	\item  \underbar{Djelatnik SC-a (inicijator) može:}
 	
 	\begin{packed_enum}
-		\item prijaviti u sustav
+		\item se prijaviti u sustav
 		\item pregledati sve zaključane zamjene
+	\end{packed_enum}
+
+	\item  \underbar{Timer (inicijator) može:}
+	
+	\begin{packed_enum}
+		\item pokrenuti uparivanje studenata s oglasima koji odgovaraju njegovim kriterijima
+		
 	\end{packed_enum}
 	
 	\item  \underbar{Baza podataka (sudionik):}
@@ -86,7 +95,7 @@
 \noindent \underbar{\textbf{UC1 -Pregled oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Neprijavljeni korisnik
+	\item \textbf{Glavni sudionik: }Neregistrirani korisnik
 	\item  \textbf{Cilj:}Pregledati oglase soba
 	\item  \textbf{Sudionici:} baza podataka
 	\item  \textbf{Preduvjet:} 
@@ -94,7 +103,7 @@
 	
 	\item[] \begin{packed_enum}
 		
-		\item Oglasi se prikazuju prilikom otvaranja aplikacije
+		\item Prilikom otvaranja aplikacije sustav prikazuje sve oglase
 		
 	\end{packed_enum}
 	
@@ -106,16 +115,19 @@
 \noindent \underbar{\textbf{UC2 -Registracija}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Neprijavljeni korisnik
-	\item  \textbf{Cilj:}Registrirati korisnika i pohraniti podatke u bazu podataka
+	\item \textbf{Glavni sudionik: }Neregistrirani korisnik
+	\item  \textbf{Cilj:}Registrirati korisnika i ovlastiti ga
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
-	\item  \textbf{Preduvjet:} dostupnost poslužitelja, korisnik nema profil
+	\item  \textbf{Preduvjet:} dostupnost poslužitelja, korisnik nije registriran
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
 		
-		\item Pritiskom na tipku "Registriraj se" otvara se stranica za registraciju
+		\item Korisnik pritišće tipku "Registriraj se"
+		\item Sustav otvara stranicu za registraciju
 		\item Korisnik unosi potrebne podatke
+		\item Sustav provjerava ispravnost podataka
+		\item Sustav registrira korisnika
 		\item Korisnik prima podatke o uspješnoj registraciji
 		
 	\end{packed_enum}
@@ -127,8 +139,9 @@
 		\item[2.a]Korisnik unosi neispravne podatke ili već zauzeto korisničko ime ili e-mail
 		\item[] \begin{packed_enum}
 			
-			\item Sustav obavještava korisnika o pogrešci te ga vraća na stranicu za registraciju
-			\item Korisnik mijenja podatke te završava unos ili odustaje od registracije
+			\item Sustav obavještava korisnika o pogrešci 
+			\item Sustav vraća korisnika na stranicu za registraciju sa crveno označenom greškom
+			\item Korisnik mijenja neispravne podatke te završava unos ili odustaje od registracije
 			
 		\end{packed_enum}
 		
@@ -138,17 +151,17 @@
 \noindent \underbar{\textbf{UC3 -Prijava u sustav}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Neprijavljeni korisnik, Djelatnik SC-a
+	\item \textbf{Glavni sudionik: }Registrirani korisnik, Djelatnik SC-a
 	\item  \textbf{Cilj:}Prijaviti se u sustav
 	\item  \textbf{Sudionici:} baza podataka
-	\item  \textbf{Preduvjet:} Registracija
+	\item  \textbf{Preduvjet:} Korisnik se je registrirao
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
 		
 		\item Unos korisničkog imena i lozinke
 		\item Sustav provjerava ispravnost podataka
-		\item Pristup korisničkim funkcijama
+		\item Sustav korisniku otvara početnu stranicu i korisnik ima pristup korisničkim funkcijama
 	\end{packed_enum}
 	
 	\item  \textbf{Opis mogućih odstupanja:}
@@ -158,7 +171,8 @@
 		\item[2.a] Unos neispravnih podataka
 		\item[] \begin{packed_enum}
 			
-			\item  Sustav obavještava o neispravnim podacima i vraća na stanicu za prijavu
+			\item  Sustav obavještava o neispravnim podacima i vraća na stanicu za prijavu s crveno označenom pogreškom
+			\item Korisnik ispravlja podatke
 			
 			
 		\end{packed_enum}
@@ -169,7 +183,7 @@
 \noindent \underbar{\textbf{UC4 -Objavljivanje oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
 	\item  \textbf{Cilj:}Objaviti oglas
 	\item  \textbf{Sudionici:} baza podataka,poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav
@@ -178,8 +192,10 @@
 	\item[] \begin{packed_enum}
 		
 		\item Korisnik odabire opciju "Objavi novi oglas"
-		\item Upisuje potrebne podatke za sobu koju nudi i kriterije za sobu koju traži. Sve podatke odabire iz padajućih izbornika osim polja za proizvoljni komentar
-		\item Pritiskom na "objavi" sustav pohranjuje oglas u bazu
+		\item Sustav otvara stranicu za objavljivanje oglasa
+		\item Korisnik upisuje potrebne podatke za sobu koju nudi i kriterije za sobu koju traži. Sve podatke odabire iz padajućih izbornika osim polja za proizvoljni komentar
+		\item Korisnik pritišće tipku "objavi" 
+		\item Sustav pohranjuje oglas u bazu
 	\end{packed_enum}
 	
 \end{packed_item}
@@ -187,7 +203,7 @@
 \noindent \underbar{\textbf{UC5 -Pregled mogućih zamjena }}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
 	\item  \textbf{Cilj:}Pregledati ponuđene moguće zamjene koje odgovaraju kriterijima korisnika
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen i ima aktivan oglas
@@ -195,15 +211,32 @@
 	
 	\item[] \begin{packed_enum}
 		
-		\item Korisniku se na početnoj stranici prikazuju svi oglasi koji odgovaraju njegovim kriterijima
+		\item Korisnik otvara početnu stranicu
+		\item Sustav prikazuje sve oglase koji odgovaraju njegovim kriterijima
+		
+	\end{packed_enum}
+\end{packed_item}
+\noindent \underbar{\textbf{UC6 - Uparivanje oglasa}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: }Timer
+	\item  \textbf{Cilj:}Upariti studenta s oglasima koji odgovaraju njegovim kriterijima
+	\item  \textbf{Sudionici:} baza podataka, poslužitelj
+	\item  \textbf{Preduvjet:}
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Timer pokreće uparivanje svakih 5 sati
+		\item Sustav za svakog studenta stvara listu svih oglasa koji direktno ili lančano odgovaraju njegovim kriterijima
 		
 	\end{packed_enum}
 \end{packed_item}
 
-\noindent \underbar{\textbf{UC6 -Lajkanje oglasa}}
+\noindent \underbar{\textbf{UC7 -Lajkanje oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
 	\item  \textbf{Cilj:}"Lajkati" oglase soba koje korisnika zanimaju
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen, ima aktivan oglas i barem jedan oglas odgovara njegovim kriterijima
@@ -212,16 +245,15 @@
 	\item[] \begin{packed_enum}
 		
 		\item Korisnik oglase koji ga zanimaju označava("lajka") po stupnjevima od 1 do 3
-		\item Njegov odabir se sprema u bazu podataka
-		
+		\item Sustav sprema njegov odabir
 	\end{packed_enum}
 	
 \end{packed_item}
 
-\noindent \underbar{\textbf{UC7 -Mjenjanje Lajka}}
+\noindent \underbar{\textbf{UC8 -Mjenjanje Lajka}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
 	\item  \textbf{Cilj:}Promijeniti razinu "lajka" ili maknuti lajk
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen, ima aktivan oglas,barem jedan oglas odgovara njegovim kriterijima
@@ -236,10 +268,10 @@
 	
 \end{packed_item}
 
-\noindent \underbar{\textbf{UC8 -Pregled mojih oglasa}}
+\noindent \underbar{\textbf{UC9 -Pregled mojih oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
 	\item  \textbf{Cilj:}Vidjeti sve svoje oglase
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen i ima oglas
@@ -248,15 +280,15 @@
 	\item[] \begin{packed_enum}
 		
 		\item Korisnik odabire opciju "Moji oglasi"
-		\item Prikazuje mu se stranica sa listom njegovih oglasa
+		\item Sustav otvara stranicu gdje se prikazuju svi korisnikovi oglasi
 		
 	\end{packed_enum}
 \end{packed_item}
 
-\noindent \underbar{\textbf{UC9 -Uređivanje oglasa}}
+\noindent \underbar{\textbf{UC10 -Uređivanje oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
 	\item  \textbf{Cilj:}Urediti već postojeći oglas
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen i ima aktivan oglas
@@ -265,37 +297,21 @@
 	\item[] \begin{packed_enum}
 		
 		\item Korisnik odlazi pod "Moji oglasi" 
-		\item Prikazuje mu se stranica sa listom njegovih oglasa
-		\item Korisnik odabire opciju uredi te mijenja podatke
+		\item Sustav prikazuje stranicu sa listom njegovih oglasa
+		\item Korisnik odabire opciju uredi
+		\item Korisnik mijenja podatke ili atribut je li oglas aktivan ili neaktivan
 		\item Korisnik potvrđuje promjene odabirom opcije spremi
 		\item Promjene se spremaju u bazu podataka 
 		
 	\end{packed_enum}
 \end{packed_item}
 
-\noindent \underbar{\textbf{UC10 -Aktivan/Neaktivan}}
-\begin{packed_item}
-	
-	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
-	\item  \textbf{Cilj:}Učiniti oglas aktivnim ili neaktivnim
-	\item  \textbf{Sudionici:} baza podataka, poslužitelj
-	\item  \textbf{Preduvjet:} Korisnik je prijavljen i ima  oglas
-	\item  \textbf{Opis osnovnog tijeka:}
-	
-	\item[] \begin{packed_enum}
-		
-		\item Korisnik odlazi pod "Moji oglasi" 
-		\item Prikazuje mu se stranica sa listom njegovih oglasa
-		\item Korisnik odabire opciju da učini svoj oglas aktivnim ili neaktivnim
-		\item Promjene se spremaju u bazu podataka 
-		
-	\end{packed_enum}
-\end{packed_item}
+
 
 \noindent \underbar{\textbf{UC11 -Brisanje oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
 	\item  \textbf{Cilj:}Izbrisati oglas
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen i ima oglas
@@ -304,17 +320,17 @@
 	\item[] \begin{packed_enum}
 		
 		\item Korisnik odlazi pod "Moji oglasi" 
-		\item Prikazuje mu se stranica sa listom njegovih oglasa
+		\item Sustav prikazuje stranicu sa listom njegovih oglasa
 		\item Korisnik odabire opciju izbriši
-		\item Promjene se spremaju u bazu podataka 
+		\item Sustav briše oglas iz baze podataka
 		
 	\end{packed_enum}
 \end{packed_item}
 
-\noindent \underbar{\textbf{UC12 -PregledProfila}}
+\noindent \underbar{\textbf{UC12 -Pregled profila}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
 	\item  \textbf{Cilj:}Vidjeti svoje osobne podatke
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen
@@ -323,7 +339,7 @@
 	\item[] \begin{packed_enum}
 		
 		\item Korisnik odlazi pod "Moj profil"
-		\item Prikazuje mu se njegov profil 
+		\item Sustav otvara stranicu korisnikova profila 
 		
 	\end{packed_enum}
 \end{packed_item}
@@ -340,9 +356,11 @@
 	\item[] \begin{packed_enum}
 		
 		\item Korisnik odlazi pod "Moj profil"
-		\item Prikazuje mu se njegov profil
-		\item Korisnik uređuje svoje osobne podatke
-		\item Promjene se spremaju u bazu podataka 
+		\item Sustav otvara stranicu korisnikova profila 
+		\item Korisnik odabire opciju "uredi"
+		\item Korisnik mijenja osobne podatke
+		\item Korisnik pritišće tiku "spremi promjene"
+		\item Sustav sprema promjene 
 		
 	\end{packed_enum}
 \end{packed_item}
@@ -350,7 +368,7 @@
 \noindent \underbar{\textbf{UC14 -Brisanje profila}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
+	\item \textbf{Glavni sudionik: }Registrirani korisnik
 	\item  \textbf{Cilj:}Vidjeti svoje osobne podatke
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen
@@ -359,9 +377,9 @@
 	\item[] \begin{packed_enum}
 		
 		\item Korisnik odlazi pod "Moj profil"
-		\item Prikazuje mu se njegov profil
-		\item Korisnik odabire opciju izbriši profil
-		\item Promjene se spremaju u bazu podataka 
+		\item Sustav otvara stranicu korisnikova profila 
+		\item Korisnik odabire opciju "izbriši profil"
+		\item Sustav briše korisnikov profil i otvara početnu stranicu
 		
 	\end{packed_enum}
 \end{packed_item}
@@ -369,7 +387,7 @@
 \noindent \underbar{\textbf{UC15 -Potvrđivanje zamjene}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
+	\item \textbf{Glavni sudionik: }Registrirani  korisnik
 	\item  \textbf{Cilj:}Potvrditi zamjenu sobe
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen, sve uključene strane su "lajkale" oglas
@@ -384,20 +402,21 @@
 		
 	\end{packed_enum}
 \end{packed_item}
-\noindent \underbar{\textbf{UC16 -Pregled djelatnika}}
+\noindent \underbar{\textbf{UC16 -Pregled zaključanih zamjena}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: }Djelatnik SC-a
-	\item  \textbf{Cilj:}Vidjeti sve zaključane promjene kako bi se mogle provesti u sustavu SC-a
+	\item  \textbf{Cilj:}Vidjeti sve zaključane zamjene kako bi se mogle provesti u sustavu SC-a
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:}Djelatnik je prijavljen
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
 		
-		\item Nakon prijave djelatniku se na početnoj strani prikazuje popis svih zaključanih zamjena
-		\item Poslužitelj iz baze podataka dohvaća popis i prikazuje ga djelatniku
-	\eject	
+		\item Sustav na početnoj stranici prikazuje listu svih zaključanih zamjena
+		\item Korisnik označuje sve zamjene koje je proveo
+		\item Sustav miče označene zamjene sa stranice
+		
 		
 	\end{packed_enum}
 	
@@ -406,15 +425,15 @@
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: }Djelatnik SC-a, Prijavljeni korisnik
-	\item  \textbf{Cilj:}Vidjeti sve zaključane promjene kako bi se mogle provesti u sustavu SC-a
+	\item  \textbf{Cilj:}Odjaviti se iz sustava
 	\item  \textbf{Sudionici:}poslužitelj
 	\item  \textbf{Preduvjet:}Djelatnik je prijavljen
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
 		
-		\item Korisnik se pritiskom na tipku odjavljuje s profila te se vraća na početnu stranicu
-		
+		\item Korisnik pritišće tipku "odjavi se"
+		\item Sustav odjavljuje korisnika te otvara početnu stranicu		
 		
 	\end{packed_enum}
 	
@@ -424,14 +443,14 @@
 \begin{figure}[H]
 	\includegraphics[scale=0.4]{dijagrami/dijagram1.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 	\centering
-	\caption{Dijagrami obrazaca uporabe, funkcionalnost neprijavljenog korisnika i djelatnika SC-a}
+	\caption{Dijagrami obrazaca uporabe, funkcionalnost neregistriranog korisnika i djelatnika SC-a}
 	\label{fig:dijagramObrazaca1}
 \end{figure}
 
 \begin{figure}[H]
 	\includegraphics[scale=0.4]{dijagrami/dijagram2.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 	\centering
-	\caption{Dijagrami obrazaca uporabe, funkcionalnost prijavljenog korisnika}
+	\caption{Dijagrami obrazaca uporabe, funkcionalnost prijavljenog korisnika i timera}
 	\label{fig:dijagramObrazaca2}
 \end{figure}
 
@@ -474,7 +493,7 @@
 \end{figure}
 
 \noindent \textbf{Obrazac uporabe UC15(Potvrđivanje zamjene)}\\
-\indent Korisnik potvrđuje zamjenu odabirom opcije "zaključaj zamjenu". Potvrda se sprema u bazu podataka promjenom statusa oglasa.
+\indent Korisnik potvrđuje zamjenu odabirom opcije "zaključaj zamjenu". Potvrda se sprema u bazu podataka promjenom statusa oglasa tek kad sve strane potvrde zamjenu.
 
 
 \begin{figure}[H]
