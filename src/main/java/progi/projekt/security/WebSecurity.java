@@ -1,6 +1,9 @@
 package progi.projekt.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,10 +20,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
-	/*
+
+
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(myUserDetailsService);
+		auth.userDetailsService(studentUserDetailsService);
 	}
 
 	@Override
@@ -28,7 +32,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-	*/
 
 
 	@Override
@@ -47,12 +50,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		http.headers().frameOptions().sameOrigin(); //za h2, nama ne treba?
 		http.csrf().disable();
 
-		/*
+		/* trebati ce za jwt sessione
 		httpSecurity.csrf().disable()
-				.authorizeRequests().antMatchers("/authenticate").permitAll().
-						anyRequest().authenticated().and().
-						exceptionHandling().and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.authorizeRequests().antMatchers("/authenticate").permitAll()
+									.anyRequest().authenticated()
+									.and()
+									.exceptionHandling());
 
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		 */

@@ -1,7 +1,4 @@
 package progi.projekt.security;
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,9 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+//trebati ce za jwt sessione
+
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
-
 
     @Autowired
     private JwtUtil jwtTokenUtil;
@@ -45,16 +43,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             UserDetails userDetails = this.studentUserDetailsService.loadUserByUsername(username);
 
+            //if the username matches and the token is not expired
+            //this is the only difference between this and the default implementation
             if (jwtTokenUtil.validateToken(jwt, userDetails)) {
 
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
 
+        //continue the security filter chain
         chain.doFilter(request, response);
     }
 

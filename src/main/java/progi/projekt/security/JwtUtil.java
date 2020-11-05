@@ -12,9 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+//user -> jwt and jwt -> user
+
 @Service
 public class JwtUtil {
 
+    //used to hash new jwt tokens
     private String SECRET_KEY = "secret";
 
     public String extractUsername(String token) {
@@ -38,17 +41,18 @@ public class JwtUtil {
     }
 
     public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = new HashMap<>(); //dodatni podaci koji se ukljucuju u payload jwt-a
         return createToken(claims, userDetails.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-
+        int milisTo10Hours = 1000 * 60 * 60 * 10; //expiration time
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + milisTo10Hours))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
+    //used to check if a token belongs to an actual user from the database
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));

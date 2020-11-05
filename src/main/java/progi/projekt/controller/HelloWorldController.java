@@ -5,17 +5,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.authentication.AuthenticationManagerFactoryBean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import progi.projekt.security.AuthenticationRequest;
+import progi.projekt.security.AuthenticationResponse;
 import progi.projekt.security.JwtUtil;
 import progi.projekt.security.StudentUserDetailsService;
 
+//testiranje za jwt sessione
+// /authenticate koji dobije username i password (AuthenticationRequest), a vraca jwt (AuthenticationResponse)
 
 @RestController
 class HelloWorldController {
+
+
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -25,6 +33,7 @@ class HelloWorldController {
 
 	@Autowired
 	private StudentUserDetailsService studentUserDetailsService;
+
 
 	@RequestMapping({ "/hello" })
 	public String firstPage() {
@@ -44,7 +53,7 @@ class HelloWorldController {
 		}
 
 
-		final UserDetails userDetails = userDetailsService
+		final UserDetails userDetails = studentUserDetailsService
 				.loadUserByUsername(authenticationRequest.getUsername());
 
 		final String jwt = jwtTokenUtil.generateToken(userDetails);

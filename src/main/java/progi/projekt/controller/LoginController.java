@@ -20,17 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//tko uopce hendla sessione? Kako uskladiti permission management sa autentifikacijom sessiona?
-//ako Spring hendla session, frontend autentifikaciju preko state managementa, a backend permissione (automatski
-// preko StudentUserDetalisService?), sto sprjecava korisnika da se ulogira svojim accountom, dobije permission i onda
-// rucno posalje request sa drugacijim usernamom tako otvori neciji tudji account page?
-
-//sadrzi li svaki request user i pass onda? Rjesava li to Spring ili mi?
-
-//ako svaki request sadrzi user i pass, rade li Spring ili React automatski hashing ili se login salje kao plain text
-// u zahtjevu?
-
-
+//Spring Security ima ugradjeni login controller pa je ovo redundantno?
 
 @RestController
 @RequestMapping("/login")

@@ -2,6 +2,8 @@ package progi.projekt.security;
 
 import java.io.Serializable;
 
+//trebati ce za jwt sessione
+
 public class AuthenticationResponse implements Serializable {
 
     private final String jwt;
