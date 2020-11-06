@@ -3,6 +3,7 @@ package progi.projekt.security.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,8 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtil {
-
-    //used to hash new jwt tokens
-    private String SECRET_KEY = "secret";
+    @Value("${progi.projekt.jwt.secret}")
+    private String SECRET_KEY;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -46,9 +46,9 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        int milisTo10Hours = 1000 * 60 * 60 * 10; //expiration time
+        int ExpirationTimeMiliS = hoursToMiliseconds(10);
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + milisTo10Hours))
+                .setExpiration(new Date(System.currentTimeMillis() + ExpirationTimeMiliS))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
@@ -56,5 +56,10 @@ public class JwtUtil {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public int hoursToMiliseconds(int hours){
+        int hourToMilis = 60 * 60 * 1000;
+        return hours * hourToMilis;
     }
 }

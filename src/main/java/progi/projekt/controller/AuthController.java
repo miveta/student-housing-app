@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +18,9 @@ import progi.projekt.security.StudentUserDetailsService;
 import progi.projekt.security.jwt.JwtUtil;
 import progi.projekt.service.StudentService;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-//Spring Security ima ugradjeni login controller pa je ovo redundantno?
 
 @RestController
 //@RequestMapping("/auth")
@@ -39,53 +39,61 @@ public class AuthController {
     //'WebRequest request' je argument za citanje cijelog requesta
 
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 
+        //try to authenticate the user
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getLogin(), authenticationRequest.getPassword())
             );
         } catch (BadCredentialsException e) {
-            throw new Exception("Incorrect username or password", e);
+            throw new UsernameNotFoundException("Incorrect username or password", e);
         }
 
-
+        //if the user successfully authenticated (correct login and pass) we return a jwt token:
+        //get UserDetals from login
         final UserDetails userDetails = studentUserDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+                .loadUserByUsername(authenticationRequest.getLogin());
 
+        //generate a new jwt token from UserData
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
+        //return 200 OK with the jwt in the request body
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
-
-    @GetMapping("")
+    @GetMapping("/userInfo")
     public String showLoggedInUser(@AuthenticationPrincipal User loggedInUser) {
-        return "Tu nije nista implementirano";
+        String username = loggedInUser.getUsername();
+        Collection<GrantedAuthority> auths = loggedInUser.getAuthorities();
+        String authsPrint = auths.toString();
+
+        return "Username: " + username + " Auths: " + authsPrint;
     }
 
-    //front mora poslati 'User' objekt
+    /*TODO?
     @PostMapping("/login")
     public ResponseEntity<?> loginResponse(@AuthenticationPrincipal User userLoginData) {
-        String username = userLoginData.getUsername();
-        String passHash = userLoginData.getPassword();
 
         try {
-            UserDetails studentUBazi = studentUserDetailsService.loadUserByUsername(username);
+            //TODO?
+
 
             //if successful
             Map<String, String> propsSucc = new HashMap<>();
             propsSucc.put("status", "200");
             return new ResponseEntity<>(propsSucc, HttpStatus.OK);
-        } catch (UsernameNotFoundException e) {
+        }
+        catch (UsernameNotFoundException e) {
             String originalMessage = e.getMessage();
+
 
             //if unsuccessful
             Map<String, String> propsFail = new HashMap<>();
-            propsFail.put("status", "401");
+            propsFail.put("status", "408");
             //propsFail.put("error", originalMessage);
-            return new ResponseEntity<>(propsFail, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(propsFail, HttpStatus.LENGTH_REQUIRED);
         }
     }
 
@@ -94,5 +102,5 @@ public class AuthController {
         // TODO
         return new ResponseEntity<>(new HashMap<>(), HttpStatus.NOT_IMPLEMENTED);
     }
-
+     */
 }

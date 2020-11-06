@@ -52,4 +52,14 @@ class HelloWorldController {
         return "Hello User";
     }
 
+    @RequestMapping({"/admin"})
+    public String userPage() {
+        return "Admin page";
+    }
+
+    @RequestMapping({"/user"})
+    public String adminPage() {
+        return "User page";
+    }
+
 }
