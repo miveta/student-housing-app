@@ -1,13 +1,14 @@
 import React from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
 
 import Login from "./components/Login";
 import Register from "./components/Register";
 
 function App() {
-    return (<Router>
+    return (
+        <Router>
             <div className="App">
                 <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                     <div className="container">
@@ -27,13 +28,14 @@ function App() {
                 <div className="outer">
                     <div className="inner">
                         <Switch>
-                            <Route exact path='/' component={Login} />
-                            <Route path="/sign-in" component={Login} />
-                            <Route path="/register" component={Register} />
+                            <Route exact path='/' component={Login}/>
+                            <Route path="/sign-in" component={Login}/>
+                            <Route path="/register" component={Register}/>
                         </Switch>
                     </div>
                 </div>
-            </div></Router>
+            </div>
+        </Router>
     );
 }
 
