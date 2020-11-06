@@ -26,7 +26,10 @@ public class StudentUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //try catch se moze rjesiti i preko optional klasa
         try {
-            return new User(username, password(username), authorities(username));
+            //temp hardcoded login koji zaobidje bazu
+            return new User(username, "pass", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ADMIN, " +
+                    "ROLE_STUDENT") );
+            //eturn new User(username, password(username), authorities(username));
         } catch (Exception e) {
             //ovo ce uloviti exception od password() i authorities(), i ako constructor od Usera nesto baci
             String originalMessage = e.getMessage();
