@@ -6,8 +6,7 @@ import progi.projekt.model.Student;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Long> {
-	//ovo se autogenerira?
-	Student findByJmbag(String jmbag);
+	Student findByEmail(String email);
 
 	Student findByKorisnickoIme(String korisnickoIme);
 }

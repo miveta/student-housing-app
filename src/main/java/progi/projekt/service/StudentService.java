@@ -6,19 +6,18 @@ import progi.projekt.repository.StudentRepository;
 import progi.projekt.security.exception.SavingException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentService {
     List<Student> listAll();
 
 	StudentRepository getRepo();
 
-	Student findByJmbag(String username) throws UsernameNotFoundException;
+	Optional<Student> findByEmail(String email) throws UsernameNotFoundException;
 
-	Student findBykorisnickoIme(String username) throws UsernameNotFoundException;
+	Optional<Student> findBykorisnickoIme(String username) throws UsernameNotFoundException;
 
-	String getLozinka(Student student) throws UsernameNotFoundException;
-
-	boolean isElevated(Student student) throws UsernameNotFoundException;
+	String getLozinka(Student student);
 
 	Student createStudent(Student student) throws SavingException;
 }
