@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-//TODO : CHECK
 @Entity
 public class Paviljon implements Serializable {
     @Id

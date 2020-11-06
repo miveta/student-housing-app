@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-//TODO: CHECK
 @Entity
 public class Soba implements Serializable {
     @Id
@@ -61,11 +60,58 @@ public class Soba implements Serializable {
             this.paviljon = paviljon;
             this.brojKreveta = brojKreveta;
             this.tipKupaonice = tipKupaonice;
-            this.tipKupaonice = tipKupaonice;
             this.broj = brojSobe;
             this.kat = kat;
         } else {
             System.err.println("Ništa u kreaciji sobe ne smije biti null!");
         }
+    }
+
+    public int getBroj() {
+        return broj;
+    }
+
+    public void setBroj(int broj) {
+        this.broj = broj;
+    }
+
+    public int getKat() {
+        return kat;
+    }
+
+    public void setKat(int kat) {
+        this.kat = kat;
+    }
+
+    public Paviljon getPaviljon() {
+        return paviljon;
+    }
+
+    public void setPaviljon(Paviljon paviljon) {
+        this.paviljon = paviljon;
+    }
+
+    public BrojKrevetaEnum getBrojKreveta() {
+        return brojKreveta;
+    }
+
+    public void setBrojKreveta(BrojKrevetaEnum brojKreveta) {
+        this.brojKreveta = brojKreveta;
+    }
+
+    public TipKupaoniceEnum getTipKupaonice() {
+        return tipKupaonice;
+    }
+
+    public void setTipKupaonice(TipKupaoniceEnum tipKupaonice) {
+        this.tipKupaonice = tipKupaonice;
+    }
+
+    public OznakeKategorijaEnum getKategorija() {
+        return kategorija;
+    }
+
+    public void setKategorija(OznakeKategorijaEnum kategorija) {
+        this.kategorija = kategorija;
     }
 }

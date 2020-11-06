@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-//TODO: FINISHED
 @Entity
 public class StatusOglasa implements Serializable {
     @Id
@@ -78,5 +77,13 @@ public class StatusOglasa implements Serializable {
 
     public void setOglas(Oglas oglas) {
         this.oglas = oglas;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

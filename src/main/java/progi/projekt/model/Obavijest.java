@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-//TODO: FINISHED
 @Entity
 public class Obavijest {
     @Id

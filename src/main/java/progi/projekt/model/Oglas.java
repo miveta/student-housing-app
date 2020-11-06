@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
-//TODO: FINISHED
 @Entity
 public class Oglas {
     @Id
@@ -92,5 +91,13 @@ public class Oglas {
 
     public void setObavijesti(List<Obavijest> obavijesti) {
         this.obavijesti = obavijesti;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

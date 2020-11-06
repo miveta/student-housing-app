@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-//TODO: FINISHED
 @Entity
 public class Grad {
     @Id
@@ -68,5 +67,13 @@ public class Grad {
 
     public void setStudentskiCentar(StudentskiCentar studentskiCentar) {
         this.studentskiCentar = studentskiCentar;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

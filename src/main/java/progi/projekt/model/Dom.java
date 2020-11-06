@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-//TODO: FINISHED
 @Entity
 public class Dom implements Serializable {
     @Id
@@ -64,5 +63,21 @@ public class Dom implements Serializable {
 
     public void setGrad(Grad grad) {
         this.grad = grad;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Set<Paviljon> getPaviljoni() {
+        return paviljoni;
+    }
+
+    public void setPaviljoni(Set<Paviljon> paviljoni) {
+        this.paviljoni = paviljoni;
     }
 }
