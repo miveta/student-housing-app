@@ -1,12 +1,9 @@
 package progi.projekt.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import progi.projekt.model.Student;
 import progi.projekt.model.ZaposlenikSC;
 import progi.projekt.repository.ZaposlenikscRepository;
-import progi.projekt.security.exception.JmbagNotFoundException;
 import progi.projekt.security.exception.SavingException;
 import progi.projekt.service.ZaposlenikscService;
 
