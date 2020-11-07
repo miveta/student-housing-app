@@ -9,7 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import progi.projekt.security.jwt.JwtRequestFilter;
 
 @EnableWebSecurity //ukljucivanje provjere razine pristupa
@@ -26,16 +27,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(studentUserDetailsService);
     }
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(studentUserDetailsService);
+
+        //ako zelimo koristiti custom auth provider:
+        //auth.authenticationProvider(myAuthProvider());
         super.configure(auth);
     }
 
@@ -51,28 +49,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
 
-        //sami radimo jwt sessione pa ih Spring ne mora voditi za nas:
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        //s obzirom da nema session, trebamo filter koji provjerava Authorization header svakog requesta i postavlja
-        // security context:
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
         //Authority permission mozemo postaviti i za putanju, ne samo za metodu
         http.authorizeRequests()
                 .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/user").hasAuthority("ROLE_STUDENT")
-                .antMatchers("/authenticate").permitAll()
                 .antMatchers("/hello").permitAll()
                 .antMatchers("/").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/checklogin").permitAll()
+                .and().formLogin();
 
-        //formLogin(); ne radi out of the box kod sa jwt
-
-
-        //httpSecurity.exceptionHandling());
-
-
+        super.configure(http);
     }
 
 }

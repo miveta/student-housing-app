@@ -15,14 +15,10 @@ import progi.projekt.security.jwt.JwtUtil;
 @RestController
 class HelloWorldController {
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
     private JwtUtil jwtTokenUtil;
 
     @Autowired
     private StudentUserDetailsService studentUserDetailsService;
-
 
     @GetMapping("/")
     public String demo() {
