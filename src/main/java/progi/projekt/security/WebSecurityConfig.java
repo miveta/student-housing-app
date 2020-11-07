@@ -51,7 +51,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
 
-
         //sami radimo jwt sessione pa ih Spring ne mora voditi za nas:
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -71,8 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //formLogin(); ne radi out of the box kod sa jwt
 
 
-
-		//httpSecurity.exceptionHandling());
+        //httpSecurity.exceptionHandling());
 
 
     }

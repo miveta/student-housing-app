@@ -28,7 +28,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<Student> findByEmail(String email){
+    public Optional<Student> findByEmail(String email) {
         try {
             Optional<Student> opt = Optional.of(studentRepository.findByEmail(email));
             return opt;
@@ -38,7 +38,6 @@ public class StudentServiceImpl implements StudentService {
             //throw new JmbagNotFoundException("No user with email: '" + email + "'");
             return Optional.empty();
         }
-
     }
 
     @Override

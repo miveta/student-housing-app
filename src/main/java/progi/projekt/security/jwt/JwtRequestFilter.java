@@ -17,8 +17,8 @@ import java.io.IOException;
 
 //za debugging koristiti Postman jer browseri pohrane i securityContext uz jwt pa se 2. i 3. if ne izvrse:
 //1. napraviti POST /authenticate sa
-    //Header: Content-Type=application/json
-    //body:
+//Header: Content-Type=application/json
+//body:
 /*
     {
             "login": "user",
@@ -27,7 +27,7 @@ import java.io.IOException;
 */
 //2. dobiveni response (jwt) kopirati
 //3. napraviti novi header Authorization=Bearer {$jwt}
-    //note: sada vise Content-Type header i body nisu potrebni
+//note: sada vise Content-Type header i body nisu potrebni
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {

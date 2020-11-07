@@ -5,8 +5,8 @@ import org.springframework.stereotype.Repository;
 import progi.projekt.model.ZaposlenikSC;
 
 @Repository
-public interface ZaposlenikscRepository extends JpaRepository<ZaposlenikSC,Long> {
-	ZaposlenikSC findByEmail(String email);
+public interface ZaposlenikscRepository extends JpaRepository<ZaposlenikSC, Long> {
+    ZaposlenikSC findByEmail(String email);
 
-	ZaposlenikSC findByKorisnickoIme(String korisnickoIme);
+    ZaposlenikSC findByKorisnickoIme(String korisnickoIme);
 }

@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 public class Application {
     @Bean
-    public PasswordEncoder pswdEncoder(){
+    public PasswordEncoder pswdEncoder() {
         //privremeno ne radim hash passworda dok frontend ne implementira hashing sa svoje strane
         return NoOpPasswordEncoder.getInstance();
         //return new BCryptPasswordEncoder();

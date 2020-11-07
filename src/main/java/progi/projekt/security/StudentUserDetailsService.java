@@ -14,7 +14,6 @@ import progi.projekt.model.ZaposlenikSC;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.ZaposlenikscService;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,20 +33,18 @@ public class StudentUserDetailsService implements UserDetailsService {
         //try catch se moze rjesiti i preko optional klasa
         try {
             //privremeni hardcoded login koji zaobidje bazu
-            if (username.equals("admin")){
+            if (username.equals("admin")) {
                 String rolesZaposlenik = "ROLE_ADMIN, ROLE_ZAPOSLENIKSC, ROLE_STUDENT, ROLE_USER";
-                return new User("admin","pass",
+                return new User("admin", "pass",
                         AuthorityUtils.commaSeparatedStringToAuthorityList(rolesZaposlenik));
             } else {
                 String rolesStudent = "ROLE_STUDENT, ROLE_USER";
-                return new User(username,"pass",
+                return new User(username, "pass",
                         AuthorityUtils.commaSeparatedStringToAuthorityList(rolesStudent));
             }
 
             //return new User(username, password(username), authorities(username));
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             //ovo ce uloviti exception od password() i authorities(), i ako constructor od Usera nesto baci
             String originalMessage = e.getMessage();
             throw new UsernameNotFoundException("No user '" + username + "'");
@@ -65,10 +62,9 @@ public class StudentUserDetailsService implements UserDetailsService {
             Optional<Student> student = studentService.findBykorisnickoIme(username);
             if (student.isEmpty()) {
                 Optional<ZaposlenikSC> zaposlenik = zaposlenikscService.findBykorisnickoIme(username);
-                if (student.isEmpty() && zaposlenik.isEmpty()){
+                if (student.isEmpty() && zaposlenik.isEmpty()) {
                     throw new UsernameNotFoundException("No user '" + username + "'");
-                }
-                else {
+                } else {
                     return zaposlenikscService.getLozinka(zaposlenik.get());
                 }
             } else {
@@ -91,10 +87,9 @@ public class StudentUserDetailsService implements UserDetailsService {
             Optional<Student> student = studentService.findBykorisnickoIme(username);
             if (student.isEmpty()) {
                 Optional<ZaposlenikSC> zaposlenik = zaposlenikscService.findBykorisnickoIme(username);
-                if (student.isEmpty() && zaposlenik.isEmpty()){
+                if (student.isEmpty() && zaposlenik.isEmpty()) {
                     throw new UsernameNotFoundException("No user '" + username + "'");
-                }
-                else {
+                } else {
                     String rolesZaposlenik = "ROLE_ADMIN, ROLE_ZAPOSLENIKSC, ROLE_STUDENT, ROLE_USER";
                     return AuthorityUtils.commaSeparatedStringToAuthorityList(rolesZaposlenik);
                 }

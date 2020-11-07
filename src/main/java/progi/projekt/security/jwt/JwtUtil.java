@@ -58,7 +58,7 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    public int hoursToMiliseconds(int hours){
+    public int hoursToMiliseconds(int hours) {
         int hourToMilis = 60 * 60 * 1000;
         return hours * hourToMilis;
     }

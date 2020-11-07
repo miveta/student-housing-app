@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ZaposlenikscService {
-	List<ZaposlenikSC> listAll();
+    List<ZaposlenikSC> listAll();
 
-	ZaposlenikscRepository getRepo();
+    ZaposlenikscRepository getRepo();
 
-	Optional<ZaposlenikSC> findByEmail(String email) throws UsernameNotFoundException;
+    Optional<ZaposlenikSC> findByEmail(String email) throws UsernameNotFoundException;
 
-	Optional<ZaposlenikSC> findBykorisnickoIme(String username) throws UsernameNotFoundException;
+    Optional<ZaposlenikSC> findBykorisnickoIme(String username) throws UsernameNotFoundException;
 
-	String getLozinka(ZaposlenikSC zaposlenik);
+    String getLozinka(ZaposlenikSC zaposlenik);
 
-	ZaposlenikSC createZaposlenikSC(ZaposlenikSC zaposlenik) throws SavingException;
+    ZaposlenikSC createZaposlenikSC(ZaposlenikSC zaposlenik) throws SavingException;
 }

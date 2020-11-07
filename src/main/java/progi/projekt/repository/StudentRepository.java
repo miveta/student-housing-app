@@ -5,8 +5,8 @@ import org.springframework.stereotype.Repository;
 import progi.projekt.model.Student;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student,Long> {
-	Student findByEmail(String email);
+public interface StudentRepository extends JpaRepository<Student, Long> {
+    Student findByEmail(String email);
 
-	Student findByKorisnickoIme(String korisnickoIme);
+    Student findByKorisnickoIme(String korisnickoIme);
 }
