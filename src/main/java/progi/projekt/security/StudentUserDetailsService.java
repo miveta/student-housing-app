@@ -38,10 +38,12 @@ public class StudentUserDetailsService implements UserDetailsService {
                 String rolesZaposlenik = "ROLE_ADMIN, ROLE_ZAPOSLENIKSC, ROLE_STUDENT, ROLE_USER";
                 return new User("admin","pass",
                         AuthorityUtils.commaSeparatedStringToAuthorityList(rolesZaposlenik));
-            } else {
+            } else if (username.equals("user")) {
                 String rolesStudent = "ROLE_STUDENT, ROLE_USER";
-                return new User(username,"pass",
+                return new User("user","pass",
                         AuthorityUtils.commaSeparatedStringToAuthorityList(rolesStudent));
+            } else {
+                throw new UsernameNotFoundException("No user '" + username + "'");
             }
 
             //return new User(username, password(username), authorities(username));

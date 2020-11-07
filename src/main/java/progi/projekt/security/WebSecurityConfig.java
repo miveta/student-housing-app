@@ -27,16 +27,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(studentUserDetailsService);
     }
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(studentUserDetailsService);
+
+        //ako zelimo koristiti custom auth provider:
+        //auth.authenticationProvider(myAuthProvider());
         super.configure(auth);
     }
 
@@ -58,6 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user").hasAuthority("ROLE_STUDENT")
                 .antMatchers("/hello").permitAll()
                 .antMatchers("/").permitAll()
+                .antMatchers("/checklogin").permitAll()
                 .and().formLogin();
 
         super.configure(http);
