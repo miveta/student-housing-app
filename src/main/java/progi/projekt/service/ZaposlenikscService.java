@@ -1,7 +1,6 @@
 package progi.projekt.service;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import progi.projekt.model.Student;
 import progi.projekt.model.ZaposlenikSC;
 import progi.projekt.repository.ZaposlenikscRepository;
 import progi.projekt.security.exception.SavingException;

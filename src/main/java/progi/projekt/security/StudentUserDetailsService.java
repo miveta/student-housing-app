@@ -14,7 +14,6 @@ import progi.projekt.model.ZaposlenikSC;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.ZaposlenikscService;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 

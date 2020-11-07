@@ -1,15 +1,11 @@
 package progi.projekt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
-import progi.projekt.security.AuthenticationRequest;
-import progi.projekt.security.AuthenticationResponse;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import progi.projekt.security.StudentUserDetailsService;
 import progi.projekt.security.jwt.JwtUtil;
 
@@ -18,8 +14,6 @@ import progi.projekt.security.jwt.JwtUtil;
 
 @RestController
 class HelloWorldController {
-
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
