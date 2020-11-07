@@ -1,4 +1,4 @@
-package progi.projekt.security.exception;
+package progi.projekt.security;
 
 
 import org.springframework.core.Ordered;
@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import progi.projekt.security.exception.JmbagNotFoundException;
+import progi.projekt.security.exception.SavingException;
+import progi.projekt.security.exception.UsernameNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,23 +23,27 @@ public class SecurityExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     protected ResponseEntity<?> handleUsernameNotFound(Exception e, WebRequest request) {
-        return getResponseEntity(e);
+        Map<String, String> props = new HashMap<>();
+        props.put("message", e.getMessage());
+        props.put("status", "407");
+        props.put("error", "Bad Request");
+        return new ResponseEntity<>(props, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(JmbagNotFoundException.class)
     protected ResponseEntity<?> handleJmbagNotFound(Exception e, WebRequest request) {
-        return getResponseEntity(e);
+        Map<String, String> props = new HashMap<>();
+        props.put("message", e.getMessage());
+        props.put("status", "407");
+        props.put("error", "Bad Request");
+        return new ResponseEntity<>(props, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(SavingException.class)
     protected ResponseEntity<?> handleSaving(Exception e, WebRequest request) {
-        return getResponseEntity(e);
-    }
-
-    private ResponseEntity<?> getResponseEntity(Exception e) {
         Map<String, String> props = new HashMap<>();
         props.put("message", e.getMessage());
-        props.put("status", "400");
+        props.put("status", "407");
         props.put("error", "Bad Request");
         return new ResponseEntity<>(props, HttpStatus.BAD_REQUEST);
     }

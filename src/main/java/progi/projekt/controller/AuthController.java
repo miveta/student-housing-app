@@ -3,15 +3,18 @@ package progi.projekt.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import progi.projekt.security.AuthenticationRequest;
+import progi.projekt.security.AuthenticationResponse;
 import progi.projekt.security.StudentUserDetailsService;
+import progi.projekt.security.jwt.JwtUtil;
 import progi.projekt.service.StudentService;
 
 import java.util.HashMap;
@@ -20,14 +23,41 @@ import java.util.Map;
 //Spring Security ima ugradjeni login controller pa je ovo redundantno?
 
 @RestController
-@RequestMapping("/auth")
+//@RequestMapping("/auth")
 public class AuthController {
     @Autowired
     private StudentService studentService;
     @Autowired
     private StudentUserDetailsService studentUserDetailsService;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtUtil jwtTokenUtil;
+
     //'WebRequest request' je argument za citanje cijelog requesta
+
+    /*
+    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+            );
+        } catch (BadCredentialsException e) {
+            throw new Exception("Incorrect username or password", e);
+        }
+
+
+        final UserDetails userDetails = studentUserDetailsService
+                .loadUserByUsername(authenticationRequest.getUsername());
+
+        final String jwt = jwtTokenUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    }
 
 
     @GetMapping("")
@@ -64,5 +94,7 @@ public class AuthController {
         // TODO
         return new ResponseEntity<>(new HashMap<>(), HttpStatus.NOT_IMPLEMENTED);
     }
+
+     */
 
 }
