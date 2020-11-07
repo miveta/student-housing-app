@@ -38,7 +38,7 @@ public class AuthController {
 
     //'WebRequest request' je argument za citanje cijelog requesta
 
-
+    /*
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 
@@ -94,5 +94,7 @@ public class AuthController {
         // TODO
         return new ResponseEntity<>(new HashMap<>(), HttpStatus.NOT_IMPLEMENTED);
     }
+
+     */
 
 }

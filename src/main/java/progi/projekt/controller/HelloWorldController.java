@@ -19,7 +19,6 @@ import progi.projekt.security.jwt.JwtUtil;
 @RestController
 class HelloWorldController {
 
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -51,5 +50,16 @@ class HelloWorldController {
     public String helloUser() {
         return "Hello User";
     }
+
+    @RequestMapping({"/admin"})
+    public String userPage() {
+        return "Admin page";
+    }
+
+    @RequestMapping({"/user"})
+    public String adminPage() {
+        return "User page";
+    }
+
 
 }

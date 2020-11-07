@@ -14,6 +14,7 @@ import progi.projekt.model.ZaposlenikSC;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.ZaposlenikscService;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,12 +35,13 @@ public class StudentUserDetailsService implements UserDetailsService {
         try {
             //privremeni hardcoded login koji zaobidje bazu
             if (username.equals("admin")){
+                String rolesZaposlenik = "ROLE_ADMIN, ROLE_ZAPOSLENIKSC, ROLE_STUDENT, ROLE_USER";
                 return new User("admin","pass",
-                        AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ADMIN, " +
-                                "ROLE_USER") );
+                        AuthorityUtils.commaSeparatedStringToAuthorityList(rolesZaposlenik));
             } else {
+                String rolesStudent = "ROLE_STUDENT, ROLE_USER";
                 return new User(username,"pass",
-                        AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
+                        AuthorityUtils.commaSeparatedStringToAuthorityList(rolesStudent));
             }
 
             //return new User(username, password(username), authorities(username));
@@ -93,10 +95,12 @@ public class StudentUserDetailsService implements UserDetailsService {
                     throw new UsernameNotFoundException("No user '" + username + "'");
                 }
                 else {
-                    return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ADMIN");
+                    String rolesZaposlenik = "ROLE_ADMIN, ROLE_ZAPOSLENIKSC, ROLE_STUDENT, ROLE_USER";
+                    return AuthorityUtils.commaSeparatedStringToAuthorityList(rolesZaposlenik);
                 }
             } else {
-                return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER");
+                String rolesStudent = "ROLE_STUDENT, ROLE_USER";
+                return AuthorityUtils.commaSeparatedStringToAuthorityList(rolesStudent);
             }
 
         } catch (UsernameNotFoundException e) {
@@ -107,4 +111,3 @@ public class StudentUserDetailsService implements UserDetailsService {
     }
 
 }
-

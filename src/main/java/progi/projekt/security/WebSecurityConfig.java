@@ -36,8 +36,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //privremeni configuration
-
         auth.userDetailsService(studentUserDetailsService);
         super.configure(auth);
     }
@@ -53,30 +51,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin(); //za h2, nama ne treba?
         http.csrf().disable();
 
-        //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        //http.authorizeRequests().antMatchers("/").permitAll();
-
-        /*
+        //Authority permission mozemo postaviti i za putanju, ne samo za metodu
         http.authorizeRequests()
                 .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/user").hasAuthority("ROLE_STUDENT")
+                .antMatchers("/hello").permitAll()
                 .antMatchers("/").permitAll()
                 .and().formLogin();
-                */
-
-
-
-		/* trebati ce za jwt sessione
-		httpSecurity.csrf().disable()
-				.authorizeRequests().antMatchers("/authenticate").permitAll()
-									.anyRequest().authenticated()
-									.and()
-									.exceptionHandling());
-
-		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-		 */
-
 
         super.configure(http);
     }
