@@ -6,7 +6,6 @@ class Login extends Component {
         super(props);
     }
 
-
     render() {
         return (
             <Form>

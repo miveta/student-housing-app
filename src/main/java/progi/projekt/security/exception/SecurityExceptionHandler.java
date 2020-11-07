@@ -20,24 +20,20 @@ public class SecurityExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     protected ResponseEntity<?> handleUsernameNotFound(Exception e, WebRequest request) {
-        Map<String, String> props = new HashMap<>();
-        props.put("message", e.getMessage());
-        props.put("status", "400");
-        props.put("error", "Bad Request");
-        return new ResponseEntity<>(props, HttpStatus.BAD_REQUEST);
+        return getResponseEntity(e);
     }
 
     @ExceptionHandler(JmbagNotFoundException.class)
     protected ResponseEntity<?> handleJmbagNotFound(Exception e, WebRequest request) {
-        Map<String, String> props = new HashMap<>();
-        props.put("message", e.getMessage());
-        props.put("status", "400");
-        props.put("error", "Bad Request");
-        return new ResponseEntity<>(props, HttpStatus.BAD_REQUEST);
+        return getResponseEntity(e);
     }
 
     @ExceptionHandler(SavingException.class)
     protected ResponseEntity<?> handleSaving(Exception e, WebRequest request) {
+        return getResponseEntity(e);
+    }
+
+    private ResponseEntity<?> getResponseEntity(Exception e) {
         Map<String, String> props = new HashMap<>();
         props.put("message", e.getMessage());
         props.put("status", "400");
