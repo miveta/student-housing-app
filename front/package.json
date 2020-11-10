@@ -7,6 +7,8 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "avs-sdk": "^1.2.5",
+    "aws-sdk": "^2.788.0",
     "bcrypt": "^5.0.0",
     "bootstrap": "^4.5.3",
     "jquery": "^3.5.1",

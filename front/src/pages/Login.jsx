@@ -4,7 +4,7 @@ import {hashingPassword} from "../index";
 import {Link} from "react-router-dom";
 
 function Login(props) {
-    const [loginForm, setLoginForm] = React.useState({username: '', lozinka: ''});
+    const [loginForm, setLoginForm] = React.useState({username: '', password: ''});
     const [error, setError] = React.useState('');
 
     // todo potencijalno ovo staviti kao props kojeg mu app proslijeduje?
@@ -19,7 +19,7 @@ function Login(props) {
 
         const body = {
             username: loginForm.username,
-            lozinka: loginForm.lozinka
+            password: loginForm.password
         };
 
 
@@ -52,7 +52,7 @@ function Login(props) {
             </Form.Group>
             <Form.Group>
                 <Form.Label> Lozinka </Form.Label>
-                <Form.Control name="password" type="password" placeholder={loginForm.lozinka} onChange={onChange}/>
+                <Form.Control name="password" type="password" placeholder={loginForm.password} onChange={onChange}/>
             </Form.Group>
             <Button type="submit" variant="dark" size="lg" block>Prijavi se</Button>
             {

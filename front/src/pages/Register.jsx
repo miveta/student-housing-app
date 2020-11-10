@@ -12,7 +12,7 @@ function Register(props) {
         setForm(oldForm => ({...oldForm, [name]: value}))
     }
 
-    async function onSubmit(e) {
+    function onSubmit(e) {
         e.preventDefault();
         setError("");
 
@@ -22,7 +22,7 @@ function Register(props) {
             jmbag: form.jmbag,
             username: form.username,
             email: form.email,
-            lozinka: await hashingPassword(form.lozinka)
+            lozinka: form.lozinka
         };
 
         console.log(body);
