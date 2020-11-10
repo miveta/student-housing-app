@@ -5,6 +5,7 @@ import {Redirect, Route, Switch} from "react-router-dom";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import NoviOglas from "./components/NoviOglas";
 import Footer from "./partial/Footer";
 import Header from "./partial/Header";
 
@@ -46,6 +47,7 @@ function App() {
                     <Switch>
                         <Route exact path="/login" component={() => <Login onLogin={onLogin}/>}/>
                         <Route exact path="/register" component={Register}/>
+                        <Route exact path="/novioglas" component={NoviOglas}/>
                         {/*Je li ovo ok praksa??*/}
                         <Redirect to="/login"/>
                     </Switch>
