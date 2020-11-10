@@ -1,6 +1,7 @@
 import React from "react";
 import {Button, Form} from 'react-bootstrap';
 import {hashingPassword} from "../index";
+import {Link} from "react-router-dom";
 
 function Register(props) {
     const [form, setForm] = React.useState({ime: '', prezime: '', jmbag: '', username: '', email: '', lozinka: ''});
@@ -79,11 +80,16 @@ function Register(props) {
                 <Form.Control name="email" type="email" placeholder={form.email} onChange={onChange}/>
             </Form.Group>
             <Form.Group>
-                <Form.Label> Password </Form.Label>
+                <Form.Label> Lozinka </Form.Label>
                 <Form.Control name="lozinka" type="password" placeholder={form.lozinka} onChange={onChange}/>
             </Form.Group>
             <div>{error}</div>
             <Button type="submit" variant="dark" size="lg" block disabled={!isValid()}> Registriraj se </Button>
+            {
+                <p className="already-registered text-right">
+                    <Link to="/sign-in">Već si registriran?</Link>
+                </p>
+            }
         </Form>
     )
 }
