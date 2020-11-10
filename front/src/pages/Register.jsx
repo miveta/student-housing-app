@@ -1,5 +1,6 @@
 import React from "react";
 import {Button, Form} from 'react-bootstrap';
+import {hashingPassword} from "../index";
 
 function Register(props) {
     const [form, setForm] = React.useState({ime: '', prezime: '', jmbag: '', username: '', email: '', lozinka: ''});
@@ -10,7 +11,7 @@ function Register(props) {
         setForm(oldForm => ({...oldForm, [name]: value}))
     }
 
-    function onSubmit(e) {
+    async function onSubmit(e) {
         e.preventDefault();
         setError("");
 
@@ -20,7 +21,7 @@ function Register(props) {
             jmbag: form.jmbag,
             username: form.username,
             email: form.email,
-            lozinka: form.lozinka
+            lozinka: await hashingPassword(form.lozinka)
         };
 
         console.log(body);

@@ -1,5 +1,6 @@
 import React from "react";
 import {Button, Form} from 'react-bootstrap';
+import {hashingPassword} from "../index";
 
 function Login(props) {
     const [loginForm, setLoginForm] = React.useState({username: '', lozinka: ''});
