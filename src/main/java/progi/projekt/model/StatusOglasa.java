@@ -17,11 +17,11 @@ public class StatusOglasa implements Serializable {
     @Column(nullable = false)
     private StatusOglasaEnum status;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_oglas")
     private Oglas oglas;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_student")
     private Student potvrdioOglas;
 

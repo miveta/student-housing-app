@@ -30,7 +30,7 @@ public class TrazeniUvjeti {
     @Column(nullable = false)
     private int godina;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_student")
     private Student traziStudent;
 

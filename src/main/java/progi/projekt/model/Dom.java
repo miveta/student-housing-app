@@ -17,11 +17,11 @@ public class Dom implements Serializable {
     @Column(nullable = false)
     private String naziv;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_grad")
     private Grad grad;
 
-    @OneToMany(mappedBy = "dom")
+    @OneToMany(mappedBy = "dom", cascade = CascadeType.ALL)
     private Set<Paviljon> paviljoni;
 
     //Naziv i grad ne smiju biti null!

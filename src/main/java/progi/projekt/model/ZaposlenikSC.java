@@ -26,7 +26,7 @@ public class ZaposlenikSC {
     @Column(nullable = false, name = "hash_lozinke")
     private String lozinka;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_sc")
     private StudentskiCentar zaposlenSC;
 

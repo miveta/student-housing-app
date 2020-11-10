@@ -18,10 +18,10 @@ public class Obavijest {
     private boolean procitana;
     private Date vrijeme;
 
-    @ManyToMany(targetEntity = Student.class, mappedBy = "obavijesti")
+    @ManyToMany(targetEntity = Student.class, mappedBy = "obavijesti", cascade = CascadeType.ALL)
     private List<Student> studenti;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_oglas")
     private Oglas oglas;
 

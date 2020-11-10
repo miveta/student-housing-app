@@ -19,14 +19,16 @@ public class Oglas {
     private int godina;
     private Date objavljen;
 
-    @OneToOne
-    @JoinColumns({
-            @JoinColumn(name = "id_status_oglasa")
-    })
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_status_oglasa")
     private StatusOglasa status;
 
-    @OneToMany(mappedBy = "oglas")
+    @OneToMany(mappedBy = "oglas", cascade = CascadeType.ALL)
     private List<Obavijest> obavijesti;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="id_student")
+    private Student student;
 
     //Naslov i godina ne smiju biti null
     public Oglas(String naslov, String opis, int godina, Date objavljen) {
@@ -100,5 +102,13 @@ public class Oglas {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 }

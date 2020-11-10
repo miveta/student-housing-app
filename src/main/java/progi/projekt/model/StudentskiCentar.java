@@ -13,11 +13,11 @@ public class StudentskiCentar {
 
     private String naziv;
 
-    @OneToOne
-    @JoinColumn(name = "id_grad", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_grad")
     private Grad grad;
 
-    @OneToMany(mappedBy = "zaposlenSC")
+    @OneToMany(mappedBy = "zaposlenSC", cascade = CascadeType.ALL)
     List<ZaposlenikSC> zaposlenici;
 
     //Naziv i grad ne smiju biti null!

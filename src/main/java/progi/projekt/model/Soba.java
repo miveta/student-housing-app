@@ -17,7 +17,7 @@ public class Soba implements Serializable {
     private int kat;
 
     @Id
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumns({
             @JoinColumn(name = "id_paviljon"),
             @JoinColumn(name = "id_dom")

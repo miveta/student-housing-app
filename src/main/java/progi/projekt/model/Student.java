@@ -33,16 +33,20 @@ public class Student implements Serializable, User {
 
     private boolean obavijestiNaMail;
 
-    @ManyToMany(targetEntity = Obavijest.class)
+    @ManyToMany(targetEntity = Obavijest.class, cascade = CascadeType.ALL)
     private List<Obavijest> obavijesti;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_status_oglasa")
-    private Oglas potvrdioOglas;
+    private StatusOglasa potvrdioOglas;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_trazeni_uvjeti")
     private TrazeniUvjeti uvjeti;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="oglas")
+    private Oglas oglas;
 
     public Student() {
     }
@@ -140,11 +144,11 @@ public class Student implements Serializable, User {
         this.obavijestiNaMail = obavijestiNaMail;
     }
 
-    public Oglas getPotvrdioOglas() {
+    public StatusOglasa getPotvrdioOglas() {
         return potvrdioOglas;
     }
 
-    public void setPotvrdioOglas(Oglas potvrdioOglas) {
+    public void setPotvrdioOglas(StatusOglasa potvrdioOglas) {
         this.potvrdioOglas = potvrdioOglas;
     }
 
@@ -186,5 +190,13 @@ public class Student implements Serializable, User {
     @Override
     public String getUsername() {
         return korisnickoIme;
+    }
+
+    public Oglas getOglas() {
+        return oglas;
+    }
+
+    public void setOglas(Oglas oglas) {
+        this.oglas = oglas;
     }
 }

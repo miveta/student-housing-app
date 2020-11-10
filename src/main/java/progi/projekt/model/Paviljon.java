@@ -16,11 +16,11 @@ public class Paviljon implements Serializable {
     private String naziv;
 
     @Id
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_dom")
     private Dom dom;
 
-    @OneToMany(mappedBy = "paviljon")
+    @OneToMany(mappedBy = "paviljon", cascade = CascadeType.ALL)
     private Set<Soba> sobe;
 
     public Paviljon() {

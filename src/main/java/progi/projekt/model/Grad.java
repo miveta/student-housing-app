@@ -14,11 +14,11 @@ public class Grad {
     @Column(nullable = false)
     private String naziv;
 
-    @OneToMany(mappedBy = "grad")
+    @OneToMany(mappedBy = "grad", cascade = CascadeType.ALL)
     private Set<Dom> domovi;
 
-    @OneToOne
-    @JoinColumn(name = "id_sc", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_sc")
     private StudentskiCentar studentskiCentar;
 
     //Naziv i studentskiCentar ne smiju biti null
