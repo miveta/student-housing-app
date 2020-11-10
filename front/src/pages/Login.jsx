@@ -1,5 +1,6 @@
 import React from "react";
 import {Button, Form} from 'react-bootstrap';
+import {Link} from "react-router-dom";
 
 function Login(props) {
     const [loginForm, setLoginForm] = React.useState({username: '', lozinka: ''});
@@ -42,18 +43,22 @@ function Login(props) {
 
     return (
         <Form onSubmit={onSubmit}>
-            <h3>Log in</h3>
+            <h3>Prijava</h3>
 
             <Form.Group>
                 <Form.Label> Korisničko ime </Form.Label>
                 <Form.Control name="username" type="text" placeholder={loginForm.username} onChange={onChange}/>
             </Form.Group>
             <Form.Group>
-                <Form.Label> Password </Form.Label>
+                <Form.Label> Lozinka </Form.Label>
                 <Form.Control name="password" type="password" placeholder={loginForm.lozinka} onChange={onChange}/>
             </Form.Group>
-            <Button type="submit" variant="dark" size="lg" block>Sign in</Button>
-
+            <Button type="submit" variant="dark" size="lg" block>Prijavi se</Button>
+            {
+                <p className="not-registered text-right">
+                    <Link to="/register">Nisi registriran?</Link>
+                </p>
+            }
             {
                 // Zakomentirano zato što nisam sigurna da ćemo raditi to sa forgot your pwd
                 /*
