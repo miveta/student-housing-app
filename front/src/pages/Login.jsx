@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Form} from 'react-bootstrap';
-import {hashingPassword} from "../index";
+import {hashPassword} from "../index";
 import {Link} from "react-router-dom";
 
 function Login(props) {
@@ -19,7 +19,7 @@ function Login(props) {
 
         const body = {
             username: loginForm.username,
-            password: loginForm.password
+            password: hashPassword(loginForm.password)
         };
 
 

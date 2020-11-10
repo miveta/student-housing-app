@@ -3,9 +3,13 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import {BrowserRouter} from "react-router-dom";
-//import bcrypt from "bcrypt";
+import {sha256} from "js-sha256";
 
-const saltRounds = 10;
+export function hashPassword(passwordToBeHashed) {
+   return sha256(passwordToBeHashed);
+
+}
+
 ReactDOM.render(
     <BrowserRouter>
         <App/>
@@ -17,28 +21,3 @@ ReactDOM.render(
 
 
 //serviceWorker.unregister();
-
-/*export function hashingPassword(password) {
-    const hash = bcrypt.hashSync(password, saltRounds);
-    return hash*/
-    /*bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(password, salt, function (err, hash) {
-            if (err) {
-                console.error(err)
-                return
-            }
-
-            return hash
-        });
-    });*/
-//}
-
-/*export function comparePasswordHash(password) {
-    bcrypt.compare(password, hash, (err, res) => {
-        if (err) {
-            console.error(err)
-            return
-        }
-        return //true or false
-    })
-}*/

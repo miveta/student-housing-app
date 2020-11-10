@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Form} from 'react-bootstrap';
-import {hashingPassword} from "../index";
+import {hashPassword} from "../index";
 import {Link} from "react-router-dom";
 
 function Register(props) {
@@ -22,7 +22,7 @@ function Register(props) {
             jmbag: form.jmbag,
             username: form.username,
             email: form.email,
-            lozinka: form.lozinka
+            lozinka: hashPassword(form.lozinka)
         };
 
         console.log(body);
