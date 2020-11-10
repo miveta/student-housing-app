@@ -7,33 +7,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import progi.projekt.forms.LoginForm;
 
 @Component
 public class AuthenticationHandler {
+    @Autowired
+    private StudentUserDetailsService studentUserDetailsService;
 
-	@Autowired
-	private StudentUserDetailsService studentUserDetailsService;
-	@Autowired
-	private PasswordEncoder pswdEncoder;
+    @Autowired
+    private PasswordEncoder pswdEncoder;
 
-	public Authentication authenticate (loginForm data) {
+    public Authentication authenticate(LoginForm data) {
+        UserDetails userDetails = studentUserDetailsService.loadUserByUsername(data.getUsername());
 
-		String username = data.getLogin();
-		String password = data.getPassword();
+        if (userDetails == null)
+            throw new BadCredentialsException("Username not provided");
 
-		UserDetails userDetails = studentUserDetailsService.loadUserByUsername(username);
+        if (!pswdEncoder.matches(data.getPassword(), userDetails.getPassword()))
+            throw new BadCredentialsException("Username or password is wrong");
 
-		if (userDetails == null) {
-			throw new BadCredentialsException("Username not provided");
-		}
-		if (!pswdEncoder.matches(password, userDetails.getPassword())) {
-			throw new BadCredentialsException("Username or password is wrong");
-		}
-
-		Authentication auth =
-				new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-		return auth;
-	}
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    }
 
 }

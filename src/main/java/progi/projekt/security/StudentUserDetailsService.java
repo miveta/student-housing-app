@@ -32,27 +32,38 @@ public class StudentUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //try catch se moze rjesiti i preko optional klasa
         try {
+            Optional<Student> student = studentService.findBykorisnickoIme(username);
+            if (student.isPresent()) {
+                String rolesStudent = "ROLE_STUDENT, ROLE_USER";
+                return new User(student.get().getKorisnickoIme(), student.get().getLozinka(), AuthorityUtils.commaSeparatedStringToAuthorityList(rolesStudent));
+            } else {
+                Optional<ZaposlenikSC> zaposlenikSC = zaposlenikscService.findBykorisnickoIme(username);
+                if (zaposlenikSC.isPresent()) {
+                    String rolesZaposlenik = "ROLE_ADMIN, ROLE_ZAPOSLENIKSC, ROLE_STUDENT, ROLE_USER";
+                    return new User(zaposlenikSC.get().getKorisnickoIme(), zaposlenikSC.get().getLozinka(), AuthorityUtils.commaSeparatedStringToAuthorityList(rolesZaposlenik));
+                } else {
+                    throw new UsernameNotFoundException("No user '" + username + "'");
+                }
+            }
+
+/*
             //privremeni hardcoded login koji zaobidje bazu
-            if (username.equals("admin")){
+            if (username.equals("admin")) {
                 String rolesZaposlenik = "ROLE_ADMIN, ROLE_ZAPOSLENIKSC, ROLE_STUDENT, ROLE_USER";
-                return new User("admin","pass",
+                return new User("admin", "pass",
                         AuthorityUtils.commaSeparatedStringToAuthorityList(rolesZaposlenik));
             } else if (username.equals("user")) {
                 String rolesStudent = "ROLE_STUDENT, ROLE_USER";
-                return new User("user","pass",
+                return new User("user", "pass",
                         AuthorityUtils.commaSeparatedStringToAuthorityList(rolesStudent));
             } else {
                 throw new UsernameNotFoundException("No user '" + username + "'");
             }
-
+ */
             //return new User(username, password(username), authorities(username));
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             //ovo ce uloviti exception od password() i authorities(), i ako constructor od Usera nesto baci
-            String originalMessage = e.getMessage();
             throw new UsernameNotFoundException("No user '" + username + "'");
-            //ovoga ulovi SecurityExceptionHandler
         }
 
     }
@@ -66,10 +77,9 @@ public class StudentUserDetailsService implements UserDetailsService {
             Optional<Student> student = studentService.findBykorisnickoIme(username);
             if (student.isEmpty()) {
                 Optional<ZaposlenikSC> zaposlenik = zaposlenikscService.findBykorisnickoIme(username);
-                if (student.isEmpty() && zaposlenik.isEmpty()){
+                if (zaposlenik.isEmpty()) {
                     throw new UsernameNotFoundException("No user '" + username + "'");
-                }
-                else {
+                } else {
                     return zaposlenikscService.getLozinka(zaposlenik.get());
                 }
             } else {
@@ -92,10 +102,9 @@ public class StudentUserDetailsService implements UserDetailsService {
             Optional<Student> student = studentService.findBykorisnickoIme(username);
             if (student.isEmpty()) {
                 Optional<ZaposlenikSC> zaposlenik = zaposlenikscService.findBykorisnickoIme(username);
-                if (student.isEmpty() && zaposlenik.isEmpty()){
+                if (zaposlenik.isEmpty()) {
                     throw new UsernameNotFoundException("No user '" + username + "'");
-                }
-                else {
+                } else {
                     String rolesZaposlenik = "ROLE_ADMIN, ROLE_ZAPOSLENIKSC, ROLE_STUDENT, ROLE_USER";
                     return AuthorityUtils.commaSeparatedStringToAuthorityList(rolesZaposlenik);
                 }

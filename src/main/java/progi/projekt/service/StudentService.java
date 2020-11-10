@@ -2,7 +2,6 @@ package progi.projekt.service;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import progi.projekt.model.Student;
-import progi.projekt.repository.StudentRepository;
 import progi.projekt.security.exception.SavingException;
 
 import java.util.List;
@@ -10,8 +9,6 @@ import java.util.Optional;
 
 public interface StudentService {
     List<Student> listAll();
-
-    StudentRepository getRepo();
 
     Optional<Student> findByEmail(String email) throws UsernameNotFoundException;
 

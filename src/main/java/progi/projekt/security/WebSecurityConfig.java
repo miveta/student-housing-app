@@ -1,16 +1,11 @@
 package progi.projekt.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import progi.projekt.security.jwt.JwtRequestFilter;
 
 @EnableWebSecurity //ukljucivanje provjere razine pristupa
@@ -26,7 +21,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(studentUserDetailsService);
     }
-
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -48,19 +42,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin(); //za h2, nama ne treba?
         http.csrf().disable();
 
-
         //Authority permission mozemo postaviti i za putanju, ne samo za metodu
         http.authorizeRequests()
                 .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/user").hasAuthority("ROLE_STUDENT")
                 .antMatchers("/hello").permitAll()
-                .antMatchers("/").permitAll()
+                .antMatchers("/login", "/register").permitAll()
                 .antMatchers("/checklogin").permitAll()
-                .and().formLogin();
+                .and().formLogin().loginPage("/login")
+                .and().logout().logoutSuccessUrl("/login");
 
         super.configure(http);
     }
-
 }
 
 //dodati @Secured("ROLE_ADMIN") na metode koje poziva admin, @Secured("ROLE_STUDENT") na metode koje poziva student

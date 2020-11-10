@@ -4,33 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import progi.projekt.security.AuthenticationRequest;
-import progi.projekt.security.AuthenticationResponse;
-import progi.projekt.security.StudentUserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import progi.projekt.security.*;
-import progi.projekt.security.jwt.JwtUtil;
+import progi.projekt.forms.LoginForm;
+import progi.projekt.forms.RegisterForm;
+import progi.projekt.model.Student;
+import progi.projekt.security.AuthenticationHandler;
+import progi.projekt.security.StudentUserDetailsService;
 import progi.projekt.service.StudentService;
-
-import java.util.Collection;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -39,18 +24,19 @@ import java.util.Map;
 @RestController
 //@RequestMapping("/auth")
 public class AuthController {
-
     @Autowired
     private StudentUserDetailsService studentUserDetailsService;
 
     @Autowired
     private AuthenticationHandler authenticationHandler;
 
+    @Autowired
+    private StudentService studentService;
 
     //'@AuthenticationPrincipal WebRequest request' je argument za citanje cijelog requesta
     //'@RequestBody LoginForm loginForm' je argument za citanje cijelog bodya requesta
     //'@AuthenticationPrincipal User userLoginData' vraca podatke o korisniku u security contextu
-
+    @CrossOrigin
     @GetMapping("/userInfo")
     public String showLoggedInUser(@AuthenticationPrincipal User loggedInUser) {
         String username = loggedInUser.getUsername();
@@ -60,7 +46,22 @@ public class AuthController {
         return "Username: " + username + " Auths: " + authsPrint;
     }
 
+    @CrossOrigin
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> register(@RequestBody @Validated RegisterForm registerForm) {
+        boolean alreadyExists = studentService.findBykorisnickoIme(registerForm.getUsername()).isPresent();
 
+        Map<String, String> props = new HashMap<>();
+        if (alreadyExists) {
+            props.put("error", "User with this name already exists!");
+            return new ResponseEntity<>(props, HttpStatus.BAD_REQUEST);
+        }
+
+        Student student = registerForm.fromRegisterForm();
+        student = studentService.createStudent(student);
+
+        return new ResponseEntity<>(props, HttpStatus.OK);
+    }
 
     //front mora poslati 'loginForm' objekt, controller vraca 200 za dobre podatke, 401 za lose
     //Header: Content-Type=application/json
@@ -71,16 +72,11 @@ public class AuthController {
             "password": "pass"
         }
     */
-    @PostMapping(value="/checklogin", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    @PostMapping(value = "/checklogin", consumes = MediaType.APPLICATION_JSON_VALUE)
     //@ResponseBody
-    public ResponseEntity<?> loginResponse(@RequestBody loginForm data) {
-
-        String username = data.getLogin();
-        String password = data.getPassword();
-
+    public ResponseEntity<?> loginResponse(@RequestBody LoginForm data) {
         try {
-            UserDetails userDetails = this.studentUserDetailsService.loadUserByUsername(username);
-
             Authentication auth = authenticationHandler.authenticate(data);
 
             //if successful
@@ -89,12 +85,10 @@ public class AuthController {
             return new ResponseEntity<>(propsSucc, HttpStatus.OK);
 
         } catch (Exception e) {
-            String originalMessage = e.getMessage();
-
             //if unsuccessful (user doesnt exist or login and password dont match
             Map<String, String> propsFail = new HashMap<>();
             propsFail.put("status", "401");
-            propsFail.put("error", originalMessage);
+            propsFail.put("error", e.getMessage());
             return new ResponseEntity<>(propsFail, HttpStatus.UNAUTHORIZED);
         }
     }

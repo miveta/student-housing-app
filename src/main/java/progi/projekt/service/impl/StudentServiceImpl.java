@@ -18,11 +18,6 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
 
     @Override
-    public StudentRepository getRepo() {
-        return studentRepository;
-    }
-
-    @Override
     public List<Student> listAll() {
         return studentRepository.findAll();
     }

@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-public class Student implements Serializable {
+public class Student implements Serializable, User {
     @Id
     @Column(name = "id_korisnik")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(nullable = false, unique = true, length = 10)
-    private int jmbag;
+    private String jmbag;
 
     // Korisnicko ime ne smije biti null, te mora biti unique
     @Column(nullable = false, unique = true, name = "korisnicko_ime")
@@ -33,7 +33,6 @@ public class Student implements Serializable {
 
     private boolean obavijestiNaMail;
 
-
     @ManyToMany(targetEntity = Obavijest.class)
     private List<Obavijest> obavijesti;
 
@@ -50,9 +49,16 @@ public class Student implements Serializable {
 
     //Sve osim obavijestiNaMail ne smije biti null!
     //JMBAG mora biti velicine 10
-    public Student(int jmbag, String korisnickoIme, String ime, String prezime, String email, String lozinka, boolean obavijestiNaMail) {
+
+    /*
+     * zakomentirano zato što bi sada
+     * validaciju bi trebao odraditi controller s anotacijom @valid
+     * provjeri RegisterForm - tamo se anotacijama mogu dodavati pravilaa
+     * */
+    /*
+    public Student(String jmbag, String korisnickoIme, String ime, String prezime, String email, String lozinka, boolean obavijestiNaMail) {
         if (korisnickoIme != null && ime != null && prezime != null && email != null && lozinka != null) {
-            if (String.valueOf(jmbag).length() == 10) {
+            if (jmbag.length() == 10) {
                 this.jmbag = jmbag;
                 this.korisnickoIme = korisnickoIme;
                 this.ime = ime;
@@ -68,6 +74,8 @@ public class Student implements Serializable {
         }
     }
 
+     */
+
     public List<Obavijest> getObavijesti() {
         return obavijesti;
     }
@@ -76,11 +84,11 @@ public class Student implements Serializable {
         this.obavijesti = obavijesti;
     }
 
-    public int getJmbag() {
+    public String getJmbag() {
         return jmbag;
     }
 
-    public void setJmbag(int jmbag) {
+    public void setJmbag(String jmbag) {
         this.jmbag = jmbag;
     }
 
@@ -168,5 +176,15 @@ public class Student implements Serializable {
 
     public void setElevated(boolean elevated) {
         this.elevated = elevated;
+    }
+
+    @Override
+    public String getPassword() {
+        return lozinka;
+    }
+
+    @Override
+    public String getUsername() {
+        return korisnickoIme;
     }
 }
