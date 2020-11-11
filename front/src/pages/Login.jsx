@@ -1,6 +1,5 @@
 import React from "react";
 import {Button, Form} from 'react-bootstrap';
-import {hashPassword} from "../index";
 import {Link} from "react-router-dom";
 
 function Login(props) {
@@ -16,13 +15,12 @@ function Login(props) {
         e.preventDefault();
         setError("");
 
-        let psw = hashPassword(loginForm.password);
-        console.log(psw);
+
         const body = {
             username: loginForm.username,
-            password: hashPassword(loginForm.password)
+            password: loginForm.password
         };
-
+        console.log(body);
         const options = {
             method: 'POST',
             headers: {

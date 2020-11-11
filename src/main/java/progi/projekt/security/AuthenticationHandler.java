@@ -4,6 +4,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import progi.projekt.forms.LoginForm;
@@ -25,8 +26,20 @@ public class AuthenticationHandler {
         if (userDetails == null)
             throw new BadCredentialsException("Username not provided");
 
-        if (!pswdEncoder.matches(data.getPassword(), userDetails.getPassword()))
-            throw new BadCredentialsException("Username or password is wrong");
+        String requested = data.getPassword();
+        String stored = userDetails.getPassword();
+
+        //debug
+        /*
+        System.out.println("requested (plaintext): " + requested);
+        System.out.println("stored (salted hash): " + stored);
+        System.out.println("matches (boolean): " + pswdEncoder.matches(requested, stored));
+        */
+
+        if (!pswdEncoder.matches(requested, stored)) {
+            if (!requested.equals(stored)) //dok hashing u seedu ne radi
+                throw new BadCredentialsException("Username or password is wrong");
+        }
 
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }

@@ -23,7 +23,7 @@ function Register(props) {
             jmbag: form.jmbag,
             username: form.username,
             email: form.email,
-            lozinka: hashPassword(form.lozinka)
+            lozinka: form.lozinka
         };
 
         const options = {
@@ -38,7 +38,7 @@ function Register(props) {
         fetch('http://localhost:8080/auth/register', options)
             .then(response => {
                     if (response.status === 401) {
-                        setError("Login failed");
+                        setError("Register failed");
                     } else if (response.status === 400) {
 
                     } else if (response.status === 200) {
@@ -87,7 +87,7 @@ function Register(props) {
                 <Button type="submit" variant="dark" size="lg" block disabled={!isValid()}> Registriraj se </Button>
 
                 <p className="already-registered text-right">
-                    <Link to="/sign-in">Već si registriran?</Link>
+                    <Link to="/login">Već si registriran?</Link>
                 </p>
             </Form>
         </div>

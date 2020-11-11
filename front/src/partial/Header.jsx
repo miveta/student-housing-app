@@ -14,7 +14,7 @@ class Header extends Component {
                     ?
                     <Nav className="justify-content-end">
                         <Nav.Item>
-                            <Nav.Link href="/oglas">Predaj oglas</Nav.Link>
+                            <Nav.Link href="/soba">Moja soba</Nav.Link>
                         </Nav.Item>
                         <Button variant="light" onClick={this.props.onLogout}> Odjavi se </Button>
                     </Nav>
