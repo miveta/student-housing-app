@@ -2,7 +2,6 @@ package progi.projekt.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,28 +17,28 @@ public class Dom implements Serializable {
     @Column(nullable = false)
     private String naziv;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_grad")
     private Grad grad;
 
-    @OneToMany(mappedBy = "dom")
+    @OneToMany(mappedBy = "dom", cascade = CascadeType.ALL)
     private Set<Paviljon> paviljoni;
 
     //Naziv i grad ne smiju biti null!
-    public Dom(String naziv, Grad grad, boolean imaMenzu){
-        if(naziv != null){
-            if(grad != null){
+    public Dom(String naziv, Grad grad, boolean imaMenzu) {
+        if (naziv != null) {
+            if (grad != null) {
                 this.naziv = naziv;
                 this.grad = grad;
                 this.imaMenzu = imaMenzu;
             } else
                 System.err.print("Grad u konstruktoru doma ne smije biti null!");
-        }
-        else
+        } else
             System.err.print("Naziv doma ne smije biti null!");
     }
 
-    public Dom(){}
+    public Dom() {
+    }
 
     public boolean isImaMenzu() {
         return imaMenzu;

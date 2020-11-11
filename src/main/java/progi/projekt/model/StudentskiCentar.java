@@ -13,28 +13,27 @@ public class StudentskiCentar {
 
     private String naziv;
 
-    @OneToOne
-    @JoinColumn(name = "id_grad", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_grad")
     private Grad grad;
 
-    @OneToMany(mappedBy="zaposlenSC")
+    @OneToMany(mappedBy = "zaposlenSC", cascade = CascadeType.ALL)
     List<ZaposlenikSC> zaposlenici;
 
     //Naziv i grad ne smiju biti null!
-    public StudentskiCentar(String naziv, Grad grad){
-        if(naziv != null){
-            if(grad != null){
+    public StudentskiCentar(String naziv, Grad grad) {
+        if (naziv != null) {
+            if (grad != null) {
                 this.naziv = naziv;
                 this.grad = grad;
-            }
-            else
+            } else
                 System.err.println("Grad studentskog centra ne smije biti null!");
-        }
-        else
+        } else
             System.err.println("Naziv studentskog centra ne smije biti null!");
     }
 
-    public StudentskiCentar(){ }
+    public StudentskiCentar() {
+    }
 
     public UUID getId() {
         return id;

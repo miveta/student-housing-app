@@ -22,7 +22,7 @@ public class TrazeniUvjeti {
     @Enumerated(EnumType.STRING)
     private TipKupaoniceEnum tipKupaonice;
 
-    @Column(name="kategorija", nullable = false)
+    @Column(name = "kategorija", nullable = false)
     @Enumerated(EnumType.STRING)
     private OznakeKategorijaEnum kategorija;
 
@@ -30,15 +30,16 @@ public class TrazeniUvjeti {
     @Column(nullable = false)
     private int godina;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_student")
     private Student traziStudent;
 
-    public TrazeniUvjeti(){}
+    public TrazeniUvjeti() {
+    }
 
     //Ništa ne smije biti null osim komentara
-    public TrazeniUvjeti(BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija, int godina, Student student, String komentar){
-        if(brojKreveta != null && tipKupaonice != null && kategorija != null && student != null){
+    public TrazeniUvjeti(BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija, int godina, Student student, String komentar) {
+        if (brojKreveta != null && tipKupaonice != null && kategorija != null && student != null) {
             this.brojKreveta = brojKreveta;
             this.tipKupaonice = tipKupaonice;
             this.kategorija = kategorija;

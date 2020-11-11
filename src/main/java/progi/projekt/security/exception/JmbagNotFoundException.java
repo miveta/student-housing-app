@@ -1,0 +1,14 @@
+package progi.projekt.security.exception;
+
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+@ResponseStatus(NOT_FOUND)
+public class JmbagNotFoundException extends RuntimeException {
+    private static final long serialVersionUID = 10L;
+
+    public JmbagNotFoundException(String message) {
+        super(message);
+    }
+}

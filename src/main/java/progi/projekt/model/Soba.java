@@ -7,7 +7,6 @@ import progi.projekt.model.enums.TipKupaoniceEnum;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 public class Soba implements Serializable {
@@ -18,10 +17,10 @@ public class Soba implements Serializable {
     private int kat;
 
     @Id
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumns({
-            @JoinColumn(name="id_paviljon"),
-            @JoinColumn(name="id_dom")
+            @JoinColumn(name = "id_paviljon"),
+            @JoinColumn(name = "id_dom")
     })
     private Paviljon paviljon;
 
@@ -33,7 +32,7 @@ public class Soba implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipKupaoniceEnum tipKupaonice;
 
-    @Column(name="kategorija")
+    @Column(name = "kategorija")
     @Enumerated(EnumType.STRING)
     private OznakeKategorijaEnum kategorija;
 
@@ -52,11 +51,12 @@ public class Soba implements Serializable {
         return Objects.hash(broj, kat, paviljon);
     }
 
-    public Soba(){}
+    public Soba() {
+    }
 
     //Ništa ne smije biti null!
-    public Soba(int brojSobe, int kat, Paviljon paviljon, BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija){
-        if(paviljon != null && brojKreveta != null && tipKupaonice != null && kategorija != null){
+    public Soba(int brojSobe, int kat, Paviljon paviljon, BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija) {
+        if (paviljon != null && brojKreveta != null && tipKupaonice != null && kategorija != null) {
             this.paviljon = paviljon;
             this.brojKreveta = brojKreveta;
             this.tipKupaonice = tipKupaonice;

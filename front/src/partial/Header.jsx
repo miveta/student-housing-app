@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Link} from "react-router-dom";
+import {Button, Nav, Navbar} from "react-bootstrap";
 
 class Header extends Component {
     constructor(props) {
@@ -7,25 +7,28 @@ class Header extends Component {
     }
 
     render() {
-        {/*
-            // todo - promijeni u bootstrap!
-             kad se ekran smanji na pola nestane navbar
-        */}
-        return(
-            <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-                <div className="container">
-                    <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-                        <ul className="navbar-nav ml-auto">
-                            <li className="nav-item">
-                                <Link className="nav-link" to={"/login"}>Login</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to={"/register"}>Register</Link>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+        return (
+            <Navbar expand="lg" bg="light" className="justify-content-between header" sticky={"top"}>
+                <Navbar.Brand href="/">ZAMJENA SOBA</Navbar.Brand>
+                {this.props.isLoggedIn
+                    ?
+                    <Nav className="justify-content-end">
+                        <Nav.Item>
+                            <Nav.Link href="/oglas">Predaj oglas</Nav.Link>
+                        </Nav.Item>
+                        <Button variant="light" onClick={this.props.onLogout}> Odjavi se </Button>
+                    </Nav>
+                    :
+                    <Nav className="justify-content-end">
+                        <Nav.Item>
+                            <Nav.Link href="/login">Prijava</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link href="/register">Registracija</Nav.Link>
+                        </Nav.Item>
+                    </Nav>
+                }
+            </Navbar>
         )
     }
 }

@@ -1,32 +1,59 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
+import {Route, Switch, useHistory} from "react-router-dom";
 
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Footer from "./partial/Footer";
+import Login from "./pages/Login";
 import Header from "./partial/Header";
+import Homepage from "./pages/Homepage";
+import Footer from "./partial/Footer";
+import Register from "./pages/Register";
+import Soba from "./components/Soba";
 
 function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    let history = useHistory();
+
+    useEffect(() => setIsLoggedIn(localStorage.getItem("user") !== null));
+
+    function onLogin(user) {
+        localStorage.setItem("user", JSON.stringify(user));
+        setIsLoggedIn(true);
+        history.push('/')
+    }
+
+    function onLogut() {
+        localStorage.clear();
+        setIsLoggedIn(false)
+    }
+
+    /*
+        if (!isLoggedIn) {
+
+            <Switch>
+                <Route exact path="/login" component={() => <Login onLogin={onLogin}/>}/>
+                <Route exact path="/register" component={() => <Register onLogin={onLogin}/>}/>
+                {/!*Je li ovo ok praksa??*!/}
+                <Redirect to="/login"/>
+            </Switch>
+
+        }
+    */
+
     return (
-        <Router>
-            <div className="App">
-                <Header/>
-                <div className="outer">
-                    <div className="inner">
-                        <Switch>
-                            <Route exact path='/' component={Login}/>
-                            <Route path="/login" component={Login}/>
-                            <Route path="/register" component={Register}/>
-                            {/*Je li ovo ok praksa??*/}
-                            <Redirect to="/"/>
-                        </Switch>
-                    </div>
-                </div>
-                <Footer/>
+        <div className="App">
+            <Header onLogout={onLogut} isLoggedIn={isLoggedIn}/>
+            <div className="outer">
+                <Switch>
+                    {/* todo slozi ove rute tako da ulogirani korisnik ni ne može otići na /login */}
+                    <Route exact path="/login" component={() => <Login onLogin={onLogin}/>}/>
+                    <Route exact path="/register" component={() => <Register onLogin={onLogin}/>}/>
+                    <Route exact path="/soba" component={() => <Soba/>}/>
+                    <Route path='/' component={Homepage}/>
+                </Switch>
             </div>
-        </Router>
+            <Footer/>
+        </div>
     );
 }
 

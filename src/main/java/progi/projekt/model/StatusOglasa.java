@@ -17,29 +17,30 @@ public class StatusOglasa implements Serializable {
     @Column(nullable = false)
     private StatusOglasaEnum status;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_oglas")
     private Oglas oglas;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_student")
     private Student potvrdioOglas;
 
 
     //Status i oglas ne smiju biti null!
-    public StatusOglasa(StatusOglasaEnum status, Oglas oglas){
-        if(status != null)
-            if(oglas != null) {
+    public StatusOglasa(StatusOglasaEnum status, Oglas oglas) {
+        if (status != null)
+            if (oglas != null) {
                 this.status = status;
                 this.oglas = oglas;
-            } else{
+            } else {
                 System.err.println("Status oglasa se mora odnositi na neki oglas!");
             }
         else
             System.err.println("Status oglasa ne smije biti null!");
     }
 
-    public StatusOglasa(){}
+    public StatusOglasa() {
+    }
 
     @Override
     public boolean equals(Object o) {

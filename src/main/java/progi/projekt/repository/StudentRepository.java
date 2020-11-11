@@ -5,9 +5,8 @@ import org.springframework.stereotype.Repository;
 import progi.projekt.model.Student;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student,Long> {
-	//ovo se autogenerira?
-	Student findByJmbag(String jmbag);
+public interface StudentRepository extends JpaRepository<Student, Long> {
+    Student findByEmail(String email);
 
-	Student findByKorisnickoIme(String korisnickoIme);
+    Student findByKorisnickoIme(String korisnickoIme);
 }

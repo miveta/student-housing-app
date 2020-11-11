@@ -2,7 +2,6 @@ package progi.projekt.model;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,27 +18,29 @@ public class Obavijest {
     private boolean procitana;
     private Date vrijeme;
 
-    @ManyToMany(targetEntity = Student.class, mappedBy = "obavijesti")
+    @ManyToMany(targetEntity = Student.class, mappedBy = "obavijesti", cascade = CascadeType.ALL)
     private List<Student> studenti;
 
-    @ManyToOne
-    @JoinColumn(name="id_oglas")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_oglas")
     private Oglas oglas;
 
     //Tekst ne smije biti null
-    public Obavijest(String tekst, Date vrijeme){
-        if(tekst != null){
+    public Obavijest(String tekst, Date vrijeme) {
+        if (tekst != null) {
             this.tekst = tekst;
             this.procitana = false;
             this.vrijeme = vrijeme;
-        }
-        else
+        } else
             System.err.println("Tekst obavijesti ne smije biti null1");
     }
 
-    public Obavijest(){}
+    public Obavijest() {
+    }
 
-    public void addStudent(Student kor){ studenti.add(kor);}
+    public void addStudent(Student kor) {
+        studenti.add(kor);
+    }
 
     public String getTekst() {
         return tekst;

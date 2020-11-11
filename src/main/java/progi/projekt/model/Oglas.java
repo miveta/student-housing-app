@@ -19,18 +19,20 @@ public class Oglas {
     private int godina;
     private Date objavljen;
 
-    @OneToOne
-    @JoinColumns({
-            @JoinColumn(name="id_status_oglasa")
-    })
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_status_oglasa")
     private StatusOglasa status;
 
-    @OneToMany(mappedBy = "oglas")
+    @OneToMany(mappedBy = "oglas", cascade = CascadeType.ALL)
     private List<Obavijest> obavijesti;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="id_student")
+    private Student student;
+
     //Naslov i godina ne smiju biti null
-    public Oglas(String naslov, String opis, int godina, Date objavljen){
-        if(naslov != null){
+    public Oglas(String naslov, String opis, int godina, Date objavljen) {
+        if (naslov != null) {
             this.naslov = naslov;
             this.opis = opis;
             this.godina = godina;
@@ -39,9 +41,10 @@ public class Oglas {
             System.err.println("Naslov oglasa ne smije biti null!");
     }
 
-    public Oglas(){}
+    public Oglas() {
+    }
 
-    public void addObavijest(Obavijest obav){
+    public void addObavijest(Obavijest obav) {
         obavijesti.add(obav);
     }
 
@@ -99,5 +102,13 @@ public class Oglas {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 }

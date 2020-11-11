@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-public class Student implements Serializable {
+public class Student implements Serializable, Korisnik {
     @Id
     @Column(name = "id_korisnik")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(nullable = false, unique = true, length = 10)
-    private int jmbag;
+    private String jmbag;
 
     // Korisnicko ime ne smije biti null, te mora biti unique
-    @Column(nullable = false,unique = true, name = "korisnicko_ime")
+    @Column(nullable = false, unique = true, name = "korisnicko_ime")
     private String korisnickoIme;
 
     @Column(nullable = false)
@@ -33,25 +33,42 @@ public class Student implements Serializable {
 
     private boolean obavijestiNaMail;
 
-
-    @ManyToMany(targetEntity = Obavijest.class)
+    @ManyToMany(targetEntity = Obavijest.class, cascade = CascadeType.ALL)
     private List<Obavijest> obavijesti;
 
-    @OneToOne
-    @JoinColumn(name="id_status_oglasa")
-    private Oglas potvrdioOglas;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_status_oglasa")
+    private StatusOglasa potvrdioOglas;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_trazeni_uvjeti")
     private TrazeniUvjeti uvjeti;
 
-    public Student() { }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="oglas")
+    private Oglas oglas;
+
+    public Student() {
+    }
+
+    @Override
+    public String getTipKorisnika() {
+        return "student";
+    }
 
     //Sve osim obavijestiNaMail ne smije biti null!
     //JMBAG mora biti velicine 10
-    public Student(int jmbag, String korisnickoIme, String ime, String prezime, String email, String lozinka, boolean obavijestiNaMail){
-        if(korisnickoIme != null && ime != null && prezime != null && email != null && lozinka != null){
-            if(String.valueOf(jmbag).length() == 10){
+
+    /*
+     * zakomentirano zato što bi sada
+     * validaciju bi trebao odraditi controller s anotacijom @valid
+     * provjeri RegisterForm - tamo se anotacijama mogu dodavati pravila
+     * */
+    /*
+    public Student(String jmbag, String korisnickoIme, String ime, String prezime, String email, String lozinka, boolean obavijestiNaMail) {
+        if (korisnickoIme != null && ime != null && prezime != null && email != null && lozinka != null) {
+            if (jmbag.length() == 10) {
                 this.jmbag = jmbag;
                 this.korisnickoIme = korisnickoIme;
                 this.ime = ime;
@@ -67,6 +84,8 @@ public class Student implements Serializable {
         }
     }
 
+     */
+
     public List<Obavijest> getObavijesti() {
         return obavijesti;
     }
@@ -75,11 +94,11 @@ public class Student implements Serializable {
         this.obavijesti = obavijesti;
     }
 
-    public int getJmbag() {
+    public String getJmbag() {
         return jmbag;
     }
 
-    public void setJmbag(int jmbag) {
+    public void setJmbag(String jmbag) {
         this.jmbag = jmbag;
     }
 
@@ -111,6 +130,7 @@ public class Student implements Serializable {
         return email;
     }
 
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -131,11 +151,11 @@ public class Student implements Serializable {
         this.obavijestiNaMail = obavijestiNaMail;
     }
 
-    public Oglas getPotvrdioOglas() {
+    public StatusOglasa getPotvrdioOglas() {
         return potvrdioOglas;
     }
 
-    public void setPotvrdioOglas(Oglas potvrdioOglas) {
+    public void setPotvrdioOglas(StatusOglasa potvrdioOglas) {
         this.potvrdioOglas = potvrdioOglas;
     }
 
@@ -155,22 +175,11 @@ public class Student implements Serializable {
         this.id = id;
     }
 
-
-    @Column(nullable = false, name = "vise_ovlasti")
-    private boolean elevated;
-    //ako je ovo true user prilikom logina dobije i ROLE_ADMIN uz ROLE_STUDENT
-
-    //bi li studentService, odnosno StudentRepository trebali raditi ovo?
-    public boolean isElevated() {
-        return elevated;
+    public Oglas getOglas() {
+        return oglas;
     }
 
-    public void setElevated(boolean elevated) {
-        this.elevated = elevated;
+    public void setOglas(Oglas oglas) {
+        this.oglas = oglas;
     }
-
-    public String getLozinka() { return lozinka; }
-
-    public void setLozinka(String lozinka) { this.lozinka = lozinka; }
-
 }

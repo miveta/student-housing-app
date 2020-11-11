@@ -1,54 +1,51 @@
 package progi.projekt.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import progi.projekt.model.Student;
 import progi.projekt.repository.StudentRepository;
-import progi.projekt.security.JmbagNotFoundException;
-import progi.projekt.security.SavingException;
+import progi.projekt.security.exception.SavingException;
 import progi.projekt.service.StudentService;
 
 import java.util.List;
+import java.util.Optional;
+
+//Ukoliko se provjera danih podataka radi preko asserta, assert baca IllegalArgumentException
 
 @Service
 public class StudentServiceImpl implements StudentService {
-    @Autowired
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
-    public StudentRepository getRepo() {return studentRepository; }
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public List<Student> listAll() {
         return studentRepository.findAll();
     }
 
-    //Provjera danih podataka preko asserta baca IllegalArgumentException
-
     @Override
-    public Student findByJmbag(String jmbag) throws UsernameNotFoundException {
+    public Optional<Student> findByEmail(String email) {
         try {
-            Student rezultat = studentRepository.findByJmbag(jmbag);
-            return rezultat;
-        }
-        catch (Exception e){
+            return Optional.of(studentRepository.findByEmail(email));
+        } catch (Exception e) {
             //studentRepo baca exceptione koje mu proslijedi baza (e)?
             String originalMessage = e.getMessage();
-            throw new JmbagNotFoundException("No user with JMBAG: '" + jmbag + "'");
+            //throw new JmbagNotFoundException("No user with email: '" + email + "'");
+            return Optional.empty();
         }
-
     }
 
     @Override
-    public Student findBykorisnickoIme(String username) throws UsernameNotFoundException {
+    public Optional<Student> findBykorisnickoIme(String username) {
         try {
-            Student rezultat = studentRepository.findByKorisnickoIme(username);
-            return rezultat;
-        }
-        catch (Exception e){
+            return Optional.of(studentRepository.findByKorisnickoIme(username));
+        } catch (Exception e) {
             //studentRepo baca exceptione koje mu proslijedi baza (e)?
             String originalMessage = e.getMessage();
-            throw new UsernameNotFoundException("No user with username: '" + username + "'");
+            //throw new UsernameNotFoundException("No user with username: '" + username + "'");
+            return Optional.empty();
         }
     }
 
@@ -58,20 +55,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean isElevated(Student student) {
-        return student.isElevated();
+    public Student createStudent(Student student) throws SavingException {
+        try {
+            return studentRepository.saveAndFlush(student);
+        } catch (Exception e) {
+            //studentRepo baca exceptione koje mu proslijedi baza (e)?
+            throw new SavingException("Exception while saving user. Original message: '" + e.getMessage() + "'");
+        }
     }
 
     @Override
-    public Student createStudent(Student student) throws SavingException{
-        try {
-            Student rezultat = studentRepository.saveAndFlush(student);
-            return rezultat;
-        }
-        catch (Exception e){
-            //studentRepo baca exceptione koje mu proslijedi baza (e)?
-            String originalMessage = e.getMessage();
-            throw new SavingException("Exception while saving user. Original message: '" + originalMessage + "'");
-        }
+    public boolean studentExists(String username) throws UsernameNotFoundException {
+        return findBykorisnickoIme(username).isPresent();
     }
 }

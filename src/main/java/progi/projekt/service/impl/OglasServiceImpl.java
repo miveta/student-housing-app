@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import progi.projekt.model.Oglas;
 import progi.projekt.repository.OglasRepository;
 import progi.projekt.service.OglasService;
+
 import java.util.List;
 
 @Service

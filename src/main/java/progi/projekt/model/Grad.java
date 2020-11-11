@@ -1,7 +1,6 @@
 package progi.projekt.model;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,33 +14,32 @@ public class Grad {
     @Column(nullable = false)
     private String naziv;
 
-    @OneToMany(mappedBy = "grad")
+    @OneToMany(mappedBy = "grad", cascade = CascadeType.ALL)
     private Set<Dom> domovi;
 
-    @OneToOne
-    @JoinColumn(name = "id_sc", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_sc")
     private StudentskiCentar studentskiCentar;
 
     //Naziv i studentskiCentar ne smiju biti null
-    public Grad(String naziv, StudentskiCentar studentskiCentar, Set<Dom> domovi){
-        if(naziv != null){
-            if(studentskiCentar != null){
+    public Grad(String naziv, StudentskiCentar studentskiCentar, Set<Dom> domovi) {
+        if (naziv != null) {
+            if (studentskiCentar != null) {
                 this.naziv = naziv;
                 this.studentskiCentar = studentskiCentar;
                 this.domovi = domovi;
-            }
-            else{
+            } else {
                 System.err.print("SC ne smije biti null pri kreiranju grada!");
             }
-        }
-        else{
+        } else {
             System.err.println("Naziv grada ne smije biti null!");
         }
     }
 
-    public Grad(){}
+    public Grad() {
+    }
 
-    public void addDom(Dom dom){
+    public void addDom(Dom dom) {
         this.domovi.add(dom);
     }
 

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import progi.projekt.model.Oglas;
+import progi.projekt.repository.OglasRepository;
 import progi.projekt.service.OglasService;
 
 import java.util.List;
@@ -16,8 +17,13 @@ public class OglasController {
     @Autowired
     private OglasService oglasService;
 
+    @Autowired
+    private OglasRepository oglasRepository;
+
     @GetMapping("")
     public List<Oglas> listOglas() {
         return oglasService.listAll();
     }
+
+
 }

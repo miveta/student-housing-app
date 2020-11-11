@@ -16,26 +16,26 @@ public class Paviljon implements Serializable {
     private String naziv;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name="id_dom")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_dom")
     private Dom dom;
 
-    @OneToMany(mappedBy = "paviljon")
+    @OneToMany(mappedBy = "paviljon", cascade = CascadeType.ALL)
     private Set<Soba> sobe;
 
-    public Paviljon(){}
+    public Paviljon() {
+    }
 
     //Naziv i dom ne smiju biti null!
-    public Paviljon(String naziv, Dom dom){
-        if(naziv != null){
-            if(dom != null){
+    public Paviljon(String naziv, Dom dom) {
+        if (naziv != null) {
+            if (dom != null) {
                 this.naziv = naziv;
                 this.dom = dom;
-            } else{
+            } else {
                 System.err.println("Dom paviljona ne smije biti null!");
             }
-        }
-        else{
+        } else {
             System.err.println("Naziv paviljona ne smije biti null!");
         }
     }
@@ -86,7 +86,7 @@ public class Paviljon implements Serializable {
         this.sobe = sobe;
     }
 
-    public void addSoba(Soba soba){
+    public void addSoba(Soba soba) {
         this.sobe.add(soba);
     }
 }
