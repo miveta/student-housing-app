@@ -23,7 +23,7 @@ function Register(props) {
             jmbag: form.jmbag,
             username: form.username,
             email: form.email,
-            lozinka: hashPassword(form.lozinka)
+            lozinka: form.lozinka
         };
 
         const options = {
@@ -38,7 +38,7 @@ function Register(props) {
         fetch('http://localhost:8080/auth/register', options)
             .then(response => {
                     if (response.status === 401) {
-                        setError("Login failed");
+                        setError("Register failed");
                     } else if (response.status === 400) {
 
                     } else if (response.status === 200) {
