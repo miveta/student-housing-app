@@ -1,106 +1,109 @@
 package progi.projekt.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import progi.projekt.dto.KorisnikDTO;
 import progi.projekt.forms.LoginForm;
 import progi.projekt.forms.RegisterForm;
+import progi.projekt.model.Korisnik;
 import progi.projekt.model.Student;
 import progi.projekt.security.AuthenticationHandler;
-import progi.projekt.security.StudentUserDetailsService;
+import progi.projekt.security.KorisnikUserDetailsService;
 import progi.projekt.service.StudentService;
+import progi.projekt.service.ZaposlenikSCService;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
+@CrossOrigin
 @RestController
-//@RequestMapping("/auth")
+@RequestMapping("/auth")
 public class AuthController {
-    @Autowired
-    private StudentUserDetailsService studentUserDetailsService;
+    private final KorisnikUserDetailsService korisnikUserDetailsService;
 
-    @Autowired
-    private AuthenticationHandler authenticationHandler;
+    private final AuthenticationHandler authenticationHandler;
 
-    @Autowired
-    private StudentService studentService;
+    private final StudentService studentService;
+
+    private final ZaposlenikSCService zaposlenikscService;
+
+    public AuthController(KorisnikUserDetailsService korisnikUserDetailsService, AuthenticationHandler authenticationHandler, StudentService studentService, ZaposlenikSCService zaposlenikscService) {
+        this.korisnikUserDetailsService = korisnikUserDetailsService;
+        this.authenticationHandler = authenticationHandler;
+        this.studentService = studentService;
+        this.zaposlenikscService = zaposlenikscService;
+    }
 
     //'@AuthenticationPrincipal WebRequest request' je argument za citanje cijelog requesta
     //'@RequestBody LoginForm loginForm' je argument za citanje cijelog bodya requesta
     //'@AuthenticationPrincipal User userLoginData' vraca podatke o korisniku u security contextu
-    @CrossOrigin
+/*
+    // not currently used
     @GetMapping("/userInfo")
-    public String showLoggedInUser(@AuthenticationPrincipal User loggedInUser) {
-        String username = loggedInUser.getUsername();
-        Collection<GrantedAuthority> auths = loggedInUser.getAuthorities();
-        String authsPrint = auths.toString();
-
-        return "Username: " + username + " Auths: " + authsPrint;
+    public ResponseEntity<?> showLoggedInUser(@AuthenticationPrincipal User loggedInUser) {
+        if (Objects.isNull(loggedInUser)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nema ulogiranog korisnika!");
+        }
+        //String username = loggedInUser.getUsername();
+        //Collection<GrantedAuthority> auths = loggedInUser.getAuthorities();
+        //String authsPrint = auths.toString();
+        Student student = studentService.findBykorisnickoIme(loggedInUser.getUsername()).get();
+        StudentDTO studentDTO = new StudentDTO(student);
+        return ResponseEntity.ok(studentDTO);
     }
+*/
 
-    @CrossOrigin
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@RequestBody @Validated RegisterForm registerForm) {
-        boolean alreadyExists = studentService.findBykorisnickoIme(registerForm.getUsername()).isPresent();
-
-        Map<String, String> props = new HashMap<>();
-        if (alreadyExists) {
-            props.put("error", "User with this name already exists!");
-            return new ResponseEntity<>(props, HttpStatus.BAD_REQUEST);
+        if (studentService.studentExists(registerForm.getUsername())) {
+            return ResponseEntity.badRequest().body("Već postoji korisnik s tim imenom!");
         }
 
+        // ne provjeravamo zaposlenike zato što se oni unose u bazu preko backenda
         Student student = registerForm.fromRegisterForm();
         student = studentService.createStudent(student);
+        KorisnikDTO studentDTO = new KorisnikDTO(student);
 
-        return new ResponseEntity<>(props, HttpStatus.OK);
+        return ResponseEntity.ok(studentDTO);
     }
 
+    /*
     //front mora poslati 'loginForm' objekt, controller vraca 200 za dobre podatke, 401 za lose
     //Header: Content-Type=application/json
     //body:
-    /*
         {
             "login": "user",
             "password": "pass"
         }
     */
-    @CrossOrigin
-    @PostMapping(value = "/checklogin", consumes = MediaType.APPLICATION_JSON_VALUE)
-    //@ResponseBody
-    public ResponseEntity<?> loginResponse(@RequestBody LoginForm data) {
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> login(@RequestBody LoginForm data) {
         try {
             Authentication auth = authenticationHandler.authenticate(data);
 
-            //if successful
-            Map<String, String> propsSucc = new HashMap<>();
-            propsSucc.put("status", "200");
-            return new ResponseEntity<>(propsSucc, HttpStatus.OK);
+            //SecurityContext sc = SecurityContextHolder.getContext();
+            //sc.setAuthentication(auth);
 
+            //HttpSession session = req.getSession(true);
+            //session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+            //if successful
+            // authentication handler will throw a badcredentials exception if the student doesnt exist before it reaches this step
+            Korisnik korisnik;
+
+            Optional<Student> student = studentService.findBykorisnickoIme(data.getUsername());
+            korisnik = student.isPresent() ? student.get() : zaposlenikscService.findBykorisnickoIme(data.getUsername()).get();
+
+            KorisnikDTO korisnikDTO = new KorisnikDTO(korisnik);
+
+            return ResponseEntity.ok(korisnikDTO);
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         } catch (Exception e) {
-            //if unsuccessful (user doesnt exist or login and password dont match
-            Map<String, String> propsFail = new HashMap<>();
-            propsFail.put("status", "401");
-            propsFail.put("error", e.getMessage());
-            return new ResponseEntity<>(propsFail, HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
-
-
-    /*
-    @PostMapping("/register")
-    public ResponseEntity<?> registerResponse(@AuthenticationPrincipal User userRegisterData) {
-        // TODO
-        return new ResponseEntity<>(new HashMap<>(), HttpStatus.NOT_IMPLEMENTED);
-    }
-    */
-
 }

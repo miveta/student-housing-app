@@ -17,4 +17,6 @@ public interface StudentService {
     String getLozinka(Student student);
 
     Student createStudent(Student student) throws SavingException;
+
+    boolean studentExists(String username) throws UsernameNotFoundException;
 }

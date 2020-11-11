@@ -1,6 +1,5 @@
 package progi.projekt.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -12,21 +11,24 @@ import org.springframework.stereotype.Service;
 import progi.projekt.model.Student;
 import progi.projekt.model.ZaposlenikSC;
 import progi.projekt.service.StudentService;
-import progi.projekt.service.ZaposlenikscService;
+import progi.projekt.service.ZaposlenikSCService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StudentUserDetailsService implements UserDetailsService {
+public class KorisnikUserDetailsService implements UserDetailsService {
     @Value("${progi.projekt.admin.pass}")
     private String adminPasswordHash;
 
-    @Autowired
-    private StudentService studentService;
+    private final StudentService studentService;
 
-    @Autowired
-    private ZaposlenikscService zaposlenikscService;
+    private final ZaposlenikSCService zaposlenikscService;
+
+    public KorisnikUserDetailsService(StudentService studentService, ZaposlenikSCService zaposlenikscService) {
+        this.studentService = studentService;
+        this.zaposlenikscService = zaposlenikscService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

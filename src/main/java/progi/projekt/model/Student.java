@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-public class Student implements Serializable, User {
+public class Student implements Serializable, Korisnik {
     @Id
     @Column(name = "id_korisnik")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -44,11 +44,17 @@ public class Student implements Serializable, User {
     @JoinColumn(name = "id_trazeni_uvjeti")
     private TrazeniUvjeti uvjeti;
 
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="oglas")
     private Oglas oglas;
 
     public Student() {
+    }
+
+    @Override
+    public String getTipKorisnika() {
+        return "student";
     }
 
     //Sve osim obavijestiNaMail ne smije biti null!
@@ -57,7 +63,7 @@ public class Student implements Serializable, User {
     /*
      * zakomentirano zato što bi sada
      * validaciju bi trebao odraditi controller s anotacijom @valid
-     * provjeri RegisterForm - tamo se anotacijama mogu dodavati pravilaa
+     * provjeri RegisterForm - tamo se anotacijama mogu dodavati pravila
      * */
     /*
     public Student(String jmbag, String korisnickoIme, String ime, String prezime, String email, String lozinka, boolean obavijestiNaMail) {
@@ -124,6 +130,7 @@ public class Student implements Serializable, User {
         return email;
     }
 
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -166,30 +173,6 @@ public class Student implements Serializable, User {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-
-    @Column(nullable = false, name = "vise_ovlasti")
-    private boolean elevated;
-    //ako je ovo true user prilikom logina dobije i ROLE_ADMIN uz ROLE_STUDENT
-
-    //bi li studentService, odnosno StudentRepository trebali raditi ovo?
-    public boolean isElevated() {
-        return elevated;
-    }
-
-    public void setElevated(boolean elevated) {
-        this.elevated = elevated;
-    }
-
-    @Override
-    public String getPassword() {
-        return lozinka;
-    }
-
-    @Override
-    public String getUsername() {
-        return korisnickoIme;
     }
 
     public Oglas getOglas() {

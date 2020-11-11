@@ -8,7 +8,7 @@ import progi.projekt.security.exception.SavingException;
 import java.util.List;
 import java.util.Optional;
 
-public interface ZaposlenikscService {
+public interface ZaposlenikSCService {
     List<ZaposlenikSC> listAll();
 
     ZaposlenikscRepository getRepo();
@@ -20,4 +20,6 @@ public interface ZaposlenikscService {
     String getLozinka(ZaposlenikSC zaposlenik);
 
     ZaposlenikSC createZaposlenikSC(ZaposlenikSC zaposlenik) throws SavingException;
+
+    boolean zaposlenikExists(String username) throws UsernameNotFoundException;
 }

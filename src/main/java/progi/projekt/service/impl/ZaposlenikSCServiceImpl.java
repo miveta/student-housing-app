@@ -1,17 +1,18 @@
 package progi.projekt.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import progi.projekt.model.ZaposlenikSC;
 import progi.projekt.repository.ZaposlenikscRepository;
 import progi.projekt.security.exception.SavingException;
-import progi.projekt.service.ZaposlenikscService;
+import progi.projekt.service.ZaposlenikSCService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ZaposlenikscServiceImpl implements ZaposlenikscService {
+public class ZaposlenikSCServiceImpl implements ZaposlenikSCService {
     @Autowired
     private ZaposlenikscRepository zaposlenikscRepository;
 
@@ -28,8 +29,7 @@ public class ZaposlenikscServiceImpl implements ZaposlenikscService {
     @Override
     public Optional<ZaposlenikSC> findByEmail(String email) {
         try {
-            Optional<ZaposlenikSC> opt = Optional.of(zaposlenikscRepository.findByEmail(email));
-            return opt;
+            return Optional.of(zaposlenikscRepository.findByEmail(email));
         } catch (Exception e) {
             //zaposelnikRepo baca exceptione koje mu proslijedi baza (e)?
             String originalMessage = e.getMessage();
@@ -41,8 +41,7 @@ public class ZaposlenikscServiceImpl implements ZaposlenikscService {
     @Override
     public Optional<ZaposlenikSC> findBykorisnickoIme(String username) {
         try {
-            Optional<ZaposlenikSC> opt = Optional.of(zaposlenikscRepository.findByKorisnickoIme(username));
-            return opt;
+            return Optional.of(zaposlenikscRepository.findByKorisnickoIme(username));
         } catch (Exception e) {
             //studentRepo baca exceptione koje mu proslijedi baza (e)?
             String originalMessage = e.getMessage();
@@ -65,5 +64,10 @@ public class ZaposlenikscServiceImpl implements ZaposlenikscService {
             String originalMessage = e.getMessage();
             throw new SavingException("Exception while saving user. Original message: '" + originalMessage + "'");
         }
+    }
+
+    @Override
+    public boolean zaposlenikExists(String username) throws UsernameNotFoundException {
+        return findBykorisnickoIme(username).isPresent();
     }
 }

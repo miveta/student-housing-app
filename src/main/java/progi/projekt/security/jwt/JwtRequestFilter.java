@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import progi.projekt.security.StudentUserDetailsService;
+import progi.projekt.security.KorisnikUserDetailsService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -36,11 +36,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtUtil jwtTokenUtil;
 
     @Autowired
-    private StudentUserDetailsService studentUserDetailsService;
+    private KorisnikUserDetailsService korisnikUserDetailsService;
 
-    public JwtRequestFilter(JwtUtil jwtTokenUtil, StudentUserDetailsService studentUserDetailsService) {
+    public JwtRequestFilter(JwtUtil jwtTokenUtil, KorisnikUserDetailsService korisnikUserDetailsService) {
         this.jwtTokenUtil = jwtTokenUtil;
-        this.studentUserDetailsService = studentUserDetailsService;
+        this.korisnikUserDetailsService = korisnikUserDetailsService;
     }
 
 
@@ -63,7 +63,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         //this is the only difference between this and the default implementation:
         //manually setting the security context with the data extracted from jwt
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.studentUserDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = this.korisnikUserDetailsService.loadUserByUsername(username);
 
             //if the username matches and the token is not expired (if the jwt data is valid)
             if (jwtTokenUtil.validateToken(jwt, userDetails)) {

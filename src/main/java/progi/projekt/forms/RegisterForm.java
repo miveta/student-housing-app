@@ -24,6 +24,7 @@ public class RegisterForm {
     private String email;
 
     @NotNull
+    @Size(min = 5)
     private String lozinka;
 
     public RegisterForm() {

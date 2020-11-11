@@ -1,6 +1,6 @@
 package progi.projekt.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import progi.projekt.model.Student;
 import progi.projekt.repository.StudentRepository;
@@ -14,8 +14,11 @@ import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
-    @Autowired
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
+
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public List<Student> listAll() {
@@ -25,8 +28,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Optional<Student> findByEmail(String email) {
         try {
-            Optional<Student> opt = Optional.of(studentRepository.findByEmail(email));
-            return opt;
+            return Optional.of(studentRepository.findByEmail(email));
         } catch (Exception e) {
             //studentRepo baca exceptione koje mu proslijedi baza (e)?
             String originalMessage = e.getMessage();
@@ -38,8 +40,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Optional<Student> findBykorisnickoIme(String username) {
         try {
-            Optional<Student> opt = Optional.of(studentRepository.findByKorisnickoIme(username));
-            return opt;
+            return Optional.of(studentRepository.findByKorisnickoIme(username));
         } catch (Exception e) {
             //studentRepo baca exceptione koje mu proslijedi baza (e)?
             String originalMessage = e.getMessage();
@@ -59,8 +60,12 @@ public class StudentServiceImpl implements StudentService {
             return studentRepository.saveAndFlush(student);
         } catch (Exception e) {
             //studentRepo baca exceptione koje mu proslijedi baza (e)?
-            String originalMessage = e.getMessage();
-            throw new SavingException("Exception while saving user. Original message: '" + originalMessage + "'");
+            throw new SavingException("Exception while saving user. Original message: '" + e.getMessage() + "'");
         }
+    }
+
+    @Override
+    public boolean studentExists(String username) throws UsernameNotFoundException {
+        return findBykorisnickoIme(username).isPresent();
     }
 }

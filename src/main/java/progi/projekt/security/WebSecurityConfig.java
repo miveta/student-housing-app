@@ -11,20 +11,33 @@ import progi.projekt.security.jwt.JwtRequestFilter;
 @EnableWebSecurity //ukljucivanje provjere razine pristupa
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private StudentUserDetailsService studentUserDetailsService;
+    private final KorisnikUserDetailsService korisnikUserDetailsService;
 
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+    private final JwtRequestFilter jwtRequestFilter;
+
+    public WebSecurityConfig(KorisnikUserDetailsService korisnikUserDetailsService, JwtRequestFilter jwtRequestFilter) {
+        this.korisnikUserDetailsService = korisnikUserDetailsService;
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(studentUserDetailsService);
+        auth.userDetailsService(korisnikUserDetailsService);
     }
+
+    /*@Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }*/
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(studentUserDetailsService);
+        auth.userDetailsService(korisnikUserDetailsService);
 
         //ako zelimo koristiti custom auth provider:
         //auth.authenticationProvider(myAuthProvider());
@@ -33,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.userDetailsService(studentUserDetailsService);
+        http.userDetailsService(korisnikUserDetailsService);
 
         http.requiresChannel()
                 .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
@@ -47,11 +60,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/user").hasAuthority("ROLE_STUDENT")
                 .antMatchers("/hello").permitAll()
-                .antMatchers("/login", "/register").permitAll()
-                .antMatchers("/checklogin").permitAll()
-                .and().formLogin().loginPage("/login")
-                .and().logout().logoutSuccessUrl("/login");
-
+                // dozvolila sam sve auth da se prijave
+                .antMatchers("/auth/*").permitAll()
+        ;
         super.configure(http);
     }
 }

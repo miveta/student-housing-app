@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-public class ZaposlenikSC {
+public class ZaposlenikSC implements Korisnik {
     @Id
     @Column(name = "id_zaposlenik")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,6 +26,8 @@ public class ZaposlenikSC {
     @Column(nullable = false, name = "hash_lozinke")
     private String lozinka;
 
+    private boolean obavijestiNaMail;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_sc")
     private StudentskiCentar zaposlenSC;
@@ -34,6 +36,11 @@ public class ZaposlenikSC {
     }
 
     //Ništa ne smije biti null!
+    /*
+     * zakomentirano zato što ga nećemo kreirati kroz kod preko parametara nego direktno u bazu,
+     * ako će ga trebati kreirati iz koda onda ćemo koristiti @valid anotacije
+     * */
+    /*
     public ZaposlenikSC(String korisnickoIme, String ime, String prezime, String email, String lozinka) {
         if (korisnickoIme != null && ime != null && prezime != null && email != null && lozinka != null) {
             this.korisnickoIme = korisnickoIme;
@@ -44,6 +51,21 @@ public class ZaposlenikSC {
         } else {
             System.err.println("Pri kreaciji zaposlenika nista ne smije biti null!");
         }
+    }
+
+     */
+
+    public boolean isObavijestiNaMail() {
+        return obavijestiNaMail;
+    }
+
+    public void setObavijestiNaMail(boolean obavijestiNaMail) {
+        this.obavijestiNaMail = obavijestiNaMail;
+    }
+
+    @Override
+    public String getJmbag() {
+        return null;
     }
 
     public String getKorisnickoIme() {
@@ -72,6 +94,11 @@ public class ZaposlenikSC {
 
     public String getEmail() {
         return email;
+    }
+
+    @Override
+    public String getTipKorisnika() {
+        return "zaposlenikSC";
     }
 
     public void setEmail(String email) {
