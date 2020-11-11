@@ -87,7 +87,7 @@ function Register(props) {
                 <Button type="submit" variant="dark" size="lg" block disabled={!isValid()}> Registriraj se </Button>
 
                 <p className="already-registered text-right">
-                    <Link to="/sign-in">Već si registriran?</Link>
+                    <Link to="/login">Već si registriran?</Link>
                 </p>
             </Form>
         </div>
