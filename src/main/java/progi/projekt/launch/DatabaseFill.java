@@ -11,15 +11,10 @@ import progi.projekt.model.enums.StatusOglasaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 import progi.projekt.repository.*;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashSet;
-
-import static java.security.MessageDigest.getInstance;
 
 @Component
 public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> {
@@ -80,7 +75,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 ivica.setIme("Ivica");
                 ivica.setPrezime("Ivic");
                 // todo promijeni
-                ivica.setKorisnickoIme("ivi69");
+                ivica.setKorisnickoIme("ivi14");
                 ivica.setLozinka(hashPassword("123456"));
                 ivica.setObavijestiNaMail(false);
                 ivica.setJmbag("0036567891");
@@ -113,7 +108,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 stefko.setIme("Stefko");
                 stefko.setPrezime("Stefic");
                 stefko.setLozinka(hashPassword("stefko"));
-                stefko.setKorisnickoIme("stef666");
+                stefko.setKorisnickoIme("stef567");
 
                 //Kreiraj grad
                 Grad zagreb = new Grad();

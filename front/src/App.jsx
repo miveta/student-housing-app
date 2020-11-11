@@ -16,6 +16,7 @@ function App() {
 
     useEffect(() => setIsLoggedIn(localStorage.getItem("user") !== null));
 
+
     function onLogin(user) {
         localStorage.setItem("user", JSON.stringify(user));
         setIsLoggedIn(true);
@@ -46,8 +47,9 @@ function App() {
             <div className="outer">
                 <Switch>
                     {/* todo slozi ove rute tako da ulogirani korisnik ni ne može otići na /login */}
-                    <Route exact path="/login" component={() => <Login onLogin={onLogin}/>}/>
-                    <Route exact path="/register" component={() => <Register onLogin={onLogin}/>}/>
+                    <Route exact path="/login" component={() => <Login onLogin={onLogin} isLoggedIn={isLoggedIn}/>}/>
+                    <Route exact path="/register"
+                           component={() => <Register onLogin={onLogin} isLoggedIn={isLoggedIn}/>}/>
                     <Route exact path="/soba" component={() => <Soba/>}/>
                     <Route path='/' component={Homepage}/>
                 </Switch>

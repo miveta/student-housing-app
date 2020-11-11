@@ -15,12 +15,11 @@ function Login(props) {
         e.preventDefault();
         setError("");
 
-
         const body = {
             username: loginForm.username,
             password: loginForm.password
         };
-        console.log(body);
+
         const options = {
             method: 'POST',
             headers: {
@@ -44,6 +43,11 @@ function Login(props) {
         const {username, password} = loginForm;
         return username.length > 0 && password.length > 5;
     }
+
+    if (props.isLoggedIn) {
+        // todo bilo bi super kad ulogirani user ne bi mogao ni pristupiti ovoj komponenti
+    }
+
 
     return (
         <div className="inner">
