@@ -1,13 +1,29 @@
 \chapter{Arhitektura i dizajn sustava}
 		
-		\textbf{\textit{dio 1. revizije}}\\
-
-		\textit{ Potrebno je opisati stil arhitekture te identificirati: podsustave, preslikavanje na radnu platformu, spremišta podataka, mrežne protokole, globalni upravljački tok i sklopovsko-programske zahtjeve. Po točkama razraditi i popratiti odgovarajućim skicama:}
-	\begin{itemize}
-		\item 	\textit{izbor arhitekture temeljem principa oblikovanja pokazanih na predavanjima (objasniti zašto ste baš odabrali takvu arhitekturu)}
-		\item 	\textit{organizaciju sustava s najviše razine apstrakcije (npr. klijent-poslužitelj, baza podataka, datotečni sustav, grafičko sučelje)}
-		\item 	\textit{organizaciju aplikacije (npr. slojevi frontend i backend, MVC arhitektura) }		
+			Arhitektura sustava je web aplikacija kojoj će korisnici pristupati pomoću web preglednika. Odlučili smo se na takvu arhitekturu jer je cilj sustava da bude što jednostavniji za korištenje i da mu se može pristupiti sa svih mjesta.
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.4]{slike/Skica_sustava.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Skica sustava}
+				\label{fig:sustav}
+			\end{figure}
+			
+			Programski jezik koji smo odabralni za izradu aplikacije je java s razvojnim okvirom Spring Boot te javaScript. Odabrano razvojno okruženje je IntelliJ IDEA. 
+			Aplikacija je organizirana u dva sloja: frontend i backend. Za izradu frontenda koristi se React. Frontend i backend komuniciraju pomoću RESTa. Backend se sastoji od tri sloja:
+		\begin{itemize}
+		\item Kontroler - služi za komunikaciju s frontendom. Zaprima HTTP zathtjev te određuje koja će se funkcionalnost izvršavati
+		\item Servis - u njima se odvijaju poslovne logike i sve funkcionalnosti aplikacije
+		\item Repozitorij - dohvaća i sprema podatke u bazu podataka
 	\end{itemize}
+
+\begin{figure}[H]
+\includegraphics[scale=0.4]{slike/Skica_aplikacije.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+\centering
+\caption{Skica aplikacije}
+\label{fig:aplikacija}
+\end{figure}
+
 
 	
 		
