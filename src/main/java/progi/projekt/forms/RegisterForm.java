@@ -78,7 +78,7 @@ public class RegisterForm {
         this.lozinka = lozinka;
     }
 
-    public Student fromRegisterForm() {
+    public Student fromRegisterForm(String passhash) {
         Student student = new Student();
         student.setIme(this.ime);
         student.setPrezime(this.prezime);
@@ -86,9 +86,7 @@ public class RegisterForm {
         student.setKorisnickoIme(this.username);
         student.setEmail(this.email);
 
-        // TODO ovo bi trebalo raditi ali ne uspijeva autowire-at pwdencoder
-        //student.setLozinka(passwordEncoder.encode(this.lozinka));
-        student.setLozinka(this.lozinka);
+        student.setLozinka(passhash);
 
         // po defaultu stavi da dobiva obavijesti na mail - hardkodirano
         student.setObavijestiNaMail(true);

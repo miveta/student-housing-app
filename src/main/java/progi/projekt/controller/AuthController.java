@@ -5,6 +5,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.KorisnikDTO;
@@ -31,18 +36,24 @@ public class AuthController {
 
     private final ZaposlenikSCService zaposlenikscService;
 
-    public AuthController(KorisnikUserDetailsService korisnikUserDetailsService, AuthenticationHandler authenticationHandler, StudentService studentService, ZaposlenikSCService zaposlenikscService) {
+    private final PasswordEncoder pswdEncoder;
+
+    public AuthController(KorisnikUserDetailsService korisnikUserDetailsService,
+                          AuthenticationHandler authenticationHandler, StudentService studentService,
+                          ZaposlenikSCService zaposlenikscService, PasswordEncoder pswdEncoder) {
         this.korisnikUserDetailsService = korisnikUserDetailsService;
         this.authenticationHandler = authenticationHandler;
         this.studentService = studentService;
         this.zaposlenikscService = zaposlenikscService;
+        this.pswdEncoder = pswdEncoder;
     }
 
     //'@AuthenticationPrincipal WebRequest request' je argument za citanje cijelog requesta
     //'@RequestBody LoginForm loginForm' je argument za citanje cijelog bodya requesta
     //'@AuthenticationPrincipal User userLoginData' vraca podatke o korisniku u security contextu
-/*
+
     // not currently used
+    /*
     @GetMapping("/userInfo")
     public ResponseEntity<?> showLoggedInUser(@AuthenticationPrincipal User loggedInUser) {
         if (Objects.isNull(loggedInUser)) {
@@ -52,10 +63,10 @@ public class AuthController {
         //Collection<GrantedAuthority> auths = loggedInUser.getAuthorities();
         //String authsPrint = auths.toString();
         Student student = studentService.findBykorisnickoIme(loggedInUser.getUsername()).get();
-        StudentDTO studentDTO = new StudentDTO(student);
+        KorisnikDTO studentDTO = new KorisnikDTO(student);
         return ResponseEntity.ok(studentDTO);
     }
-*/
+    */
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@RequestBody @Validated RegisterForm registerForm) {
@@ -64,10 +75,20 @@ public class AuthController {
         }
 
         // ne provjeravamo zaposlenike zato što se oni unose u bazu preko backenda
-        Student student = registerForm.fromRegisterForm();
-        student = studentService.createStudent(student);
-        KorisnikDTO studentDTO = new KorisnikDTO(student);
 
+        //izrada Student modela
+        String passhash = pswdEncoder.encode(registerForm.getLozinka());
+        Student student = registerForm.fromRegisterForm(passhash);
+        student = studentService.createStudent(student);
+
+
+        //login nakon registracije
+        LoginForm data = new LoginForm(registerForm.getUsername(), registerForm.getLozinka());
+        Authentication auth = authenticationHandler.authenticate(data);
+        SecurityContext sc = SecurityContextHolder.getContext();
+        sc.setAuthentication(auth);
+
+        KorisnikDTO studentDTO = new KorisnikDTO(student);
         return ResponseEntity.ok(studentDTO);
     }
 
@@ -76,7 +97,7 @@ public class AuthController {
     //Header: Content-Type=application/json
     //body:
         {
-            "login": "user",
+            "username": "user",
             "password": "pass"
         }
     */
@@ -85,11 +106,13 @@ public class AuthController {
         try {
             Authentication auth = authenticationHandler.authenticate(data);
 
-            //SecurityContext sc = SecurityContextHolder.getContext();
-            //sc.setAuthentication(auth);
+            SecurityContext sc = SecurityContextHolder.getContext();
+            sc.setAuthentication(auth);
 
+            //nije potrebno dok koristimo Springove sessione
             //HttpSession session = req.getSession(true);
             //session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+
             //if successful
             // authentication handler will throw a badcredentials exception if the student doesnt exist before it reaches this step
             Korisnik korisnik;

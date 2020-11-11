@@ -2,6 +2,7 @@ package progi.projekt.launch;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import progi.projekt.model.*;
 import progi.projekt.model.enums.BrojKrevetaEnum;
@@ -23,6 +24,8 @@ import static java.security.MessageDigest.getInstance;
 @Component
 public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> {
 
+    private final PasswordEncoder pswdEncoder;
+
     //TODO: kada su rjeseni database controlleri za umetanje, ovo bi bilo dobro izvest prek njih
     private final StudentRepository studentRepository;
     private final DomRepository domRepository;
@@ -34,7 +37,9 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
     private final ZaposlenikscRepository zaposlenikscRepository;
     private final StudentskiCentarRepository studentskiCentarRepository;
 
-    public DatabaseFill(StudentRepository studentRepository, DomRepository domRepository, GradRepository gradRepository, ObavijestRepository obavijestRepository, OglasRepository oglasRepository, StatusOglasaRepository statusOglasaRepository, TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository, StudentskiCentarRepository studentskiCentarRepository) {
+    public DatabaseFill(StudentRepository studentRepository, DomRepository domRepository,
+                        GradRepository gradRepository, ObavijestRepository obavijestRepository,
+                        OglasRepository oglasRepository, StatusOglasaRepository statusOglasaRepository, TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository, StudentskiCentarRepository studentskiCentarRepository, PasswordEncoder pswdEncoder) {
         this.studentRepository = studentRepository;
         this.domRepository = domRepository;
         this.gradRepository = gradRepository;
@@ -44,16 +49,21 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
         this.trazeniUvjetiRepository = trazeniUvjetiRepository;
         this.zaposlenikscRepository = zaposlenikscRepository;
         this.studentskiCentarRepository = studentskiCentarRepository;
+        this.pswdEncoder = pswdEncoder;
     }
 
 
     private String hashPassword(String password) throws NoSuchAlgorithmException {
+        /*
         MessageDigest digest = getInstance("SHA-256");
 
         byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
         String encoded = Base64.getEncoder().encodeToString(hash);
 
         return encoded;
+        */
+
+        return pswdEncoder.encode(password);
     }
 
     @Override
@@ -63,7 +73,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
         //SOBE NE RADE
         //LAJKOVI NE RADE
         try {
-            if (studentRepository.count() != 0) {
+            if (studentRepository.count() == 0) {
                 //Kreiraj studente
                 Student ivica = new Student();
                 ivica.setEmail("ivica@gmail.com");
