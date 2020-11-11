@@ -16,7 +16,8 @@ function Register(props) {
         e.preventDefault();
         setError("");
 
-        const body = {
+        // names of variables of this object MUST match those of progi.projekt.forms.RegisterForm.class
+        const registerForm = {
             ime: form.ime,
             prezime: form.prezime,
             jmbag: form.jmbag,
@@ -25,26 +26,25 @@ function Register(props) {
             lozinka: hashPassword(form.lozinka)
         };
 
-        console.log(body);
         const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(registerForm)
         };
 
-        fetch('http://localhost:8080/register', options)
+        fetch('http://localhost:8080/auth/register', options)
             .then(response => {
                     if (response.status === 401) {
                         setError("Login failed");
                     } else if (response.status === 400) {
-                        response.json().then(body => {
-                            setError(body.errors);
-                        })
-                    } else {
 
+                    } else if (response.status === 200) {
+                        response.json().then(body => {
+                            props.onLogin(body)
+                        }).catch(error => console.log(error))
                     }
                 }
             );
@@ -52,45 +52,45 @@ function Register(props) {
 
     function isValid() {
         const {ime, prezime, jmbag, username, email, lozinka} = form;
-        return true;
+        return ime.length > 0 && prezime.length > 0 && jmbag.length === 10 && username.length > 0 && email.length > 0 && lozinka.length > 5;
     }
 
     return (
-        <Form onSubmit={onSubmit}>
-            <h3>Registracija</h3>
+        <div className="inner">
+            <Form onSubmit={onSubmit}>
+                <h3>Registracija</h3>
 
-            <Form.Group>
-                <Form.Label> Ime </Form.Label>
-                <Form.Control name="ime" type="text" placeholder={form.name} onChange={onChange}/>
-            </Form.Group>
-            <Form.Group>
-                <Form.Label> Prezime </Form.Label>
-                <Form.Control name="prezime" type="text" placeholder={form.prezime} onChange={onChange}/>
-            </Form.Group>
-            <Form.Group>
-                <Form.Label> JMBAG </Form.Label>
-                <Form.Control name="jmbag" type="text" placeholder={form.jmbag} onChange={onChange}/>
-            </Form.Group>
-            <Form.Group>
-                <Form.Label> Korisničko ime </Form.Label>
-                <Form.Control name="username" type="text" placeholder={form.username} onChange={onChange}/>
-            </Form.Group>
-            <Form.Group>
-                <Form.Label> Email </Form.Label>
-                <Form.Control name="email" type="email" placeholder={form.email} onChange={onChange}/>
-            </Form.Group>
-            <Form.Group>
-                <Form.Label> Lozinka </Form.Label>
-                <Form.Control name="lozinka" type="password" placeholder={form.lozinka} onChange={onChange}/>
-            </Form.Group>
-            <div>{error}</div>
-            <Button type="submit" variant="dark" size="lg" block disabled={!isValid()}> Registriraj se </Button>
-            {
+                <Form.Group>
+                    <Form.Label> Ime </Form.Label>
+                    <Form.Control name="ime" type="text" placeholder={form.name} onChange={onChange}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label> Prezime </Form.Label>
+                    <Form.Control name="prezime" type="text" placeholder={form.prezime} onChange={onChange}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label> JMBAG </Form.Label>
+                    <Form.Control name="jmbag" type="text" placeholder={form.jmbag} onChange={onChange}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label> Korisničko ime </Form.Label>
+                    <Form.Control name="username" type="text" placeholder={form.username} onChange={onChange}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label> Email </Form.Label>
+                    <Form.Control name="email" type="email" placeholder={form.email} onChange={onChange}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label> Lozinka </Form.Label>
+                    <Form.Control name="lozinka" type="password" placeholder={form.lozinka} onChange={onChange}/>
+                </Form.Group>
+                <Button type="submit" variant="dark" size="lg" block disabled={!isValid()}> Registriraj se </Button>
+
                 <p className="already-registered text-right">
                     <Link to="/sign-in">Već si registriran?</Link>
                 </p>
-            }
-        </Form>
+            </Form>
+        </div>
     )
 }
 

@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {Navbar} from "react-bootstrap";
 
 class Footer extends Component {
     constructor(props) {
@@ -7,9 +8,9 @@ class Footer extends Component {
 
     render() {
         return(
-            <nav className="navbar navbar-expand-lg navbar-light fixed-bottom">
-
-            </nav>
+            <Navbar bg="light" className="justify-content-end footer">
+                Spring rolice 2020
+            </Navbar>
         )
     }
 }

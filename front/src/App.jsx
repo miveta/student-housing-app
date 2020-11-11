@@ -1,61 +1,59 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import {Redirect, Route, Switch} from "react-router-dom";
+import {Route, Switch, useHistory} from "react-router-dom";
 
 import Login from "./pages/Login";
-import Register from "./pages/Register";
-import NoviOglas from "./components/NoviOglas";
-import Footer from "./partial/Footer";
 import Header from "./partial/Header";
+import Homepage from "./pages/Homepage";
+import Footer from "./partial/Footer";
+import Register from "./pages/Register";
+import Soba from "./components/Soba";
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-    const [loadingUser, setLoadingUser] = React.useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    let history = useHistory();
 
-    React.useEffect(() => {
-        fetch("/userInfo")
-            .then(response => {
-                console.log(response);
-                if (response.status !== 401) {
-                    setLoadingUser(false);
-                    setIsLoggedIn(true);
-                } else {
-                    setLoadingUser(false);
-                }
-            })
-    }, []);
+    useEffect(() => setIsLoggedIn(localStorage.getItem("user") !== null));
 
-    if (loadingUser) {
-        return <div>Loading...</div>
-    }
-
-    function onLogin() {
-        setIsLoggedIn(true)
+    function onLogin(user) {
+        localStorage.setItem("user", JSON.stringify(user));
+        setIsLoggedIn(true);
+        history.push('/')
     }
 
     function onLogut() {
-        setIsLoggedIn(false);
+        localStorage.clear();
+        setIsLoggedIn(false)
     }
 
+    /*
+        if (!isLoggedIn) {
+
+            <Switch>
+                <Route exact path="/login" component={() => <Login onLogin={onLogin}/>}/>
+                <Route exact path="/register" component={() => <Register onLogin={onLogin}/>}/>
+                {/!*Je li ovo ok praksa??*!/}
+                <Redirect to="/login"/>
+            </Switch>
+
+        }
+    */
 
     return (
         <div className="App">
-            {isLoggedIn && <Header/>}
+            <Header onLogout={onLogut} isLoggedIn={isLoggedIn}/>
             <div className="outer">
-                <div className="inner">
-                    <Switch>
-                        <Route exact path="/login" component={() => <Login onLogin={onLogin}/>}/>
-                        <Route exact path="/register" component={Register}/>
-                        <Route exact path="/novioglas" component={NoviOglas}/>
-                        {/*Je li ovo ok praksa??*/}
-                        <Redirect to="/login"/>
-                    </Switch>
-                </div>
+                <Switch>
+                    {/* todo slozi ove rute tako da ulogirani korisnik ni ne može otići na /login */}
+                    <Route exact path="/login" component={() => <Login onLogin={onLogin}/>}/>
+                    <Route exact path="/register" component={() => <Register onLogin={onLogin}/>}/>
+                    <Route exact path="/soba" component={() => <Soba/>}/>
+                    <Route path='/' component={Homepage}/>
+                </Switch>
             </div>
-            {isLoggedIn && <Footer/>}
+            <Footer/>
         </div>
-
     );
 }
 

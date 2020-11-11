@@ -7,7 +7,6 @@ function Login(props) {
     const [loginForm, setLoginForm] = React.useState({username: '', password: ''});
     const [error, setError] = React.useState('');
 
-    // todo potencijalno ovo staviti kao props kojeg mu app proslijeduje?
     function onChange(event) {
         const {name, value} = event.target;
         setLoginForm(oldForm => ({...oldForm, [name]: value}))
@@ -17,11 +16,12 @@ function Login(props) {
         e.preventDefault();
         setError("");
 
+        let psw = hashPassword(loginForm.password);
+        console.log(psw);
         const body = {
             username: loginForm.username,
             password: hashPassword(loginForm.password)
         };
-
 
         const options = {
             method: 'POST',
@@ -32,43 +32,48 @@ function Login(props) {
             body: JSON.stringify(body)
         };
 
-        fetch('http://localhost:8080/checklogin', options)
+        fetch('http://localhost:8080/auth/login', options)
             .then(response => {
-                if (response.status === 401) {
-                    setError("Login failed");
-                } else {
-                    props.onLogin();
+                if (response.status === 200) {
+                    response.json().then(body => {
+                        props.onLogin(body)
+                    }).catch(error => console.log(error))
                 }
             });
     }
 
-    return (
-        <Form onSubmit={onSubmit}>
-            <h3>Prijava</h3>
+    function isValid() {
+        const {username, password} = loginForm;
+        return username.length > 0 && password.length > 5;
+    }
 
-            <Form.Group>
-                <Form.Label> Korisničko ime </Form.Label>
-                <Form.Control name="username" type="text" placeholder={loginForm.username} onChange={onChange}/>
-            </Form.Group>
-            <Form.Group>
-                <Form.Label> Lozinka </Form.Label>
-                <Form.Control name="password" type="password" placeholder={loginForm.password} onChange={onChange}/>
-            </Form.Group>
-            <Button type="submit" variant="dark" size="lg" block>Prijavi se</Button>
-            {
+    return (
+        <div className="inner">
+            <Form onSubmit={onSubmit}>
+                <h3>Prijava</h3>
+
+                <Form.Group>
+                    <Form.Label> Korisničko ime </Form.Label>
+                    <Form.Control name="username" type="text" placeholder={loginForm.username} onChange={onChange}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label> Lozinka </Form.Label>
+                    <Form.Control name="password" type="password" placeholder={loginForm.password} onChange={onChange}/>
+                </Form.Group>
+                <Button type="submit" variant="dark" size="lg" block disabled={!isValid()}> Prijavi se </Button>
                 <p className="not-registered text-right">
-                    <Link to="/register">Nisi registriran?</Link>
+                    <Link to="/register">Nisi još registriran?</Link>
                 </p>
-            }
-            {
-                // Zakomentirano zato što nisam sigurna da ćemo raditi to sa forgot your pwd
-                /*
-                <p className="forgot-password text-right">
-                    Forgot <a href="#">password?</a>
-                </p>
-                */
-            }
-        </Form>
+                {
+                    // Zakomentirano zato što nisam sigurna da ćemo raditi to sa forgot your pwd
+                    /*
+                    <p className="forgot-password text-right">
+                        Forgot <a href="#">password?</a>
+                    </p>
+                    */
+                }
+            </Form>
+        </div>
     )
 }
 

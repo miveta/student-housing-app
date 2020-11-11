@@ -6,21 +6,28 @@ class Header extends Component {
         super(props);
     }
 
-    logout() {
-        fetch("/logout").then(() => {
-            this.state.props.onLogout();
-        });
-    }
-
     render() {
-        return(
-            <Navbar expand="lg" bg="light">
-                <Nav className="mr-auto">
-                    <Nav.Link href="/login">Login</Nav.Link>
-                    <Nav.Link href="/register">Register</Nav.Link>
-                    <Nav.Link href="/novioglas">Novi oglas</Nav.Link>
-                    <Button onClick={this.logout}/>
-                </Nav>
+        return (
+            <Navbar expand="lg" bg="light" className="justify-content-between header" sticky={"top"}>
+                <Navbar.Brand href="/">ZAMJENA SOBA</Navbar.Brand>
+                {this.props.isLoggedIn
+                    ?
+                    <Nav className="justify-content-end">
+                        <Nav.Item>
+                            <Nav.Link href="/oglas">Predaj oglas</Nav.Link>
+                        </Nav.Item>
+                        <Button variant="light" onClick={this.props.onLogout}> Odjavi se </Button>
+                    </Nav>
+                    :
+                    <Nav className="justify-content-end">
+                        <Nav.Item>
+                            <Nav.Link href="/login">Prijava</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link href="/register">Registracija</Nav.Link>
+                        </Nav.Item>
+                    </Nav>
+                }
             </Navbar>
         )
     }
