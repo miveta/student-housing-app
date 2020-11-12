@@ -9,6 +9,7 @@ import Homepage from "./pages/Homepage";
 import Footer from "./partial/Footer";
 import Register from "./pages/Register";
 import Soba from "./components/Soba";
+import TrazimSobu from "./components/TrazimSobu";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,9 +24,10 @@ function App() {
         history.push('/')
     }
 
-    function onLogut() {
+    function onLogout() {
         localStorage.clear();
-        setIsLoggedIn(false)
+        setIsLoggedIn(false);
+        history.push('/')
     }
 
     /*
@@ -43,7 +45,7 @@ function App() {
 
     return (
         <div className="App">
-            <Header onLogout={onLogut} isLoggedIn={isLoggedIn}/>
+            <Header onLogout={onLogout} isLoggedIn={isLoggedIn}/>
             <div className="outer">
                 <Switch>
                     {/* todo slozi ove rute tako da ulogirani korisnik ni ne može otići na /login */}
@@ -51,7 +53,8 @@ function App() {
                     <Route exact path="/register"
                            component={() => <Register onLogin={onLogin} isLoggedIn={isLoggedIn}/>}/>
                     <Route exact path="/soba" component={() => <Soba/>}/>
-                    <Route path='/' component={Homepage}/>
+                    <Route exact path="/trazimsobu" component={() => <TrazimSobu/>}/>
+                    <Route path='/' exact component={Homepage}/>
                 </Switch>
             </div>
             <Footer/>

@@ -16,6 +16,9 @@ class Header extends Component {
                         <Nav.Item>
                             <Nav.Link href="/soba">Moja soba</Nav.Link>
                         </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link href="/trazimsobu">Tražim sobu</Nav.Link>
+                        </Nav.Item>
                         <Button variant="light" onClick={this.props.onLogout}> Odjavi se </Button>
                     </Nav>
                     :

@@ -1,6 +1,7 @@
 package progi.projekt.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,6 +21,9 @@ public class Grad {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_sc")
     private StudentskiCentar studentskiCentar;
+
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "grad")
+    private List<Student> studenti;
 
     //Naziv i studentskiCentar ne smiju biti null
     public Grad(String naziv, StudentskiCentar studentskiCentar, Set<Dom> domovi) {
@@ -73,5 +77,13 @@ public class Grad {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public List<Student> getStudenti() {
+        return studenti;
+    }
+
+    public void setStudenti(List<Student> studenti) {
+        this.studenti = studenti;
     }
 }
