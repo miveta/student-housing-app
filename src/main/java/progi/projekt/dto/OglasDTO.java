@@ -1,8 +1,7 @@
 package progi.projekt.dto;
 
 import progi.projekt.model.Oglas;
-import progi.projekt.model.StatusOglasa;
-import progi.projekt.model.Student;
+import progi.projekt.model.enums.StatusOglasaEnum;
 
 import java.sql.Date;
 import java.util.UUID;
@@ -13,8 +12,8 @@ public class OglasDTO {
     private String opis;
     private int godina;
     private Date objavljen;
-    private StatusOglasa status;
-    private Student student;
+    private StatusOglasaEnum status;
+    private String student;
 
     public OglasDTO(Oglas oglas) {
         this.id = oglas.getId();
@@ -22,8 +21,8 @@ public class OglasDTO {
         this.opis = oglas.getOpis();
         this.godina = oglas.getGodina();
         this.objavljen = oglas.getObjavljen();
-        this.status = oglas.getStatus();
-        this.student = oglas.getStudent();
+        this.status = oglas.getStatus().getStatus();
+        this.student = oglas.getStudent().getKorisnickoIme();
     }
 
     public UUID getId() {
@@ -34,7 +33,9 @@ public class OglasDTO {
         this.id = id;
     }
 
-    public String getNaslov() { return naslov; }
+    public String getNaslov() {
+        return naslov;
+    }
 
     public void setNaslov(String naslov) {
         this.naslov = naslov;
@@ -64,19 +65,19 @@ public class OglasDTO {
         this.objavljen = objavljen;
     }
 
-    public StatusOglasa getStatus() {
+    public StatusOglasaEnum getStatus() {
         return status;
     }
 
-    public void setStatus(StatusOglasa status) {
+    public void setStatus(StatusOglasaEnum status) {
         this.status = status;
     }
 
-    public Student getStudent() {
+    public String getStudent() {
         return student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(String student) {
         this.student = student;
     }
 }

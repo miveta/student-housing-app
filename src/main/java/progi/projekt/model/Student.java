@@ -49,6 +49,10 @@ public class Student implements Serializable, Korisnik {
     @JoinColumn(name="oglas")
     private Oglas oglas;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="id_grad")
+    private Grad grad;
+
     public Student() {
     }
 
@@ -181,5 +185,13 @@ public class Student implements Serializable, Korisnik {
 
     public void setOglas(Oglas oglas) {
         this.oglas = oglas;
+    }
+
+    public Grad getGrad() {
+        return grad;
+    }
+
+    public void setGrad(Grad grad) {
+        this.grad = grad;
     }
 }

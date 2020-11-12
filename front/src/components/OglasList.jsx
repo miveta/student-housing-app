@@ -1,6 +1,5 @@
 import React from 'react';
 import Oglas from './Oglas';
-import Card from "./Card";
 
 function OglasList() {
     const [oglasi, setOglasi] = React.useState([]);
@@ -13,11 +12,11 @@ function OglasList() {
     };
 
 
-    fetch('http://localhost:8080/oglas', options)
+    fetch('http://localhost:8080/oglas/list', options)
         .then(response => {
             if (response.status === 200) {
                 response.json().then(body => {
-                    console.log(response)
+                    console.log(body)
                 }).catch(error => console.log(error))
             }
         });
