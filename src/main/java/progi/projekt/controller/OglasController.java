@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import progi.projekt.dto.OglasDTO;
-import progi.projekt.model.Oglas;
 import progi.projekt.service.OglasService;
 
 import java.util.List;
@@ -22,10 +21,6 @@ public class OglasController {
 
     @GetMapping("/list")
     public List<OglasDTO> listOglas() {
-        List<Oglas> oglasi = oglasService.listAll();
-        List<OglasDTO> oglasiDTO = oglasi.stream().map(o -> new OglasDTO(o)
-        ).collect(Collectors.toList());
-
-        return oglasiDTO;
+        return oglasService.listAll().stream().map(OglasDTO::new).collect(Collectors.toList());
     }
 }

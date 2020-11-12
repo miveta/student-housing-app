@@ -9,7 +9,6 @@ import Homepage from "./pages/Homepage";
 import Footer from "./partial/Footer";
 import Register from "./pages/Register";
 import Soba from "./components/Soba";
-import OglasList from "./components/OglasList";
 import TrazimSobu from "./components/TrazimSobu";
 
 function App() {
@@ -26,8 +25,8 @@ function App() {
 
     function onLogout() {
         localStorage.clear();
-        setIsLoggedIn(false)
-        window.location = 'http://localhost:3000/login';
+        setIsLoggedIn(false);
+        history.push('/')
     }
 
     /*

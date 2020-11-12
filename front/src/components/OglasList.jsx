@@ -1,6 +1,5 @@
 import React from 'react';
-import Oglas from './Oglas';
-import Card from "./Card";
+import OglasCard from './OglasCard';
 
 function OglasList() {
     const [oglasi, setOglasi] = React.useState([]);
@@ -12,7 +11,7 @@ function OglasList() {
         }
     };
 
-    fetch('http://localhost:8080/oglas/list', options)
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/list`, options)
         .then(response => {
             if (response.status === 200) {
                 response.json().then(body => {
@@ -20,17 +19,17 @@ function OglasList() {
                 }).catch(error => console.log(error))
             }
         });
+    korisnik;
 
     return (
-
-        <Card title="OGLASI">
+        <div>
             {
                 oglasi.map(oglas =>
-                    <Oglas key={oglas.id}
-                           oglas={oglas}/>
+                    <OglasCard key={oglas.id}
+                               oglas={oglas}/>
                )
             }
-        </Card>
+        </div>
 
     );
 
