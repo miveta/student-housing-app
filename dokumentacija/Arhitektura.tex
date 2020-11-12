@@ -10,11 +10,13 @@
 			\end{figure}
 			
 			Programski jezik koji smo odabralni za izradu aplikacije je java s razvojnim okvirom Spring Boot te javaScript. Odabrano razvojno okruženje je IntelliJ IDEA. 
-			Aplikacija je organizirana u dva sloja: frontend i backend. Za izradu frontenda koristi se React. Frontend i backend komuniciraju pomoću RESTa. Backend se sastoji od tri sloja:
+			Aplikacija je organizirana u dva sloja: frontend i backend. Za izradu frontenda koristi se React.React je javaScript biblioteka koja služi za izradu jednostranične aplikacije. Frontend i backend komuniciraju pomoću RESTa. REST se bazira na HTTP protokolu. Backend se sastoji od pet komponenti:
 		\begin{itemize}
 		\item Kontroler - služi za komunikaciju s frontendom. Zaprima HTTP zathtjev te određuje koja će se funkcionalnost izvršavati
 		\item Servis - u njima se odvijaju poslovne logike i sve funkcionalnosti aplikacije
 		\item Repozitorij - dohvaća i sprema podatke u bazu podataka
+		\item Model - opisuju entitete iz baze 
+		\item Security - omogućava autentikaciju i autorizaciju 
 	\end{itemize}
 
 \begin{figure}[H]
