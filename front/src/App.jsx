@@ -10,6 +10,7 @@ import Footer from "./partial/Footer";
 import Register from "./pages/Register";
 import Soba from "./components/Soba";
 import OglasList from "./components/OglasList";
+import TrazimSobu from "./components/TrazimSobu";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -50,6 +51,7 @@ function App() {
                     <Route exact path="/login" component={() => <Login onLogin={onLogin}/>}/>
                     <Route exact path="/register" component={() => <Register onLogin={onLogin}/>}/>
                     <Route exact path="/soba" component={() => <Soba/>}/>
+                    <Route exact path="/trazimsobu" component={() => <TrazimSobu/>}/>
                     <Route path='/' exact component={Homepage}/>
                 </Switch>
             </div>
