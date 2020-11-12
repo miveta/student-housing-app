@@ -9,6 +9,7 @@ import Homepage from "./pages/Homepage";
 import Footer from "./partial/Footer";
 import Register from "./pages/Register";
 import Soba from "./components/Soba";
+import OglasList from "./components/OglasList";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -49,7 +50,7 @@ function App() {
                     <Route exact path="/login" component={() => <Login onLogin={onLogin}/>}/>
                     <Route exact path="/register" component={() => <Register onLogin={onLogin}/>}/>
                     <Route exact path="/soba" component={() => <Soba/>}/>
-                    <Route path='/' component={Homepage}/>
+                    <Route path='/' exact component={Homepage}/>
                 </Switch>
             </div>
             <Footer/>

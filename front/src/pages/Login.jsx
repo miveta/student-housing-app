@@ -20,7 +20,7 @@ function Login(props) {
             username: loginForm.username,
             password: loginForm.password
         };
-        console.log(body);
+
         const options = {
             method: 'POST',
             headers: {
