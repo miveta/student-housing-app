@@ -151,17 +151,17 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 oglasIvica.setGodina(2020);
                 oglasIvica.setNaslov("Trokrevetna soba kategorije II");
                 oglasIvica.setOpis("Dobro ocuvana soba na drugom katu, blizu menze");
-                oglasIvica.setObjavljen(new Date(2020, 10, 1));
+                oglasIvica.setObjavljen(Date.valueOf("2020-10-01"));
 
                 oglasMarko.setGodina(2020);
                 oglasMarko.setNaslov("Jednokrevetna soba kategorije I");
                 oglasMarko.setOpis("Dobro ocuvana soba na trecem katu");
-                oglasMarko.setObjavljen(new Date(2020, 10, 5));
+                oglasMarko.setObjavljen(Date.valueOf("2020-10-05"));
 
                 oglasPero.setGodina(2020);
                 oglasPero.setNaslov("Dvokrevetna soba kategorije II");
                 oglasPero.setOpis("/");
-                oglasPero.setObjavljen(new Date(2020, 10, 7));
+                oglasPero.setObjavljen(Date.valueOf("2020-10-07"));
 
                 //Kreiraj statuse
                 StatusOglasa statusMarko = new StatusOglasa();
@@ -175,7 +175,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 Obavijest obavijestZaIvicu = new Obavijest();
                 obavijestZaIvicu.setProcitana(false);
                 obavijestZaIvicu.setTekst("Pero je potvrdio tvoj oglas!");
-                obavijestZaIvicu.setVrijeme(new Date(2020, 10, 8));
+                obavijestZaIvicu.setVrijeme(Date.valueOf("2020-10-8"));
 
 
                 //Linkaj sve------------------------------------------------------------------------------
