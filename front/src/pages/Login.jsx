@@ -29,7 +29,7 @@ function Login(props) {
             body: JSON.stringify(body)
         };
 
-        fetch('http://localhost:8080/auth/login', options)
+        fetch( `${process.env.REACT_APP_BACKEND_URL}/auth/login`, options)
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(body => {

@@ -17,11 +17,9 @@ public class OglasController {
     @Autowired
     private OglasService oglasService;
 
-    @Autowired
-    private OglasRepository oglasRepository;
-
     @GetMapping("")
     public List<Oglas> listOglas() {
+
         return oglasService.listAll();
     }
 

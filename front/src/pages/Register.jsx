@@ -3,6 +3,7 @@ import {Button, Form} from 'react-bootstrap';
 import {hashPassword} from "../index";
 import {Link} from "react-router-dom";
 
+
 function Register(props) {
     const [form, setForm] = React.useState({ime: '', prezime: '', jmbag: '', username: '', email: '', lozinka: ''});
     const [error, setError] = React.useState('');
@@ -35,7 +36,7 @@ function Register(props) {
             body: JSON.stringify(registerForm)
         };
 
-        fetch('http://localhost:8080/auth/register', options)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/register`, options)
             .then(response => {
                     if (response.status === 401) {
                         setError("Register failed");

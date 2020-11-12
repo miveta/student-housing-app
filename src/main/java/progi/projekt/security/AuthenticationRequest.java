@@ -5,8 +5,6 @@ import java.io.Serializable;
 //trebati ce za jwt sessione
 
 public class AuthenticationRequest implements Serializable {
-
-
     private String login;
     private String password;
 
