@@ -37,17 +37,12 @@ function Register(props) {
 
         fetch('http://localhost:8080/auth/register', options)
             .then(response => {
-                    if (response.status === 401) {
-                        setError("Register failed");
-                    } else if (response.status === 400) {
-
-                    } else if (response.status === 200) {
-                        response.json().then(body => {
-                            props.onLogin(body)
-                        }).catch(error => console.log(error))
-                    }
+                if (response.status === 200) {
+                    response.json().then(body => {
+                        props.onLogin(body);
+                    });
                 }
-            );
+            }).catch(error => console.log(error));
     }
 
     function isValid() {
@@ -61,33 +56,35 @@ function Register(props) {
                 <h3>Registracija</h3>
 
                 <Form.Group>
-                    <Form.Label> Ime </Form.Label>
+                    <Form.Label> Ime* </Form.Label>
                     <Form.Control name="ime" type="text" placeholder={form.name} onChange={onChange}/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label> Prezime </Form.Label>
+                    <Form.Label> Prezime* </Form.Label>
                     <Form.Control name="prezime" type="text" placeholder={form.prezime} onChange={onChange}/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label> JMBAG </Form.Label>
+                    <Form.Label> JMBAG* (mora biti 10 znamenki) </Form.Label>
                     <Form.Control name="jmbag" type="text" placeholder={form.jmbag} onChange={onChange}/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label> Korisničko ime </Form.Label>
+                    <Form.Label> Korisničko ime* </Form.Label>
                     <Form.Control name="username" type="text" placeholder={form.username} onChange={onChange}/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label> Email </Form.Label>
+                    <Form.Label> Email* </Form.Label>
                     <Form.Control name="email" type="email" placeholder={form.email} onChange={onChange}/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label> Lozinka </Form.Label>
+                    <Form.Label> Lozinka* (minimalno 5 znakova)</Form.Label>
                     <Form.Control name="lozinka" type="password" placeholder={form.lozinka} onChange={onChange}/>
                 </Form.Group>
                 <Button type="submit" variant="dark" size="lg" block disabled={!isValid()}> Registriraj se </Button>
-
                 <p className="already-registered text-right">
                     <Link to="/login">Već si registriran?</Link>
+                </p>
+                <p>
+                    Polja označena * ne smiju ostati prazna!
                 </p>
             </Form>
         </div>

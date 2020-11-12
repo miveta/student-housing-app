@@ -19,7 +19,6 @@ function OglasList() {
                 }).catch(error => console.log(error))
             }
         });
-    korisnik;
 
     return (
         <div>
