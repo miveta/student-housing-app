@@ -24,9 +24,10 @@ function App() {
         history.push('/')
     }
 
-    function onLogut() {
+    function onLogout() {
         localStorage.clear();
         setIsLoggedIn(false)
+        window.location = 'http://localhost:3000/login';
     }
 
     /*
@@ -44,7 +45,7 @@ function App() {
 
     return (
         <div className="App">
-            <Header onLogout={onLogut} isLoggedIn={isLoggedIn}/>
+            <Header onLogout={onLogout} isLoggedIn={isLoggedIn}/>
             <div className="outer">
                 <Switch>
                     {/* todo slozi ove rute tako da ulogirani korisnik ni ne može otići na /login */}
