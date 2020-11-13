@@ -54,7 +54,7 @@ function App() {
                            component={() => <Register onLogin={onLogin} isLoggedIn={isLoggedIn}/>}/>
                     <Route exact path="/soba" component={() => <Soba/>}/>
                     <Route exact path="/trazimsobu" component={() => <TrazimSobu/>}/>
-                    <Route path='/' exact component={Homepage}/>
+                    <Route path='/' exact component={() => <Homepage isLoggedIn={isLoggedIn}/>}/>
                 </Switch>
             </div>
             <Footer/>

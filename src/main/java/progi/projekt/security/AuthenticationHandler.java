@@ -24,7 +24,7 @@ public class AuthenticationHandler {
         UserDetails userDetails = korisnikUserDetailsService.loadUserByUsername(data.getUsername());
 
         if (userDetails == null)
-            throw new BadCredentialsException("Username not provided");
+            throw new BadCredentialsException("Korisničko ime nije upisano.");
 
         String requested = data.getPassword();
         String stored = userDetails.getPassword();
@@ -38,7 +38,7 @@ public class AuthenticationHandler {
 
         if (!pswdEncoder.matches(requested, stored)) {
             if (!requested.equals(stored)) //dok hashing u seedu ne radi
-                throw new BadCredentialsException("Username or password is wrong");
+                throw new BadCredentialsException("Unijeli ste netočno korisničko ime ili lozinku.");
         }
 
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

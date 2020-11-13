@@ -63,7 +63,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // dozvolila sam sve auth da se prijave
                 .antMatchers("/auth/*").permitAll()
                 .antMatchers("/oglas/list").permitAll()
+                //.antMatchers("/").permitAll() //yes? no?
         ;
+
+        //warning: ovo hoce bacati errore ako je neko od svojstava vec definirano
         super.configure(http);
     }
 }
