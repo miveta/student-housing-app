@@ -15,3 +15,11 @@ DNEVNIK SASTANAKA
 
 4. sastanak (22/10/2020 - Teams):
     - Ivana i Luka su sudjelovali => razgovor o optimalnoj organizaciji baze podataka
+
+5. sastanak (29/10/2020 - Teams):
+    - Podjela uloga za kreiranje baze, izradu kontrolera, servisa i repozitorija, dokumentacije i logina i registgracije
+
+6. sastanak (06/11/2020 - Teams):
+    - Diskusija o trenutnom napretku projekta
+    - Podjela poslova koji se moraju obaviti do prve predaje projekta
+    - Dogovoren novi sastanak u utorak
