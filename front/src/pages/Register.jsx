@@ -51,8 +51,7 @@ function Register(props) {
 
     function isValid() {
         const {ime, prezime, jmbag, username, email, lozinka} = form;
-        return true
-        //ime.length > 0 && prezime.length > 0 && jmbag.length === 10 && username.length > 0 && email.length > 0 && lozinka.length > 5;
+        return ime.length > 0 && prezime.length > 0 && jmbag.length === 10 && username.length > 0 && email.length > 0 && lozinka.length > 5;
     }
 
     return (
@@ -66,7 +65,8 @@ function Register(props) {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Prezime* </Form.Label>
-                    <Form.Control name="prezime" type="text" placeholder={form.prezime} onChange={onChange} required/>
+                    <Form.Control name="prezime" type="text" placeholder={form.prezime} onChange={onChange} required
+                                  maxLength="10" minLength="10"/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> JMBAG* (mora biti 10 znamenki) </Form.Label>
@@ -84,6 +84,7 @@ function Register(props) {
                     <Form.Label> Lozinka* (minimalno 5 znakova)</Form.Label>
                     <Form.Control name="lozinka" type="password" placeholder={form.lozinka} onChange={onChange}
                                   required/>
+
                 </Form.Group>
                 <p className="errorMessage">
                     {error}

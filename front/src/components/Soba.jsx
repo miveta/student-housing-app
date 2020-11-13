@@ -8,8 +8,8 @@ class Soba extends Component {
             change: false
         };
 
-        this.onChange = this.onChange.bind(this)
-
+        this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this)
     }
 
     onChange(event) {
@@ -29,7 +29,7 @@ class Soba extends Component {
 
         return (
             <div className="middle">
-                <Form onSubmit={onSubmit}>
+                <Form onSubmit={this.onSubmit}>
                     <h3> Moja soba </h3>
                     <Form.Group>
                         <Form.Label> Grad </Form.Label>

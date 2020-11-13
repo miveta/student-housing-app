@@ -2,10 +2,7 @@ package progi.projekt.forms;
 
 import progi.projekt.model.Student;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 public class RegisterForm {
     @NotBlank(message = "Morate unijeti svoje ime!")
@@ -15,6 +12,7 @@ public class RegisterForm {
     private String prezime;
 
     @Size(min = 10, max = 10, message = "JMBAG se mora sastojati od 10 znakova!")
+    @Pattern(regexp = "\\d+", message = "JMBAG smije sadržavati samo znamenke!")
     private String jmbag;
 
     @NotBlank(message = "Morate unijeti svoje korisničko ime!")
