@@ -1,6 +1,5 @@
 import React from "react";
 import {Button, Form} from 'react-bootstrap';
-import {hashPassword} from "../index";
 import {Link} from "react-router-dom";
 
 function Register(props) {
@@ -35,11 +34,15 @@ function Register(props) {
             body: JSON.stringify(registerForm)
         };
 
-        fetch('http://localhost:8080/auth/register', options)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/register`, options)
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(body => {
                         props.onLogin(body);
+                    });
+                } else {
+                    response.text().then(body => {
+                        setError(body);
                     });
                 }
             }).catch(error => console.log(error));
@@ -47,7 +50,8 @@ function Register(props) {
 
     function isValid() {
         const {ime, prezime, jmbag, username, email, lozinka} = form;
-        return ime.length > 0 && prezime.length > 0 && jmbag.length === 10 && username.length > 0 && email.length > 0 && lozinka.length > 5;
+        return true
+        //ime.length > 0 && prezime.length > 0 && jmbag.length === 10 && username.length > 0 && email.length > 0 && lozinka.length > 5;
     }
 
     return (
@@ -57,28 +61,32 @@ function Register(props) {
 
                 <Form.Group>
                     <Form.Label> Ime* </Form.Label>
-                    <Form.Control name="ime" type="text" placeholder={form.name} onChange={onChange}/>
+                    <Form.Control name="ime" type="text" placeholder={form.name} onChange={onChange} required/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Prezime* </Form.Label>
-                    <Form.Control name="prezime" type="text" placeholder={form.prezime} onChange={onChange}/>
+                    <Form.Control name="prezime" type="text" placeholder={form.prezime} onChange={onChange} required/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> JMBAG* (mora biti 10 znamenki) </Form.Label>
-                    <Form.Control name="jmbag" type="text" placeholder={form.jmbag} onChange={onChange}/>
+                    <Form.Control name="jmbag" type="text" placeholder={form.jmbag} onChange={onChange} required/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Korisničko ime* </Form.Label>
-                    <Form.Control name="username" type="text" placeholder={form.username} onChange={onChange}/>
+                    <Form.Control name="username" type="text" placeholder={form.username} onChange={onChange} required/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Email* </Form.Label>
-                    <Form.Control name="email" type="email" placeholder={form.email} onChange={onChange}/>
+                    <Form.Control name="email" type="email" placeholder={form.email} onChange={onChange} required/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Lozinka* (minimalno 5 znakova)</Form.Label>
-                    <Form.Control name="lozinka" type="password" placeholder={form.lozinka} onChange={onChange}/>
+                    <Form.Control name="lozinka" type="password" placeholder={form.lozinka} onChange={onChange}
+                                  required/>
                 </Form.Group>
+                <p className="errorMessage">
+                    {error}
+                </p>
                 <Button type="submit" variant="dark" size="lg" block disabled={!isValid()}> Registriraj se </Button>
                 <p className="already-registered text-right">
                     <Link to="/login">Već si registriran?</Link>

@@ -7,6 +7,7 @@ function Soba(props) {
         e.preventDefault();
     }
 
+    // todo vrati ono gdje je submit disabled dok god se ne naprave promjene
     return (
         <div className="middle">
             <Form onSubmit={onSubmit}>
@@ -48,7 +49,8 @@ function Soba(props) {
                     <Form.Label> Komentar </Form.Label>
                     <Form.Control name="komentar" type="text"/>
                 </Form.Group>
-                <Button type="submit" variant="dark" size="lg" block> Predaj oglas </Button>
+
+                <Button type="submit" variant="dark" size="lg" block> Spremi promjene </Button>
             </Form>
         </div>
     )

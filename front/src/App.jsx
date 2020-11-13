@@ -52,7 +52,7 @@ function App() {
                     <Route exact path="/register" component={() => <Register onLogin={onLogin}/>}/>
                     <Route exact path="/soba" component={() => <Soba/>}/>
                     <Route exact path="/trazimsobu" component={() => <TrazimSobu/>}/>
-                    <Route path='/' exact component={Homepage}/>
+                    <Route path='/' exact component={() => <Homepage isLoggedIn={isLoggedIn}/>}/>
                 </Switch>
             </div>
             <Footer/>
