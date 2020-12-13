@@ -29,9 +29,6 @@ function Login(props) {
             body: JSON.stringify(body)
         };
 
-        fetch( `${process.env.REACT_APP_BACKEND_URL}/auth/login`, options)
-        const message = {};
-
         fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/login`, options)
             .then(response => {
                 if (response.status === 200) {
@@ -56,9 +53,8 @@ function Login(props) {
     }
 
     if (props.isLoggedIn) {
-        // todo bilo bi super kad ulogirani user ne bi mogao ni pristupiti ovoj komponenti
+        // todo ulogirani user ne bi mogao ni pristupiti ovoj komponenti
     }
-
 
     return (
         <div className="inner">

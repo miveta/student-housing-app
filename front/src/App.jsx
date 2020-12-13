@@ -17,7 +17,6 @@ function App() {
 
     useEffect(() => setIsLoggedIn(localStorage.getItem("user") !== null));
 
-
     function onLogin(user) {
         localStorage.setItem("user", JSON.stringify(user));
         setIsLoggedIn(true);
