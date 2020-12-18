@@ -30,6 +30,9 @@ public class Oglas {
     @JoinColumn(name="id_student")
     private Student student;
 
+    @OneToMany(mappedBy="likedOglas",cascade = CascadeType.ALL)
+    private List<Lajk> lajkovi;
+
     //Naslov i godina ne smiju biti null
     public Oglas(String naslov, String opis, int godina, Date objavljen) {
         if (naslov != null) {
@@ -110,5 +113,13 @@ public class Oglas {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public List<Lajk> getLajkovi() {
+        return lajkovi;
+    }
+
+    public void setLajkovi(List<Lajk> lajkovi) {
+        this.lajkovi = lajkovi;
     }
 }

@@ -9,12 +9,12 @@ public class Lajk implements Serializable {
     private int ocjena;
 
     @Id
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_student")
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "id_korisnik")
     private Student likedByStudent;
 
     @Id
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "id_oglas")
     private Oglas likedOglas;
 

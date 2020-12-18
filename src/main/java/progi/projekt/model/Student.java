@@ -33,7 +33,7 @@ public class Student implements Serializable, Korisnik {
 
     private boolean obavijestiNaMail;
 
-    @ManyToMany(targetEntity = Obavijest.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Obavijest.class, cascade = CascadeType.ALL)
     private List<Obavijest> obavijesti;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -52,6 +52,9 @@ public class Student implements Serializable, Korisnik {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="id_grad")
     private Grad grad;
+
+    @OneToMany(mappedBy = "likedByStudent",cascade = CascadeType.ALL)
+    private List<Lajk> lajkovi;
 
     public Student() {
     }
@@ -193,5 +196,13 @@ public class Student implements Serializable, Korisnik {
 
     public void setGrad(Grad grad) {
         this.grad = grad;
+    }
+
+    public List<Lajk> getLajkovi() {
+        return lajkovi;
+    }
+
+    public void setLajkovi(List<Lajk> lajkovi) {
+        this.lajkovi = lajkovi;
     }
 }
