@@ -33,6 +33,7 @@ public class Oglas {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "kandidati")
     private List<Kandidat> kandidati;
 
+
     //Naslov i godina ne smiju biti null
     public Oglas(String naslov, String opis, int godina, Date objavljen) {
         if (naslov != null) {
@@ -113,5 +114,13 @@ public class Oglas {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public List<Kandidat> getKandidati() {
+        return kandidati;
+    }
+
+    public void setKandidati(List<Kandidat> kandidati) {
+        this.kandidati = kandidati;
     }
 }
