@@ -30,6 +30,9 @@ public class Oglas {
     @JoinColumn(name="id_student")
     private Student student;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "kandidati")
+    private List<Kandidat> kandidati;
+
     //Naslov i godina ne smiju biti null
     public Oglas(String naslov, String opis, int godina, Date objavljen) {
         if (naslov != null) {
