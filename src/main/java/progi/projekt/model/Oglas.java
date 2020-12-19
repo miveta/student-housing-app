@@ -92,9 +92,7 @@ public class Oglas {
         return status;
     }
 
-    public void setStatus(StatusOglasa status) {
-        this.status = status;
-    }
+    public void setStatus(StatusOglasa status) { this.status = status; }
 
     public void setObavijesti(List<Obavijest> obavijesti) {
         this.obavijesti = obavijesti;

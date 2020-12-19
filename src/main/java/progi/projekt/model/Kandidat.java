@@ -54,6 +54,8 @@ public class Kandidat {
 		this.ignore = ignore;
 	}
 
+	private Integer ocjena;
+
 
 	public Kandidat(Oglas oglas, Oglas kandOglas, Integer bliskost, Boolean ignore) {
 		if (oglas != null || kandOglas != null) {
@@ -66,5 +68,13 @@ public class Kandidat {
 	}
 
 	public Kandidat() {
+	}
+
+	public Integer getOcjena() {
+		return ocjena;
+	}
+
+	public void setOcjena(Integer ocjena) {
+		this.ocjena = ocjena;
 	}
 }

@@ -44,6 +44,29 @@ public class Par {
 		this.done = done;
 	}
 
+	@Basic
+	@Column(name = "lanac", nullable = true)
+	private Boolean lanac;
+
+	public Boolean getLanac() {
+		return lanac;
+	}
+	public void setLanac(Boolean done) {
+		this.lanac = lanac;
+	}
+
+
+	@Basic
+	@Column(name = "ignore", nullable = true)
+	private Boolean ignore;
+
+	public Boolean getIgnore() {
+		return ignore;
+	}
+	public void setIgnorec(Boolean ignore) {
+		this.ignore = ignore;
+	}
+
 
 	public Par(Oglas oglas1, Oglas oglas2, Boolean done) {
 		if (oglas1 != null || oglas2 != null) {
