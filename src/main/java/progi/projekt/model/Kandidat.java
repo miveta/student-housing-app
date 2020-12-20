@@ -1,6 +1,7 @@
 package progi.projekt.model;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "kandidat", schema = "public", catalog = "dc917r8jcempur")
@@ -8,14 +9,16 @@ public class Kandidat {
 	@Id
 	@Column(name = "id_kandidat", nullable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int idKandidat;
+	private UUID idKandidat;
 
-	public int getIdKandidat() {
+	public UUID getIdKandidat() {
 		return idKandidat;
 	}
 
 
 	@Column(name = "id_oglas", nullable = false)
+	private UUID idOglas;
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_oglas")
 	private Oglas oglas;
@@ -76,5 +79,13 @@ public class Kandidat {
 
 	public void setOcjena(Integer ocjena) {
 		this.ocjena = ocjena;
+	}
+
+	public UUID getIdOglas() {
+		return idOglas;
+	}
+
+	public void setIdOglas(UUID idOglas) {
+		this.idOglas = idOglas;
 	}
 }

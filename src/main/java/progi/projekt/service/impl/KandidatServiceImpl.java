@@ -2,16 +2,15 @@ package progi.projekt.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import progi.projekt.model.Kandidat;
-import progi.projekt.model.Oglas;
-import progi.projekt.model.Soba;
-import progi.projekt.model.TrazeniUvjeti;
+import progi.projekt.model.*;
 import progi.projekt.repository.KandidatRepository;
 import progi.projekt.service.KandidatService;
+import progi.projekt.service.UvjetiService;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,8 +22,8 @@ public class KandidatServiceImpl implements KandidatService {
 	private KandidatRepository kandidatRepo;
 
 	@Override
-	public List<Kandidat> listAll() {
-		return kandidatRepo.findAll();
+	public List<Kandidat> listAll(UUID oglasUuid) {
+		return kandidatRepo.findAllByIdOglas(oglasUuid);
 	}
 
 	@Override
@@ -89,9 +88,22 @@ public class KandidatServiceImpl implements KandidatService {
 
 	}
 
-	public Boolean sobaMatchesUvjet (Soba soba, TrazeniUvjeti uvjeti){
-		//pozivanje TrazeniUvjetiService.sobaMatchesUvjet(soba, uvjeti)
+	@Override
+	public void save(Kandidat kand) {
+		kandidatRepo.save(kand);
+	}
 
-		return false;
+	@Override
+	public Integer calculateScore(Oglas oglas1, Oglas oglas2) {
+		Soba soba2 = oglas2.getStudent().getSoba();
+		TrazeniUvjeti uvjeti1 = UvjetiService.findByIdOglas(oglas1.getId());
+
+		Integer bliskost = UvjetiService.izracunajBliskost(soba2, uvjeti1);
+
+		return bliskost;
+	}
+
+	public Boolean sobaMatchesUvjet (Soba soba, TrazeniUvjeti uvjeti){
+		return UvjetiService.sobaMatchesUvjet(soba, uvjeti);
 	}
 }

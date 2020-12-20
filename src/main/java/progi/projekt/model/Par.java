@@ -63,7 +63,7 @@ public class Par {
 	public Boolean getIgnore() {
 		return ignore;
 	}
-	public void setIgnorec(Boolean ignore) {
+	public void setIgnore(Boolean ignore) {
 		this.ignore = ignore;
 	}
 
