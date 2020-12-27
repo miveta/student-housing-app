@@ -7,4 +7,7 @@ import progi.projekt.model.LajkId;
 
 @Repository
 public interface LajkRepository extends JpaRepository<Lajk, LajkId> {
+
+    Lajk findByLajkId(LajkId lajkId);
+
 }

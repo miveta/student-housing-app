@@ -24,6 +24,11 @@ public class LajkId implements Serializable {
     public LajkId() {
     }
 
+    public LajkId(Student studentId, Oglas oglasId) {
+        this.studentId = studentId;
+        this.oglasId = oglasId;
+    }
+
     public Student getStudentId() {
         return studentId;
     }

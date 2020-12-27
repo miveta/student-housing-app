@@ -7,6 +7,7 @@ import progi.projekt.repository.OglasRepository;
 import progi.projekt.service.OglasService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OglasServiceImpl implements OglasService {
@@ -17,5 +18,17 @@ public class OglasServiceImpl implements OglasService {
     @Override
     public List<Oglas> listAll() {
         return oglasRepo.findAll();
+    }
+
+    @Override
+    public Optional<Oglas> findById(String oglasId) {
+        try {
+            return Optional.of(oglasRepo.findByOglasId(Long.parseLong(oglasId)));
+        } catch (Exception e) {
+            //studentRepo baca exceptione koje mu proslijedi baza (e)?
+            String originalMessage = e.getMessage();
+            //throw new JmbagNotFoundException("No user with email: '" + email + "'");
+            return Optional.empty();
+        }
     }
 }
