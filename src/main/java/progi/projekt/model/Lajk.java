@@ -5,11 +5,11 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@IdClass(LajkId.class)
+//@IdClass(LajkId.class)
 public class Lajk implements Serializable {
     private int ocjena;
 
-    @Id
+    /*@Id
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_student")
     private Student likedByStudent;
@@ -18,10 +18,29 @@ public class Lajk implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_oglas")
     private Oglas likedOglas;
+*/
+    @EmbeddedId
+    private LajkId lajkId;
+
+    public int getOcjena() {
+        return ocjena;
+    }
+
+    public void setOcjena(int ocjena) {
+        this.ocjena = ocjena;
+    }
+
+    public LajkId getLajkId() {
+        return lajkId;
+    }
+
+    public void setLajkId(LajkId lajkId) {
+        this.lajkId = lajkId;
+    }
 
     public Lajk() {
     }
-
+    /*
     //Nista ne smije biti null!
     //Ocjena mora biti 1,2 ili 3
     public Lajk(Student likedBy, Oglas liked, int ocjena) {
@@ -78,5 +97,5 @@ public class Lajk implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(likedByStudent, likedOglas);
-    }
+    }*/
 }
