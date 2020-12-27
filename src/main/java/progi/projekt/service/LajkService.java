@@ -1,4 +1,4 @@
-package progi.projekt.service.impl;
+package progi.projekt.service;
 
 import progi.projekt.model.Lajk;
 
