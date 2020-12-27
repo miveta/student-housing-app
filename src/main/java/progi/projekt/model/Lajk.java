@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
+@IdClass(LajkId.class)
 public class Lajk implements Serializable {
     private int ocjena;
 
