@@ -32,10 +32,6 @@ public class Soba implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipKupaoniceEnum tipKupaonice;
 
-    @Column(name = "kategorija")
-    @Enumerated(EnumType.STRING)
-    private OznakeKategorijaEnum kategorija;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -105,13 +101,5 @@ public class Soba implements Serializable {
 
     public void setTipKupaonice(TipKupaoniceEnum tipKupaonice) {
         this.tipKupaonice = tipKupaonice;
-    }
-
-    public OznakeKategorijaEnum getKategorija() {
-        return kategorija;
-    }
-
-    public void setKategorija(OznakeKategorijaEnum kategorija) {
-        this.kategorija = kategorija;
     }
 }

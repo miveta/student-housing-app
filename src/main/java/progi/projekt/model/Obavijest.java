@@ -16,6 +16,7 @@ public class Obavijest {
     private String tekst;
 
     private boolean procitana;
+
     private Date vrijeme;
 
     @ManyToMany(targetEntity = Student.class, mappedBy = "obavijesti", cascade = CascadeType.ALL)

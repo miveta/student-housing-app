@@ -25,21 +25,6 @@ public class Grad {
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "grad")
     private List<Student> studenti;
 
-    //Naziv i studentskiCentar ne smiju biti null
-    public Grad(String naziv, StudentskiCentar studentskiCentar, Set<Dom> domovi) {
-        if (naziv != null) {
-            if (studentskiCentar != null) {
-                this.naziv = naziv;
-                this.studentskiCentar = studentskiCentar;
-                this.domovi = domovi;
-            } else {
-                System.err.print("SC ne smije biti null pri kreiranju grada!");
-            }
-        } else {
-            System.err.println("Naziv grada ne smije biti null!");
-        }
-    }
-
     public Grad() {
     }
 

@@ -62,3 +62,24 @@ function App() {
 }
 
 export default App;
+
+/*
+function PrivateRoute({ component: Component, ...rest }) {
+    return (
+        <Route
+            {...rest}
+            render={props =>
+                cookie.load('isAuth') === 'true' ? (
+                    <Component {...props}/>
+                ) : (
+                    <Redirect
+                        to={{
+                            pathname: "/login",
+
+                        }}
+                    />
+                )
+            }
+        />
+    );
+}*/

@@ -63,6 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // dozvolila sam sve auth da se prijave
                 .antMatchers("/auth/*").permitAll()
                 .antMatchers("/oglas/list").permitAll()
+                .antMatchers("/soba/*").permitAll()
                 //.antMatchers("/").permitAll() //yes? no?
         ;
 

@@ -1,6 +1,7 @@
 package progi.projekt.service;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import progi.projekt.model.Obavijest;
 import progi.projekt.model.Student;
 import progi.projekt.security.exception.SavingException;
 
@@ -12,11 +13,13 @@ public interface StudentService {
 
     Optional<Student> findByEmail(String email) throws UsernameNotFoundException;
 
-    Optional<Student> findBykorisnickoIme(String username) throws UsernameNotFoundException;
+    Optional<Student> findByKorisnickoIme(String username) throws UsernameNotFoundException;
 
     String getLozinka(Student student);
 
     Student createStudent(Student student) throws SavingException;
 
     boolean studentExists(String username) throws UsernameNotFoundException;
+
+    List<Obavijest> getObavijest(String username);
 }
