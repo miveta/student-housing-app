@@ -8,26 +8,25 @@ import progi.projekt.service.OglasService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OglasServiceImpl implements OglasService {
 
     @Autowired
-    private OglasRepository oglasRepo;
+    private OglasRepository oglasRepository;
 
     @Override
     public List<Oglas> listAll() {
-        return oglasRepo.findAll();
+        return oglasRepository.findAll();
     }
 
     @Override
     public Optional<Oglas> findById(String oglasId) {
         try {
-            return Optional.of(oglasRepo.findByOglasId(Long.parseLong(oglasId)));
+            return oglasRepository.findById(UUID.fromString(oglasId));
         } catch (Exception e) {
-            //studentRepo baca exceptione koje mu proslijedi baza (e)?
-            String originalMessage = e.getMessage();
-            //throw new JmbagNotFoundException("No user with email: '" + email + "'");
+            System.err.println(e);
             return Optional.empty();
         }
     }

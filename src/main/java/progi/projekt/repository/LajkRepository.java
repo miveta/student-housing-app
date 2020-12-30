@@ -5,9 +5,11 @@ import org.springframework.stereotype.Repository;
 import progi.projekt.model.Lajk;
 import progi.projekt.model.LajkId;
 
+import java.util.Optional;
+
 @Repository
 public interface LajkRepository extends JpaRepository<Lajk, LajkId> {
 
-    Lajk findByLajkId(LajkId lajkId);
+    Optional<Lajk> findById(LajkId lajkId);
 
 }

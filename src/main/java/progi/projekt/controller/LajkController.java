@@ -1,10 +1,8 @@
 package progi.projekt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import progi.projekt.forms.LajkForm;
 import progi.projekt.model.Lajk;
 import progi.projekt.model.LajkId;
 import progi.projekt.model.Oglas;
@@ -35,30 +33,40 @@ public class LajkController {
         return lajkService.listAll();
     }
 
+    @GetMapping(value = "/ocjena")
+    public String ocjena(@RequestParam(value = "student_username") String studentUsername,
+                         @RequestParam(value = "oglas_id") String oglasId) {
+        Optional<Student> studentOpt = studentService.findByKorisnickoIme(studentUsername);
+        Optional<Oglas> oglasOpt = oglasService.findById(oglasId);
+
+        LajkId lajkId = new LajkId(studentOpt.get(), oglasOpt.get());
+        Optional<Lajk> lajkOpt = lajkService.findLajk(lajkId); // zapravo nije bilo potrebno, i da ga nađe trenutno nam ne treba postojeća ocjena
+
+        if (lajkOpt.isPresent()) {
+            return String.valueOf(lajkOpt.get().getOcjena());
+        } else {
+            return "";
+        }
+    }
+
     @PutMapping(value = "/update")
-    public ResponseEntity<?> update(@RequestParam(value = "id_student") Student studentId,
-                                    @RequestParam(value = "id_oglas") Oglas oglasId,
+    public ResponseEntity<?> update(@RequestParam(value = "student_username") String studentUsername,
+                                    @RequestParam(value = "oglas_id") String oglasId,
                                     @RequestParam(value = "ocjena") int ocjena) {
-    //public ResponseEntity<?> update(@RequestBody LajkForm data) {
+        Optional<Student> studentOpt = studentService.findByKorisnickoIme(studentUsername);
+        Optional<Oglas> oglasOpt = oglasService.findById(oglasId);
 
-        System.out.println("here");
-        //int ocjena = data.getOcjena();
+        LajkId lajkId = new LajkId(studentOpt.get(), oglasOpt.get());
+        // Optional<Lajk> lajkOpt = lajkService.findLajk(lajkId); // zapravo nije bilo potrebno, i da ga nađe trenutno nam ne treba postojeća ocjena
 
-       // Optional<Student> studentId = studentService.findBykorisnickoIme(data.getStudentId());
-        //Optional<Oglas> oglasId = oglasService.findById(data.getOglasId());
+        Lajk lajk = new Lajk();
+        lajk.setLajkId(lajkId);
+        lajk.setOcjena(ocjena);
 
-        //LajkId lajkId = new LajkId(studentId.get(), oglasId.get());
 
-        LajkId lajkId = new LajkId(studentId, oglasId);
+        Lajk updatedLajk = lajkService.update(lajk);
 
-        Optional<Lajk> lajk = lajkService.findLajk(lajkId);
-
-        Lajk l = lajk.get();
-        l.setOcjena(ocjena);
-
-        Lajk updatedLajk = lajkService.update(l);
-
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(updatedLajk);
     }
 
 }

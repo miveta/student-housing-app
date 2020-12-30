@@ -3,11 +3,12 @@ package progi.projekt.service.impl;
 import org.springframework.stereotype.Service;
 import progi.projekt.model.Lajk;
 import progi.projekt.model.LajkId;
+import progi.projekt.model.Oglas;
+import progi.projekt.model.Student;
 import progi.projekt.repository.LajkRepository;
 import progi.projekt.security.exception.SavingException;
 import progi.projekt.service.LajkService;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,13 +29,20 @@ public class LajkServiceImpl implements LajkService {
     @Override
     public Optional<Lajk> findLajk(LajkId lajkId) {
         try {
-            return Optional.of(lajkRepository.findByLajkId(lajkId));
+            Optional<Lajk> lajk = lajkRepository.findById(lajkId);
+            return lajk;
         } catch (Exception e) {
             //lajkRepo baca exceptione koje mu proslijedi baza (e)?
             String originalMessage = e.getMessage();
             //throw new LajkNotFoundException("No lajk with lajkId: '" + lajkId + "'");
             return Optional.empty();
         }
+    }
+
+    @Override
+    public Optional<Lajk> findLajk(Student student, Oglas oglas) {
+        LajkId lajkId = new LajkId(student, oglas);
+        return findLajk(lajkId);
     }
 
     @Override
