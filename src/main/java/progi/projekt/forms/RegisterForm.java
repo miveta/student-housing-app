@@ -21,10 +21,9 @@ public class RegisterForm {
     @Email(message = "Vaš mail mora imati strukturu maila!")
     private String email;
 
+    @NotNull
     @Size(min = 5)
     private String lozinka;
-
-    private boolean obavijestiNaMail;
 
     public RegisterForm() {
     }
@@ -77,14 +76,6 @@ public class RegisterForm {
         this.lozinka = lozinka;
     }
 
-    public boolean isObavijestiNaMail() {
-        return obavijestiNaMail;
-    }
-
-    public void setObavijestiNaMail(boolean obavijestiNaMail) {
-        this.obavijestiNaMail = obavijestiNaMail;
-    }
-
     public Student fromRegisterForm(String passhash) {
         Student student = new Student();
         student.setIme(this.ime);
@@ -96,7 +87,7 @@ public class RegisterForm {
         student.setLozinka(passhash);
 
         // po defaultu stavi da dobiva obavijesti na mail - hardkodirano
-        student.setObavijestiNaMail(this.obavijestiNaMail);
+        student.setObavijestiNaMail(true);
         return student;
     }
 
@@ -109,7 +100,6 @@ public class RegisterForm {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", lozinka='" + lozinka + '\'' +
-                ", obavijestiNaMail=" + obavijestiNaMail +
                 '}';
     }
 }

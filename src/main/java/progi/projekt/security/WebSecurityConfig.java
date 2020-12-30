@@ -64,9 +64,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/*").permitAll()
                 .antMatchers("/oglas/list").permitAll()
                 //.antMatchers("/").permitAll() //yes? no?
-                .antMatchers("/student/*").permitAll()
-                .antMatchers("/mojprofil/*").permitAll()
-
         ;
 
         //warning: ovo hoce bacati errore ako je neko od svojstava vec definirano

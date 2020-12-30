@@ -248,9 +248,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 obavijestZaIvicu.setOglas(oglasIvica);
 
                 //ASSIGN IVICA TO OBAVIJEST
-                ArrayList<Student> ivicaList = new ArrayList<>();
-                ivicaList.add(ivica);
-                obavijestZaIvicu.setStudenti(ivicaList);
+                obavijestZaIvicu.setStudent(ivica);
 
 
                 //Saveaj sve---------------------------------------------------------------------------

@@ -53,9 +53,13 @@ public class Student implements Serializable, Korisnik {
     @JoinColumn(name="id_grad")
     private Grad grad;
 
+    @OneToMany(mappedBy = "likedByStudent",cascade = CascadeType.ALL)
+    private List<Lajk> lajkovi;
+
     //@HolikToLudnica(fetch = FetchType.VRAPCE_HITNA, mappedBy = "AppleMaps")
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "student")
-    private Soba soba;
+    //@OneToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name="broj")        //TODO: bolje mapiranje!
+    //private Soba soba;
 
     public Student() {
     }
@@ -199,11 +203,20 @@ public class Student implements Serializable, Korisnik {
         this.grad = grad;
     }
 
-    public Soba getSoba() {
-        return soba;
+    public List<Lajk> getLajkovi() {
+        return lajkovi;
     }
 
+    public void setLajkovi(List<Lajk> lajkovi) {
+        this.lajkovi = lajkovi;
+    }
+
+    public Soba getSoba() {
+        return new Soba();
+        //return soba;
+    }
+/*
     public void setSoba(Soba soba) {
         this.soba = soba;
-    }
+    }*/
 }

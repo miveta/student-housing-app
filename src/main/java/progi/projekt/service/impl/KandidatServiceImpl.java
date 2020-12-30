@@ -7,10 +7,7 @@ import progi.projekt.repository.KandidatRepository;
 import progi.projekt.service.KandidatService;
 import progi.projekt.service.UvjetiService;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,10 +17,11 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Autowired
 	private KandidatRepository kandidatRepo;
-
+    //TODO: maknuto zbog UUID
 	@Override
 	public List<Kandidat> listAll(UUID oglasUuid) {
-		return kandidatRepo.findAllByIdOglas(oglasUuid);
+		//return kandidatRepo.findAllByIdOglas(oglasUuid);
+		return new ArrayList<Kandidat>();
 	}
 
 	@Override

@@ -15,9 +15,9 @@ public class Kandidat {
 		return idKandidat;
 	}
 
-
-	@Column(name = "id_oglas", nullable = false)
-	private UUID idOglas;
+	//TODO: kaj je ovo?
+	//@Column(name = "id_oglas", nullable = false)
+	//private UUID idOglas;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_oglas")
@@ -28,7 +28,7 @@ public class Kandidat {
 	}
 
 
-	@Column(name = "id_kand_oglasa", nullable = false)
+	//@Column(name = "id_kand_oglasa", nullable = false)
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_kand_oglasa")
 	private Oglas kandOglas;
@@ -82,10 +82,11 @@ public class Kandidat {
 	}
 
 	public UUID getIdOglas() {
-		return idOglas;
+		return new UUID(0,0);
+		//return idOglas;	//TODO
 	}
-
+/*
 	public void setIdOglas(UUID idOglas) {
 		this.idOglas = idOglas;
-	}
+	}*/
 }

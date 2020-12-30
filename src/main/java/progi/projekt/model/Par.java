@@ -13,7 +13,7 @@ public class Par {
 	public int getIdPar() {	return idPar; }
 
 
-	@Column(name = "id_oglas1", nullable = false)
+	//@Column(name = "id_oglas1", nullable = false)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_oglas1")
 	private Oglas oglas1;
@@ -23,7 +23,7 @@ public class Par {
 	}
 
 
-	@Column(name = "id_oglas2", nullable = false)
+	//@Column(name = "id_oglas2", nullable = false)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_oglas2")
 	private Oglas oglas2;

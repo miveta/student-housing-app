@@ -30,7 +30,10 @@ public class Oglas {
     @JoinColumn(name="id_student")
     private Student student;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "kandidati")
+    @OneToMany(mappedBy="likedOglas",cascade = CascadeType.ALL)
+    private List<Lajk> lajkovi;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "kandOglas")
     private List<Kandidat> kandidati;
 
 
@@ -92,7 +95,9 @@ public class Oglas {
         return status;
     }
 
-    public void setStatus(StatusOglasa status) { this.status = status; }
+    public void setStatus(StatusOglasa status) {
+        this.status = status;
+    }
 
     public void setObavijesti(List<Obavijest> obavijesti) {
         this.obavijesti = obavijesti;
@@ -112,6 +117,14 @@ public class Oglas {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public List<Lajk> getLajkovi() {
+        return lajkovi;
+    }
+
+    public void setLajkovi(List<Lajk> lajkovi) {
+        this.lajkovi = lajkovi;
     }
 
     public List<Kandidat> getKandidati() {
