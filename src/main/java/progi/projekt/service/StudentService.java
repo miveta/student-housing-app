@@ -14,9 +14,17 @@ public interface StudentService {
 
     Optional<Student> findBykorisnickoIme(String username) throws UsernameNotFoundException;
 
+    Optional<Student> findByJmbag(String jmbag) throws UsernameNotFoundException;
+
+
     String getLozinka(Student student);
 
     Student createStudent(Student student) throws SavingException;
 
     boolean studentExists(String username) throws UsernameNotFoundException;
+
+    Student update(Student student) throws SavingException;
+
+    Student delete(Student student) throws SavingException;
+
 }

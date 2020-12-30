@@ -1,4 +1,3 @@
-import React, {useEffect, useState} from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import {Route, Switch, useHistory} from "react-router-dom";
@@ -10,6 +9,9 @@ import Footer from "./partial/Footer";
 import Register from "./pages/Register";
 import Soba from "./components/Soba";
 import TrazimSobu from "./components/TrazimSobu";
+import MojProfil from "./pages/MojProfil"
+import {useEffect, useState} from "react";
+import UrediProfil from "./components/UrediProfil";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,13 +23,13 @@ function App() {
     function onLogin(user) {
         localStorage.setItem("user", JSON.stringify(user));
         setIsLoggedIn(true);
-        history.push('/')
+        history.push('/');
     }
 
     function onLogout() {
         localStorage.clear();
+        history.push('/');
         setIsLoggedIn(false);
-        history.push('/')
     }
 
     /*
@@ -55,6 +57,8 @@ function App() {
                     <Route exact path="/soba" component={() => <Soba/>}/>
                     <Route exact path="/trazimsobu" component={() => <TrazimSobu/>}/>
                     <Route path='/' exact component={() => <Homepage isLoggedIn={isLoggedIn}/>}/>
+                    <Route exact path="/mojprofil" component={() => <MojProfil isLoggedIn={isLoggedIn} onLogout={onLogout}/>}/>
+                    <Route exact path="/mojprofil/uredi" component={() => <UrediProfil onLogin={onLogin}/>}/>
                 </Switch>
             </div>
             <Footer/>

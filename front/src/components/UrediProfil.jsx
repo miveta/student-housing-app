@@ -3,8 +3,9 @@ import {Button, Form} from 'react-bootstrap';
 import {Link} from "react-router-dom";
 
 
-function Register(props) {
-    const [form, setForm] = React.useState({ime: '', prezime: '', jmbag: '', username: '', email: '', lozinka: ''});
+function UrediProfil(props) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const [form, setForm] = React.useState({ime: user.ime, prezime: user.prezime, jmbag: user.jmbag, username: user.korisnickoIme, email: user.email, obavijestiNaMail: user.obavijestiNaMail});
     const [error, setError] = React.useState('');
 
     function onChange(event) {
@@ -23,12 +24,11 @@ function Register(props) {
             jmbag: form.jmbag,
             username: form.username,
             email: form.email,
-            lozinka: form.lozinka,
-            obavijestiNaMail: true
+            obavijestiNaMail: form.obavijestiNaMail
         };
 
         const options = {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
@@ -36,7 +36,8 @@ function Register(props) {
             body: JSON.stringify(registerForm)
         };
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/register`, options)
+        console.log(registerForm);
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/student/update`, options)
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(body => {
@@ -51,50 +52,42 @@ function Register(props) {
     }
 
     function isValid() {
-        const {ime, prezime, jmbag, username, email, lozinka} = form;
-        return ime.length > 0 && prezime.length > 0 && jmbag.length === 10 && username.length > 0 && email.length > 0 && lozinka.length > 5;
+        const {ime, prezime, username, email} = form;
+        return ime.length > 0 && prezime.length > 0 && username.length > 0 && email.length > 0;
     }
 
     return (
         <div className="inner">
             <Form onSubmit={onSubmit}>
-                <h3>Registracija</h3>
+                <h3>Uredi profil</h3>
 
                 <Form.Group>
                     <Form.Label> Ime* </Form.Label>
-                    <Form.Control name="ime" type="text" placeholder={form.name} onChange={onChange} required/>
+                    <Form.Control name="ime" defaultValue={user.ime} type="text" placeholder={form.name} onChange={onChange} required/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Prezime* </Form.Label>
-                    <Form.Control name="prezime" type="text" placeholder={form.prezime} onChange={onChange} required
-                                  />
+                    <Form.Control name="prezime" defaultValue={user.prezime} type="text" placeholder={form.prezime} onChange={onChange} required/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> JMBAG* (mora biti 10 znamenki) </Form.Label>
-                    <Form.Control name="jmbag" type="text" placeholder={form.jmbag} onChange={onChange} required
-                                  maxLength="10" minLength="10"/>
+                    <Form.Control name="jmbag" readOnly defaultValue={user.jmbag} type="text" placeholder={form.jmbag} onChange={onChange} required/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Korisničko ime* </Form.Label>
-                    <Form.Control name="username" type="text" placeholder={form.username} onChange={onChange} required/>
+                    <Form.Control name="username" readOnly defaultValue={user.korisnickoIme} type="text" placeholder={form.username} onChange={onChange} required/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Email* </Form.Label>
-                    <Form.Control name="email" type="email" placeholder={form.email} onChange={onChange} required/>
+                    <Form.Control name="email" type="email" defaultValue={user.email} placeholder={form.email} onChange={onChange} required/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label> Lozinka* (minimalno 5 znakova)</Form.Label>
-                    <Form.Control name="lozinka" type="password" placeholder={form.lozinka} onChange={onChange}
-                                  required/>
-
+                    <Form.Check name="obavijestiNaMail" type="checkbox" defaultChecked={user.obavijestiNaMail} onChange={e => setForm(oldForm => ({...oldForm, ["obavijestiNaMail"]: e.target.checked}))} label="Obavijesti na mail" />
                 </Form.Group>
                 <p className="errorMessage">
                     {error}
                 </p>
-                <Button type="submit" variant="dark" size="lg" block disabled={!isValid()}> Registriraj se </Button>
-                <p className="already-registered text-right">
-                    <Link to="/login">Već si registriran?</Link>
-                </p>
+                <Button type="submit" variant="dark" size="lg" block disabled={!isValid()}> Ažuriraj podatke </Button>
                 <p>
                     Polja označena * ne smiju ostati prazna!
                 </p>
@@ -103,4 +96,4 @@ function Register(props) {
     )
 }
 
-export default Register;
+export default UrediProfil;
