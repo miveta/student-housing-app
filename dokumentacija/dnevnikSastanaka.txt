@@ -23,3 +23,17 @@ DNEVNIK SASTANAKA
     - Diskusija o trenutnom napretku projekta
     - Podjela poslova koji se moraju obaviti do prve predaje projekta
     - Dogovoren novi sastanak u utorak
+
+7. sastanak (10/11/2020 - Teams):
+    - Dogovor o načinu kriptiranja i hashiranja lozinki
+
+8. sastanak (11/11/2020 - Teams):
+    - Pregled trenutnog stanja projekta
+    - Članovi su prije zadnjeg sastanka za predaju projekta prezentirali
+    što su napravili kako bi se svi upoznali sa svim dijelovima aplikacije
+
+9. sastanak (12/11/2020 - Teams):
+    - Ivana, Luka i Hrvoje sudjelovali - prezentacija osnovnih funkcionalnosti aplikacije
+
+10.sastanak (3/12/2020 - Teams):
+    - Ivana i Hrvoje sudjelovali - kolokviranje 1. ciklusa projekta

@@ -51,7 +51,7 @@ public class AuthController {
 	}
 
 	//'@AuthenticationPrincipal WebRequest request' je argument za citanje cijelog requesta
-	//'@RequestBody LoginForm loginForm' je argument za citanje cijelog bodya requesta
+	//'@RequestBody LoginForm loginForm' je argument za citanje objekta iz bodya requesta
 	//'@AuthenticationPrincipal User userLoginData' vraca podatke o korisniku u security contextu
 
 	//region Backend testiranje sessiona
