@@ -1,16 +1,34 @@
 import React, {Component} from "react";
 import {Button, Nav, Navbar} from "react-bootstrap";
+import App from "../App";
+import * as Swal from "sweetalert2";
 
 class Header extends Component {
     constructor(props) {
         super(props);
     }
 
+    logout = async () => {
+        Swal.fire({
+            title: 'Jeste li sigurni da se želite odjaviti?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#33B5E7',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Odustani',
+            confirmButtonText: 'Da, želim.'
+        }).then(async (result) => {
+            if (result.value) {
+                await this.props.logout();
+            }
+        })
+    };
+
     render() {
         return (
             <Navbar expand="lg" bg="light" className="justify-content-between header" sticky={"top"}>
                 <Navbar.Brand href="/">ZAMJENA SOBA</Navbar.Brand>
-                {this.props.isLoggedIn
+                {this.props.authenticated
                     ?
                     <Nav className="justify-content-end">
                         <Nav.Item>
@@ -19,6 +37,7 @@ class Header extends Component {
                         <Nav.Item>
                             <Nav.Link href="/trazimsobu">Tražim sobu</Nav.Link>
                         </Nav.Item>
+                        <Button variant="light" onClick={this.logout}> Odjavi se </Button>
                         <Nav.Item>
                             <Nav.Link href="/mojprofil">Moj profil</Nav.Link>
                         </Nav.Item>

@@ -53,6 +53,10 @@ public class Student implements Serializable, Korisnik {
     @JoinColumn(name="id_grad")
     private Grad grad;
 
+    //@HolikToLudnica(fetch = FetchType.VRAPCE_HITNA, mappedBy = "AppleMaps")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "student")
+    private Soba soba;
+
     public Student() {
     }
 
@@ -193,5 +197,13 @@ public class Student implements Serializable, Korisnik {
 
     public void setGrad(Grad grad) {
         this.grad = grad;
+    }
+
+    public Soba getSoba() {
+        return soba;
+    }
+
+    public void setSoba(Soba soba) {
+        this.soba = soba;
     }
 }
