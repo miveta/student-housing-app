@@ -6,10 +6,10 @@ class TrazimSobu extends Component{
         super(props);
         this.state = {
             change: false,
-            gradovi: [],
+            user: JSON.parse(localStorage.getItem("user")),
+            grad: '' ,
             domovi: [],
             paviljoni: [],
-            katovi: [],
             izabrano: {
                 dom: [],
                 paviljon: [],
@@ -32,6 +32,33 @@ class TrazimSobu extends Component{
 
     onSubmit(e) {
         e.preventDefault();
+        const trazeniUvjeti = {
+            grad: this.state.grad,
+            dom: this.state.dom,
+            paviljon: this.state.paviljon,
+            kat: this.state.kat,
+            brojKreveta: this.state.brojKreveta,
+            tipKupaonice: this.state.tipKupaonice,
+            komentar: this.state.komentar
+        };
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(trazeniUvjeti)
+        };
+
+        return fetch(`${process.env.REACT_APP_BACKEND_URL}/uvjeti`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+
+                } else {
+                    console.log(response.status)
+                }
+            });
+
     }
 
     componentDidMount() {
@@ -96,47 +123,41 @@ class TrazimSobu extends Component{
         <div className="middle">
             <Form onSubmit={this.onSubmit}>
                 <h3> Tražim sobu </h3>
-                <Form.Group>
-                    <Form.Label> Grad </Form.Label>
-                    <Form.Control as="select" defaultValue="Odaberi...">
-                        {this.state.gradovi.map(grad => (
-                            <option id={grad.id}>{grad.naziv}</option>
-                        ))}
-                    </Form.Control>
-
-                </Form.Group>
+                <p>Grad: {this.state.grad}</p>
                 <Form.Group>
                     <Form.Label> Dom </Form.Label>
-                    <Form.Check>{this.state.domovi.map(dom =>(
-                        <option id={dom.id}>{dom.naziv}</option>
-                    ))}</Form.Check>
+                    {this.state.domovi.map(dom =>(
+                        <Form.Check onChange={this.onChange} type="checkbox" id={dom.id} label={dom.naziv}/>
+                    ))}
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Paviljon </Form.Label>
-                    <Form.Check>{this.state.paviljoni.map(paviljon =>(
-                        <option id={paviljon.id}>{paviljon.naziv}</option>
-                    ))}</Form.Check>
+                    {this.state.paviljoni.map(paviljon =>(
+                        <Form.Check onChange={this.onChange} type="checkbox" id={paviljon.id} label={paviljon.naziv}/>
+                    ))}
 
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Kat </Form.Label>
-                    <Form.Check>{this.state.katovi.map(kat =>(
-                        <option id={kat.id}>{kat.naziv}</option>
-                    ))}</Form.Check>
+                    <Form.Check  onChange={this.onChange} type="checkbox" label="1"/>
+                    <Form.Check onChange={this.onChange} type="checkbox" label="2"/>
+                    <Form.Check onChange={this.onChange} type="checkbox" label="3"/>
+                    <Form.Check onChange={this.onChange} type="checkbox" label="4"/>
+                    <Form.Check onChange={this.onChange} type="checkbox" label="Nebitno"/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Broj kreveta </Form.Label>
-                    <Form.Check type="checkbox" label="Jednokrevetna soba"  />
-                    <Form.Check type="checkbox" label="Dvokrevetna soba"/>
-                    <Form.Check type="checkbox" label="Trokrevetna soba" />
-                    <Form.Check type="checkbox" label="Višekrevetna soba"  />
-                    <Form.Check type="checkbox" label="Nebitno"/>
+                    <Form.Check  onChange={this.onChange} type="checkbox" label="Jednokrevetna"/>
+                    <Form.Check onChange={this.onChange} type="checkbox" label="Dvokrevetna"/>
+                    <Form.Check onChange={this.onChange} type="checkbox" label="Trokrevetna"/>
+                    <Form.Check onChange={this.onChange} type="checkbox" label="Višekrevetna"/>
+                    <Form.Check onChange={this.onChange} type="checkbox" label="Nebitno"/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Tip kupaonice </Form.Label>
-                    <Form.Check type="checkbox" label="U sobi"  />
-                    <Form.Check type="checkbox" label="Zajednički"/>
-                    <Form.Check type="checkbox" label="Nebitno"/>
+                    <Form.Check onChange={this.onChange}  type="checkbox" label="U sobi"  />
+                    <Form.Check onChange={this.onChange}  type="checkbox" label="Zajednički"/>
+                    <Form.Check onChange={this.onChange}  type="checkbox" label="Nebitno"/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label> Komentar </Form.Label>

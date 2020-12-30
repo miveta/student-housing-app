@@ -1,11 +1,11 @@
 package progi.projekt.service.impl;
 
-import progi.projekt.model.Dom;
-import progi.projekt.model.Grad;
-import progi.projekt.model.Paviljon;
-import progi.projekt.model.Student;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import progi.projekt.model.*;
 import progi.projekt.repository.GradRepository;
 import progi.projekt.repository.StudentRepository;
+import progi.projekt.repository.TrazeniUvjetiRepository;
 import progi.projekt.service.TrazimSobuService;
 
 import java.util.List;
@@ -23,20 +23,25 @@ public class TrazimSobuServiceImpl implements TrazimSobuService {
     @Autowired
     StudentRepository studentRepository;
 
-
+    @Autowired
+    TrazeniUvjetiRepository trazeniUvjetiRepository;
 
     @Override
-    public Grad findGrad(String username) {
+    public Grad findGrad(String username){
         student = studentRepository.findByKorisnickoIme(username);
-        Grad grad = student.getGrad();
-        grad = gradRepository.getOne(grad.getId());
-        return grad;
+        return student.getGrad();
     }
+
+    @Override
+    public void update(TrazeniUvjeti uvjeti) {
+        trazeniUvjetiRepository.save(uvjeti);
+    }
+
 
     @Override
     public Set<Dom> findAllDom() {
         Grad grad = student.getGrad();
-        grad = gradRepository.getOne(grad.getId());
+
         return grad.getDomovi();
     }
 

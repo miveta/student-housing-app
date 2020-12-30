@@ -5,6 +5,7 @@ import progi.projekt.model.enums.OznakeKategorijaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -13,14 +14,17 @@ public class TrazeniUvjeti {
     @Column(name = "id_trazeni_uvjeti")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
+    private Grad grad;
+    private Set<Dom> dom;
+    private Set<Paviljon> paviljon;
+    private Set<Integer> kat;
     @Column(name = "broj_kreveta", nullable = false)
     @Enumerated(EnumType.STRING)
-    private BrojKrevetaEnum brojKreveta;
+    private Set<BrojKrevetaEnum> brojKreveta;
 
     @Column(name = "tip_kupaonice", nullable = false)
     @Enumerated(EnumType.STRING)
-    private TipKupaoniceEnum tipKupaonice;
+    private Set<TipKupaoniceEnum> tipKupaonice;
 
     @Column(name = "kategorija", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -38,7 +42,7 @@ public class TrazeniUvjeti {
     }
 
     //Ništa ne smije biti null osim komentara
-    public TrazeniUvjeti(BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija, int godina, Student student, String komentar) {
+    public TrazeniUvjeti(Set<BrojKrevetaEnum> brojKreveta, Set<TipKupaoniceEnum> tipKupaonice, OznakeKategorijaEnum kategorija, int godina, Student student, String komentar) {
         if (brojKreveta != null && tipKupaonice != null && kategorija != null && student != null) {
             this.brojKreveta = brojKreveta;
             this.tipKupaonice = tipKupaonice;
@@ -49,6 +53,38 @@ public class TrazeniUvjeti {
         }
     }
 
+    public Grad getGrad() {
+        return grad;
+    }
+
+    public void setGrad(Grad grad) {
+        this.grad = grad;
+    }
+
+    public Set<Dom> getDom() {
+        return dom;
+    }
+
+    public void setDom(Set<Dom> dom) {
+        this.dom = dom;
+    }
+
+    public Set<Paviljon> getPaviljon() {
+        return paviljon;
+    }
+
+    public void setPaviljon(Set<Paviljon> paviljon) {
+        this.paviljon = paviljon;
+    }
+
+    public Set<Integer> getKat() {
+        return kat;
+    }
+
+    public void setKat(Set<Integer> kat) {
+        this.kat = kat;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -57,19 +93,19 @@ public class TrazeniUvjeti {
         this.id = id;
     }
 
-    public BrojKrevetaEnum getBrojKreveta() {
+    public Set<BrojKrevetaEnum> getBrojKreveta() {
         return brojKreveta;
     }
 
-    public void setBrojKreveta(BrojKrevetaEnum brojKreveta) {
+    public void setBrojKreveta(Set<BrojKrevetaEnum> brojKreveta) {
         this.brojKreveta = brojKreveta;
     }
 
-    public TipKupaoniceEnum getTipKupaonice() {
+    public Set<TipKupaoniceEnum> getTipKupaonice() {
         return tipKupaonice;
     }
 
-    public void setTipKupaonice(TipKupaoniceEnum tipKupaonice) {
+    public void setTipKupaonice(Set<TipKupaoniceEnum> tipKupaonice) {
         this.tipKupaonice = tipKupaonice;
     }
 

@@ -2,10 +2,10 @@ package progi.projekt.controller;
 
 import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 
 import progi.projekt.dto.DomDTO;
@@ -31,7 +31,7 @@ public class TrazimSobuController {
     private TrazimSobuService trazimSobuService;
 
     @GetMapping("/grad")
-    public GradDTO getGrad(@PathVariable String username) {
+    public GradDTO getGrad(@RequestParam(value = "user") String username) {
         GradDTO grad = new GradDTO(trazimSobuService.findGrad(username));
         return grad;
     }
@@ -50,7 +50,25 @@ public class TrazimSobuController {
 
     }
 
+    @PutMapping(value = "/uvjeti", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> update(@RequestBody  TrazeniUvjeti trazeniUvjeti,
+                                    @RequestParam(value = "user") String username) {
+        Optional<Student> student = studentService.findBykorisnickoIme(username);
 
+        TrazeniUvjeti uvjeti = student.get().getUvjeti();
+
+        uvjeti.setBrojKreveta(trazeniUvjeti.getBrojKreveta());
+        uvjeti.setTraziStudent(student.get());
+        uvjeti.setKomentar(trazeniUvjeti.getKomentar());
+        uvjeti.setTipKupaonice(trazeniUvjeti.getTipKupaonice());
+        uvjeti.setDom(trazeniUvjeti.getDom());
+        uvjeti.setKat(trazeniUvjeti.getKat());
+        uvjeti.setPaviljon(trazeniUvjeti.getPaviljon());
+        uvjeti.setGrad(trazeniUvjeti.getGrad());
+
+        trazimSobuService.update(uvjeti);
+        return ResponseEntity.ok(uvjeti);
+    }
 
 
 }
