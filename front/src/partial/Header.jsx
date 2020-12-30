@@ -41,9 +41,7 @@ class Header extends Component {
                         <Nav.Item>
                             <Nav.Link href="/mojprofil">Moj profil</Nav.Link>
                         </Nav.Item>
-                        <Nav.Item>
-                        <Button variant="light" onClick={this.logout}> Odjavi se </Button>
-                        </Nav.Item>
+                        <Button variant="light" onClick={this.props.onLogout}> Odjavi se </Button>
                     </Nav>
                     :
                     <Nav className="justify-content-end">

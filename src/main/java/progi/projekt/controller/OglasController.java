@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import progi.projekt.dto.OglasDTO;
 import progi.projekt.service.OglasService;
-import progi.projekt.service.StudentService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +19,7 @@ public class OglasController {
     @Autowired
     private OglasService oglasService;
 
-      @GetMapping("/list")
+    @GetMapping("/list")
     public List<OglasDTO> listOglas() {
         return oglasService.listAll().stream().map(OglasDTO::new).collect(Collectors.toList());
     }

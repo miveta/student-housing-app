@@ -7,11 +7,15 @@ import cookie from 'react-cookies';
 import Soba from "./components/Soba";
 import TrazimSobu from "./components/TrazimSobu";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Homepage from "./pages/Homepage";
 import Header from "./partial/Header";
 import Footer from "./partial/Footer";
 import Register from "./pages/Register";
+import Soba from "./components/Soba";
+import TrazimSobu from "./components/TrazimSobu";
 import MojProfil from "./pages/MojProfil"
+import {useEffect, useState} from "react";
 import UrediProfil from "./components/UrediProfil";
 
 
@@ -72,14 +76,31 @@ class App extends Component {
                         <PrivateRoute exact path="/soba" component={Soba}/>
                         <Route exact path="/trazimsobu" component={TrazimSobu}/>
                         <Route path='/' exact component={Homepage}/>
-                        <Route exact path="/mojprofil" component={() => <MojProfil isLoggedIn={this.state.authenticated} onLogout={this.logout}/>}/>
-                        <Route exact path="/mojprofil/uredi" component={() => <UrediProfil onLogin={this.authenticate}/>}/>
                     </Switch>
                 </div>
                 <Footer/>
             </div>
         )
     }
+    return (
+        <div className="App">
+            <Header onLogout={onLogout} isLoggedIn={isLoggedIn}/>
+            <div className="outer">
+                <Switch>
+                    {/* todo slozi ove rute tako da ulogirani korisnik ni ne može otići na /login */}
+                    <Route exact path="/login" component={() => <Login onLogin={onLogin} isLoggedIn={isLoggedIn}/>}/>
+                    <Route exact path="/register"
+                           component={() => <Register onLogin={onLogin} isLoggedIn={isLoggedIn}/>}/>
+                    <Route exact path="/soba" component={() => <Soba/>}/>
+                    <Route exact path="/trazimsobu" component={() => <TrazimSobu/>}/>
+                    <Route path='/' exact component={() => <Homepage isLoggedIn={isLoggedIn}/>}/>
+                    <Route exact path="/mojprofil" component={() => <MojProfil isLoggedIn={isLoggedIn} onLogout={onLogout}/>}/>
+                    <Route exact path="/mojprofil/uredi" component={() => <UrediProfil onLogin={onLogin}/>}/>
+                </Switch>
+            </div>
+            <Footer/>
+        </div>
+    );
 }
 
 export default App;
