@@ -9,7 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface LajkRepository extends JpaRepository<Lajk, LajkId> {
-
     Optional<Lajk> findById(LajkId lajkId);
-
 }
