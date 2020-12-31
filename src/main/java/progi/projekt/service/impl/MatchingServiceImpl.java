@@ -49,18 +49,7 @@ public class MatchingServiceImpl implements MatchingService {
 		//prolazi po svim oglasima i stvara kandidat parove
 
 
-		//popunjavanje liste postojecih kandidata svakog oglasa
-		//ili ce to Spring napraviti sam radi @OneToMany(fetch = FetchType.LAZY, mappedBy = "kandidati") u Oglas.java?
 		List<Oglas> oglasi = oglasService.listAll();
-
-		for (Oglas oglas : oglasi){
-			List<Kandidat> kandidati = kandidatService.listAll(oglas.getId());
-			for (Kandidat kandidat : kandidati){
-				if (kandidat.getOglas().getId() == oglas.getId() || kandidat.getIdKandidat() == oglas.getId()) {
-					oglas.getKandidati().add(kandidat);
-				}
-			}
-		}
 
 		//dodavanje novih kandidata
 		for (Oglas oglas1 : oglasi){
@@ -70,6 +59,20 @@ public class MatchingServiceImpl implements MatchingService {
 				}
 			}
 		}
+
+		//popunjavanje liste postojecih kandidata svakog oglasa iz liste svih kandidata
+		for (Oglas oglas : oglasi){
+			List<Kandidat> kandidati = kandidatService.listAll(oglas.getId());
+			for (Kandidat kandidat : kandidati){
+				if (kandidat.getOglas().getId() == oglas.getId() /*|| kandidat.getKandOglas().getId() == oglas.getId
+				()*/) {
+					if (!kandidati.contains(kandidat)) {
+						oglas.getKandidati().add(kandidat);
+					}
+				}
+			}
+		}
+
 	}
 
 

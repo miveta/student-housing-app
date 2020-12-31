@@ -16,6 +16,9 @@ public class Soba implements Serializable {
     @Id
     private int kat;
 
+    @Column(nullable = true, unique=true)
+    private int id_soba;
+
     @Id
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumns({

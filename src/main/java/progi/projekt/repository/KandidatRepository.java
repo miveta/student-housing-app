@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface KandidatRepository extends JpaRepository<Kandidat, Long> {
 	List<Kandidat> findAllByIdKandidat(UUID oglasUuid);
-	//List<Kandidat> findAllByIdOglas(UUID oglasUuid);
+	List<Kandidat> findAllByIdOglas(UUID oglasUuid);
 }

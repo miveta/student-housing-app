@@ -17,11 +17,12 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Autowired
 	private KandidatRepository kandidatRepo;
+
     //TODO: maknuto zbog UUID
 	@Override
 	public List<Kandidat> listAll(UUID oglasUuid) {
-		//return kandidatRepo.findAllByIdOglas(oglasUuid);
-		return new ArrayList<Kandidat>();
+		return kandidatRepo.findAllByIdOglas(oglasUuid);
+		//return new ArrayList<Kandidat>();
 	}
 
 	@Override
@@ -94,7 +95,7 @@ public class KandidatServiceImpl implements KandidatService {
 	@Override
 	public Integer calculateScore(Oglas oglas1, Oglas oglas2) {
 		Soba soba2 = oglas2.getStudent().getSoba();
-		TrazeniUvjeti uvjeti1 = UvjetiService.findByIdOglas(oglas1.getId());
+		TrazeniUvjeti uvjeti1 = UvjetiService.findByOglas(oglas1);
 
 		Integer bliskost = UvjetiService.izracunajBliskost(soba2, uvjeti1);
 

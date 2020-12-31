@@ -61,6 +61,10 @@ public class Student implements Serializable, Korisnik {
     //@JoinColumn(name="broj")        //TODO: bolje mapiranje!
     //private Soba soba;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_soba")
+    private Soba soba;
+
     public Student() {
     }
 
@@ -212,11 +216,10 @@ public class Student implements Serializable, Korisnik {
     }
 
     public Soba getSoba() {
-        return new Soba();
-        //return soba;
+        return soba;
     }
-/*
+
     public void setSoba(Soba soba) {
         this.soba = soba;
-    }*/
+    }
 }
