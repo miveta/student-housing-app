@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Button, Form} from 'react-bootstrap';
 import {Link, Redirect} from "react-router-dom";
-import App from "../App";
 
 
 class Login extends Component {
@@ -14,7 +13,6 @@ class Login extends Component {
             error: ''
         };
     }
-
 
     onChange = (event) => {
         const {name, value} = event.target;

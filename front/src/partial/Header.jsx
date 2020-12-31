@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import {Button, Nav, Navbar} from "react-bootstrap";
-import App from "../App";
 import * as Swal from "sweetalert2";
+import {withRouter} from 'react-router-dom';
+
 
 class Header extends Component {
     constructor(props) {
@@ -9,6 +10,7 @@ class Header extends Component {
     }
 
     logout = async () => {
+
         Swal.fire({
             title: 'Jeste li sigurni da se želite odjaviti?',
             type: 'warning',
@@ -20,6 +22,7 @@ class Header extends Component {
         }).then(async (result) => {
             if (result.value) {
                 await this.props.logout();
+                this.props.history.push("/")
             }
         })
     };
@@ -37,11 +40,10 @@ class Header extends Component {
                         <Nav.Item>
                             <Nav.Link href="/trazimsobu">Tražim sobu</Nav.Link>
                         </Nav.Item>
-                        <Button variant="light" onClick={this.logout}> Odjavi se </Button>
                         <Nav.Item>
                             <Nav.Link href="/mojprofil">Moj profil</Nav.Link>
                         </Nav.Item>
-                        <Button variant="light" onClick={this.props.onLogout}> Odjavi se </Button>
+                        <Button variant="light" onClick={this.logout}> Odjavi se </Button>
                     </Nav>
                     :
                     <Nav className="justify-content-end">
@@ -58,4 +60,4 @@ class Header extends Component {
     }
 }
 
-export default Header;
+export default withRouter(Header);
