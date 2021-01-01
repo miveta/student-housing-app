@@ -50,6 +50,18 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Optional<Student> findByJmbag(String jmbag) {
+        try {
+            return Optional.of(studentRepository.findByJmbag(jmbag));
+        } catch (Exception e) {
+            //studentRepo baca exceptione koje mu proslijedi baza (e)?
+            String originalMessage = e.getMessage();
+            //throw new JmbagNotFoundException("No user with jmbag: '" + jmbag + "'");
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public String getLozinka(Student student) {
         return student.getLozinka();
     }
@@ -67,5 +79,21 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public boolean studentExists(String username) throws UsernameNotFoundException {
         return findBykorisnickoIme(username).isPresent();
+    }
+
+    @Override
+    public Student update(Student student) throws SavingException {
+        try {
+            return studentRepository.saveAndFlush(student);
+        } catch (Exception e) {
+            //studentRepo baca exceptione koje mu proslijedi baza (e)?
+            throw new SavingException("Exception while saving user. Original message: '" + e.getMessage() + "'");
+        }
+    }
+
+    @Override
+    public Student delete(Student student) throws SavingException {
+        studentRepository.delete(student);
+        return null;
     }
 }
