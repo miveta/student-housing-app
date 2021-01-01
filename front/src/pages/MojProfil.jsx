@@ -1,13 +1,15 @@
 import React, {Component, useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import cookie from 'react-cookies';
+import {withRouter} from 'react-router-dom';
 
 
 class MojProfil extends Component {
     user;
     constructor(props) {
         super(props)
-        this.user = JSON.parse(localStorage.getItem("user"));
+        this.user = cookie.load('principal');
     }
 
     state = {
@@ -42,6 +44,7 @@ class MojProfil extends Component {
             .then(response => {
                 if (response.status === 200) {
                         this.props.onLogout();
+                        this.props.history.push("/")
                 } else {
                     response.text().then(body => {
                         console.log(body);
@@ -92,4 +95,4 @@ class MojProfil extends Component {
     }
 }
 
-export default MojProfil;
+export default withRouter(MojProfil);

@@ -1,10 +1,12 @@
 import React from "react";
 import {Button, Form} from 'react-bootstrap';
 import {Link} from "react-router-dom";
+import {withRouter} from 'react-router-dom';
+import cookie from "react-cookies";
 
 
 function UrediProfil(props) {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = cookie.load('principal');
     const [form, setForm] = React.useState({ime: user.ime, prezime: user.prezime, jmbag: user.jmbag, username: user.korisnickoIme, email: user.email, obavijestiNaMail: user.obavijestiNaMail});
     const [error, setError] = React.useState('');
 
@@ -41,7 +43,8 @@ function UrediProfil(props) {
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(body => {
-                        props.onLogin(body);
+                        props.onLogin(body)
+                        props.history.push("/mojprofil")
                     });
                 } else {
                     response.text().then(body => {
@@ -96,4 +99,4 @@ function UrediProfil(props) {
     )
 }
 
-export default UrediProfil;
+export default withRouter(UrediProfil);
