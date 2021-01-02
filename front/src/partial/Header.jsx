@@ -21,8 +21,8 @@ class Header extends Component {
             confirmButtonText: 'Da, želim.'
         }).then(async (result) => {
             if (result.value) {
+                this.props.history.push("/");
                 await this.props.logout();
-                this.props.history.push("/")
             }
         })
     };
