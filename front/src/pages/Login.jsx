@@ -92,7 +92,6 @@ class Login extends Component {
                                       required/>
                     </Form.Group>
                         <Button className="passwordShow" variant="dark" size="sm" onClick={this.showHide}>{this.state.type === 'input' ? 'Sakrij lozinku' : 'Prikaži lozinku'}</Button>
-
                     <p className="errorMessage">
                         {this.state.error}
                     </p>
