@@ -10,10 +10,19 @@ class Login extends Component {
             redirect: false,
             username: '',
             password: '',
-            error: ''
+            error: '',
+            type: 'password'
         };
+        this.showHide = this.showHide.bind(this);
     }
 
+    showHide(e){
+        e.preventDefault();
+        e.stopPropagation();
+        this.setState({
+            type: this.state.type === 'input' ? 'password' : 'input'
+        })
+    }
     onChange = (event) => {
         const {name, value} = event.target;
         this.setState(state => ({...state, [name]: value}))
@@ -78,10 +87,12 @@ class Login extends Component {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label> Lozinka </Form.Label>
-                        <Form.Control name="password" type="password" // tu ne trebaju placeholderi
+                        <Form.Control name="password" type={this.state.type} // tu ne trebaju placeholderi
                                       onChange={this.onChange}
                                       required/>
                     </Form.Group>
+                        <Button className="passwordShow" variant="dark" size="sm" onClick={this.showHide}>{this.state.type === 'input' ? 'Sakrij lozinku' : 'Prikaži lozinku'}</Button>
+
                     <p className="errorMessage">
                         {this.state.error}
                     </p>
