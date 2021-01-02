@@ -38,7 +38,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<Student> findBykorisnickoIme(String username) {
+    public Optional<Student> findByKorisnickoIme(String username) {
         try {
             return Optional.of(studentRepository.findByKorisnickoIme(username));
         } catch (Exception e) {
@@ -78,7 +78,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public boolean studentExists(String username) throws UsernameNotFoundException {
-        return findBykorisnickoIme(username).isPresent();
+        return findByKorisnickoIme(username).isPresent();
     }
 
     @Override

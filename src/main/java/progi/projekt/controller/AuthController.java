@@ -5,19 +5,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.KorisnikDTO;
-import progi.projekt.dto.OglasDTO;
 import progi.projekt.forms.LoginForm;
 import progi.projekt.forms.RegisterForm;
 import progi.projekt.model.Korisnik;
-import progi.projekt.model.Oglas;
 import progi.projekt.model.Student;
 import progi.projekt.security.AuthenticationHandler;
 import progi.projekt.security.KorisnikUserDetailsService;
@@ -123,7 +119,7 @@ public class AuthController {
 			// authentication handler will throw a badcredentials exception if the student doesnt exist before it reaches this step
 			Korisnik korisnik;
 
-			Optional<Student> student = studentService.findBykorisnickoIme(data.getUsername());
+            Optional<Student> student = studentService.findByKorisnickoIme(data.getUsername());
 			korisnik = student.isPresent() ? student.get() : zaposlenikscService.findBykorisnickoIme(data.getUsername()).get();
 
 			KorisnikDTO korisnikDTO = new KorisnikDTO(korisnik);
