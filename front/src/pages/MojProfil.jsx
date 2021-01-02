@@ -43,8 +43,8 @@ class MojProfil extends Component {
         fetch(`${process.env.REACT_APP_BACKEND_URL}/student/delete`, options)
             .then(response => {
                 if (response.status === 200) {
-                        this.props.onLogout();
-                        this.props.history.push("/")
+                    this.props.onLogout();
+                    this.props.history.push("/")
                 } else {
                     response.text().then(body => {
                         console.log(body);

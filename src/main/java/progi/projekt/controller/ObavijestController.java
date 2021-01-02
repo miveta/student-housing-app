@@ -37,9 +37,9 @@ public class ObavijestController {
             obavijest.setVrijeme(new Date(System.currentTimeMillis()));
             obavijest.setProcitana(false);
             obavijest.setOglas(oglas);
-            obavijest.setStudent(lajk.getLikedByStudent());
-            obavijest.setTekst("Oglas studenta " + lajk.getLikedByStudent().getIme() + " "
-                    + lajk.getLikedByStudent().getPrezime() + " izmjenjen.");
+            obavijest.setStudent(lajk.getLajkId().getStudentId());
+            obavijest.setTekst("Oglas studenta " + lajk.getLajkId().getStudentId().getIme() + " "
+                    + lajk.getLajkId().getStudentId().getPrezime() + " izmjenjen.");
             obavijestRepository.save(obavijest);
         }
     }

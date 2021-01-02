@@ -18,18 +18,20 @@ public class MatchingServiceImpl implements MatchingService {
 	private final OglasService oglasService;
 	private final KandidatService kandidatService;
 	private final ParService parService;
+	private final LajkService lajkService;
 
 	public MatchingServiceImpl(
-					StudentService studentService,
-					OglasService oglasService,
-					KandidatService kandidatService,
-					ParService parService
-					)
+			StudentService studentService,
+			OglasService oglasService,
+			KandidatService kandidatService,
+			ParService parService,
+			LajkService lajkService)
 	{
 		this.studentService = studentService;
 		this.oglasService = oglasService;
 		this.kandidatService = kandidatService;
 		this.parService = parService;
+		this.lajkService = lajkService;
 	}
 
 
@@ -79,11 +81,11 @@ public class MatchingServiceImpl implements MatchingService {
 		//poziva se uz metodu iz LajkControllera. Stvara kandidata/par ako je student ocjenio oglas koji mu inicijalno
 		// nije ponudjen kao par pa nije mogao biti u topN pa niti postati par
 
-		List<Lajk> lajkovi = LajkService.listAll();
+		List<Lajk> lajkovi = lajkService.listAll();
 
 		for (Lajk lajk : lajkovi){
-			Oglas oglas1 = lajk.getLikedByStudent().getOglas();
-			Oglas oglas2 = lajk.getLikedOglas();
+			Oglas oglas1 = lajk.getLajkId().getStudentId().getOglas();
+			Oglas oglas2 = lajk.getLajkId().getOglasId();
 
 			if (kandidatService.josNisuKandidat(oglas1, oglas2)){
 				stvoriKand(oglas1, oglas2);
@@ -142,11 +144,11 @@ public class MatchingServiceImpl implements MatchingService {
 		//zato je polje oglasi sortirano po datumu objave
 		for (Oglas oglas : oglasi){
 			UUID studentID = oglas.getStudent().getId();
-			List<Lajk> lajkovi = LajkService.listAll();
+			List<Lajk> lajkovi = lajkService.listAll();
 			for (Lajk lajk : lajkovi){
-				if (lajk.getLikedByStudent().getId() == studentID) {
+				if (lajk.getLajkId().getStudentId().getId() == studentID) {
 					UUID id1 = oglas.getId();
-					UUID id2 = lajk.getLikedOglas().getId();
+					UUID id2 = lajk.getLajkId().getOglasId().getId();
 					Key key = new Key(id1, id2);
 
 					Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());

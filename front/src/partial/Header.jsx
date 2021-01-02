@@ -22,7 +22,7 @@ class Header extends Component {
         }).then(async (result) => {
             if (result.value) {
                 await this.props.logout();
-                this.props.history.push("/")
+                this.props.history.push("/");
             }
         })
     };

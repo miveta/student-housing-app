@@ -45,7 +45,6 @@ class App extends Component {
         cookie.save('principal', cb, {path: '/', maxAge: 5 * 60 * 60});
         this.setState({authenticated: true});
         this.setState({user: cb});
-
         console.log(this)
     };
 

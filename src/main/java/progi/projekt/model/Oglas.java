@@ -30,7 +30,7 @@ public class Oglas {
     @JoinColumn(name="id_student")
     private Student student;
 
-    @OneToMany(mappedBy="likedOglas",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="id_oglas",cascade = CascadeType.ALL)
     private List<Lajk> lajkovi;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "kandOglas")
