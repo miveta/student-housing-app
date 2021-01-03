@@ -6,18 +6,9 @@ import progi.projekt.model.TrazeniUvjeti;
 import java.util.UUID;
 
 public interface UvjetiService {
-	static TrazeniUvjeti findByIdOglas(UUID id) {
-		//poziv non-static
-		return null;
-	}
+	 TrazeniUvjeti findByIdOglas(UUID id);
 
-	static Integer izracunajBliskost(Soba soba, TrazeniUvjeti uvjeti) {
-		//poziv non-static
-		return null;
-	}
+	 Integer izracunajBliskost(Soba soba, TrazeniUvjeti uvjeti);
 
-	static Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti) {
-		//poziv non-static
-		return null;
-	}
+	Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti);
 }

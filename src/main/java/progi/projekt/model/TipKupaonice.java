@@ -7,7 +7,7 @@ import java.util.UUID;
 @Entity
 public class TipKupaonice implements Serializable {
     @Id
-    @Column(name = "id_kupaonica")
+    @Column(name = "id_tip_kupaonice")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 

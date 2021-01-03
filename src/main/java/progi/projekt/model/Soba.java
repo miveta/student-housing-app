@@ -24,13 +24,11 @@ public class Soba implements Serializable {
     })
     private Paviljon paviljon;
 
-    @Column(name = "broj_kreveta")
-    @Enumerated(EnumType.STRING)
-    private BrojKrevetaEnum brojKreveta;
+    @JoinColumn(name = "id_broj_kreveta")
+    private BrojKreveta brojKreveta;
 
-    @Column(name = "tip_kupaonice")
-    @Enumerated(EnumType.STRING)
-    private TipKupaoniceEnum tipKupaonice;
+    @JoinColumn(name = "id_tip_kupaonice")
+    private TipKupaonice tipKupaonice;
 
     @Column(name = "kategorija")
     @Enumerated(EnumType.STRING)
@@ -55,7 +53,7 @@ public class Soba implements Serializable {
     }
 
     //Ništa ne smije biti null!
-    public Soba(int brojSobe, int kat, Paviljon paviljon, BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija) {
+    public Soba(int brojSobe, int kat, Paviljon paviljon, BrojKreveta brojKreveta, TipKupaonice tipKupaonice, OznakeKategorijaEnum kategorija) {
         if (paviljon != null && brojKreveta != null && tipKupaonice != null && kategorija != null) {
             this.paviljon = paviljon;
             this.brojKreveta = brojKreveta;
@@ -91,19 +89,19 @@ public class Soba implements Serializable {
         this.paviljon = paviljon;
     }
 
-    public BrojKrevetaEnum getBrojKreveta() {
+    public BrojKreveta getBrojKreveta() {
         return brojKreveta;
     }
 
-    public void setBrojKreveta(BrojKrevetaEnum brojKreveta) {
+    public void setBrojKreveta(BrojKreveta brojKreveta) {
         this.brojKreveta = brojKreveta;
     }
 
-    public TipKupaoniceEnum getTipKupaonice() {
+    public TipKupaonice getTipKupaonice() {
         return tipKupaonice;
     }
 
-    public void setTipKupaonice(TipKupaoniceEnum tipKupaonice) {
+    public void setTipKupaonice(TipKupaonice tipKupaonice) {
         this.tipKupaonice = tipKupaonice;
     }
 

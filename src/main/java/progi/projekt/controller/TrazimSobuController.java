@@ -32,6 +32,7 @@ public class TrazimSobuController {
     @Autowired
     DomRepository domRepository;
 
+
     @Autowired
     private StudentService studentService;
 
@@ -76,7 +77,7 @@ public class TrazimSobuController {
                                     @RequestParam(value = "tipKupaonice") String[] tipKupaonice,
                                     @RequestParam(value = "komentar") String komentar) {
         Student student = studentRepository.findByKorisnickoIme(username);
-
+        Set<Dom> dom = new HashSet<>();
         TrazeniUvjeti uvjeti = student.getUvjeti();
         if(uvjeti == null){
             uvjeti = new TrazeniUvjeti();
@@ -85,22 +86,27 @@ public class TrazimSobuController {
         uvjeti.setTraziStudent(student);
         uvjeti.setGrad(student.getGrad());
         if(domId[0] != "" ) {
-            Set<Dom> dom = new HashSet<>();
+
             for (String id : domId) {
                 Dom d = domRepository.findById(UUID.fromString(id));
                 dom.add(d);
             }
             uvjeti.setDomovi(dom);
         }
-        if(paviljoni[0] != "") {
-            Set<Paviljon> paviljon = new HashSet<>();
-            for (String p : paviljoni) {
-                Paviljon temp = new Paviljon();
-                temp.setNaziv(p);
-                paviljon.add(temp);
-            }
-            //uvjeti.setPaviljoni(paviljon);
-        }
+//        if(paviljoni[0] != "") {
+//            Set<Paviljon> paviljon = new HashSet<>();
+//            for(Dom d : dom) {
+//                for (String p : paviljoni) {
+//
+//                        Paviljon temp = new Paviljon();
+//                        temp.setNaziv(p);
+//                        temp.setDom(d);
+//                        paviljon.add(temp);
+//
+//                }
+//            }
+//            uvjeti.setPaviljoni(paviljon);
+//        }
         if(brojKreveta[0] != "") {
             Set<BrojKreveta> brKreveta = new HashSet<>();
             for (String b : brojKreveta) {

@@ -7,7 +7,7 @@ import java.util.UUID;
 @Entity
 public class BrojKreveta implements Serializable {
     @Id
-    @Column(name = "id_kreveti")
+    @Column(name = "id_broj_kreveta")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
