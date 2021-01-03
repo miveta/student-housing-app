@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import progi.projekt.model.*;
 import progi.projekt.repository.KandidatRepository;
 import progi.projekt.service.KandidatService;
+import progi.projekt.service.OglasService;
+import progi.projekt.service.SobaService;
 import progi.projekt.service.UvjetiService;
 
 import java.util.*;
@@ -18,10 +20,17 @@ public class KandidatServiceImpl implements KandidatService {
 	@Autowired
 	private KandidatRepository kandidatRepo;
 
+	@Autowired
+	private SobaService sobaService;
+
+	@Autowired
+	private OglasService oglasService;
+
     //TODO: maknuto zbog UUID
 	@Override
 	public List<Kandidat> listAll(UUID oglasUuid) {
-		return kandidatRepo.findAllByIdOglas(oglasUuid);
+		var oglas = oglasService.findById(oglasUuid);
+		return kandidatRepo.findAllByOglas(oglas);
 		//return new ArrayList<Kandidat>();
 	}
 
@@ -31,8 +40,8 @@ public class KandidatServiceImpl implements KandidatService {
 		var uvjeti1 = oglas1.getStudent().getUvjeti();
 		var uvjeti2 = oglas2.getStudent().getUvjeti();
 
-		var soba1 = oglas1.getStudent().getSoba();
-		var soba2 = oglas2.getStudent().getSoba();
+		var soba1 = sobaService.getByStudentId(oglas1.getStudent().getId());
+		var soba2 = sobaService.getByStudentId(oglas2.getStudent().getId());
 
 		return (sobaMatchesUvjet(soba1, uvjeti2) && sobaMatchesUvjet(soba2, uvjeti1)) ? true : false;
 	}
@@ -94,7 +103,7 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Override
 	public Integer calculateScore(Oglas oglas1, Oglas oglas2) {
-		Soba soba2 = oglas2.getStudent().getSoba();
+		Soba soba2 = sobaService.getByStudentId(oglas2.getStudent().getId());
 		TrazeniUvjeti uvjeti1 = UvjetiService.findByOglas(oglas1);
 
 		Integer bliskost = UvjetiService.izracunajBliskost(soba2, uvjeti1);

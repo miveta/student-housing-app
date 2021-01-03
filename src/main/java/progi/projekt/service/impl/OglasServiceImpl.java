@@ -7,6 +7,7 @@ import progi.projekt.repository.OglasRepository;
 import progi.projekt.service.OglasService;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OglasServiceImpl implements OglasService {
@@ -17,5 +18,10 @@ public class OglasServiceImpl implements OglasService {
     @Override
     public List<Oglas> listAll() {
         return oglasRepo.findAll();
+    }
+
+    @Override
+    public Oglas findById(UUID oglasUUID) {
+        return oglasRepo.findById(oglasUUID);
     }
 }

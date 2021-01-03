@@ -3,7 +3,6 @@ package progi.projekt.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "par", schema = "public", catalog = "dc917r8jcempur")
 public class Par {
 	@Id
 	@Column(name = "id_par", nullable = false)

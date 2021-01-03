@@ -10,13 +10,9 @@ import progi.projekt.repository.UvjetiRepository;
 import java.util.UUID;
 
 public interface UvjetiService {
-	@Autowired
-	UvjetiRepository uvjetiRepo;
 
 	static TrazeniUvjeti findByOglas(Oglas oglas) {
-		var stud = oglas.getStudent();
-		TrazeniUvjeti uv = uvjetiRepo.findByTraziStudent(stud);
-		return uv;
+		return null;
 	}
 
 	static Integer izracunajBliskost(Soba soba, TrazeniUvjeti uvjeti) {
