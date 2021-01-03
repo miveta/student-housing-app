@@ -41,30 +41,22 @@ function TrazimSobu(props){
 
     function onSubmit(e) {
         e.preventDefault();
-        const trazeniUvjeti = {
-            grad: grad,
-            dom: uvjeti["dom"],
-            paviljon: uvjeti["paviljon"],
-            kat: uvjeti["kat"],
-            brojKreveta: uvjeti["brojKreveta"],
-            tipKupaonice: uvjeti["tipKupaonice"],
-            komentar: uvjeti["komentar"]
-        };
+
         const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
-            body: JSON.stringify(trazeniUvjeti)
+
         };
 
-        return fetch(`http://localhost:8080/trazimSobu/uvjeti/?user=${user.korisnickoIme}&domovi=
+        return fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/uvjeti?user=${user.korisnickoIme}&domovi=
         ${uvjeti["dom"]}&paviljoni=${uvjeti["paviljon"]}
         &katovi=${uvjeti["kat"]}&brojKreveta=${uvjeti["brojKreveta"]}&tipKupaonice=${uvjeti["tipKupaonice"]}&komentar=${uvjeti["komentar"]}`, options)
             .then(response => {
                 if (response.status === 200) {
-                    response.json().then(() => props.history.push('/'));
+                    response.json().then(() => props.history.push("/"));
                 }
                 else {
                     console.log(response.status)
@@ -81,7 +73,7 @@ function TrazimSobu(props){
             }
         };
 
-        fetch(`http://localhost:8080/trazimSobu/grad?user=${user.korisnickoIme}`, options)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/grad?user=${user.korisnickoIme}`, options)
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
@@ -91,7 +83,7 @@ function TrazimSobu(props){
                 }
             }).then(json => {
             setGrad(json);
-        }).then(fetch(`http://localhost:8080/trazimSobu/domovi`, options)
+        }).then(fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/domovi`, options)
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
