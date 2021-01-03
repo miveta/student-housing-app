@@ -23,8 +23,8 @@ import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@RestController
 @CrossOrigin
+@RestController
 @RequestMapping("/trazimSobu")
 public class TrazimSobuController {
 
@@ -63,13 +63,13 @@ public class TrazimSobuController {
 
     }
 
-    @PutMapping(value = "/uvjeti", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/uvjeti", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> put(@RequestParam(value = "user") String username,
                                     @RequestParam(value = "domovi") String[] domId,
                                     @RequestParam(value = "paviljoni") String[] paviljoni,
                                     @RequestParam(value = "katovi") String[] katovi,
-                                    @RequestParam(value = "tipKupaonice") String[] tipKupaonice,
                                     @RequestParam(value = "brojKreveta") String[] brojKreveta,
+                                    @RequestParam(value = "tipKupaonice") String[] tipKupaonice,
                                     @RequestParam(value = "komentar") String komentar) {
         Optional<Student> student = studentService.findByKorisnickoIme(username);
 

@@ -32,6 +32,11 @@ function TrazimSobu(props){
 
 
     }
+    function onChangek(event) {
+        const {name, value} = event.target;
+        setUvjeti(oldForm => ({...oldForm, [name]: value}));
+    }
+
 
 
     function onSubmit(e) {
@@ -126,14 +131,14 @@ function TrazimSobu(props){
                     <br/>
                     {domovi.map(dom =>(
                         <li>
-                        <label>
-                            <input
-                                type="checkbox"
-                                onChange={onChange}
-                                value={dom.id}
-                                name="dom"
-                        />{dom.naziv}
-                        </label>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    onChange={onChange}
+                                    value={dom.id}
+                                    name="dom"
+                                />{dom.naziv}
+                            </label>
                         </li>
                     ))}
                 </label>
@@ -219,7 +224,7 @@ function TrazimSobu(props){
                     <input
                         type="text"
                         name="komentar"
-                        onChange={onChange}
+                        onChange={onChangek}
                     />
 
                 </label>
