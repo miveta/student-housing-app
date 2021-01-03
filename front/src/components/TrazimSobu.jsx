@@ -1,5 +1,5 @@
-import React, {Component, useEffect} from "react";
-import { withRouter } from 'react-router-dom';
+import React, { useEffect} from "react";
+import {withRouter} from 'react-router-dom';
 
 function TrazimSobu(props){
     const user = JSON.parse(localStorage.getItem("user"));
@@ -51,12 +51,16 @@ function TrazimSobu(props){
 
         };
 
-        return fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/uvjeti?user=${user.korisnickoIme}&domovi=
+        return fetch(`http://localhost:8080/trazimSobu/uvjeti?user=${user.korisnickoIme}&domovi=
         ${uvjeti["dom"]}&paviljoni=${uvjeti["paviljon"]}
         &katovi=${uvjeti["kat"]}&brojKreveta=${uvjeti["brojKreveta"]}&tipKupaonice=${uvjeti["tipKupaonice"]}&komentar=${uvjeti["komentar"]}`, options)
             .then(response => {
                 if (response.status === 200) {
-                    response.json().then(() => props.history.push("/"));
+                    response.json().then(body => {
+                        props.onLogin(body)
+                        props.history.push("/")
+
+                    });
                 }
                 else {
                     console.log(response.status)
@@ -73,7 +77,7 @@ function TrazimSobu(props){
             }
         };
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/grad?user=${user.korisnickoIme}`, options)
+        fetch(`http://localhost:8080/trazimSobu/grad?user=${user.korisnickoIme}`, options)
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
@@ -83,7 +87,7 @@ function TrazimSobu(props){
                 }
             }).then(json => {
             setGrad(json);
-        }).then(fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/domovi`, options)
+        }).then(fetch(`http://localhost:8080/trazimSobu/domovi`, options)
             .then(response => {
                 if (response.status === 200) {
                     return response.json()

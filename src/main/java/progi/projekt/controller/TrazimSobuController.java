@@ -15,6 +15,7 @@ import progi.projekt.dto.PaviljonDTO;
 import progi.projekt.model.*;
 import progi.projekt.repository.BrojKrevetaRepository;
 import progi.projekt.repository.DomRepository;
+import progi.projekt.repository.StudentRepository;
 import progi.projekt.repository.TipKupaoniceRepository;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.TrazimSobuService;
@@ -32,13 +33,16 @@ public class TrazimSobuController {
     DomRepository domRepository;
 
     @Autowired
+    private StudentService studentService;
+
+    @Autowired
     BrojKrevetaRepository brojKrevetaRepository;
 
     @Autowired
     TipKupaoniceRepository tipKupaoniceRepository;
 
     @Autowired
-    private StudentService studentService;
+    StudentRepository studentRepository;
 
     @Autowired
     private TrazimSobuService trazimSobuService;
@@ -71,43 +75,53 @@ public class TrazimSobuController {
                                     @RequestParam(value = "brojKreveta") String[] brojKreveta,
                                     @RequestParam(value = "tipKupaonice") String[] tipKupaonice,
                                     @RequestParam(value = "komentar") String komentar) {
-        Optional<Student> student = studentService.findByKorisnickoIme(username);
+        Student student = studentRepository.findByKorisnickoIme(username);
 
-        TrazeniUvjeti uvjeti = student.get().getUvjeti();
+        TrazeniUvjeti uvjeti = student.getUvjeti();
         if(uvjeti == null){
             uvjeti = new TrazeniUvjeti();
         }
-        uvjeti.setKomentar(komentar);
-        uvjeti.setTraziStudent(student.get());
-        uvjeti.setGrad(student.get().getGrad());
-        Set<Dom> dom = new HashSet<>();
-        for(String id : domId){
-            Dom d = domRepository.findById(UUID.fromString(id));
-            dom.add(d);
+        if(komentar != "") uvjeti.setKomentar(komentar);
+        uvjeti.setTraziStudent(student);
+        uvjeti.setGrad(student.getGrad());
+        if(domId[0] != "" ) {
+            Set<Dom> dom = new HashSet<>();
+            for (String id : domId) {
+                Dom d = domRepository.findById(UUID.fromString(id));
+                dom.add(d);
+            }
+            uvjeti.setDomovi(dom);
         }
-        uvjeti.setDomovi(dom);
-        Set<Paviljon> paviljon = new HashSet<>();
-        for(String p : paviljoni){
-            Paviljon temp = new Paviljon();
-            temp.setNaziv(p);
-            paviljon.add(temp);
+        if(paviljoni[0] != "") {
+            Set<Paviljon> paviljon = new HashSet<>();
+            for (String p : paviljoni) {
+                Paviljon temp = new Paviljon();
+                temp.setNaziv(p);
+                paviljon.add(temp);
+            }
+            //uvjeti.setPaviljoni(paviljon);
         }
-        Set<BrojKreveta> brKreveta = new HashSet<>();
-        for(String b : brojKreveta){
-            BrojKreveta temp = brojKrevetaRepository.findByNaziv(b);
-            brKreveta.add(temp);
+        if(brojKreveta[0] != "") {
+            Set<BrojKreveta> brKreveta = new HashSet<>();
+            for (String b : brojKreveta) {
+                BrojKreveta temp = brojKrevetaRepository.findByNaziv(b);
+                brKreveta.add(temp);
+            }
+            uvjeti.setBrojKreveta(brKreveta);
         }
-        uvjeti.setBrojKreveta(brKreveta);
-        Set<TipKupaonice> tKupaonice = new HashSet<>();
-        for(String t : tipKupaonice){
-            TipKupaonice temp = tipKupaoniceRepository.findByTip(t);
-            tKupaonice.add(temp);
+        if(tipKupaonice[0]  != "null") {
+            Set<TipKupaonice> tKupaonice = new HashSet<>();
+            for (String t : tipKupaonice) {
+                TipKupaonice temp = tipKupaoniceRepository.findByTip(t);
+                tKupaonice.add(temp);
+            }
+            uvjeti.setTipKupaonice(tKupaonice);
         }
-        uvjeti.setTipKupaonice(tKupaonice);
         trazimSobuService.update(uvjeti);
-        return ResponseEntity.ok(uvjeti);
+        return ResponseEntity.ok("uvjeti uneseni");
 
     }
+
 
 
 }

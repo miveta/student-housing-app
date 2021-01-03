@@ -31,10 +31,12 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
     private final TrazeniUvjetiRepository trazeniUvjetiRepository;
     private final ZaposlenikscRepository zaposlenikscRepository;
     private final StudentskiCentarRepository studentskiCentarRepository;
+    private final BrojKrevetaRepository brojKrevetaRepository;
+    private final TipKupaoniceRepository tipKupaoniceRepository;
 
     public DatabaseFill(StudentRepository studentRepository, DomRepository domRepository,
                         GradRepository gradRepository, ObavijestRepository obavijestRepository,
-                        OglasRepository oglasRepository, StatusOglasaRepository statusOglasaRepository, TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository, StudentskiCentarRepository studentskiCentarRepository, PasswordEncoder pswdEncoder) {
+                        OglasRepository oglasRepository, StatusOglasaRepository statusOglasaRepository, TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository, StudentskiCentarRepository studentskiCentarRepository, PasswordEncoder pswdEncoder, BrojKrevetaRepository brojKrevetaRepository, TipKupaoniceRepository tipKupaoniceRepository) {
         this.studentRepository = studentRepository;
         this.domRepository = domRepository;
         this.gradRepository = gradRepository;
@@ -45,6 +47,8 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
         this.zaposlenikscRepository = zaposlenikscRepository;
         this.studentskiCentarRepository = studentskiCentarRepository;
         this.pswdEncoder = pswdEncoder;
+        this.brojKrevetaRepository = brojKrevetaRepository;
+        this.tipKupaoniceRepository = tipKupaoniceRepository;
     }
 
 
@@ -283,6 +287,18 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 oglasi.add(oglasMarko);
                 oglasi.add(oglasPero);
 
+                HashSet<BrojKreveta> kreveti = new HashSet<>();
+                kreveti.add(jednokrevetna);
+                kreveti.add(dvokrevetna);
+                kreveti.add(trokrevetna);
+                kreveti.add(nebitnok);
+
+                HashSet<TipKupaonice> kupaonice = new HashSet<>();
+                kupaonice.add(privatna);
+                kupaonice.add(dijeljena);
+                kupaonice.add(nebitno);
+
+
                 gradRepository.save(zagreb);
                 zaposlenikscRepository.save(stefko);
                 studentskiCentarRepository.save(studentskiCentar);
@@ -292,6 +308,9 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 trazeniUvjetiRepository.saveAll(trazeniUvjeti);
                 statusOglasaRepository.saveAll(statusiOglasa);
                 studentRepository.saveAll(studentiZaSave);
+                brojKrevetaRepository.saveAll(kreveti);
+                tipKupaoniceRepository.saveAll(kupaonice);
+
 
                 System.out.println("Umetnute pocetne vrijednosti");
 
