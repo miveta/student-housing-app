@@ -16,9 +16,6 @@ public class Soba implements Serializable {
     @Id
     private int kat;
 
-    @Column(nullable = true, unique=true)
-    private int id_soba;
-
     @Id
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumns({
@@ -26,6 +23,9 @@ public class Soba implements Serializable {
             @JoinColumn(name = "id_dom")
     })
     private Paviljon paviljon;
+
+    @Column(nullable = true, name = "id_soba")
+    private Integer idSoba;
 
     @Column(name = "broj_kreveta")
     @Enumerated(EnumType.STRING)
@@ -38,6 +38,7 @@ public class Soba implements Serializable {
     @Column(name = "kategorija")
     @Enumerated(EnumType.STRING)
     private OznakeKategorijaEnum kategorija;
+
 
     @Override
     public boolean equals(Object o) {
@@ -118,3 +119,4 @@ public class Soba implements Serializable {
         this.kategorija = kategorija;
     }
 }
+

@@ -55,6 +55,12 @@ public class Student implements Serializable, Korisnik {
     private Grad grad;
 
 
+    @Column(nullable = true, name = "id_soba")
+    private Integer idSoba;
+
+
+
+
 
     public Student() {
     }

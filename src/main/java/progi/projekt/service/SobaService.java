@@ -5,4 +5,5 @@ import progi.projekt.model.Soba;
 
 public interface SobaService {
 	Soba getByStudentId(UUID id);
+	Soba getById (Integer sobaId);
 }
