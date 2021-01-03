@@ -1,67 +1,74 @@
-import React, {Component} from "react";
-import {Button, Form} from 'react-bootstrap';
+import React, {Component, useEffect} from "react";
+import { withRouter } from 'react-router-dom';
 
-class TrazimSobu extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            change: false,
-            user: JSON.parse(localStorage.getItem("user")),
-            grad: '' ,
-            domovi: [],
-            paviljoni: [],
-            izabrano: {
-                dom: [],
-                paviljon: [],
-                kat: [],
-                brojKreveta: [],
-                tipKupaonice: [],
-                komentar: ''
-            }
-        };
+function TrazimSobu(props){
+    const user = JSON.parse(localStorage.getItem("user"));
+    const [grad, setGrad] = React.useState('');
+    const [domovi, setDomovi] = React.useState([{id: '', imaMenzu: '', naziv: ''}]) ;
 
-        this.onChange = this.onChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+    const [uvjeti, setUvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [],brojKreveta: [], komentar: ''});
+    const paviljoni = ['1', '2', '3', '4', '5', '6'];
+    const katovi = ['1', '2', '3', '4'];
+    const kreveti = [
+        {name:"Jednokrevetna", value:"JEDNOKREVETNA"},
+        {name:"Dvokrevetna", value:"DVOKREVETNA"},
+        {name:"Trokrevetna", value:"JEDNOKREVETNA"},
+        {name:"Nebitno", value:"NEBITNO"}
+    ]
+    const kupaonice = [
+        {name:"Privatna", value:"PRIVATNA"},
+        {name:"Zajednicka", value:"ZAJEDNICKA"},
+        {name:"Nebitno", value:"NEBITNO"}
+    ]
+    function onChange(event){
+        const {name, value} = event.target;
+        const ids = uvjeti[name].map(el => el.id);
+        if(event.target.checked){
+            uvjeti[name].push(value);
+        }else{
+            const index = ids.indexOf(value.id);
+            uvjeti[name].splice(index,1);
+        }
+
+
     }
 
-    onChange(event) {
-        this.setState({change: true});
 
-        console.log(event.target)
-    }
-
-    onSubmit(e) {
+    function onSubmit(e) {
         e.preventDefault();
         const trazeniUvjeti = {
-            grad: this.state.grad,
-            dom: this.state.dom,
-            paviljon: this.state.paviljon,
-            kat: this.state.kat,
-            brojKreveta: this.state.brojKreveta,
-            tipKupaonice: this.state.tipKupaonice,
-            komentar: this.state.komentar
+            grad: grad,
+            dom: uvjeti["dom"],
+            paviljon: uvjeti["paviljon"],
+            kat: uvjeti["kat"],
+            brojKreveta: uvjeti["brojKreveta"],
+            tipKupaonice: uvjeti["tipKupaonice"],
+            komentar: uvjeti["komentar"]
         };
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
             },
             body: JSON.stringify(trazeniUvjeti)
         };
 
-        return fetch(`${process.env.REACT_APP_BACKEND_URL}/uvjeti`, options)
+        return fetch(`http://localhost:8080/trazimSobu/uvjeti/?user=${user.korisnickoIme}&domovi=
+        ${uvjeti["dom"]}&paviljoni=${uvjeti["paviljon"]}
+        &katovi=${uvjeti["kat"]}&brojKreveta=${uvjeti["brojKreveta"]}&tipKupaonice=${uvjeti["tipKupaonice"]}&komentar=${uvjeti["komentar"]}`, options)
             .then(response => {
                 if (response.status === 200) {
-                    return response.json()
-
-                } else {
+                    response.json().then(() => props.history.push('/'));
+                }
+                else {
                     console.log(response.status)
                 }
             });
 
     }
 
-    componentDidMount() {
+    useEffect(() => {
         const options = {
             method: 'GET',
             headers: {
@@ -69,7 +76,7 @@ class TrazimSobu extends Component{
             }
         };
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/grad`, options)
+        fetch(`http://localhost:8080/trazimSobu/grad?user=${user.korisnickoIme}`, options)
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
@@ -78,9 +85,8 @@ class TrazimSobu extends Component{
                     console.log(response.status)
                 }
             }).then(json => {
-            this.setState({grad: json})
-        })
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/domovi`, options)
+            setGrad(json);
+        }).then(fetch(`http://localhost:8080/trazimSobu/domovi`, options)
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
@@ -89,83 +95,141 @@ class TrazimSobu extends Component{
                     console.log(response.status)
                 }
             }).then(json => {
-            this.setState({domovi: json})
-        })
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/paviljoni`, options)
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json()
-
-                } else {
-                    console.log(response.status)
-                }
-            }).then(json => {
-            this.setState({paviljoni: json})
-        })
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/katovi`, options)
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json()
-
-                } else {
-                    console.log(response.status)
-                }
-            }).then(json => {
-            this.setState({katovi: json})
-        })
-    }
+                setDomovi(json)
+            }))
+        //     .then(fetch(`http://localhost:8080/trazimSobu/paviljoni`, options)
+        //     .then(response => {
+        //         if (response.status === 200) {
+        //             return response.json()
+        //
+        //         } else {
+        //             console.log(response.status)
+        //         }
+        //     }).then(json => {
+        //     this.setState({katovi: json})
+        // }))
+    },[]);
 
 
 
-    render(){
+
     return (
 
-        <div className="middle">
-            <Form onSubmit={this.onSubmit}>
-                <h3> Tražim sobu </h3>
-                <p>Grad: {this.state.grad}</p>
-                <Form.Group>
-                    <Form.Label> Dom </Form.Label>
-                    {this.state.domovi.map(dom =>(
-                        <Form.Check onChange={this.onChange} type="checkbox" id={dom.id} label={dom.naziv}/>
-                    ))}
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label> Paviljon </Form.Label>
-                    {this.state.paviljoni.map(paviljon =>(
-                        <Form.Check onChange={this.onChange} type="checkbox" id={paviljon.id} label={paviljon.naziv}/>
-                    ))}
+        <div className="middle" >
 
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label> Kat </Form.Label>
-                    <Form.Check  onChange={this.onChange} type="checkbox" label="1"/>
-                    <Form.Check onChange={this.onChange} type="checkbox" label="2"/>
-                    <Form.Check onChange={this.onChange} type="checkbox" label="3"/>
-                    <Form.Check onChange={this.onChange} type="checkbox" label="4"/>
-                    <Form.Check onChange={this.onChange} type="checkbox" label="Nebitno"/>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label> Broj kreveta </Form.Label>
-                    <Form.Check  onChange={this.onChange} type="checkbox" label="Jednokrevetna"/>
-                    <Form.Check onChange={this.onChange} type="checkbox" label="Dvokrevetna"/>
-                    <Form.Check onChange={this.onChange} type="checkbox" label="Trokrevetna"/>
-                    <Form.Check onChange={this.onChange} type="checkbox" label="Višekrevetna"/>
-                    <Form.Check onChange={this.onChange} type="checkbox" label="Nebitno"/>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label> Tip kupaonice </Form.Label>
-                    <Form.Check onChange={this.onChange}  type="checkbox" label="U sobi"  />
-                    <Form.Check onChange={this.onChange}  type="checkbox" label="Zajednički"/>
-                    <Form.Check onChange={this.onChange}  type="checkbox" label="Nebitno"/>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label> Komentar </Form.Label>
-                    <Form.Control name="komentar" type="text"  />
-                </Form.Group>
-                <Button type="submit" variant="dark" size="lg" block> Predaj oglas </Button>
-            </Form>
+            <h3>Grad: {grad.naziv}</h3>
+
+            <form onSubmit={onSubmit}>
+                <label>
+                    Dom:
+
+                    <br/>
+                    {domovi.map(dom =>(
+                        <li>
+                        <label>
+                            <input
+                                type="checkbox"
+                                onChange={onChange}
+                                value={dom.id}
+                                name="dom"
+                        />{dom.naziv}
+                        </label>
+                        </li>
+                    ))}
+                </label>
+                <br/>
+                <label>
+                    Paviljon:
+
+                    <br/>
+                    {paviljoni.map(p =>(
+                        <li>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    onChange={onChange}
+                                    value={p}
+                                    name="paviljon"
+                                />{p}
+                            </label>
+                        </li>
+                    ))}
+                </label>
+
+                <br/>
+                <label>
+                    Kat:
+
+                    <br/>
+                    {katovi.map(p =>(
+                        <li>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    onChange={onChange}
+                                    value={p}
+                                    name="kat"
+                                />{p}
+                            </label>
+                        </li>
+                    ))}
+                </label>
+
+                <br/>
+                <label>
+                    Broj kreveta:
+
+                    <br/>
+                    {kreveti.map(p =>(
+                        <li>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    onChange={onChange}
+                                    value={p.value}
+                                    name="brojKreveta"
+                                />{p.name}
+                            </label>
+                        </li>
+                    ))}
+                </label>
+                <br/>
+                <label>
+                    Tip kupaonice:
+
+                    <br/>
+                    {kupaonice.map(p =>(
+                        <li>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    onChange={onChange}
+                                    value={p.value}
+                                    name="tipKupaonice"
+                                />{p.name}
+                            </label>
+                        </li>
+                    ))}
+                </label>
+                <br/>
+                <label>
+                    Komentar:
+
+                    <br/>
+                    <input
+                        type="text"
+                        name="komentar"
+                        onChange={onChange}
+                    />
+
+                </label>
+                <br/>
+                <input type="submit"  value="Submit" />
+
+            </form>
+
         </div>
-    )}
+
+    )
 }
-export default TrazimSobu;
+export default withRouter(TrazimSobu);

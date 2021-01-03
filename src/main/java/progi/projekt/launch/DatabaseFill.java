@@ -126,23 +126,34 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 TrazeniUvjeti uvjetiMarko = new TrazeniUvjeti();
                 TrazeniUvjeti uvjetiPero = new TrazeniUvjeti();
                 TrazeniUvjeti uvjetiIvica = new TrazeniUvjeti();
-                uvjetiIvica.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
-                uvjetiIvica.setKategorija(OznakeKategorijaEnum.II);
-                uvjetiIvica.setTipKupaonice(TipKupaoniceEnum.NEBITNO);
                 uvjetiIvica.setGodina(2020);
                 uvjetiIvica.setKomentar("Trazim sobu!");
 
-                uvjetiMarko.setBrojKreveta(BrojKrevetaEnum.DVOKREVETNA);
-                uvjetiMarko.setKategorija(OznakeKategorijaEnum.I);
-                uvjetiMarko.setTipKupaonice(TipKupaoniceEnum.PRIVATNA);
+
                 uvjetiMarko.setGodina(2020);
                 uvjetiMarko.setKomentar("Trazim i ja sobu!");
 
-                uvjetiPero.setBrojKreveta(BrojKrevetaEnum.TROKREVETNA);
-                uvjetiPero.setKategorija(OznakeKategorijaEnum.II);
-                uvjetiPero.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
+
                 uvjetiPero.setGodina(2020);
                 uvjetiPero.setKomentar("");
+
+                //Kreiraj tipKupaonice
+                TipKupaonice privatna = new TipKupaonice();
+                TipKupaonice dijeljena = new TipKupaonice();
+                TipKupaonice nebitno = new TipKupaonice();
+                privatna.setTip("PRIVATNA");
+                dijeljena.setTip("DIJELJENA");
+                nebitno.setTip("NEBITNO");
+
+                //Kreiraj brojKreveta
+                BrojKreveta jednokrevetna = new BrojKreveta();
+                BrojKreveta dvokrevetna = new BrojKreveta();
+                BrojKreveta trokrevetna = new BrojKreveta();
+                BrojKreveta nebitnok = new BrojKreveta();
+                jednokrevetna.setNaziv("JEDNOKREVETNA");
+                dvokrevetna.setNaziv("DVOKREVETNA");
+                trokrevetna.setNaziv("TROKREVETNA");
+                nebitnok.setNaziv("NEBITNO");
 
                 //Kreiraj oglase
                 Oglas oglasMarko = new Oglas();
@@ -248,9 +259,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 obavijestZaIvicu.setOglas(oglasIvica);
 
                 //ASSIGN IVICA TO OBAVIJEST
-                ArrayList<Student> ivicaList = new ArrayList<>();
-                ivicaList.add(ivica);
-                obavijestZaIvicu.setStudenti(ivicaList);
+                //obavijestZaIvicu.setStudent(ivica);
 
 
                 //Saveaj sve---------------------------------------------------------------------------

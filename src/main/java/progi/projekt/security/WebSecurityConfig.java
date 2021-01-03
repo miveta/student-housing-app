@@ -63,12 +63,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // dozvolila sam sve auth da se prijave
                 .antMatchers("/auth/*").permitAll()
                 .antMatchers("/oglas/list").permitAll()
-                //.antMatchers("/").permitAll() //yes? no?
+                .antMatchers("/lajk/*").permitAll()
+                .antMatchers("/trazimSobu/*").permitAll()
+        //.antMatchers("/").permitAll() //yes? no?
         ;
 
         //warning: ovo hoce bacati errore ako je neko od svojstava vec definirano
         super.configure(http);
     }
 }
-
-//dodati @Secured("ROLE_ADMIN") na metode koje poziva admin, @Secured("ROLE_STUDENT") na metode koje poziva student

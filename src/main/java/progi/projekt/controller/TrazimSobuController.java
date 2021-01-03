@@ -2,6 +2,7 @@ package progi.projekt.controller;
 
 import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,6 +13,9 @@ import progi.projekt.dto.DomDTO;
 import progi.projekt.dto.GradDTO;
 import progi.projekt.dto.PaviljonDTO;
 import progi.projekt.model.*;
+import progi.projekt.repository.BrojKrevetaRepository;
+import progi.projekt.repository.DomRepository;
+import progi.projekt.repository.TipKupaoniceRepository;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.TrazimSobuService;
 
@@ -23,6 +27,15 @@ import java.util.stream.Collectors;
 @CrossOrigin
 @RequestMapping("/trazimSobu")
 public class TrazimSobuController {
+
+    @Autowired
+    DomRepository domRepository;
+
+    @Autowired
+    BrojKrevetaRepository brojKrevetaRepository;
+
+    @Autowired
+    TipKupaoniceRepository tipKupaoniceRepository;
 
     @Autowired
     private StudentService studentService;
@@ -51,23 +64,49 @@ public class TrazimSobuController {
     }
 
     @PutMapping(value = "/uvjeti", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> update(@RequestBody  TrazeniUvjeti trazeniUvjeti,
-                                    @RequestParam(value = "user") String username) {
-        Optional<Student> student = studentService.findBykorisnickoIme(username);
+    public ResponseEntity<?> put(@RequestParam(value = "user") String username,
+                                    @RequestParam(value = "domovi") String[] domId,
+                                    @RequestParam(value = "paviljoni") String[] paviljoni,
+                                    @RequestParam(value = "katovi") String[] katovi,
+                                    @RequestParam(value = "tipKupaonice") String[] tipKupaonice,
+                                    @RequestParam(value = "brojKreveta") String[] brojKreveta,
+                                    @RequestParam(value = "komentar") String komentar) {
+        Optional<Student> student = studentService.findByKorisnickoIme(username);
 
         TrazeniUvjeti uvjeti = student.get().getUvjeti();
-
-        uvjeti.setBrojKreveta(trazeniUvjeti.getBrojKreveta());
+        if(uvjeti == null){
+            uvjeti = new TrazeniUvjeti();
+        }
+        uvjeti.setKomentar(komentar);
         uvjeti.setTraziStudent(student.get());
-        uvjeti.setKomentar(trazeniUvjeti.getKomentar());
-        uvjeti.setTipKupaonice(trazeniUvjeti.getTipKupaonice());
-        uvjeti.setDom(trazeniUvjeti.getDom());
-        uvjeti.setKat(trazeniUvjeti.getKat());
-        uvjeti.setPaviljon(trazeniUvjeti.getPaviljon());
-        uvjeti.setGrad(trazeniUvjeti.getGrad());
-
+        uvjeti.setGrad(student.get().getGrad());
+        Set<Dom> dom = new HashSet<>();
+        for(String id : domId){
+            Dom d = domRepository.findById(UUID.fromString(id));
+            dom.add(d);
+        }
+        uvjeti.setDomovi(dom);
+        Set<Paviljon> paviljon = new HashSet<>();
+        for(String p : paviljoni){
+            Paviljon temp = new Paviljon();
+            temp.setNaziv(p);
+            paviljon.add(temp);
+        }
+        Set<BrojKreveta> brKreveta = new HashSet<>();
+        for(String b : brojKreveta){
+            BrojKreveta temp = brojKrevetaRepository.findByNaziv(b);
+            brKreveta.add(temp);
+        }
+        uvjeti.setBrojKreveta(brKreveta);
+        Set<TipKupaonice> tKupaonice = new HashSet<>();
+        for(String t : tipKupaonice){
+            TipKupaonice temp = tipKupaoniceRepository.findByTip(t);
+            tKupaonice.add(temp);
+        }
+        uvjeti.setTipKupaonice(tKupaonice);
         trazimSobuService.update(uvjeti);
         return ResponseEntity.ok(uvjeti);
+
     }
 
 

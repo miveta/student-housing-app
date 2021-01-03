@@ -123,7 +123,7 @@ public class AuthController {
 			// authentication handler will throw a badcredentials exception if the student doesnt exist before it reaches this step
 			Korisnik korisnik;
 
-			Optional<Student> student = studentService.findBykorisnickoIme(data.getUsername());
+			Optional<Student> student = studentService.findByKorisnickoIme(data.getUsername());
 			korisnik = student.isPresent() ? student.get() : zaposlenikscService.findBykorisnickoIme(data.getUsername()).get();
 
 			KorisnikDTO korisnikDTO = new KorisnikDTO(korisnik);

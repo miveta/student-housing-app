@@ -15,8 +15,11 @@ public class Grad {
     @Column(nullable = false)
     private String naziv;
 
-    @OneToMany(mappedBy = "grad", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "grad", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Dom> domovi;
+
+    @OneToMany(mappedBy = "grad", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<TrazeniUvjeti> trazeniUvjeti;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_sc")

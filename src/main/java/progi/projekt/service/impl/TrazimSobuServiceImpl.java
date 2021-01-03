@@ -3,6 +3,7 @@ package progi.projekt.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import progi.projekt.model.*;
+import progi.projekt.repository.DomRepository;
 import progi.projekt.repository.GradRepository;
 import progi.projekt.repository.StudentRepository;
 import progi.projekt.repository.TrazeniUvjetiRepository;
@@ -17,6 +18,9 @@ import java.util.stream.Collectors;
 @Service
 public class TrazimSobuServiceImpl implements TrazimSobuService {
     private Student student;
+
+
+
     @Autowired
     GradRepository gradRepository;
 
@@ -41,7 +45,6 @@ public class TrazimSobuServiceImpl implements TrazimSobuService {
     @Override
     public Set<Dom> findAllDom() {
         Grad grad = student.getGrad();
-
         return grad.getDomovi();
     }
 

@@ -21,6 +21,10 @@ public class Dom implements Serializable {
     @JoinColumn(name = "id_grad")
     private Grad grad;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_trazeniUvjeti")
+    private TrazeniUvjeti trazeni_uvjeti;
+
     @OneToMany(mappedBy = "dom", cascade = CascadeType.ALL)
     private Set<Paviljon> paviljoni;
 
@@ -66,6 +70,14 @@ public class Dom implements Serializable {
 
     public UUID getId() {
         return id;
+    }
+
+    public TrazeniUvjeti getTrazeni_uvjeti() {
+        return trazeni_uvjeti;
+    }
+
+    public void setTrazeni_uvjeti(TrazeniUvjeti trazeni_uvjeti) {
+        this.trazeni_uvjeti = trazeni_uvjeti;
     }
 
     public void setId(UUID id) {

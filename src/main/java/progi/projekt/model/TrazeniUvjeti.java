@@ -14,24 +14,29 @@ public class TrazeniUvjeti {
     @Column(name = "id_trazeni_uvjeti")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
+    @ManyToOne
+    @JoinColumn(name = "id_grad")
     private Grad grad;
-    private Set<Dom> dom;
-    private Set<Paviljon> paviljon;
-    private Set<Integer> kat;
-    @Column(name = "broj_kreveta", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Set<BrojKrevetaEnum> brojKreveta;
 
-    @Column(name = "tip_kupaonice", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Set<TipKupaoniceEnum> tipKupaonice;
+    @OneToMany(mappedBy = "trazeni_uvjeti", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Dom> domovi;
 
-    @Column(name = "kategorija", nullable = false)
+    @OneToMany(mappedBy = "trazeni_uvjeti", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Paviljon> paviljoni;
+
+    @OneToMany(mappedBy = "trazeni_uvjeti", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<BrojKreveta> brojKreveta;
+
+    @OneToMany(mappedBy = "trazeni_uvjeti", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<TipKupaonice> tipKupaonice;
+
+    @Column(name = "kategorija")
     @Enumerated(EnumType.STRING)
     private OznakeKategorijaEnum kategorija;
 
     private String komentar;
-    @Column(nullable = false)
+    @Column(name = "godina")
     private int godina;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -42,16 +47,7 @@ public class TrazeniUvjeti {
     }
 
     //Ništa ne smije biti null osim komentara
-    public TrazeniUvjeti(Set<BrojKrevetaEnum> brojKreveta, Set<TipKupaoniceEnum> tipKupaonice, OznakeKategorijaEnum kategorija, int godina, Student student, String komentar) {
-        if (brojKreveta != null && tipKupaonice != null && kategorija != null && student != null) {
-            this.brojKreveta = brojKreveta;
-            this.tipKupaonice = tipKupaonice;
-            this.kategorija = kategorija;
-            this.godina = godina;
-            this.traziStudent = student;
-            this.komentar = komentar;
-        }
-    }
+
 
     public Grad getGrad() {
         return grad;
@@ -59,30 +55,6 @@ public class TrazeniUvjeti {
 
     public void setGrad(Grad grad) {
         this.grad = grad;
-    }
-
-    public Set<Dom> getDom() {
-        return dom;
-    }
-
-    public void setDom(Set<Dom> dom) {
-        this.dom = dom;
-    }
-
-    public Set<Paviljon> getPaviljon() {
-        return paviljon;
-    }
-
-    public void setPaviljon(Set<Paviljon> paviljon) {
-        this.paviljon = paviljon;
-    }
-
-    public Set<Integer> getKat() {
-        return kat;
-    }
-
-    public void setKat(Set<Integer> kat) {
-        this.kat = kat;
     }
 
     public UUID getId() {
@@ -93,19 +65,19 @@ public class TrazeniUvjeti {
         this.id = id;
     }
 
-    public Set<BrojKrevetaEnum> getBrojKreveta() {
+    public Set<BrojKreveta> getBrojKreveta() {
         return brojKreveta;
     }
 
-    public void setBrojKreveta(Set<BrojKrevetaEnum> brojKreveta) {
+    public void setBrojKreveta(Set<BrojKreveta> brojKreveta) {
         this.brojKreveta = brojKreveta;
     }
 
-    public Set<TipKupaoniceEnum> getTipKupaonice() {
+    public Set<TipKupaonice> getTipKupaonice() {
         return tipKupaonice;
     }
 
-    public void setTipKupaonice(Set<TipKupaoniceEnum> tipKupaonice) {
+    public void setTipKupaonice(Set<TipKupaonice> tipKupaonice) {
         this.tipKupaonice = tipKupaonice;
     }
 
@@ -123,6 +95,22 @@ public class TrazeniUvjeti {
 
     public void setKomentar(String komentar) {
         this.komentar = komentar;
+    }
+
+    public Set<Dom> getDomovi() {
+        return domovi;
+    }
+
+    public void setDomovi(Set<Dom> domovi) {
+        this.domovi = domovi;
+    }
+
+    public Set<Paviljon> getPaviljoni() {
+        return paviljoni;
+    }
+
+    public void setPaviljoni(Set<Paviljon> paviljoni) {
+        this.paviljoni = paviljoni;
     }
 
     public int getGodina() {

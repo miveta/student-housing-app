@@ -8,9 +8,13 @@ class Footer extends Component {
 
     render() {
         return(
+
+            <footer>
             <Navbar bg="light" className="justify-content-end footer">
                 Spring rolice 2020
             </Navbar>
+            </footer>
+
         )
     }
 }

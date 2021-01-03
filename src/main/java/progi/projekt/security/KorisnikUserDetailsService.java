@@ -64,7 +64,7 @@ public class KorisnikUserDetailsService implements UserDetailsService {
 
 		//ako login nije hardcoded "admin", password dobijemo iz DB-a:
 		try {
-			Optional<Student> student = studentService.findBykorisnickoIme(username);
+			Optional<Student> student = studentService.findByKorisnickoIme(username);
 			if (student.isEmpty()) {
 				Optional<ZaposlenikSC> zaposlenik = zaposlenikscService.findBykorisnickoIme(username);
 				if (zaposlenik.isEmpty()) {
@@ -88,7 +88,7 @@ public class KorisnikUserDetailsService implements UserDetailsService {
 
 		//ako login nije hardcoded "admin", role dobijemo iz DB-a:
 		try {
-			Optional<Student> student = studentService.findBykorisnickoIme(username);
+			Optional<Student> student = studentService.findByKorisnickoIme(username);
 			if (student.isEmpty()) {
 				Optional<ZaposlenikSC> zaposlenik = zaposlenikscService.findBykorisnickoIme(username);
 				if (zaposlenik.isEmpty()) {

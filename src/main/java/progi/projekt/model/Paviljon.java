@@ -20,6 +20,10 @@ public class Paviljon implements Serializable {
     @JoinColumn(name = "id_dom")
     private Dom dom;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_trazeniUvjeti")
+    private TrazeniUvjeti trazeni_uvjeti;
+
     @OneToMany(mappedBy = "paviljon", cascade = CascadeType.ALL)
     private Set<Soba> sobe;
 
@@ -40,14 +44,14 @@ public class Paviljon implements Serializable {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Paviljon paviljon = (Paviljon) o;
-        return id.equals(paviljon.id) &&
-                dom.equals(paviljon.dom);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Paviljon paviljon = (Paviljon) o;
+//        return id.equals(paviljon.id) &&
+//                dom.equals(paviljon.dom);
+//    }
 
     @Override
     public int hashCode() {
@@ -76,6 +80,14 @@ public class Paviljon implements Serializable {
 
     public void setDom(Dom dom) {
         this.dom = dom;
+    }
+
+    public TrazeniUvjeti getTrazeni_uvjeti() {
+        return trazeni_uvjeti;
+    }
+
+    public void setTrazeni_uvjeti(TrazeniUvjeti trazeni_uvjeti) {
+        this.trazeni_uvjeti = trazeni_uvjeti;
     }
 
     public Set<Soba> getSobe() {
