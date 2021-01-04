@@ -124,6 +124,7 @@ public class Soba implements Serializable {
     public Kat getKat() {
         return kat;
     }
+}
 
     public void setKat(Kat kat) {
         this.kat = kat;

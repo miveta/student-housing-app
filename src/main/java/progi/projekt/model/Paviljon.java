@@ -1,5 +1,8 @@
 package progi.projekt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import progi.projekt.model.enums.OznakeKategorijaEnum;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,6 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@JsonIgnoreProperties({"dom"}) // dodano da se izbjegne rekuzija za fetch
 public class Paviljon implements Serializable {
     @Id
     @Column(name = "id_paviljon")
@@ -22,21 +26,11 @@ public class Paviljon implements Serializable {
     @OneToMany(mappedBy = "paviljon", cascade = CascadeType.ALL)
     private Set<Kat> katovi;
 
-    public Paviljon() {
-    }
+    @Column(name = "kategorija")
+    @Enumerated(EnumType.STRING)
+    private OznakeKategorijaEnum kategorija;
 
-    //Naziv i dom ne smiju biti null!
-    public Paviljon(String naziv, Dom dom) {
-        if (naziv != null) {
-            if (dom != null) {
-                this.naziv = naziv;
-                this.dom = dom;
-            } else {
-                System.err.println("Dom paviljona ne smije biti null!");
-            }
-        } else {
-            System.err.println("Naziv paviljona ne smije biti null!");
-        }
+    public Paviljon() {
     }
 
     @Override
@@ -83,5 +77,13 @@ public class Paviljon implements Serializable {
 
     public void setKatovi(Set<Kat> katovi) {
         this.katovi = katovi;
+    }
+
+    public OznakeKategorijaEnum getKategorija() {
+        return kategorija;
+    }
+
+    public void setKategorija(OznakeKategorijaEnum kategorija) {
+        this.kategorija = kategorija;
     }
 }

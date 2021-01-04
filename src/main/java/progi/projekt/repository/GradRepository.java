@@ -3,5 +3,9 @@ package progi.projekt.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import progi.projekt.model.Grad;
 
-public interface GradRepository extends JpaRepository<Grad, Long> {
+import java.util.List;
+import java.util.UUID;
+
+public interface GradRepository extends JpaRepository<Grad, UUID> {
+    //List<Grad> findAll();
 }

@@ -34,7 +34,6 @@ public class StudentController {
         return studentService.listAll();
     }
 
-
     public void init(){
         Student ivica = new Student();
         ivica.setEmail("kakaka@gma.com");

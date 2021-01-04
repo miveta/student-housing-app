@@ -65,6 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/oglas/list").permitAll()
                 .antMatchers("/lajk/*").permitAll()
                 .antMatchers("/oglas/*").permitAll()
+                .antMatchers("/soba/*").permitAll()
                 //.antMatchers("/").permitAll() //yes? no?
                 .antMatchers("/student/*").permitAll()
                 .antMatchers("/mojprofil/*").permitAll()

@@ -2,6 +2,7 @@ package progi.projekt.service.impl;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import progi.projekt.model.Obavijest;
 import progi.projekt.model.Student;
 import progi.projekt.repository.StudentRepository;
 import progi.projekt.security.exception.SavingException;
@@ -28,7 +29,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Optional<Student> findByEmail(String email) {
         try {
-            return Optional.of(studentRepository.findByEmail(email));
+            return studentRepository.findByEmail(email);
         } catch (Exception e) {
             //studentRepo baca exceptione koje mu proslijedi baza (e)?
             String originalMessage = e.getMessage();
@@ -40,7 +41,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Optional<Student> findByKorisnickoIme(String username) {
         try {
-            return Optional.of(studentRepository.findByKorisnickoIme(username));
+            return studentRepository.findByKorisnickoIme(username);
         } catch (Exception e) {
             //studentRepo baca exceptione koje mu proslijedi baza (e)?
             String originalMessage = e.getMessage();
@@ -78,6 +79,18 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public boolean studentExists(String username) throws UsernameNotFoundException {
+        return findByKorisnickoIme(username).isPresent();
+    }
+
+    @Override
+    public List<Obavijest> getObavijest(String username) {
+        Optional<Student> student = findByKorisnickoIme(username);
+
+        if (student.isEmpty()) {
+            throw new UsernameNotFoundException("Student s tim korisničkim imenom ne postoji!");
+        }
+
+        return student.get().getObavijesti();
         return findByKorisnickoIme(username).isPresent();
     }
 

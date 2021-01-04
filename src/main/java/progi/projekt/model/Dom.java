@@ -1,11 +1,14 @@
 package progi.projekt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@JsonIgnoreProperties({"grad", "paviljoni"}) // dodano da se izbjegne rekuzija za fetch
 public class Dom implements Serializable {
     @Id
     @Column(name = "id_dom")
@@ -23,19 +26,6 @@ public class Dom implements Serializable {
 
     @OneToMany(mappedBy = "dom", cascade = CascadeType.ALL)
     private Set<Paviljon> paviljoni;
-
-    //Naziv i grad ne smiju biti null!
-    public Dom(String naziv, Grad grad, boolean imaMenzu) {
-        if (naziv != null) {
-            if (grad != null) {
-                this.naziv = naziv;
-                this.grad = grad;
-                this.imaMenzu = imaMenzu;
-            } else
-                System.err.print("Grad u konstruktoru doma ne smije biti null!");
-        } else
-            System.err.print("Naziv doma ne smije biti null!");
-    }
 
     public Dom() {
     }

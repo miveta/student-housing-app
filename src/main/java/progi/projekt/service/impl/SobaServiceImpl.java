@@ -1,4 +1,3 @@
-package progi.projekt.service.impl;
 
 import org.springframework.stereotype.Service;
 import progi.projekt.model.Soba;
@@ -11,6 +10,13 @@ import java.util.UUID;
 public class SobaServiceImpl implements SobaService {
 
 	private SobaRepository sobaRepository;
+
+    @Autowired
+    GradRepository gradRepository;
+
+    public List<Grad> findAllGrad() {
+        return gradRepository.findAll();
+    }
 
 	public SobaServiceImpl(SobaRepository sobaRepository) {
 		this.sobaRepository = sobaRepository;

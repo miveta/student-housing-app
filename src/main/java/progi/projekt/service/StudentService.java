@@ -1,6 +1,7 @@
 package progi.projekt.service;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import progi.projekt.model.Obavijest;
 import progi.projekt.model.Student;
 import progi.projekt.security.exception.SavingException;
 
@@ -27,4 +28,6 @@ public interface StudentService {
 
     Student delete(Student student) throws SavingException;
 
+
+    List<Obavijest> getObavijest(String username);
 }
