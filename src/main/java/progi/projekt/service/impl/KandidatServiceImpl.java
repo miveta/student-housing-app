@@ -30,8 +30,8 @@ public class KandidatServiceImpl implements KandidatService {
 		var uvjeti1 = oglas1.getStudent().getUvjeti();
 		var uvjeti2 = oglas2.getStudent().getUvjeti();
 
-		var soba1 = oglas1.getStudent().getSoba();
-		var soba2 = oglas2.getStudent().getSoba();
+		var soba1 = oglas1.getSoba();
+		var soba2 = oglas2.getSoba();
 
 		return (sobaMatchesUvjet(soba1, uvjeti2) && sobaMatchesUvjet(soba2, uvjeti1)) ? true : false;
 	}
@@ -93,7 +93,7 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Override
 	public Integer calculateScore(Oglas oglas1, Oglas oglas2) {
-		Soba soba2 = oglas2.getStudent().getSoba();
+		Soba soba2 = oglas2.getSoba();
 		TrazeniUvjeti uvjeti1 = UvjetiService.findByIdOglas(oglas1.getId());
 
 		Integer bliskost = UvjetiService.izracunajBliskost(soba2, uvjeti1);

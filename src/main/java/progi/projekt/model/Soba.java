@@ -7,22 +7,24 @@ import progi.projekt.model.enums.TipKupaoniceEnum;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class Soba implements Serializable {
     @Id
+    @Column(name = "id_soba")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_kat")
+    private Kat kat;
+
     private int broj;
 
-    @Id
-    private int kat;
-
-    @Id
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumns({
-            @JoinColumn(name = "id_paviljon"),
-            @JoinColumn(name = "id_dom")
-    })
-    private Paviljon paviljon;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="id_oglas")
+    private Oglas oglas;
 
     @Column(name = "broj_kreveta")
     @Enumerated(EnumType.STRING)
@@ -36,32 +38,16 @@ public class Soba implements Serializable {
     @Enumerated(EnumType.STRING)
     private OznakeKategorijaEnum kategorija;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Soba soba = (Soba) o;
-        return kat == soba.kat &&
-                broj == soba.broj &&
-                paviljon.equals(soba.paviljon);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(broj, kat, paviljon);
-    }
-
     public Soba() {
     }
 
     //Ništa ne smije biti null!
-    public Soba(int brojSobe, int kat, Paviljon paviljon, BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija) {
-        if (paviljon != null && brojKreveta != null && tipKupaonice != null && kategorija != null) {
-            this.paviljon = paviljon;
+    public Soba(int brojSobe, Kat kat, Paviljon paviljon, BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija) {
+        if (brojKreveta != null && tipKupaonice != null && kategorija != null) {
             this.brojKreveta = brojKreveta;
             this.tipKupaonice = tipKupaonice;
             this.broj = brojSobe;
-            this.kat = kat;
+            //this.kat = kat;
         } else {
             System.err.println("Ništa u kreaciji sobe ne smije biti null!");
         }
@@ -73,22 +59,6 @@ public class Soba implements Serializable {
 
     public void setBroj(int broj) {
         this.broj = broj;
-    }
-
-    public int getKat() {
-        return kat;
-    }
-
-    public void setKat(int kat) {
-        this.kat = kat;
-    }
-
-    public Paviljon getPaviljon() {
-        return paviljon;
-    }
-
-    public void setPaviljon(Paviljon paviljon) {
-        this.paviljon = paviljon;
     }
 
     public BrojKrevetaEnum getBrojKreveta() {
@@ -113,5 +83,28 @@ public class Soba implements Serializable {
 
     public void setKategorija(OznakeKategorijaEnum kategorija) {
         this.kategorija = kategorija;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+    public Oglas getOglas() {
+        return oglas;
+    }
+
+    public void setOglas(Oglas oglas) {
+        this.oglas = oglas;
+    }
+
+    public Kat getKat() {
+        return kat;
+    }
+
+    public void setKat(Kat kat) {
+        this.kat = kat;
     }
 }

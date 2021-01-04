@@ -2,6 +2,7 @@ package progi.projekt.model;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -17,11 +18,10 @@ public class Obavijest {
     private boolean procitana;
     private Date vrijeme;
 
-    @ManyToOne(targetEntity = Student.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_korisnik")
-    private Student student;
+    @ManyToMany(targetEntity = Student.class, mappedBy = "obavijesti", cascade = CascadeType.MERGE)
+    private List<Student> studenti;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_oglas")
     private Oglas oglas;
 
@@ -36,6 +36,10 @@ public class Obavijest {
     }
 
     public Obavijest() {
+    }
+
+    public void addStudent(Student kor) {
+        studenti.add(kor);
     }
 
     public String getTekst() {
@@ -70,12 +74,12 @@ public class Obavijest {
         this.id = id;
     }
 
-    public Student getStudent() {
-        return student;
+    public List<Student> getStudenti() {
+        return studenti;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setStudent(List<Student> studenti) {
+        this.studenti = studenti;
     }
 
     public Oglas getOglas() {
@@ -85,4 +89,5 @@ public class Obavijest {
     public void setOglas(Oglas oglas) {
         this.oglas = oglas;
     }
+
 }

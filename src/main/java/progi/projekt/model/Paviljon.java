@@ -15,13 +15,12 @@ public class Paviljon implements Serializable {
 
     private String naziv;
 
-    @Id
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_dom")
     private Dom dom;
 
     @OneToMany(mappedBy = "paviljon", cascade = CascadeType.ALL)
-    private Set<Soba> sobe;
+    private Set<Kat> katovi;
 
     public Paviljon() {
     }
@@ -78,15 +77,11 @@ public class Paviljon implements Serializable {
         this.dom = dom;
     }
 
-    public Set<Soba> getSobe() {
-        return sobe;
+    public Set<Kat> getKatovi() {
+        return katovi;
     }
 
-    public void setSobe(Set<Soba> sobe) {
-        this.sobe = sobe;
-    }
-
-    public void addSoba(Soba soba) {
-        this.sobe.add(soba);
+    public void setKatovi(Set<Kat> katovi) {
+        this.katovi = katovi;
     }
 }

@@ -36,6 +36,9 @@ public class Oglas {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "kandOglas")
     private List<Kandidat> kandidati;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="id_soba")
+    private Soba soba;
 
     //Naslov i godina ne smiju biti null
     public Oglas(String naslov, String opis, int godina, Date objavljen) {
@@ -133,5 +136,13 @@ public class Oglas {
 
     public void setKandidati(List<Kandidat> kandidati) {
         this.kandidati = kandidati;
+    }
+
+    public Soba getSoba() {
+        return soba;
+    }
+
+    public void setSoba(Soba soba) {
+        this.soba = soba;
     }
 }

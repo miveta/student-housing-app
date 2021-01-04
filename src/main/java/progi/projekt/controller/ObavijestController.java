@@ -10,6 +10,7 @@ import progi.projekt.service.OglasService;
 import progi.projekt.service.StudentService;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ObavijestController {
@@ -18,30 +19,30 @@ public class ObavijestController {
 
     //Stvara obavijest/i ako se soba promijeni i ne pase vise tom korisniku/ima
     public void notifyRoomConstraintsNoLongerValid(List<Student> studenti, Oglas oglas){
-        for(Student student : studenti){
-            Obavijest obavijest = new Obavijest();
-            obavijest.setVrijeme(new Date(System.currentTimeMillis()));
-            obavijest.setProcitana(false);
-            obavijest.setOglas(oglas);
-            obavijest.setStudent(student);
-            obavijest.setTekst("Oglas studenta " + oglas.getStudent().getIme() + " " + oglas.getStudent().getPrezime()
-                    + " je promjenjen, te više ne paše vašim uvjetima.");
-            obavijestRepository.save(obavijest);
-        }
+        Obavijest obavijest = new Obavijest();
+        obavijest.setVrijeme(new Date(System.currentTimeMillis()));
+        obavijest.setProcitana(false);
+        obavijest.setOglas(oglas);
+        obavijest.setStudent(studenti);
+        obavijest.setTekst("Oglas studenta " + oglas.getStudent().getIme() + " " + oglas.getStudent().getPrezime()
+                + " je promjenjen, te više ne paše vašim uvjetima.");
+        obavijestRepository.save(obavijest);
     }
 
     //Daje obavijest svima koji su lajkali taj oglas da se soba promjenila
     public void notifyRoomConstraintsChanged(Oglas oglas){
+        Obavijest obavijest = new Obavijest();
+        obavijest.setVrijeme(new Date(System.currentTimeMillis()));
+        obavijest.setProcitana(false);
+        ArrayList<Student> studentiLiked = new ArrayList<>();
         for(Lajk lajk: oglas.getLajkovi()) {
-            Obavijest obavijest = new Obavijest();
-            obavijest.setVrijeme(new Date(System.currentTimeMillis()));
-            obavijest.setProcitana(false);
-            obavijest.setOglas(oglas);
-            obavijest.setStudent(lajk.getLikedByStudent());
-            obavijest.setTekst("Oglas studenta " + lajk.getLikedByStudent().getIme() + " "
-                    + lajk.getLikedByStudent().getPrezime() + " izmjenjen.");
-            obavijestRepository.save(obavijest);
+            studentiLiked.add(lajk.getLikedByStudent());
         }
+        obavijest.setStudent(studentiLiked);
+        obavijest.setTekst("Oglas studenta " + oglas.getStudent().getIme() + " "
+                + oglas.getStudent().getPrezime() + " izmjenjen.");
+        obavijest.setOglas(oglas);
+        obavijestRepository.save(obavijest);
     }
 
     //Slanje obavijesti da ti je netko lajkao sobu
@@ -50,7 +51,9 @@ public class ObavijestController {
         obavijest.setVrijeme(new Date(System.currentTimeMillis()));
         obavijest.setProcitana(false);
         obavijest.setOglas(oglas);
-        obavijest.setStudent(oglas.getStudent());
+        ArrayList<Student> students = new ArrayList<>();
+        students.add(oglas.getStudent());
+        obavijest.setStudent(students);
         obavijest.setTekst(student.getIme() + " " + student.getPrezime() + " je lajkao vašu sobu!");
         obavijestRepository.save(obavijest);
     }
@@ -62,7 +65,9 @@ public class ObavijestController {
         obavijest.setVrijeme(new Date(System.currentTimeMillis()));
         obavijest.setProcitana(false);
         obavijest.setOglas(oglasZamijene);
-        obavijest.setStudent(oglasZamijenjenog.getStudent());
+        ArrayList<Student> student = new ArrayList<>();
+        student.add(oglasZamijenjenog.getStudent());
+        obavijest.setStudent(student);
         obavijest.setTekst("Vaša soba je uspješno zamijenjena sa sobom " + oglasZamijene.getStudent().getIme() + " " +
                 oglasZamijene.getStudent().getPrezime() + "!");
         obavijestRepository.save(obavijest);
