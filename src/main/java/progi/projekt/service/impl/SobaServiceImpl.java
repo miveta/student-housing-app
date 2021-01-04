@@ -1,6 +1,5 @@
 package progi.projekt.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import progi.projekt.model.Soba;
 import progi.projekt.repository.SobaRepository;
@@ -24,7 +23,7 @@ public class SobaServiceImpl implements SobaService {
 	}
 
 	@Override
-	public Soba getById(Integer sobaId) {
-		return sobaRepository.getByIdSoba(sobaId);
+	public Soba getById(UUID id) {
+		return sobaRepository.findById(id).get();
 	}
 }

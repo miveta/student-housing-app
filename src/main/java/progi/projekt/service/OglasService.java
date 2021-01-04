@@ -3,10 +3,10 @@ package progi.projekt.service;
 import progi.projekt.model.Oglas;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.Optional;
 
 public interface OglasService {
     List<Oglas> listAll();
-    Oglas findById (UUID oglasUUID);
+
+    Optional<Oglas> findById(String id);
 }

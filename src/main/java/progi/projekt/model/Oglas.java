@@ -10,7 +10,7 @@ public class Oglas {
     @Id
     @Column(name = "id_oglas")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id_oglas;
+    private UUID id;
 
     @Column(nullable = false)
     private String naslov;
@@ -106,12 +106,12 @@ public class Oglas {
         this.obavijesti = obavijesti;
     }
 
-    public UUID getId_oglas() {
-        return id_oglas;
+    public UUID getId() {
+        return id;
     }
 
-    public void setId_oglas(UUID id_oglas) {
-        this.id_oglas = id_oglas;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public Student getStudent() {

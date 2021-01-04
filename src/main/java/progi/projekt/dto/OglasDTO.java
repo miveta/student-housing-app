@@ -16,7 +16,7 @@ public class OglasDTO {
     private String student;
 
     public OglasDTO(Oglas oglas) {
-        this.id = oglas.getId_oglas();
+        this.id = oglas.getId();
         this.naslov = oglas.getNaslov();
         this.opis = oglas.getOpis();
         this.godina = oglas.getGodina();

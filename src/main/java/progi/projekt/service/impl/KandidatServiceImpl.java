@@ -1,15 +1,20 @@
 package progi.projekt.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import progi.projekt.model.*;
+import progi.projekt.model.Kandidat;
+import progi.projekt.model.Oglas;
+import progi.projekt.model.Soba;
+import progi.projekt.model.TrazeniUvjeti;
 import progi.projekt.repository.KandidatRepository;
 import progi.projekt.service.KandidatService;
 import progi.projekt.service.OglasService;
 import progi.projekt.service.SobaService;
 import progi.projekt.service.UvjetiService;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,20 +22,25 @@ public class KandidatServiceImpl implements KandidatService {
 	private static final int SHORTLIST_VELICINA = 3;
 	//veci broj -> brzi i blazi algoritam
 
-	@Autowired
+
 	private KandidatRepository kandidatRepo;
-
-	@Autowired
 	private SobaService sobaService;
-
-	@Autowired
 	private OglasService oglasService;
+	private UvjetiService uvjetiService;
+
+	public KandidatServiceImpl(KandidatRepository kandidatRepo, SobaService sobaService, OglasService oglasService, UvjetiService uvjetiService) {
+		this.kandidatRepo = kandidatRepo;
+		this.sobaService = sobaService;
+		this.oglasService = oglasService;
+		this.uvjetiService = uvjetiService;
+	}
 
     //TODO: maknuto zbog UUID
+	/**/
 	@Override
 	public List<Kandidat> listAll(UUID oglasUuid) {
-		var oglas = oglasService.findById(oglasUuid);
-		return kandidatRepo.findAllByOglas(oglas);
+		var oglas = oglasService.findById(oglasUuid.toString());
+		return kandidatRepo.findAllByOglas(oglas.get());
 		//return new ArrayList<Kandidat>();
 	}
 
@@ -53,11 +63,10 @@ public class KandidatServiceImpl implements KandidatService {
 		List<Oglas> topN = topN(oglas);
 
 		int i = 0;
-		for (Oglas kand : topN){
-			if (odgovaraju(oglas, kand)){
+		for (Oglas kand : topN) {
+			if (odgovaraju(oglas, kand)) {
 				return i;
-			}
-			else {
+			} else {
 				i++;
 			}
 		}
@@ -104,16 +113,16 @@ public class KandidatServiceImpl implements KandidatService {
 	@Override
 	public Integer calculateScore(Oglas oglas1, Oglas oglas2) {
 		Soba soba2 = sobaService.getByStudentId(oglas2.getStudent().getId());
-		TrazeniUvjeti uvjeti1 = UvjetiService.findByOglas(oglas1);
-		Soba soba2 = oglas2.getStudent().getSoba();
-		TrazeniUvjeti uvjeti1 = UvjetiService.findByIdOglas(oglas1.getId_oglas());
+		TrazeniUvjeti uvjeti1 = uvjetiService.findByOglas(oglas1);
+		/*Soba soba2 = oglas2.getStudent().getSoba();
+		TrazeniUvjeti uvjeti1 = uvjetiService.findByIdOglas(oglas1.getId());*/
 
-		Integer bliskost = UvjetiService.izracunajBliskost(soba2, uvjeti1);
+		Integer bliskost = uvjetiService.izracunajBliskost(soba2, uvjeti1);
 
 		return bliskost;
 	}
 
-	public Boolean sobaMatchesUvjet (Soba soba, TrazeniUvjeti uvjeti){
-		return UvjetiService.sobaMatchesUvjet(soba, uvjeti);
+	public Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti) {
+		return uvjetiService.sobaMatchesUvjet(soba, uvjeti);
 	}
 }

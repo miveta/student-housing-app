@@ -23,11 +23,9 @@ public class Soba implements Serializable {
     private int broj;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="id_oglas")
+    @JoinColumn(name = "id_oglas")
     private Oglas oglas;
 
-    @Column(nullable = true, name = "id_soba")
-    private Integer idSoba;
 
     @Column(name = "broj_kreveta")
     @Enumerated(EnumType.STRING)
@@ -41,20 +39,23 @@ public class Soba implements Serializable {
     @Enumerated(EnumType.STRING)
     private OznakeKategorijaEnum kategorija;
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Soba soba = (Soba) o;
-        return kat == soba.kat &&
-                broj == soba.broj &&
-                paviljon.equals(soba.paviljon);
+        return broj == soba.broj &&
+                Objects.equals(id, soba.id) &&
+                Objects.equals(kat, soba.kat) &&
+                Objects.equals(oglas, soba.oglas) &&
+                brojKreveta == soba.brojKreveta &&
+                tipKupaonice == soba.tipKupaonice &&
+                kategorija == soba.kategorija;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(broj, kat, paviljon);
+        return Objects.hash(id, kat, broj, oglas, brojKreveta, tipKupaonice, kategorija);
     }
 
     public Soba() {
@@ -111,6 +112,7 @@ public class Soba implements Serializable {
     public void setId(UUID id) {
         this.id = id;
     }
+
     public Oglas getOglas() {
         return oglas;
     }

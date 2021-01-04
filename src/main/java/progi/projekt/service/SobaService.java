@@ -1,9 +1,11 @@
 package progi.projekt.service;
 
-import java.util.UUID;
 import progi.projekt.model.Soba;
+
+import java.util.UUID;
 
 public interface SobaService {
 	Soba getByStudentId(UUID id);
-	Soba getById (Integer sobaId);
+
+	Soba getById(UUID id);
 }
