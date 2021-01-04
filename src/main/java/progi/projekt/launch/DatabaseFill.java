@@ -2,6 +2,8 @@ package progi.projekt.launch;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import progi.projekt.model.*;
@@ -35,13 +37,15 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
     private final SobaRepository sobaRepository;
     private final KatRepository katRepository;
     private final PaviljonRepository paviljonRepository;
+    private JavaMailSender javaMailSender;
 
     public DatabaseFill(StudentRepository studentRepository, DomRepository domRepository,
                         GradRepository gradRepository, ObavijestRepository obavijestRepository,
                         OglasRepository oglasRepository, StatusOglasaRepository statusOglasaRepository,
                         TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository,
                         StudentskiCentarRepository studentskiCentarRepository, SobaRepository sobaRepository,
-                        KatRepository katRepository, PaviljonRepository paviljonRepository, PasswordEncoder pswdEncoder) {
+                        KatRepository katRepository, PaviljonRepository paviljonRepository, PasswordEncoder pswdEncoder,
+                        JavaMailSender javaMailSender) {
         this.studentRepository = studentRepository;
         this.domRepository = domRepository;
         this.gradRepository = gradRepository;
@@ -55,6 +59,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
         this.sobaRepository = sobaRepository;
         this.katRepository = katRepository;
         this.paviljonRepository = paviljonRepository;
+        this.javaMailSender = javaMailSender;
     }
 
 
@@ -75,6 +80,18 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
     public void onApplicationEvent(ContextRefreshedEvent event) {
         //Izvedi skriptu jedino ako nista nije u bazi (inace baca error za umetanje identicnih vrijednosti)
         //LAJKOVI NE RADE???? nisam probo
+
+        //Odkomentiraj ovo da posaljes mail denisu da si pokrenuo program
+        /*
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setSubject("Uvjeti sobe više ne pašu vašim zahtjevima");
+        msg.setText("Mail radi!");
+        msg.setTo("denis.durasinovic@gmail.com");
+        javaMailSender.send(msg);
+        System.out.println("Mail poslan");*/
+
+
+
         try {
             if (studentRepository.count() == 0) {
                 //Kreiraj studente
