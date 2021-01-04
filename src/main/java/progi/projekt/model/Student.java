@@ -53,8 +53,8 @@ public class Student implements Serializable, Korisnik {
     @JoinColumn(name="id_grad")
     private Grad grad;
 
-    @OneToMany(mappedBy = "likedByStudent",cascade = CascadeType.ALL)
-    private List<Lajk> lajkovi;
+    /*@OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
+    private List<Lajk> lajkovi;*/
 
     //@HolikToLudnica(fetch = FetchType.VRAPCE_HITNA, mappedBy = "AppleMaps")
     //@OneToOne(fetch = FetchType.LAZY)
@@ -203,13 +203,13 @@ public class Student implements Serializable, Korisnik {
         this.grad = grad;
     }
 
-    public List<Lajk> getLajkovi() {
+/*    public List<Lajk> getLajkovi() {
         return lajkovi;
     }
 
     public void setLajkovi(List<Lajk> lajkovi) {
         this.lajkovi = lajkovi;
-    }
+    }*/
 
     public Soba getSoba() {
         return new Soba();

@@ -94,7 +94,7 @@ public class KandidatServiceImpl implements KandidatService {
 	@Override
 	public Integer calculateScore(Oglas oglas1, Oglas oglas2) {
 		Soba soba2 = oglas2.getStudent().getSoba();
-		TrazeniUvjeti uvjeti1 = UvjetiService.findByIdOglas(oglas1.getId());
+		TrazeniUvjeti uvjeti1 = UvjetiService.findByIdOglas(oglas1.getId_oglas());
 
 		Integer bliskost = UvjetiService.izracunajBliskost(soba2, uvjeti1);
 

@@ -10,7 +10,7 @@ public class Oglas {
     @Id
     @Column(name = "id_oglas")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private UUID id_oglas;
 
     @Column(nullable = false)
     private String naslov;
@@ -30,8 +30,8 @@ public class Oglas {
     @JoinColumn(name="id_student")
     private Student student;
 
-    @OneToMany(mappedBy="id_oglas",cascade = CascadeType.ALL)
-    private List<Lajk> lajkovi;
+    /*@OneToMany(mappedBy="oglas",cascade = CascadeType.ALL)
+    private List<Lajk> lajkovi;*/
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "kandOglas")
     private List<Kandidat> kandidati;
@@ -103,12 +103,12 @@ public class Oglas {
         this.obavijesti = obavijesti;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getId_oglas() {
+        return id_oglas;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setId_oglas(UUID id_oglas) {
+        this.id_oglas = id_oglas;
     }
 
     public Student getStudent() {
@@ -119,13 +119,13 @@ public class Oglas {
         this.student = student;
     }
 
-    public List<Lajk> getLajkovi() {
+ /*   public List<Lajk> getLajkovi() {
         return lajkovi;
     }
 
     public void setLajkovi(List<Lajk> lajkovi) {
         this.lajkovi = lajkovi;
-    }
+    }*/
 
     public List<Kandidat> getKandidati() {
         return kandidati;

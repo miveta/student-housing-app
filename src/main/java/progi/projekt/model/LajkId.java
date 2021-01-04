@@ -15,34 +15,34 @@ public class LajkId implements Serializable {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_student")
-    private Student studentId;
+    private Student student;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_oglas")
-    private Oglas oglasId;
+    private Oglas oglas;
 
     public LajkId() {
     }
 
-    public LajkId(Student studentId, Oglas oglasId) {
-        this.studentId = studentId;
-        this.oglasId = oglasId;
+    public LajkId(Student student, Oglas oglas) {
+        this.student = student;
+        this.oglas = oglas;
     }
 
-    public Student getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentId(Student studentId) {
-        this.studentId = studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public Oglas getOglasId() {
-        return oglasId;
+    public Oglas getOglas() {
+        return oglas;
     }
 
-    public void setOglasId(Oglas oglasId) {
-        this.oglasId = oglasId;
+    public void setOglas(Oglas oglas) {
+        this.oglas = oglas;
     }
 
     @Override
@@ -50,12 +50,12 @@ public class LajkId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LajkId lajkId = (LajkId) o;
-        return Objects.equals(studentId, lajkId.studentId) && Objects.equals(oglasId, lajkId.oglasId);
+        return Objects.equals(student, lajkId.student) && Objects.equals(oglas, lajkId.oglas);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(studentId, oglasId);
+        return Objects.hash(student, oglas);
     }
 
     /*public LajkId(Student studentId, Oglas oglasId) {

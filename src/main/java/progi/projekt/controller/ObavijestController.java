@@ -6,8 +6,6 @@ import progi.projekt.model.Obavijest;
 import progi.projekt.model.Oglas;
 import progi.projekt.model.Student;
 import progi.projekt.repository.ObavijestRepository;
-import progi.projekt.service.OglasService;
-import progi.projekt.service.StudentService;
 
 import java.sql.Date;
 import java.util.List;
@@ -32,16 +30,16 @@ public class ObavijestController {
 
     //Daje obavijest svima koji su lajkali taj oglas da se soba promjenila
     public void notifyRoomConstraintsChanged(Oglas oglas){
-        for(Lajk lajk: oglas.getLajkovi()) {
+        /*for(Lajk lajk: oglas.getLajkovi()) {
             Obavijest obavijest = new Obavijest();
             obavijest.setVrijeme(new Date(System.currentTimeMillis()));
             obavijest.setProcitana(false);
             obavijest.setOglas(oglas);
-            obavijest.setStudent(lajk.getLajkId().getStudentId());
-            obavijest.setTekst("Oglas studenta " + lajk.getLajkId().getStudentId().getIme() + " "
-                    + lajk.getLajkId().getStudentId().getPrezime() + " izmjenjen.");
+            obavijest.setStudent(lajk.getLajkId().getStudent());
+            obavijest.setTekst("Oglas studenta " + lajk.getLajkId().getStudent().getIme() + " "
+                    + lajk.getLajkId().getStudent().getPrezime() + " izmjenjen.");
             obavijestRepository.save(obavijest);
-        }
+        }*/
     }
 
     //Slanje obavijesti da ti je netko lajkao sobu

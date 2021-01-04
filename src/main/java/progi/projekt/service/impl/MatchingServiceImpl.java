@@ -56,9 +56,9 @@ public class MatchingServiceImpl implements MatchingService {
 		List<Oglas> oglasi = oglasService.listAll();
 
 		for (Oglas oglas : oglasi){
-			List<Kandidat> kandidati = kandidatService.listAll(oglas.getId());
+			List<Kandidat> kandidati = kandidatService.listAll(oglas.getId_oglas());
 			for (Kandidat kandidat : kandidati){
-				if (kandidat.getOglas().getId() == oglas.getId() || kandidat.getIdKandidat() == oglas.getId()) {
+				if (kandidat.getOglas().getId_oglas() == oglas.getId_oglas() || kandidat.getIdKandidat() == oglas.getId_oglas()) {
 					oglas.getKandidati().add(kandidat);
 				}
 			}
@@ -84,8 +84,8 @@ public class MatchingServiceImpl implements MatchingService {
 		List<Lajk> lajkovi = lajkService.listAll();
 
 		for (Lajk lajk : lajkovi){
-			Oglas oglas1 = lajk.getLajkId().getStudentId().getOglas();
-			Oglas oglas2 = lajk.getLajkId().getOglasId();
+			Oglas oglas1 = lajk.getLajkId().getStudent().getOglas();
+			Oglas oglas2 = lajk.getLajkId().getOglas();
 
 			if (kandidatService.josNisuKandidat(oglas1, oglas2)){
 				stvoriKand(oglas1, oglas2);
@@ -146,9 +146,9 @@ public class MatchingServiceImpl implements MatchingService {
 			UUID studentID = oglas.getStudent().getId();
 			List<Lajk> lajkovi = lajkService.listAll();
 			for (Lajk lajk : lajkovi){
-				if (lajk.getLajkId().getStudentId().getId() == studentID) {
-					UUID id1 = oglas.getId();
-					UUID id2 = lajk.getLajkId().getOglasId().getId();
+				if (lajk.getLajkId().getStudent().getId() == studentID) {
+					UUID id1 = oglas.getId_oglas();
+					UUID id2 = lajk.getLajkId().getOglas().getId_oglas();
 					Key key = new Key(id1, id2);
 
 					Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
@@ -170,8 +170,8 @@ public class MatchingServiceImpl implements MatchingService {
 			Hashtable<Par, Integer> obostraneOcjene = new Hashtable<Par, Integer>();
 			List<Par> parovi = parService.listAll();
 			for (Par par : parovi){
-				Key key1 = new Key(par.getOglas1().getId(), par.getOglas2().getId());
-				Key key2 = new Key(par.getOglas2().getId(), par.getOglas1().getId());
+				Key key1 = new Key(par.getOglas1().getId_oglas(), par.getOglas2().getId_oglas());
+				Key key2 = new Key(par.getOglas2().getId_oglas(), par.getOglas1().getId_oglas());
 				Optional<Integer> ocjena1Optional = Optional.ofNullable(ocjene.get(key1));
 				Optional<Integer> ocjena2Optional = Optional.ofNullable(ocjene.get(key2));
 
@@ -236,8 +236,8 @@ public class MatchingServiceImpl implements MatchingService {
 				if (!parService.ifObaAKTIVAN(par) && par.getIgnore() == true){
 					Optional<Kandidat> kandidatOptional = par.getOglas1().getKandidati()
 							.stream()
-							.filter(kand -> kand.getIdOglas() == par.getOglas1().getId()
-									&& kand.getKandOglas().getId() == par.getOglas2().getId())
+							.filter(kand -> kand.getIdOglas() == par.getOglas1().getId_oglas()
+									&& kand.getKandOglas().getId_oglas() == par.getOglas2().getId_oglas())
 							.findFirst();
 
 					kandidatOptional.ifPresent(kandidat -> kandidat.setIgnore(true));
