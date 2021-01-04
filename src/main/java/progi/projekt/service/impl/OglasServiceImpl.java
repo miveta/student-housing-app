@@ -7,15 +7,27 @@ import progi.projekt.repository.OglasRepository;
 import progi.projekt.service.OglasService;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OglasServiceImpl implements OglasService {
 
     @Autowired
-    private OglasRepository oglasRepo;
+    private OglasRepository oglasRepository;
 
     @Override
     public List<Oglas> listAll() {
-        return oglasRepo.findAll();
+        return oglasRepository.findAll();
+    }
+
+    @Override
+    public Optional<Oglas> findById(String oglasId) {
+        try {
+            return oglasRepository.findById(UUID.fromString(oglasId));
+        } catch (Exception e) {
+            System.err.println(e);
+            return Optional.empty();
+        }
     }
 }
