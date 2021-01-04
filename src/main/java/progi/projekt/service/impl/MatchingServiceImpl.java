@@ -18,18 +18,20 @@ public class MatchingServiceImpl implements MatchingService {
 	private final OglasService oglasService;
 	private final KandidatService kandidatService;
 	private final ParService parService;
+	private final LajkService lajkService;
 
 	public MatchingServiceImpl(
-					StudentService studentService,
-					OglasService oglasService,
-					KandidatService kandidatService,
-					ParService parService
-					)
+			StudentService studentService,
+			OglasService oglasService,
+			KandidatService kandidatService,
+			ParService parService,
+			LajkService lajkService)
 	{
 		this.studentService = studentService;
 		this.oglasService = oglasService;
 		this.kandidatService = kandidatService;
 		this.parService = parService;
+		this.lajkService = lajkService;
 	}
 
 
@@ -54,9 +56,9 @@ public class MatchingServiceImpl implements MatchingService {
 		List<Oglas> oglasi = oglasService.listAll();
 
 		for (Oglas oglas : oglasi){
-			List<Kandidat> kandidati = kandidatService.listAll(oglas.getId());
+			List<Kandidat> kandidati = kandidatService.listAll(oglas.getId_oglas());
 			for (Kandidat kandidat : kandidati){
-				if (kandidat.getOglas().getId() == oglas.getId() || kandidat.getIdKandidat() == oglas.getId()) {
+				if (kandidat.getOglas().getId_oglas() == oglas.getId_oglas() || kandidat.getIdKandidat() == oglas.getId_oglas()) {
 					oglas.getKandidati().add(kandidat);
 				}
 			}
@@ -79,11 +81,11 @@ public class MatchingServiceImpl implements MatchingService {
 		//poziva se uz metodu iz LajkControllera. Stvara kandidata/par ako je student ocjenio oglas koji mu inicijalno
 		// nije ponudjen kao par pa nije mogao biti u topN pa niti postati par
 
-		List<Lajk> lajkovi = LajkService.listAll();
+		List<Lajk> lajkovi = lajkService.listAll();
 
 		for (Lajk lajk : lajkovi){
-			Oglas oglas1 = lajk.getLikedByStudent().getOglas();
-			Oglas oglas2 = lajk.getLikedOglas();
+			Oglas oglas1 = lajk.getLajkId().getStudent().getOglas();
+			Oglas oglas2 = lajk.getLajkId().getOglas();
 
 			if (kandidatService.josNisuKandidat(oglas1, oglas2)){
 				stvoriKand(oglas1, oglas2);
@@ -142,11 +144,11 @@ public class MatchingServiceImpl implements MatchingService {
 		//zato je polje oglasi sortirano po datumu objave
 		for (Oglas oglas : oglasi){
 			UUID studentID = oglas.getStudent().getId();
-			List<Lajk> lajkovi = LajkService.listAll();
+			List<Lajk> lajkovi = lajkService.listAll();
 			for (Lajk lajk : lajkovi){
-				if (lajk.getLikedByStudent().getId() == studentID) {
-					UUID id1 = oglas.getId();
-					UUID id2 = lajk.getLikedOglas().getId();
+				if (lajk.getLajkId().getStudent().getId() == studentID) {
+					UUID id1 = oglas.getId_oglas();
+					UUID id2 = lajk.getLajkId().getOglas().getId_oglas();
 					Key key = new Key(id1, id2);
 
 					Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
@@ -168,8 +170,8 @@ public class MatchingServiceImpl implements MatchingService {
 			Hashtable<Par, Integer> obostraneOcjene = new Hashtable<Par, Integer>();
 			List<Par> parovi = parService.listAll();
 			for (Par par : parovi){
-				Key key1 = new Key(par.getOglas1().getId(), par.getOglas2().getId());
-				Key key2 = new Key(par.getOglas2().getId(), par.getOglas1().getId());
+				Key key1 = new Key(par.getOglas1().getId_oglas(), par.getOglas2().getId_oglas());
+				Key key2 = new Key(par.getOglas2().getId_oglas(), par.getOglas1().getId_oglas());
 				Optional<Integer> ocjena1Optional = Optional.ofNullable(ocjene.get(key1));
 				Optional<Integer> ocjena2Optional = Optional.ofNullable(ocjene.get(key2));
 
@@ -234,8 +236,8 @@ public class MatchingServiceImpl implements MatchingService {
 				if (!parService.ifObaAKTIVAN(par) && par.getIgnore() == true){
 					Optional<Kandidat> kandidatOptional = par.getOglas1().getKandidati()
 							.stream()
-							.filter(kand -> kand.getIdOglas() == par.getOglas1().getId()
-									&& kand.getKandOglas().getId() == par.getOglas2().getId())
+							.filter(kand -> kand.getIdOglas() == par.getOglas1().getId_oglas()
+									&& kand.getKandOglas().getId_oglas() == par.getOglas2().getId_oglas())
 							.findFirst();
 
 					kandidatOptional.ifPresent(kandidat -> kandidat.setIgnore(true));

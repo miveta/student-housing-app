@@ -6,8 +6,6 @@ import progi.projekt.model.Obavijest;
 import progi.projekt.model.Oglas;
 import progi.projekt.model.Student;
 import progi.projekt.repository.ObavijestRepository;
-import progi.projekt.service.OglasService;
-import progi.projekt.service.StudentService;
 
 import java.sql.Date;
 import java.util.ArrayList;

@@ -12,7 +12,7 @@ public interface StudentService {
 
     Optional<Student> findByEmail(String email) throws UsernameNotFoundException;
 
-    Optional<Student> findBykorisnickoIme(String username) throws UsernameNotFoundException;
+    Optional<Student> findByKorisnickoIme(String username) throws UsernameNotFoundException;
 
     Optional<Student> findByJmbag(String jmbag) throws UsernameNotFoundException;
 

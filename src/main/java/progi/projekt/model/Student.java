@@ -49,7 +49,7 @@ public class Student implements Serializable, Korisnik {
     @JoinColumn(name="oglas")
     private Oglas oglas;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="id_grad")
     private Grad grad;
 
@@ -195,4 +195,20 @@ public class Student implements Serializable, Korisnik {
         this.grad = grad;
     }
 
+/*    public List<Lajk> getLajkovi() {
+        return lajkovi;
+    }
+
+    public void setLajkovi(List<Lajk> lajkovi) {
+        this.lajkovi = lajkovi;
+    }*/
+
+    public Soba getSoba() {
+        return new Soba();
+        //return soba;
+    }
+/*
+    public void setSoba(Soba soba) {
+        this.soba = soba;
+    }*/
 }

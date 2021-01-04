@@ -29,7 +29,7 @@ public class Kandidat {
 
 
 	//@Column(name = "id_kand_oglasa", nullable = false)
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_kand_oglasa")
 	private Oglas kandOglas;
 

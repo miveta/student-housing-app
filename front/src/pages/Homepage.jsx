@@ -8,6 +8,8 @@ class Homepage extends Component {
             oglasi: []
         };
 
+        console.log(this.props)
+
     }
 
     componentDidMount() {
@@ -32,7 +34,7 @@ class Homepage extends Component {
         return (
             <div className="middle">
                 <h2>Oglasi</h2>
-                <OglasList oglasi={this.state.oglasi}/>
+                <OglasList oglasi={this.state.oglasi} isLoggedIn={this.props.isLoggedIn}/>
             </div>
         )
     }

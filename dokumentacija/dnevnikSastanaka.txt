@@ -35,5 +35,23 @@ DNEVNIK SASTANAKA
 9. sastanak (12/11/2020 - Teams):
     - Ivana, Luka i Hrvoje sudjelovali - prezentacija osnovnih funkcionalnosti aplikacije
 
-10.sastanak (3/12/2020 - Teams):
+10. sastanak (3/12/2020 - Teams):
     - Ivana i Hrvoje sudjelovali - kolokviranje 1. ciklusa projekta
+
+11. sastanak(10/12/2020)
+    - Podjela poslova nakon kolokviranja
+
+12. sastanak(29/)
+    - Provjera napretka, ponovna podjela zadataka
+
+13. sastanak(31)
+    - Provjera napretka
+
+14. sastanak(02)
+    - Dogovor o implementaciji Lajkova
+
+15. sastanak(03)
+    - Dogovor o algoritmu uparivanja oglasa
+
+16. sastanak(04)
+    - Provjera napretka, dogovor o nastavku rada na aplikaciji

@@ -46,7 +46,6 @@ class App extends Component {
         cookie.save('principal', cb, {path: '/', maxAge: 5 * 60 * 60});
         this.setState({authenticated: true});
         this.setState({user: cb});
-
         console.log(this)
     };
 
@@ -72,7 +71,7 @@ class App extends Component {
                                                           authenticated={this.state.authenticated}/>}/>
                         <PrivateRoute exact path="/soba" component={Soba}/>
                         <Route exact path="/trazimsobu" component={TrazimSobu}/>
-                        <Route path='/' exact component={Homepage}/>
+                        <Route path='/' exact component={() => <Homepage isLoggedIn={this.state.authenticated}/>}/>
                         <Route exact path="/mojprofil" component={() => <MojProfil isLoggedIn={this.state.authenticated} onLogout={this.logout}/>}/>
                         <Route exact path="/mojprofil/uredi" component={() => <UrediProfil onLogin={this.authenticate}/>}/>
                         <Route exact path="/oglas/:id" component={Oglas}/>
