@@ -34,20 +34,6 @@ public class Paviljon implements Serializable {
     public Paviljon() {
     }
 
-    //Naziv i dom ne smiju biti null!
-    public Paviljon(String naziv, Dom dom) {
-        if (naziv != null) {
-            if (dom != null) {
-                this.naziv = naziv;
-                this.dom = dom;
-            } else {
-                System.err.println("Dom paviljona ne smije biti null!");
-            }
-        } else {
-            System.err.println("Naziv paviljona ne smije biti null!");
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

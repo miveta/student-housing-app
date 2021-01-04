@@ -111,6 +111,18 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 stefko.setKorisnickoIme("stef567");
 
                 //Kreiraj grad
+                Grad osijek = new Grad();
+                osijek.setNaziv("Osijek");
+
+                //Kreiraj domove
+                Dom osijek1 = new Dom();
+                Dom osijek2 = new Dom();
+                osijek1.setImaMenzu(true);
+                osijek1.setNaziv("Osijek1");
+                osijek2.setImaMenzu(false);
+                osijek2.setNaziv("Osijek2");
+
+                //Kreiraj grad
                 Grad zagreb = new Grad();
                 zagreb.setNaziv("Zagreb");
 
@@ -209,10 +221,21 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 stefko.setZaposlenSC(studentskiCentar);
 
                 //ASSIGN DOMOVI TO GRAD
+                HashSet<Dom> domoviOsije = new HashSet<>();
+                domoviOsije.add(osijek1);
+                domoviOsije.add(osijek2);
+                osijek.setDomovi(domoviOsije);
+
+                osijek1.setGrad(osijek);
+                osijek2.setGrad(osijek);
+
+                //ASSIGN DOMOVI TO GRAD
                 HashSet<Dom> domovi = new HashSet<>();
                 domovi.add(radic);
                 domovi.add(sava);
                 zagreb.setDomovi(domovi);
+
+
 
                 //ASSIGN SC TO GRAD
                 zagreb.setStudentskiCentar(studentskiCentar);
@@ -275,6 +298,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 oglasi.add(oglasPero);
 
                 gradRepository.save(zagreb);
+                gradRepository.save(osijek);
                 zaposlenikscRepository.save(stefko);
                 studentskiCentarRepository.save(studentskiCentar);
                 domRepository.saveAll(domovi);   //domovi napravljena u procesu linkanja iznad
