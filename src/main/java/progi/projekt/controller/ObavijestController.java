@@ -1,5 +1,7 @@
 package progi.projekt.controller;
 
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequestMapping("/obavijesti")
 public class ObavijestController {
     private ObavijestRepository obavijestRepository;
+    private JavaMailSender javaMailSender;
 
     public ObavijestController(ObavijestRepository obavijestRepository) {
         this.obavijestRepository = obavijestRepository;
@@ -32,6 +35,17 @@ public class ObavijestController {
         obavijest.setTekst("Oglas studenta " + oglas.getStudent().getIme() + " " + oglas.getStudent().getPrezime()
                 + " je promjenjen, te više ne paše vašim uvjetima.");
         obavijestRepository.save(obavijest);
+
+        //Posalji mail ako je ukljuceno automatsko slanje
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setSubject("Uvjeti sobe više ne pašu vašim zahtjevima");
+        msg.setText(obavijest.getTekst());
+        for(Student student:studenti){
+            if(student.isObavijestiNaMail()){
+                msg.setTo(student.getEmail());
+                javaMailSender.send(msg);
+            }
+        }
     }
 
     //Daje obavijest svima koji su lajkali taj oglas da se soba promjenila
@@ -47,7 +61,18 @@ public class ObavijestController {
         obavijest.setTekst("Oglas studenta " + oglas.getStudent().getIme() + " "
                 + oglas.getStudent().getPrezime() + " izmjenjen.");
         obavijest.setOglas(oglas);
-        obavijestRepository.save(obavijest);*/
+        obavijestRepository.save(obavijest);
+
+        //Posalji mail ako je ukljuceno automatsko slanje
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setSubject("Uvjeti sobe više ne pašu vašim zahtjevima");
+        msg.setText(obavijest.getTekst());
+        for(Student student:studentiLiked){
+            if(student.isObavijestiNaMail()){
+                msg.setTo(student.getEmail());
+                javaMailSender.send(msg);
+            }
+        }*/
     }
 
     //Slanje obavijesti da ti je netko lajkao sobu
@@ -61,6 +86,15 @@ public class ObavijestController {
         obavijest.setStudent(students);
         obavijest.setTekst(student.getIme() + " " + student.getPrezime() + " je lajkao vašu sobu!");
         obavijestRepository.save(obavijest);
+
+        //Posalji mail ako je ukljuceno automatsko slanje
+        if(student.isObavijestiNaMail()){
+            SimpleMailMessage msg = new SimpleMailMessage();
+            msg.setSubject("Netko je lajkao vašu sobu");
+            msg.setText(obavijest.getTekst());
+            msg.setTo(student.getEmail());
+            javaMailSender.send(msg);
+        }
     }
 
     //Obavijest potvrde zamjene -- prvi oglas predstavlja studenta kojem je konfirmirana zamijena, a drugi
@@ -76,5 +110,14 @@ public class ObavijestController {
         obavijest.setTekst("Vaša soba je uspješno zamijenjena sa sobom " + oglasZamijene.getStudent().getIme() + " " +
                 oglasZamijene.getStudent().getPrezime() + "!");
         obavijestRepository.save(obavijest);
+
+        //Posalji mail ako je ukljuceno automatsko slanje
+        if(oglasZamijenjenog.getStudent().isObavijestiNaMail()){
+            SimpleMailMessage msg = new SimpleMailMessage();
+            msg.setSubject("Zamjena sobe je potvrđena");
+            msg.setText(obavijest.getTekst());
+            msg.setTo(oglasZamijenjenog.getStudent().getEmail());
+            javaMailSender.send(msg);
+        }
     }
 }
