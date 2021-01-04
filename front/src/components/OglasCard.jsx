@@ -19,6 +19,7 @@ class OglasCard extends Component {
     ];
 
     componentDidMount() {
+        console.log(this.props)
         let self = this;
 
         let user = self.state.user;

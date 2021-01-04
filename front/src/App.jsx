@@ -70,7 +70,7 @@ class App extends Component {
                                                           authenticated={this.state.authenticated}/>}/>
                         <PrivateRoute exact path="/soba" component={Soba}/>
                         <Route exact path="/trazimsobu" component={TrazimSobu}/>
-                        <Route path='/' exact component={Homepage}/>
+                        <Route path='/' exact component={() => <Homepage isLoggedIn={this.state.authenticated}/>}/>
                         <Route exact path="/mojprofil" component={() => <MojProfil isLoggedIn={this.state.authenticated} onLogout={this.logout}/>}/>
                         <Route exact path="/mojprofil/uredi" component={() => <UrediProfil onLogin={this.authenticate}/>}/>
                     </Switch>
