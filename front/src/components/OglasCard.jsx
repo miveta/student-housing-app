@@ -12,10 +12,10 @@ class OglasCard extends Component {
     }
 
     ocjene = [
-        {name: 'Sviđa mi se', value: '1'},
-        {name: 'Jako mi se sviđa', value: '2'},
-        {name: 'To je to', value: '3'},
-        {name: 'Nemoj više prikazivati', value: '4'},
+        {name: 'Sviđa mi se🙂', value: '1'},
+        {name: 'Jako mi se sviđa😁', value: '2'},
+        {name: 'To je to😍', value: '3'},
+        {name: 'Nemoj više prikazivati❌', value: '4'},
     ];
 
     componentDidMount() {
