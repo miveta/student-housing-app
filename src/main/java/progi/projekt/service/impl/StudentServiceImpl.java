@@ -53,7 +53,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Optional<Student> findByJmbag(String jmbag) {
         try {
-            return Optional.of(studentRepository.findByJmbag(jmbag));
+            return studentRepository.findByJmbag(jmbag);
         } catch (Exception e) {
             //studentRepo baca exceptione koje mu proslijedi baza (e)?
             String originalMessage = e.getMessage();
@@ -91,7 +91,6 @@ public class StudentServiceImpl implements StudentService {
         }
 
         return student.get().getObavijesti();
-        return findByKorisnickoIme(username).isPresent();
     }
 
     @Override
