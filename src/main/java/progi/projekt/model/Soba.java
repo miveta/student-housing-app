@@ -13,15 +13,11 @@ public class Soba implements Serializable {
     @Id
     private int broj;
 
-    @Id
+
     private int kat;
 
-    @Id
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumns({
-            @JoinColumn(name = "id_paviljon"),
-            @JoinColumn(name = "id_dom")
-    })
+    @ManyToOne
+    @JoinColumn(name = "id_paviljon")
     private Paviljon paviljon;
 
     @JoinColumn(name = "id_broj_kreveta")
@@ -40,22 +36,22 @@ public class Soba implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Soba soba = (Soba) o;
         return kat == soba.kat &&
-                broj == soba.broj &&
-                paviljon.equals(soba.paviljon);
+                broj == soba.broj
+                ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(broj, kat, paviljon);
+        return Objects.hash(broj, kat);
     }
 
     public Soba() {
     }
 
     //Ništa ne smije biti null!
-    public Soba(int brojSobe, int kat, Paviljon paviljon, BrojKreveta brojKreveta, TipKupaonice tipKupaonice, OznakeKategorijaEnum kategorija) {
-        if (paviljon != null && brojKreveta != null && tipKupaonice != null && kategorija != null) {
-            this.paviljon = paviljon;
+    public Soba(int brojSobe, int kat,  BrojKreveta brojKreveta, TipKupaonice tipKupaonice, OznakeKategorijaEnum kategorija) {
+        if (brojKreveta != null && tipKupaonice != null && kategorija != null) {
+
             this.brojKreveta = brojKreveta;
             this.tipKupaonice = tipKupaonice;
             this.broj = brojSobe;
@@ -81,14 +77,6 @@ public class Soba implements Serializable {
         this.kat = kat;
     }
 
-    public Paviljon getPaviljon() {
-        return paviljon;
-    }
-
-    public void setPaviljon(Paviljon paviljon) {
-        this.paviljon = paviljon;
-    }
-
     public BrojKreveta getBrojKreveta() {
         return brojKreveta;
     }
@@ -111,5 +99,14 @@ public class Soba implements Serializable {
 
     public void setKategorija(OznakeKategorijaEnum kategorija) {
         this.kategorija = kategorija;
+    }
+
+    public Paviljon getPaviljon() {
+
+        return paviljon;
+    }
+
+    public void setPaviljon(Paviljon paviljon) {
+        this.paviljon = paviljon;
     }
 }

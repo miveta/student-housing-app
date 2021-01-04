@@ -15,14 +15,13 @@ public class Paviljon implements Serializable {
 
     private String naziv;
 
-    @Id
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_dom")
     private Dom dom;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_trazeniUvjeti")
-    private TrazeniUvjeti trazeni_uvjeti;
+
+    @ManyToMany(mappedBy = "paviljoni")
+    private Set<TrazeniUvjeti> trazeni_uvjeti;
 
     @OneToMany(mappedBy = "paviljon", cascade = CascadeType.ALL)
     private Set<Soba> sobe;
@@ -82,11 +81,11 @@ public class Paviljon implements Serializable {
         this.dom = dom;
     }
 
-    public TrazeniUvjeti getTrazeni_uvjeti() {
+    public Set<TrazeniUvjeti> getTrazeni_uvjeti() {
         return trazeni_uvjeti;
     }
 
-    public void setTrazeni_uvjeti(TrazeniUvjeti trazeni_uvjeti) {
+    public void setTrazeni_uvjeti(Set<TrazeniUvjeti> trazeni_uvjeti) {
         this.trazeni_uvjeti = trazeni_uvjeti;
     }
 

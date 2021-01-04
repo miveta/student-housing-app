@@ -24,7 +24,7 @@ public class Dom implements Serializable {
     @ManyToMany(mappedBy = "domovi")
     private Set<TrazeniUvjeti> trazeni_uvjeti;
 
-    @OneToMany(mappedBy = "dom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "dom", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Paviljon> paviljoni;
 
     //Naziv i grad ne smiju biti null!

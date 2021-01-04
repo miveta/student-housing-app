@@ -15,6 +15,9 @@ public class TrazeniUvjeti {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @ElementCollection
+    private Set<Integer> katovi;
+
     @ManyToOne
     @JoinColumn(name = "id_grad")
     private Grad grad;
@@ -26,7 +29,11 @@ public class TrazeniUvjeti {
             inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
     private Set<Dom> domovi;
 
-    @OneToMany(mappedBy = "trazeni_uvjeti", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
+    @JoinTable(
+            name = "paviljoni_uvjeti",
+            joinColumns = @JoinColumn(name = "id_paviljon"),
+            inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
     private Set<Paviljon> paviljoni;
 
     @ManyToMany
@@ -139,5 +146,13 @@ public class TrazeniUvjeti {
 
     public void setTraziStudent(Student traziStudent) {
         this.traziStudent = traziStudent;
+    }
+
+    public Set<Integer> getKatovi() {
+        return katovi;
+    }
+
+    public void setKatovi(Set<Integer> katovi) {
+        this.katovi = katovi;
     }
 }

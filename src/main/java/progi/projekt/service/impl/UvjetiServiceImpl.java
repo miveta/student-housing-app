@@ -42,7 +42,7 @@ public class UvjetiServiceImpl implements UvjetiService {
                 && uvjeti.getTipKupaonice().contains(soba.getTipKupaonice()) || uvjeti.getTipKupaonice().contains(neb) || uvjeti.getTipKupaonice().isEmpty()
                 && uvjeti.getDomovi().contains(soba.getPaviljon().getDom()) || uvjeti.getDomovi().isEmpty()
                 && uvjeti.getGrad().equals(soba.getPaviljon().getDom().getGrad())
-                );
+                && uvjeti.getKatovi().contains(soba.getKat()) || uvjeti.getKatovi().isEmpty());
     }
 
 }

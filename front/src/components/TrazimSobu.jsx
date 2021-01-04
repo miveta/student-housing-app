@@ -5,9 +5,9 @@ function TrazimSobu(props){
     const user = JSON.parse(localStorage.getItem("user"));
     const [grad, setGrad] = React.useState('');
     const [domovi, setDomovi] = React.useState([{id: '', imaMenzu: '', naziv: ''}]) ;
+    const [paviljoni,setPaviljoni] = React.useState([{id: '', naziv: ''}]);
 
     const [uvjeti, setUvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [],brojKreveta: [], komentar: ''});
-    const paviljoni = ['1', '2', '3', '4', '5', '6'];
     const katovi = ['1', '2', '3', '4'];
     const kreveti = [
         {name:"Jednokrevetna", value:"JEDNOKREVETNA"},
@@ -98,17 +98,17 @@ function TrazimSobu(props){
             }).then(json => {
                 setDomovi(json)
             }))
-        //     .then(fetch(`http://localhost:8080/trazimSobu/paviljoni`, options)
-        //     .then(response => {
-        //         if (response.status === 200) {
-        //             return response.json()
-        //
-        //         } else {
-        //             console.log(response.status)
-        //         }
-        //     }).then(json => {
-        //     this.setState({katovi: json})
-        // }))
+            .then(fetch(`http://localhost:8080/trazimSobu/paviljoni`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+
+                } else {
+                    console.log(response.status)
+                }
+            }).then(json => {
+            setPaviljoni(json)
+        }))
     },[]);
 
 
@@ -149,9 +149,9 @@ function TrazimSobu(props){
                                 <input
                                     type="checkbox"
                                     onChange={onChange}
-                                    value={p}
+                                    value={p.id}
                                     name="paviljon"
-                                />{p}
+                                />{p.naziv}
                             </label>
                         </li>
                     ))}

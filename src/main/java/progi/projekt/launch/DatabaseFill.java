@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> {
@@ -31,12 +32,19 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
     private final TrazeniUvjetiRepository trazeniUvjetiRepository;
     private final ZaposlenikscRepository zaposlenikscRepository;
     private final StudentskiCentarRepository studentskiCentarRepository;
+    private final SobaRepository sobaRepository;
+    private final PaviljonRepository paviljonRepository;
     private final BrojKrevetaRepository brojKrevetaRepository;
     private final TipKupaoniceRepository tipKupaoniceRepository;
 
+
     public DatabaseFill(StudentRepository studentRepository, DomRepository domRepository,
                         GradRepository gradRepository, ObavijestRepository obavijestRepository,
-                        OglasRepository oglasRepository, StatusOglasaRepository statusOglasaRepository, TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository, StudentskiCentarRepository studentskiCentarRepository, PasswordEncoder pswdEncoder, BrojKrevetaRepository brojKrevetaRepository, TipKupaoniceRepository tipKupaoniceRepository) {
+                        OglasRepository oglasRepository, StatusOglasaRepository statusOglasaRepository,
+                        TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository,
+                        StudentskiCentarRepository studentskiCentarRepository, SobaRepository sobaRepository,
+                         PaviljonRepository paviljonRepository, PasswordEncoder pswdEncoder,
+                        BrojKrevetaRepository brojKrevetaRepository, TipKupaoniceRepository tipKupaoniceRepository) {
         this.studentRepository = studentRepository;
         this.domRepository = domRepository;
         this.gradRepository = gradRepository;
@@ -47,8 +55,11 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
         this.zaposlenikscRepository = zaposlenikscRepository;
         this.studentskiCentarRepository = studentskiCentarRepository;
         this.pswdEncoder = pswdEncoder;
+        this.sobaRepository = sobaRepository;
+        this.paviljonRepository = paviljonRepository;
         this.brojKrevetaRepository = brojKrevetaRepository;
         this.tipKupaoniceRepository = tipKupaoniceRepository;
+
     }
 
 
@@ -68,9 +79,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         //Izvedi skriptu jedino ako nista nije u bazi (inace baca error za umetanje identicnih vrijednosti)
-        //PAVLIJONI NE RADE
-        //SOBE NE RADE
-        //LAJKOVI NE RADE
+        //LAJKOVI NE RADE???? nisam probo
         try {
             if (studentRepository.count() == 0) {
                 //Kreiraj studente
@@ -78,8 +87,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 ivica.setEmail("ivica@gmail.com");
                 ivica.setIme("Ivica");
                 ivica.setPrezime("Ivic");
-                // todo promijeni
-                ivica.setKorisnickoIme("ivi14");
+                ivica.setKorisnickoIme("ivi");
                 ivica.setLozinka(hashPassword("123456"));
                 ivica.setObavijestiNaMail(false);
                 ivica.setJmbag("0036567891");
@@ -115,6 +123,18 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 stefko.setKorisnickoIme("stef567");
 
                 //Kreiraj grad
+                Grad osijek = new Grad();
+                osijek.setNaziv("Osijek");
+
+                //Kreiraj domove
+                Dom osijek1 = new Dom();
+                Dom osijek2 = new Dom();
+                osijek1.setImaMenzu(true);
+                osijek1.setNaziv("Osijek1");
+                osijek2.setImaMenzu(false);
+                osijek2.setNaziv("Osijek2");
+
+                //Kreiraj grad
                 Grad zagreb = new Grad();
                 zagreb.setNaziv("Zagreb");
 
@@ -130,34 +150,18 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 TrazeniUvjeti uvjetiMarko = new TrazeniUvjeti();
                 TrazeniUvjeti uvjetiPero = new TrazeniUvjeti();
                 TrazeniUvjeti uvjetiIvica = new TrazeniUvjeti();
+                uvjetiIvica.setKategorija(OznakeKategorijaEnum.II);
                 uvjetiIvica.setGodina(2020);
                 uvjetiIvica.setKomentar("Trazim sobu!");
 
-
+                uvjetiMarko.setKategorija(OznakeKategorijaEnum.I);
                 uvjetiMarko.setGodina(2020);
                 uvjetiMarko.setKomentar("Trazim i ja sobu!");
 
 
+                uvjetiPero.setKategorija(OznakeKategorijaEnum.II);
                 uvjetiPero.setGodina(2020);
                 uvjetiPero.setKomentar("");
-
-                //Kreiraj tipKupaonice
-                TipKupaonice privatna = new TipKupaonice();
-                TipKupaonice dijeljena = new TipKupaonice();
-                TipKupaonice nebitno = new TipKupaonice();
-                privatna.setTip("PRIVATNA");
-                dijeljena.setTip("DIJELJENA");
-                nebitno.setTip("NEBITNO");
-
-                //Kreiraj brojKreveta
-                BrojKreveta jednokrevetna = new BrojKreveta();
-                BrojKreveta dvokrevetna = new BrojKreveta();
-                BrojKreveta trokrevetna = new BrojKreveta();
-                BrojKreveta nebitnok = new BrojKreveta();
-                jednokrevetna.setNaziv("JEDNOKREVETNA");
-                dvokrevetna.setNaziv("DVOKREVETNA");
-                trokrevetna.setNaziv("TROKREVETNA");
-                nebitnok.setNaziv("NEBITNO");
 
                 //Kreiraj oglase
                 Oglas oglasMarko = new Oglas();
@@ -192,8 +196,45 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 obavijestZaIvicu.setTekst("Pero je potvrdio tvoj oglas!");
                 obavijestZaIvicu.setVrijeme(Date.valueOf("2020-10-8"));
 
+                //Kreiraj soba
+                Soba sobaIvica = new Soba();
+                sobaIvica.setBroj(1);
+
+                sobaIvica.setKategorija(OznakeKategorijaEnum.IV);
+
+                Soba sobaMarko = new Soba();
+                sobaMarko.setBroj(1);
+
+                sobaMarko.setKategorija(OznakeKategorijaEnum.II);
+
+                Soba sobaPero = new Soba();
+                sobaPero.setBroj(5);
+
+                sobaPero.setKategorija(OznakeKategorijaEnum.III);
+
+
+
+                //Kreiraj paviljon
+                Paviljon paviljonSava = new Paviljon();
+                Paviljon paviljonRadic = new Paviljon();
+                paviljonSava.setNaziv("Prvi");
+                paviljonRadic.setNaziv("Peti");
 
                 //Linkaj sve------------------------------------------------------------------------------
+
+
+                //ASSIGN OGLAS TO SOBA
+//                sobaMarko.setOglas(oglasMarko);
+//                sobaPero.setOglas(oglasPero);
+//                sobaIvica.setOglas(oglasIvica);
+
+                //ASSIGN DOM TO PAVILJON
+                paviljonSava.setDom(sava);
+                paviljonRadic.setDom(radic);
+
+
+
+
                 //ASSIGN OGLAS TO STUDENT
                 ivica.setOglas(oglasIvica);
                 marko.setOglas(oglasMarko);
@@ -224,17 +265,36 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 stefko.setZaposlenSC(studentskiCentar);
 
                 //ASSIGN DOMOVI TO GRAD
+                HashSet<Dom> domoviOsije = new HashSet<>();
+                domoviOsije.add(osijek1);
+                domoviOsije.add(osijek2);
+                osijek.setDomovi(domoviOsije);
+
+                osijek1.setGrad(osijek);
+                osijek2.setGrad(osijek);
+
+                //ASSIGN DOMOVI TO GRAD
                 HashSet<Dom> domovi = new HashSet<>();
                 domovi.add(radic);
                 domovi.add(sava);
                 zagreb.setDomovi(domovi);
 
+
+
                 //ASSIGN SC TO GRAD
                 zagreb.setStudentskiCentar(studentskiCentar);
 
-                //ASSIGN GRAD TO DOMOVI
+                //ASSIGN GRAD TO DOMO
                 radic.setGrad(zagreb);
                 sava.setGrad(zagreb);
+
+                //ASSIGN PAVILJONI TO DOM
+                HashSet<Paviljon> paviljoniRadic = new HashSet<>();
+                HashSet<Paviljon> paviljoniSava = new HashSet<>();
+                paviljoniRadic.add(paviljonRadic);
+                paviljoniSava.add(paviljonSava);
+                radic.setPaviljoni(paviljoniRadic);
+                sava.setPaviljoni(paviljoniSava);
 
                 //ASSIGN STUDENT TO TRAZIUVJETI
                 uvjetiIvica.setTraziStudent(ivica);
@@ -251,6 +311,11 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 oglasMarko.setStudent(marko);
                 oglasPero.setStudent(pero);
 
+                //ASSIGN SOBA TO OGLAS
+            //    oglasIvica.setSoba(sobaIvica);
+            //    oglasMarko.setSoba(sobaMarko);
+            //    oglasPero.setSoba(sobaPero);
+
                 //ASSIGN OGLAS TO STATUS
                 statusIvica.setOglas(oglasIvica);
                 statusMarko.setOglas(oglasMarko);
@@ -259,11 +324,14 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 //ASSIGN POTVRDIOSTUDENT TO STATUS
                 statusIvica.setPotvrdioOglas(pero);
 
+
                 //ASSIGN OGLAS TO OBAVIJEST
                 obavijestZaIvicu.setOglas(oglasIvica);
 
                 //ASSIGN IVICA TO OBAVIJEST
-                //obavijestZaIvicu.setStudent(ivica);
+                ArrayList<Student> ivicaList = new ArrayList<>();
+                ivicaList.add(ivica);
+                //obavijestZaIvicu.setStudent(ivicaList);
 
 
                 //Saveaj sve---------------------------------------------------------------------------
@@ -287,30 +355,29 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 oglasi.add(oglasMarko);
                 oglasi.add(oglasPero);
 
-                HashSet<BrojKreveta> kreveti = new HashSet<>();
-                kreveti.add(jednokrevetna);
-                kreveti.add(dvokrevetna);
-                kreveti.add(trokrevetna);
-                kreveti.add(nebitnok);
 
-                HashSet<TipKupaonice> kupaonice = new HashSet<>();
-                kupaonice.add(privatna);
-                kupaonice.add(dijeljena);
-                kupaonice.add(nebitno);
 
+                HashSet<Paviljon> paviljoni = new HashSet<>();
+                paviljoni.add(paviljonRadic);
+                paviljoni.add(paviljonSava);
+
+                HashSet<Soba> sobe = new HashSet<>();
+                sobe.add(sobaIvica);
+                sobe.add(sobaMarko);
+                sobe.add(sobaPero);
 
                 gradRepository.save(zagreb);
+                gradRepository.save(osijek);
+//                oglasRepository.saveAll(oglasi);
                 zaposlenikscRepository.save(stefko);
                 studentskiCentarRepository.save(studentskiCentar);
                 domRepository.saveAll(domovi);   //domovi napravljena u procesu linkanja iznad
                 obavijestRepository.save(obavijestZaIvicu);
-                oglasRepository.saveAll(oglasi);
                 trazeniUvjetiRepository.saveAll(trazeniUvjeti);
                 statusOglasaRepository.saveAll(statusiOglasa);
                 studentRepository.saveAll(studentiZaSave);
-                brojKrevetaRepository.saveAll(kreveti);
-                tipKupaoniceRepository.saveAll(kupaonice);
-
+                paviljonRepository.saveAll(paviljoni);
+                sobaRepository.saveAll(sobe);
 
                 System.out.println("Umetnute pocetne vrijednosti");
 

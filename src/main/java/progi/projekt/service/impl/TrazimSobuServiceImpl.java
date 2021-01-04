@@ -9,10 +9,7 @@ import progi.projekt.repository.StudentRepository;
 import progi.projekt.repository.TrazeniUvjetiRepository;
 import progi.projekt.service.TrazimSobuService;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,9 +46,9 @@ public class TrazimSobuServiceImpl implements TrazimSobuService {
     }
 
     @Override
-    public Set<Paviljon> findAllPaviljon() {
+    public List<Paviljon> findAllPaviljon() {
         Set<Dom> domovi = student.getGrad().getDomovi();
-        Set<Paviljon> paviljoni = new TreeSet<>();
+        List<Paviljon> paviljoni = new ArrayList<>();
         for (Dom dom : domovi){
             paviljoni.addAll(dom.getPaviljoni());
         }

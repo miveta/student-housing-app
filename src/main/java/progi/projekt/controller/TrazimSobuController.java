@@ -13,10 +13,7 @@ import progi.projekt.dto.DomDTO;
 import progi.projekt.dto.GradDTO;
 import progi.projekt.dto.PaviljonDTO;
 import progi.projekt.model.*;
-import progi.projekt.repository.BrojKrevetaRepository;
-import progi.projekt.repository.DomRepository;
-import progi.projekt.repository.StudentRepository;
-import progi.projekt.repository.TipKupaoniceRepository;
+import progi.projekt.repository.*;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.TrazimSobuService;
 
@@ -32,6 +29,8 @@ public class TrazimSobuController {
     @Autowired
     DomRepository domRepository;
 
+    @Autowired
+    PaviljonRepository paviljonRepository;
 
     @Autowired
     private StudentService studentService;
@@ -63,7 +62,7 @@ public class TrazimSobuController {
 
     @GetMapping("/paviljoni")
     public Set<PaviljonDTO> getPavljoni() {
-        Set<Paviljon> paviljoni = trazimSobuService.findAllPaviljon();
+        List<Paviljon> paviljoni = trazimSobuService.findAllPaviljon();
         return paviljoni.stream().map(PaviljonDTO::new).collect(Collectors.toSet());
 
     }
@@ -85,28 +84,22 @@ public class TrazimSobuController {
         uvjeti.setKomentar(komentar);
         uvjeti.setTraziStudent(student);
         uvjeti.setGrad(student.getGrad());
-
-
+        Set<Integer> kat = new HashSet<>();
+        for(String k : katovi){
+            kat.add(Integer.parseInt(k));
+        }
+        uvjeti.setKatovi(kat);
             for (String id : domId) {
                 Dom d = domRepository.findById(UUID.fromString(id));
                 dom.add(d);
             }
             uvjeti.setDomovi(dom);
-
-//        if(paviljoni[0] != "") {
-//            Set<Paviljon> paviljon = new HashSet<>();
-//            for(Dom d : dom) {
-//                for (String p : paviljoni) {
-//
-//                        Paviljon temp = new Paviljon();
-//                        temp.setNaziv(p);
-//                        temp.setDom(d);
-//                        paviljon.add(temp);
-//
-//                }
-//            }
-//            uvjeti.setPaviljoni(paviljon);
-//        }
+        Set<Paviljon> paviljon = new HashSet<>();
+        for (String id : paviljoni) {
+                Paviljon d = paviljonRepository.findById(UUID.fromString(id));
+                paviljon.add(d);
+            }
+            uvjeti.setPaviljoni(paviljon);
 
             Set<BrojKreveta> brKreveta = new HashSet<>();
             for (String b : brojKreveta) {

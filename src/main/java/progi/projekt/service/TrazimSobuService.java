@@ -11,7 +11,7 @@ import java.util.Set;
 public interface TrazimSobuService {
 
     Set<Dom> findAllDom();
-    Set<Paviljon> findAllPaviljon();
+    List<Paviljon> findAllPaviljon();
     Grad findGrad(String username);
     void update(TrazeniUvjeti uvjeti);
 }
