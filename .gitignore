@@ -41,3 +41,6 @@ build/
 ### VS Code ###
 .vscode/
 /front/debug.log
+
+### application.properties ###
+/src/main/java/resources/application.properties
