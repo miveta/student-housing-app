@@ -30,4 +30,9 @@ public class OglasServiceImpl implements OglasService {
             return Optional.empty();
         }
     }
+
+    @Override
+    public Oglas findById(UUID oglasUUID) {
+        return oglasRepo.findById(oglasUUID);
+    }
 }

@@ -31,6 +31,7 @@ public class Student implements Serializable, Korisnik {
     @Column(nullable = false, name = "hash_lozinke")
     private String lozinka;
 
+    @Column(nullable = false, name = "obavijesti_na_mail")
     private boolean obavijestiNaMail;
 
     @ManyToMany(targetEntity = Obavijest.class, cascade = CascadeType.ALL)
@@ -52,6 +53,14 @@ public class Student implements Serializable, Korisnik {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="id_grad")
     private Grad grad;
+
+
+    @Column(nullable = true, name = "id_soba")
+    private Integer idSoba;
+
+
+
+
 
     public Student() {
     }

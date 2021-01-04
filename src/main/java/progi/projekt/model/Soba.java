@@ -26,6 +26,9 @@ public class Soba implements Serializable {
     @JoinColumn(name="id_oglas")
     private Oglas oglas;
 
+    @Column(nullable = true, name = "id_soba")
+    private Integer idSoba;
+
     @Column(name = "broj_kreveta")
     @Enumerated(EnumType.STRING)
     private BrojKrevetaEnum brojKreveta;
@@ -37,6 +40,22 @@ public class Soba implements Serializable {
     @Column(name = "kategorija")
     @Enumerated(EnumType.STRING)
     private OznakeKategorijaEnum kategorija;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Soba soba = (Soba) o;
+        return kat == soba.kat &&
+                broj == soba.broj &&
+                paviljon.equals(soba.paviljon);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(broj, kat, paviljon);
+    }
 
     public Soba() {
     }
@@ -108,3 +127,4 @@ public class Soba implements Serializable {
         this.kat = kat;
     }
 }
+
