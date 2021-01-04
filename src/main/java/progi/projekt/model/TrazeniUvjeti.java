@@ -19,16 +19,28 @@ public class TrazeniUvjeti {
     @JoinColumn(name = "id_grad")
     private Grad grad;
 
-    @OneToMany(mappedBy = "trazeni_uvjeti", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
+    @JoinTable(
+            name = "domovi_uvjeti",
+            joinColumns = @JoinColumn(name = "id_dom"),
+            inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
     private Set<Dom> domovi;
 
     @OneToMany(mappedBy = "trazeni_uvjeti", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Paviljon> paviljoni;
 
-    @OneToMany(mappedBy = "trazeni_uvjeti", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
+    @JoinTable(
+            name = "kreveti_uvjeti",
+            joinColumns = @JoinColumn(name = "id_broj_kreveta"),
+            inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
     private Set<BrojKreveta> brojKreveta;
 
-    @OneToMany(mappedBy = "trazeni_uvjeti", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
+    @JoinTable(
+            name = "kupaonice_uvjeti",
+            joinColumns = @JoinColumn(name = "id_tip_kupaonice"),
+            inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
     private Set<TipKupaonice> tipKupaonice;
 
     @Column(name = "kategorija")

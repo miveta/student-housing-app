@@ -82,17 +82,17 @@ public class TrazimSobuController {
         if(uvjeti == null){
             uvjeti = new TrazeniUvjeti();
         }
-        if(komentar != "") uvjeti.setKomentar(komentar);
+        uvjeti.setKomentar(komentar);
         uvjeti.setTraziStudent(student);
         uvjeti.setGrad(student.getGrad());
-        if(domId[0] != "" ) {
+
 
             for (String id : domId) {
                 Dom d = domRepository.findById(UUID.fromString(id));
                 dom.add(d);
             }
             uvjeti.setDomovi(dom);
-        }
+
 //        if(paviljoni[0] != "") {
 //            Set<Paviljon> paviljon = new HashSet<>();
 //            for(Dom d : dom) {
@@ -107,22 +107,22 @@ public class TrazimSobuController {
 //            }
 //            uvjeti.setPaviljoni(paviljon);
 //        }
-        if(brojKreveta[0] != "") {
+
             Set<BrojKreveta> brKreveta = new HashSet<>();
             for (String b : brojKreveta) {
                 BrojKreveta temp = brojKrevetaRepository.findByNaziv(b);
                 brKreveta.add(temp);
             }
             uvjeti.setBrojKreveta(brKreveta);
-        }
-        if(tipKupaonice[0]  != "null") {
+
+
             Set<TipKupaonice> tKupaonice = new HashSet<>();
             for (String t : tipKupaonice) {
                 TipKupaonice temp = tipKupaoniceRepository.findByTip(t);
                 tKupaonice.add(temp);
             }
             uvjeti.setTipKupaonice(tKupaonice);
-        }
+
         trazimSobuService.update(uvjeti);
         return ResponseEntity.ok("uvjeti uneseni");
 

@@ -21,9 +21,8 @@ public class Dom implements Serializable {
     @JoinColumn(name = "id_grad")
     private Grad grad;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_trazeniUvjeti")
-    private TrazeniUvjeti trazeni_uvjeti;
+    @ManyToMany(mappedBy = "domovi")
+    private Set<TrazeniUvjeti> trazeni_uvjeti;
 
     @OneToMany(mappedBy = "dom", cascade = CascadeType.ALL)
     private Set<Paviljon> paviljoni;
@@ -72,11 +71,11 @@ public class Dom implements Serializable {
         return id;
     }
 
-    public TrazeniUvjeti getTrazeni_uvjeti() {
+    public Set<TrazeniUvjeti> getTrazeni_uvjeti() {
         return trazeni_uvjeti;
     }
 
-    public void setTrazeni_uvjeti(TrazeniUvjeti trazeni_uvjeti) {
+    public void setTrazeni_uvjeti(Set<TrazeniUvjeti> trazeni_uvjeti) {
         this.trazeni_uvjeti = trazeni_uvjeti;
     }
 

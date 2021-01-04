@@ -38,7 +38,7 @@ public class TrazimSobuServiceImpl implements TrazimSobuService {
 
     @Override
     public void update(TrazeniUvjeti uvjeti) {
-        trazeniUvjetiRepository.saveAndFlush(uvjeti);
+        trazeniUvjetiRepository.save(uvjeti);
     }
 
 
