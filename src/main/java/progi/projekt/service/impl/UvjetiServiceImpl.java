@@ -38,8 +38,8 @@ public class UvjetiServiceImpl implements UvjetiService {
     public Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti) {
         BrojKreveta nebitno = brojKrevetaRepository.findByNaziv("NEBITNO");
         TipKupaonice neb = tipKupaoniceRepository.findByTip("NEBITNO");
-        return (uvjeti.getBrojKreveta().contains(soba.getBrojKreveta()) || uvjeti.getBrojKreveta().contains(nebitno) || uvjeti.getBrojKreveta().isEmpty()
-                && uvjeti.getTipKupaonice().contains(soba.getTipKupaonice()) || uvjeti.getTipKupaonice().contains(neb) || uvjeti.getTipKupaonice().isEmpty()
+        return (uvjeti.getBrojKreveta().contains(soba.getBrojKreveta().name()) || uvjeti.getBrojKreveta().contains(nebitno) || uvjeti.getBrojKreveta().isEmpty()
+                && uvjeti.getTipKupaonice().contains(soba.getTipKupaonice().name()) || uvjeti.getTipKupaonice().contains(neb) || uvjeti.getTipKupaonice().isEmpty()
                 && uvjeti.getDomovi().contains(soba.getPaviljon().getDom()) || uvjeti.getDomovi().isEmpty()
                 && uvjeti.getGrad().equals(soba.getPaviljon().getDom().getGrad())
                 && uvjeti.getKatovi().contains(soba.getKat()) || uvjeti.getKatovi().isEmpty());
