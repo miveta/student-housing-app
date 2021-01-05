@@ -31,10 +31,17 @@ public class SobaController {
 
     @GetMapping("/student")
     public Soba getStudentSoba(@RequestParam(value = "student_username") String studentUsername) {
-        Optional<Soba> optionalSoba = sobaService.getByStudentUsername(studentUsername);
+        try {
+            Optional<Soba> optionalSoba = sobaService.getByStudentUsername(studentUsername);
 
-        if (!optionalSoba.isEmpty()) return optionalSoba.get();
-        else return null;
+            if (!optionalSoba.isEmpty()) return optionalSoba.get();
+            else return null;
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+            System.out.println(e.getMessage());
+        }
+
+        return null;
     }
 
 }
