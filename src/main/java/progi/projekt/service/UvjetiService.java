@@ -1,28 +1,14 @@
 package progi.projekt.service;
 
-import progi.projekt.model.Oglas;
 import progi.projekt.model.Soba;
 import progi.projekt.model.TrazeniUvjeti;
 
+import java.util.UUID;
+
 public interface UvjetiService {
+	 TrazeniUvjeti findByIdOglas(UUID id);
 
-    default TrazeniUvjeti findByOglas(Oglas oglas) {
-        return null;
-    }
+	 Integer izracunajBliskost(Soba soba, TrazeniUvjeti uvjeti);
 
-    default Integer izracunajBliskost(Soba soba, TrazeniUvjeti uvjeti) {
-        //poziv non-static
-        return null;
-    }
-
-    default Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti) {
-        if (soba.getBrojKreveta() == uvjeti.getBrojKreveta() &&
-                soba.getKategorija() == uvjeti.getKategorija() &&
-                soba.getTipKupaonice() == uvjeti.getTipKupaonice()
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti);
 }

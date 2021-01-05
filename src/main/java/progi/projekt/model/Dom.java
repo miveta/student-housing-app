@@ -24,7 +24,10 @@ public class Dom implements Serializable {
     @JoinColumn(name = "id_grad")
     private Grad grad;
 
-    @OneToMany(mappedBy = "dom", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "domovi")
+    private Set<TrazeniUvjeti> trazeni_uvjeti;
+
+    @OneToMany(mappedBy = "dom", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Paviljon> paviljoni;
 
     public Dom() {
@@ -56,6 +59,14 @@ public class Dom implements Serializable {
 
     public UUID getId() {
         return id;
+    }
+
+    public Set<TrazeniUvjeti> getTrazeni_uvjeti() {
+        return trazeni_uvjeti;
+    }
+
+    public void setTrazeni_uvjeti(Set<TrazeniUvjeti> trazeni_uvjeti) {
+        this.trazeni_uvjeti = trazeni_uvjeti;
     }
 
     public void setId(UUID id) {

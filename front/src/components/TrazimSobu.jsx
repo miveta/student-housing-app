@@ -1,52 +1,266 @@
-import React from "react";
-import {Button, Form} from 'react-bootstrap';
+import React, { useEffect} from "react";
+import { Form, Button} from 'react-bootstrap';
+import {withRouter} from 'react-router-dom';
 
-function TrazimSobu(props) {
+function TrazimSobu(props){
+    const user = JSON.parse(localStorage.getItem("user"));
+    const [grad, setGrad] = React.useState('');
+    const [domovi, setDomovi] = React.useState({d:[{id: '', imaMenzu: '', naziv: '',paviljon: {id: '', naziv: ''}, checked: false}]}) ;
+    // const [paviljoni,setPaviljoni] = React.useState([{id: '', naziv: ''}]);
+
+    const [uvjeti, setUvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [],brojKreveta: [], komentar: ''});
+    const katovi = ['1', '2', '3', '4'];
+    const kreveti = [
+        {name:"Jednokrevetna", value:"JEDNOKREVETNA"},
+        {name:"Dvokrevetna", value:"DVOKREVETNA"},
+        {name:"Trokrevetna", value:"JEDNOKREVETNA"},
+        {name:"Nebitno", value:"NEBITNO"}
+    ]
+    const kupaonice = [
+        {name:"Privatna", value:"PRIVATNA"},
+        {name:"Zajednicka", value:"ZAJEDNICKA"},
+        {name:"Nebitno", value:"NEBITNO"}
+    ]
+
+    function onChangeDom(event){
+
+        const {name, value} = event.target;
+        setDomovi(prevState =>({
+              d: prevState.d.map(dom => {
+
+                if(dom.id === value) {
+                    return {
+                        ...dom,
+                        checked: !dom.checked
+                    };
+                }else{
+                    return {...dom};
+
+                }
+            })
+        }))
+        const ids = uvjeti[name].map(el => el.id);
+        if(event.target.checked){
+            uvjeti[name].push(value);
+        }else{
+            const index = ids.indexOf(value.id);
+            uvjeti[name].splice(index,1);
+        }
+
+
+    }
+    function onChange(event){
+        const {name, value} = event.target;
+        const ids = uvjeti[name].map(el => el.id);
+        if(event.target.checked){
+            uvjeti[name].push(value);
+        }else{
+            const index = ids.indexOf(value.id);
+            uvjeti[name].splice(index,1);
+        }
+
+
+    }
+    // function onChangek(event) {
+    //     const {name, value} = event.target;
+    //     setUvjeti(oldForm => ({...oldForm, [name]: value}));
+    // }
+
+
 
     function onSubmit(e) {
         e.preventDefault();
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+
+        };
+
+        return fetch(`http://localhost:8080/trazimSobu/uvjeti?user=${user.korisnickoIme}&domovi=
+        ${uvjeti["dom"]}&paviljoni=${uvjeti["paviljon"]}
+        &katovi=${uvjeti["kat"]}&brojKreveta=${uvjeti["brojKreveta"]}&tipKupaonice=${uvjeti["tipKupaonice"]}&komentar=${uvjeti["komentar"]}`, options)
+            .then(response => {
+                if (response.status === 200) {
+                        props.history.push("/")
+                }
+                else {
+                    console.log(response.status)
+                }
+            });
+
     }
 
-    return (
-        <div className="middle">
+    useEffect(() => {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        };
+
+        fetch(`http://localhost:8080/trazimSobu/grad?user=${user.korisnickoIme}`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+
+                } else {
+                    console.log(response.status)
+                }
+            }).then(json => {
+            setGrad(json);
+        }).then(fetch(`http://localhost:8080/trazimSobu/domovi?user=${user.korisnickoIme}`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+
+                } else {
+                    console.log(response.status)
+                }
+            }).then(json => {
+                setDomovi({d:json})
+            }))
+        //     .then(fetch(`http://localhost:8080/trazimSobu/paviljoni`, options)
+        //     .then(response => {
+        //         if (response.status === 200) {
+        //             return response.json()
+        //
+        //         } else {
+        //             console.log(response.status)
+        //         }
+        //     }).then(json => {
+        //     setPaviljoni(json)
+        // }))
+    },[]);
+
+
+
+
+     return (
+
+        <div className="middle" >
             <Form onSubmit={onSubmit}>
-                <h3> Tražim sobu </h3>
-                <Form.Group>
-                    <Form.Label> Grad </Form.Label>
-                    <Form.Control as="select" defaultValue="Odaberi...">
-                        <option> Zagreb </option>
-                        <option> Split </option>
-                        <option> Zadar </option>
-                        <option> Rijeka </option>
-                    </Form.Control>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label> Dom </Form.Label>
-                    <Form.Control name="dom" type="text"/>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label> Kat </Form.Label>
-                    <Form.Control name="kat" type="text"/>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label> Broj kreveta </Form.Label>
-                    <Form.Check type="checkbox" label="Jednokrevetna soba" />
-                    <Form.Check type="checkbox" label="Dvokrevetna soba" />
-                    <Form.Check type="checkbox" label="Trokrevetna soba" />
-                    <Form.Check type="checkbox" label="Višekrevetna soba" />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label> Tip kupaonice </Form.Label>
-                    <Form.Check type="checkbox" label="U sobi" />
-                    <Form.Check type="checkbox" label="Zajednički" />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label> Komentar </Form.Label>
-                    <Form.Control name="komentar" type="text"/>
-                </Form.Group>
-                <Button type="submit" variant="dark" size="lg" block> Predaj oglas </Button>
-            </Form>
+            <h3>Grad: {grad.naziv}</h3>
+
+
+                <label>
+                    Dom:
+
+                    <br/>
+                    {domovi.d.map(dom =>(
+                        <li>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    onChange={onChangeDom}
+                                    value={dom.id}
+                                    name="dom"
+                                />{dom.naziv}
+                            </label>
+                            {dom.checked &&(
+                             <div>
+                            {/*<br/>*/}
+                            <label>
+                                Paviljon:
+
+                                <br/>
+                                {dom.paviljon.map(p =>(
+                                    <li>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                onChange={onChange}
+                                                value={p.id}
+                                                name="paviljon"
+                                            />{p.naziv}
+                                        </label>
+                                    </li>
+                                ))}
+                            </label>
+                             </div>)}
+                        </li>
+                    ))}
+                </label>
+
+
+                <br/>
+                <label>
+                    Kat:
+
+                    <br/>
+                    {katovi.map(p =>(
+                        <li>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    onChange={onChange}
+                                    value={p}
+                                    name="kat"
+                                />{p}
+                            </label>
+                        </li>
+                    ))}
+                </label>
+
+                <br/>
+                <label>
+                    Broj kreveta:
+
+                    <br/>
+                    {kreveti.map(p =>(
+                        <li>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    onChange={onChange}
+                                    value={p.value}
+                                    name="brojKreveta"
+                                />{p.name}
+                            </label>
+                        </li>
+                    ))}
+                </label>
+                <br/>
+                <label>
+                    Tip kupaonice:
+
+                    <br/>
+                    {kupaonice.map(p =>(
+                        <li>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    onChange={onChange}
+                                    value={p.value}
+                                    name="tipKupaonice"
+                                />{p.name}
+                            </label>
+                        </li>
+                    ))}
+                </label>
+                <br/>
+                {/*<label>*/}
+                {/*    Komentar:*/}
+
+                {/*    <br/>*/}
+                {/*    <input*/}
+                {/*        type="text"*/}
+                {/*        name="komentar"*/}
+                {/*        onChange={onChangek}*/}
+                {/*    />*/}
+
+                {/*</label> zas uopce to imamo?*/}
+                <br/>
+
+
+
+
+            <Button type="submit" variant="dark" size="sm" block> Pohrani uvjete </Button>
+        </Form>
         </div>
     )
 }
-export default TrazimSobu;
+export default withRouter(TrazimSobu);

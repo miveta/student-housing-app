@@ -54,13 +54,9 @@ public class Student implements Serializable, Korisnik {
     @JoinColumn(name="id_grad")
     private Grad grad;
 
-
-    @Column(nullable = true, name = "id_soba")
-    private Integer idSoba;
-
-
-
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_soba")
+    private Soba soba;
 
     public Student() {
     }
@@ -204,20 +200,11 @@ public class Student implements Serializable, Korisnik {
         this.grad = grad;
     }
 
-/*    public List<Lajk> getLajkovi() {
-        return lajkovi;
-    }
-
-    public void setLajkovi(List<Lajk> lajkovi) {
-        this.lajkovi = lajkovi;
-    }*/
-
     public Soba getSoba() {
-        return new Soba();
-        //return soba;
+        return soba;
     }
-/*
+
     public void setSoba(Soba soba) {
         this.soba = soba;
-    }*/
+    }
 }

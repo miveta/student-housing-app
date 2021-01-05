@@ -16,16 +16,16 @@ public class Soba implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_kat")
-    private Kat kat;
+    private Integer kat;
 
-    private int broj;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_oglas")
     private Oglas oglas;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_paviljon")
+    private Paviljon paviljon;
 
     @Column(name = "broj_kreveta")
     @Enumerated(EnumType.STRING)
@@ -44,8 +44,7 @@ public class Soba implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Soba soba = (Soba) o;
-        return broj == soba.broj &&
-                Objects.equals(id, soba.id) &&
+        return  Objects.equals(id, soba.id) &&
                 Objects.equals(kat, soba.kat) &&
                 Objects.equals(oglas, soba.oglas) &&
                 brojKreveta == soba.brojKreveta &&
@@ -55,19 +54,19 @@ public class Soba implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, kat, broj, oglas, brojKreveta, tipKupaonice, kategorija);
+        return Objects.hash(id, kat, oglas, brojKreveta, tipKupaonice, kategorija);
     }
 
     public Soba() {
     }
 
     //Ništa ne smije biti null!
-    public Soba(int brojSobe, Kat kat, Paviljon paviljon, BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija) {
+    public Soba(int brojSobe, int kat, Paviljon paviljon, BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija) {
         if (brojKreveta != null && tipKupaonice != null && kategorija != null) {
             this.brojKreveta = brojKreveta;
             this.tipKupaonice = tipKupaonice;
             this.broj = brojSobe;
-            //this.kat = kat;
+            this.kat = kat;
         } else {
             System.err.println("Ništa u kreaciji sobe ne smije biti null!");
         }
@@ -121,11 +120,19 @@ public class Soba implements Serializable {
         this.oglas = oglas;
     }
 
-    public Kat getKat() {
+    public Paviljon getPaviljon() {
+        return paviljon;
+    }
+
+    public void setPaviljon(Paviljon paviljon) {
+        this.paviljon = paviljon;
+    }
+
+    public int getKat() {
         return kat;
     }
 
-    public void setKat(Kat kat) {
+    public void setKat(int kat) {
         this.kat = kat;
     }
 }

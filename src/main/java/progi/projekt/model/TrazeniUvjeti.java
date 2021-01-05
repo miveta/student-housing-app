@@ -5,6 +5,7 @@ import progi.projekt.model.enums.OznakeKategorijaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -14,20 +15,47 @@ public class TrazeniUvjeti {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "broj_kreveta", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private BrojKrevetaEnum brojKreveta;
+    @ElementCollection
+    private Set<Integer> katovi;
 
-    @Column(name = "tip_kupaonice", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TipKupaoniceEnum tipKupaonice;
+    @ManyToOne
+    @JoinColumn(name = "id_grad")
+    private Grad grad;
 
-    @Column(name = "kategorija", nullable = false)
+    @ManyToMany
+    @JoinTable(
+            name = "domovi_uvjeti",
+            joinColumns = @JoinColumn(name = "id_dom"),
+            inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
+    private Set<Dom> domovi;
+
+    @ManyToMany
+    @JoinTable(
+            name = "paviljoni_uvjeti",
+            joinColumns = @JoinColumn(name = "id_paviljon"),
+            inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
+    private Set<Paviljon> paviljoni;
+
+    @ManyToMany
+    @JoinTable(
+            name = "kreveti_uvjeti",
+            joinColumns = @JoinColumn(name = "id_broj_kreveta"),
+            inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
+    private Set<BrojKreveta> brojKreveta;
+
+    @ManyToMany
+    @JoinTable(
+            name = "kupaonice_uvjeti",
+            joinColumns = @JoinColumn(name = "id_tip_kupaonice"),
+            inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
+    private Set<TipKupaonice> tipKupaonice;
+
+    @Column(name = "kategorija")
     @Enumerated(EnumType.STRING)
     private OznakeKategorijaEnum kategorija;
 
     private String komentar;
-    @Column(nullable = false)
+    @Column(name = "godina")
     private int godina;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -38,15 +66,14 @@ public class TrazeniUvjeti {
     }
 
     //Ništa ne smije biti null osim komentara
-    public TrazeniUvjeti(BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija, int godina, Student student, String komentar) {
-        if (brojKreveta != null && tipKupaonice != null && kategorija != null && student != null) {
-            this.brojKreveta = brojKreveta;
-            this.tipKupaonice = tipKupaonice;
-            this.kategorija = kategorija;
-            this.godina = godina;
-            this.traziStudent = student;
-            this.komentar = komentar;
-        }
+
+
+    public Grad getGrad() {
+        return grad;
+    }
+
+    public void setGrad(Grad grad) {
+        this.grad = grad;
     }
 
     public UUID getId() {
@@ -57,19 +84,19 @@ public class TrazeniUvjeti {
         this.id = id;
     }
 
-    public BrojKrevetaEnum getBrojKreveta() {
+    public Set<BrojKreveta> getBrojKreveta() {
         return brojKreveta;
     }
 
-    public void setBrojKreveta(BrojKrevetaEnum brojKreveta) {
+    public void setBrojKreveta(Set<BrojKreveta> brojKreveta) {
         this.brojKreveta = brojKreveta;
     }
 
-    public TipKupaoniceEnum getTipKupaonice() {
+    public Set<TipKupaonice> getTipKupaonice() {
         return tipKupaonice;
     }
 
-    public void setTipKupaonice(TipKupaoniceEnum tipKupaonice) {
+    public void setTipKupaonice(Set<TipKupaonice> tipKupaonice) {
         this.tipKupaonice = tipKupaonice;
     }
 
@@ -89,6 +116,22 @@ public class TrazeniUvjeti {
         this.komentar = komentar;
     }
 
+    public Set<Dom> getDomovi() {
+        return domovi;
+    }
+
+    public void setDomovi(Set<Dom> domovi) {
+        this.domovi = domovi;
+    }
+
+    public Set<Paviljon> getPaviljoni() {
+        return paviljoni;
+    }
+
+    public void setPaviljoni(Set<Paviljon> paviljoni) {
+        this.paviljoni = paviljoni;
+    }
+
     public int getGodina() {
         return godina;
     }
@@ -103,5 +146,13 @@ public class TrazeniUvjeti {
 
     public void setTraziStudent(Student traziStudent) {
         this.traziStudent = traziStudent;
+    }
+
+    public Set<Integer> getKatovi() {
+        return katovi;
+    }
+
+    public void setKatovi(Set<Integer> katovi) {
+        this.katovi = katovi;
     }
 }

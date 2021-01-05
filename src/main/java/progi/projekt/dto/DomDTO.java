@@ -1,11 +1,13 @@
 package progi.projekt.dto;
 
 import progi.projekt.model.Dom;
+import progi.projekt.model.Paviljon;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 
 public class DomDTO {
     private UUID id;

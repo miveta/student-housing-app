@@ -23,8 +23,12 @@ public class Paviljon implements Serializable {
     @JoinColumn(name = "id_dom")
     private Dom dom;
 
+
+    @ManyToMany(mappedBy = "paviljoni")
+    private Set<TrazeniUvjeti> trazeni_uvjeti;
+
     @OneToMany(mappedBy = "paviljon", cascade = CascadeType.ALL)
-    private Set<Kat> katovi;
+    private Set<Soba> sobe;
 
     @Column(name = "kategorija")
     @Enumerated(EnumType.STRING)
@@ -71,12 +75,16 @@ public class Paviljon implements Serializable {
         this.dom = dom;
     }
 
-    public Set<Kat> getKatovi() {
-        return katovi;
+    public Set<TrazeniUvjeti> getTrazeni_uvjeti() {
+        return trazeni_uvjeti;
     }
 
-    public void setKatovi(Set<Kat> katovi) {
-        this.katovi = katovi;
+    public void setTrazeni_uvjeti(Set<TrazeniUvjeti> trazeni_uvjeti) {
+        this.trazeni_uvjeti = trazeni_uvjeti;
+    }
+
+    public Set<Soba> getSobe() {
+        return sobe;
     }
 
     public OznakeKategorijaEnum getKategorija() {

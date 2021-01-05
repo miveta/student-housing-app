@@ -66,10 +66,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/lajk/*").permitAll()
                 .antMatchers("/oglas/*").permitAll()
                 .antMatchers("/soba/*").permitAll()
-                //.antMatchers("/").permitAll() //yes? no?
                 .antMatchers("/student/*").permitAll()
                 .antMatchers("/mojprofil/*").permitAll()
-
+                .antMatchers("/trazimSobu/*").permitAll()
+        //.antMatchers("/").permitAll() //yes? no?
         ;
 
         //warning: ovo hoce bacati errore ako je neko od svojstava vec definirano
