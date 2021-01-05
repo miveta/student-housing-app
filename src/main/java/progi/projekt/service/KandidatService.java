@@ -1,6 +1,7 @@
 package progi.projekt.service;
 
-import progi.projekt.model.*;
+import progi.projekt.model.Kandidat;
+import progi.projekt.model.Oglas;
 
 import java.util.List;
 import java.util.UUID;

@@ -4,12 +4,15 @@ import progi.projekt.model.Grad;
 import progi.projekt.model.Soba;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface SobaService {
-    Soba getByStudentId(UUID id);
+    Optional<Soba> getByStudentUsername(String username);
 
-    Soba getById(UUID id);
+    Optional<Soba> getByStudentId(UUID id);
+
+    Optional<Soba> getById(UUID id);
 
     List<Grad> findAllGrad();
 }

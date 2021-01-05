@@ -1,8 +1,5 @@
 package progi.projekt.config;
 
-import org.springframework.context.annotation.Configuration;
-
-
 public class DatabaseConfig {
 
 /*    @Value("${spring.datasource.url}")

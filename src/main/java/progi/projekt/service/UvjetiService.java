@@ -1,9 +1,12 @@
 package progi.projekt.service;
 
+import org.springframework.stereotype.Service;
 import progi.projekt.model.Oglas;
+import progi.projekt.model.Paviljon;
 import progi.projekt.model.Soba;
 import progi.projekt.model.TrazeniUvjeti;
 
+@Service
 public interface UvjetiService {
 
     default TrazeniUvjeti findByOglas(Oglas oglas) {
@@ -16,8 +19,10 @@ public interface UvjetiService {
     }
 
     default Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti) {
+        Paviljon p = new Paviljon();
+
         if (soba.getBrojKreveta() == uvjeti.getBrojKreveta() &&
-                soba.getKategorija() == uvjeti.getKategorija() &&
+                soba.getPaviljon().getKategorija() == uvjeti.getKategorija() &&
                 soba.getTipKupaonice() == uvjeti.getTipKupaonice()
         ) {
             return true;

@@ -2,7 +2,10 @@ package progi.projekt.forms;
 
 import progi.projekt.model.Student;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class RegisterForm {
     @NotBlank(message = "Morate unijeti svoje ime!")

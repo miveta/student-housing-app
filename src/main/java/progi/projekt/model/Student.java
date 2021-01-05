@@ -3,6 +3,7 @@ package progi.projekt.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -45,7 +46,6 @@ public class Student implements Serializable, Korisnik {
     @JoinColumn(name = "id_trazeni_uvjeti")
     private TrazeniUvjeti uvjeti;
 
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="oglas")
     private Oglas oglas;
@@ -55,56 +55,22 @@ public class Student implements Serializable, Korisnik {
     private Grad grad;
 
 
-    @Column(nullable = true, name = "id_soba")
-    private Integer idSoba;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_soba")
+    private Soba soba;
 
-
-
-
-
-    public Student() {
-    }
 
     @Override
     public String getTipKorisnika() {
         return "student";
     }
 
-    //Sve osim obavijestiNaMail ne smije biti null!
-    //JMBAG mora biti velicine 10
-
-    /*
-     * zakomentirano zato što bi sada
-     * validaciju bi trebao odraditi controller s anotacijom @valid
-     * provjeri RegisterForm - tamo se anotacijama mogu dodavati pravila
-     * */
-    /*
-    public Student(String jmbag, String korisnickoIme, String ime, String prezime, String email, String lozinka, boolean obavijestiNaMail) {
-        if (korisnickoIme != null && ime != null && prezime != null && email != null && lozinka != null) {
-            if (jmbag.length() == 10) {
-                this.jmbag = jmbag;
-                this.korisnickoIme = korisnickoIme;
-                this.ime = ime;
-                this.prezime = prezime;
-                this.email = email;
-                this.lozinka = lozinka;
-                this.obavijestiNaMail = obavijestiNaMail;
-            } else {
-                System.err.println("Jmbag mora imati 10 znamenaka!");
-            }
-        } else {
-            System.err.println("Pri kreaciji studenta nista ne smije biti null osim obavijestiNaMail!");
-        }
+    public UUID getId() {
+        return id;
     }
 
-     */
-
-    public List<Obavijest> getObavijesti() {
-        return obavijesti;
-    }
-
-    public void setObavijesti(List<Obavijest> obavijesti) {
-        this.obavijesti = obavijesti;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getJmbag() {
@@ -143,7 +109,6 @@ public class Student implements Serializable, Korisnik {
         return email;
     }
 
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -164,6 +129,14 @@ public class Student implements Serializable, Korisnik {
         this.obavijestiNaMail = obavijestiNaMail;
     }
 
+    public List<Obavijest> getObavijesti() {
+        return obavijesti;
+    }
+
+    public void setObavijesti(List<Obavijest> obavijesti) {
+        this.obavijesti = obavijesti;
+    }
+
     public StatusOglasa getPotvrdioOglas() {
         return potvrdioOglas;
     }
@@ -178,14 +151,6 @@ public class Student implements Serializable, Korisnik {
 
     public void setUvjeti(TrazeniUvjeti uvjeti) {
         this.uvjeti = uvjeti;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public Oglas getOglas() {
@@ -204,20 +169,57 @@ public class Student implements Serializable, Korisnik {
         this.grad = grad;
     }
 
-/*    public List<Lajk> getLajkovi() {
-        return lajkovi;
-    }
-
-    public void setLajkovi(List<Lajk> lajkovi) {
-        this.lajkovi = lajkovi;
-    }*/
-
     public Soba getSoba() {
-        return new Soba();
-        //return soba;
+        return soba;
     }
-/*
+
     public void setSoba(Soba soba) {
         this.soba = soba;
-    }*/
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return obavijestiNaMail == student.obavijestiNaMail &&
+                Objects.equals(id, student.id) &&
+                Objects.equals(jmbag, student.jmbag) &&
+                Objects.equals(korisnickoIme, student.korisnickoIme) &&
+                Objects.equals(ime, student.ime) &&
+                Objects.equals(prezime, student.prezime) &&
+                Objects.equals(email, student.email) &&
+                Objects.equals(lozinka, student.lozinka) &&
+                Objects.equals(obavijesti, student.obavijesti) &&
+                Objects.equals(potvrdioOglas, student.potvrdioOglas) &&
+                Objects.equals(uvjeti, student.uvjeti) &&
+                Objects.equals(oglas, student.oglas) &&
+                Objects.equals(grad, student.grad) &&
+                Objects.equals(soba, student.soba);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, jmbag, korisnickoIme, ime, prezime, email, lozinka, obavijestiNaMail, obavijesti, potvrdioOglas, uvjeti, oglas, grad, soba);
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", jmbag='" + jmbag + '\'' +
+                ", korisnickoIme='" + korisnickoIme + '\'' +
+                ", ime='" + ime + '\'' +
+                ", prezime='" + prezime + '\'' +
+                ", email='" + email + '\'' +
+                ", lozinka='" + lozinka + '\'' +
+                ", obavijestiNaMail=" + obavijestiNaMail +
+                ", obavijesti=" + obavijesti +
+                ", potvrdioOglas=" + potvrdioOglas +
+                ", uvjeti=" + uvjeti +
+                ", oglas=" + oglas +
+                ", grad=" + grad +
+                ", soba=" + soba +
+                '}';
+    }
 }

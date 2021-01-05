@@ -7,17 +7,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.KorisnikDTO;
 import progi.projekt.forms.RegisterForm;
-import progi.projekt.model.Korisnik;
 import progi.projekt.model.Student;
 import progi.projekt.repository.StudentRepository;
 import progi.projekt.service.StudentService;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.PostLoad;
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.Optional.*;
 
 @CrossOrigin
 @RestController

@@ -1,7 +1,5 @@
 package progi.projekt.forms;
 
-import progi.projekt.model.Student;
-
 public class LajkForm {
 
     private String studentId;

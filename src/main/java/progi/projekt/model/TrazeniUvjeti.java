@@ -5,6 +5,7 @@ import progi.projekt.model.enums.OznakeKategorijaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.UUID;
 
 @Entity
@@ -33,6 +34,9 @@ public class TrazeniUvjeti {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_student")
     private Student traziStudent;
+
+    @ElementCollection
+    private Collection<Integer> katovi;
 
     public TrazeniUvjeti() {
     }

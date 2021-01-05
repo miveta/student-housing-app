@@ -1,19 +1,23 @@
 import React, {Component} from "react";
-import {Button, Form} from 'react-bootstrap';
+import {Button, Col, Form} from 'react-bootstrap';
+import cookie from "react-cookies";
 
 class Soba extends Component {
+    user;
+
     constructor(props) {
         super(props);
         this.state = {
             change: false,
             gradovi: [],
             domovi: [],
-            paviljoni: []
+            paviljoni: [],
+            paviljon: undefined
         };
 
+        this.user = cookie.load('principal');
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.onClick = this.onClick.bind(this);
     }
 
     onSelectGrad = (event) => {
@@ -21,30 +25,56 @@ class Soba extends Component {
 
         let grad = this.state.gradovi.filter(g => g.naziv === imeGrada)[0];
 
+        this.setSelectedGrad(grad)
+    }
+
+    setSelectedGrad(grad) {
+        let domovi = grad.domovi;
+        let paviljoni = domovi.length === 1 ? domovi[0].paviljoni : [];
+        let paviljon = paviljoni.length === 1 ? paviljoni[0] : undefined
+
         this.setState({
-            domovi: grad.domovi
+            domovi: domovi,
+            paviljoni: paviljoni,
+            paviljon: paviljon
         })
     }
 
-    /*    onSelectDom = (event) => {
-            let imeDoma = event.target.value;
+    onSelectDom = (event) => {
+        let imeDoma = event.target.value;
 
-            let dom = this.state.gradovi.filter(d => d.naziv === imeDoma)[0];
+        let dom = this.state.domovi.filter(d => d.naziv === imeDoma)[0];
 
-            this.setState({
-                paviljon: dom.
-            })
-        }*/
+        this.setSelectedDom(dom)
+    }
+
+    setSelectedDom(dom) {
+        console.log(dom)
+        let paviljoni = dom.paviljoni;
+        let paviljon = paviljoni.length === 1 ? paviljoni[0] : undefined
+
+        this.setState({
+            paviljoni: paviljoni,
+            paviljon: paviljon
+        })
+    }
+
+    onSelectPaviljon = (event) => {
+        let imePaviljona = event.target.value;
+
+        let paviljon = this.state.paviljoni.filter(p => p.naziv === imePaviljona)[0];
+
+        this.setSelectedPaviljon(paviljon)
+    }
+
+    setSelectedPaviljon(paviljon) {
+        this.setState({
+            paviljon: paviljon
+        })
+    }
 
     onChange(event) {
         this.setState({change: true});
-
-        console.log(event.target)
-    }
-
-    onClick(event) {
-        const {name, value} = event.target;
-        this.setState({[name]: value})
     }
 
     onSubmit(e) {
@@ -70,6 +100,19 @@ class Soba extends Component {
                 }
             }).then(json => {
             self.setState({gradovi: json})
+            self.setSelectedGrad(json[0])
+        })
+
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/soba/student?student_username=${this.user.korisnickoIme}`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+
+                } else {
+                    console.log(response.status)
+                }
+            }).then(json => {
+            console.log(json)
         })
     }
 
@@ -88,10 +131,9 @@ class Soba extends Component {
                                 <option id={grad.id}>{grad.naziv}</option>
                             ))}
                         </Form.Control>
-                    </Form.Group>
-                    <Form.Group>
+
                         <Form.Label> Dom </Form.Label>
-                        <Form.Control as="select" name="dom" onChange={this.onClick}
+                        <Form.Control as="select" name="dom" onChange={this.onSelectDom}
                                       disabled={this.state.domovi.length === 0}>
                             {
                                 this.state.domovi.map(dom => (
@@ -100,41 +142,56 @@ class Soba extends Component {
                             }
                         </Form.Control>
                     </Form.Group>
-                    {/*    */} <Form.Group>
-                    <Form.Label> Paviljon </Form.Label>
-                    <Form.Control as="select" name="dom" onChange={this.onClick}
-                                  disabled={this.state.paviljoni.length === 0}>
-                        {
-                            this.state.paviljoni.map(paviljon => (
 
-                                <option id={paviljon.id}>{paviljon.naziv}</option>
-                            ))
-                        }
-                    </Form.Control>
-                </Form.Group>
                     <Form.Group>
-                        <Form.Label> Kat </Form.Label>
-                        <Form.Control name="kat" type="text"/>
+                        <Form.Row>
+                            <Col xs={9}>
+                                <Form.Label> Paviljon </Form.Label>
+                                <Form.Control as="select" name="paviljon" onChange={this.onSelectPaviljon}
+                                              disabled={this.state.paviljoni.length === 0}>
+                                    {
+                                        this.state.paviljoni.map(paviljon => (
+
+                                            <option id={paviljon.id}>{paviljon.naziv}</option>
+                                        ))
+                                    }
+                                </Form.Control>
+                            </Col>
+                            <Col>
+                                <Form.Group>
+                                    <Form.Label> Kat </Form.Label>
+                                    <Form.Control name="kat" type="number" min={0}
+                                                  max={this.state.paviljon === undefined ? 0 : this.state.paviljon.brojKatova}
+                                                  autoCorrect={"on"} disabled={this.state.paviljon === undefined}/>
+                                </Form.Group>
+                            </Col>
+                        </Form.Row>
                     </Form.Group>
+
+
                     <Form.Group>
-                        <Form.Label> Broj kreveta </Form.Label>
-                        <Form.Control as="select" defaultValue="Odaberi...">
-                            <option> Jednokrevetna soba</option>
-                            <option> Dvokrevetna soba</option>
-                            <option> Trokrevetna soba</option>
-                            <option> Višekrevetna soba</option>
-                        </Form.Control>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label> Tip kupaonice </Form.Label>
-                        <Form.Control as="select" defaultValue="Odaberi...">
-                            <option> U sobi</option>
-                            <option> Zajednički</option>
-                        </Form.Control>
+                        <Form.Row>
+                            <Col>
+                                <Form.Label> Broj kreveta </Form.Label>
+                                <Form.Control as="select" defaultValue="Odaberi...">
+                                    <option> Jednokrevetna soba</option>
+                                    <option> Dvokrevetna soba</option>
+                                    <option> Trokrevetna soba</option>
+                                    <option> Višekrevetna soba</option>
+                                </Form.Control>
+                            </Col>
+                            <Col>
+                                <Form.Label> Tip kupaonice </Form.Label>
+                                <Form.Control as="select" defaultValue="Odaberi...">
+                                    <option> U sobi</option>
+                                    <option> Zajednički</option>
+                                </Form.Control>
+                            </Col>
+                        </Form.Row>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label> Komentar </Form.Label>
-                        <Form.Control name="komentar" type="text"/>
+                        <Form.Control name="komentar" as="textarea" rows="3"/>
                     </Form.Group>
 
                     <Button type="submit" variant="dark" size="lg" block> Spremi promjene </Button>

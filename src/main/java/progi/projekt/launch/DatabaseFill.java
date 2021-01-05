@@ -15,7 +15,6 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> {
@@ -33,7 +32,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
     private final ZaposlenikscRepository zaposlenikscRepository;
     private final StudentskiCentarRepository studentskiCentarRepository;
     private final SobaRepository sobaRepository;
-    private final KatRepository katRepository;
+
     private final PaviljonRepository paviljonRepository;
 
     public DatabaseFill(StudentRepository studentRepository, DomRepository domRepository,
@@ -41,7 +40,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                         OglasRepository oglasRepository, StatusOglasaRepository statusOglasaRepository,
                         TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository,
                         StudentskiCentarRepository studentskiCentarRepository, SobaRepository sobaRepository,
-                        KatRepository katRepository, PaviljonRepository paviljonRepository, PasswordEncoder pswdEncoder) {
+                        PaviljonRepository paviljonRepository, PasswordEncoder pswdEncoder) {
         this.studentRepository = studentRepository;
         this.domRepository = domRepository;
         this.gradRepository = gradRepository;
@@ -53,7 +52,6 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
         this.studentskiCentarRepository = studentskiCentarRepository;
         this.pswdEncoder = pswdEncoder;
         this.sobaRepository = sobaRepository;
-        this.katRepository = katRepository;
         this.paviljonRepository = paviljonRepository;
     }
 
@@ -198,51 +196,60 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
 
                 //Kreiraj soba
                 Soba sobaIvica = new Soba();
-                sobaIvica.setBroj(1);
+
                 sobaIvica.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
-                sobaIvica.setKategorija(OznakeKategorijaEnum.IV);
+
                 sobaIvica.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
                 Soba sobaMarko = new Soba();
-                sobaMarko.setBroj(1);
+
                 sobaMarko.setBrojKreveta(BrojKrevetaEnum.DVOKREVETNA);
-                sobaMarko.setKategorija(OznakeKategorijaEnum.II);
+
                 sobaMarko.setTipKupaonice(TipKupaoniceEnum.PRIVATNA);
                 Soba sobaPero = new Soba();
-                sobaPero.setBroj(5);
+
                 sobaPero.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
-                sobaPero.setKategorija(OznakeKategorijaEnum.III);
+
                 sobaPero.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
 
-                //Kreiraj kat
+                /*//Kreiraj kat
                 Kat prviRadic = new Kat();
                 Kat drugiRadic = new Kat();
                 Kat prviSava = new Kat();
                 prviRadic.setBroj(1);
                 prviSava.setBroj(1);
-                drugiRadic.setBroj(2);
+                drugiRadic.setBroj(2);*/
 
                 //Kreiraj paviljon
-                Paviljon paviljonSava = new Paviljon();
+                Paviljon paviljonSava1 = new Paviljon();
+                paviljonSava1.setNaziv("Prvi");
+                paviljonSava1.setBrojKatova(4);
+                paviljonSava1.setKategorija(OznakeKategorijaEnum.III);
+
+                Paviljon paviljonSava2 = new Paviljon();
+                paviljonSava2.setNaziv("Onaj pored roka");
+                paviljonSava2.setBrojKatova(2);
+                paviljonSava2.setKategorija(OznakeKategorijaEnum.I);
+
                 Paviljon paviljonRadic = new Paviljon();
-                paviljonSava.setNaziv("Prvi");
                 paviljonRadic.setNaziv("Peti");
 
-                //Linkaj sve------------------------------------------------------------------------------
+                /*//Linkaj sve------------------------------------------------------------------------------
                 //ASSIGN KAT TO SOBA
                 sobaPero.setKat(prviRadic);
                 sobaIvica.setKat(drugiRadic);
                 sobaMarko.setKat(prviSava);
-
+*/
                 //ASSIGN OGLAS TO SOBA
                 sobaMarko.setOglas(oglasMarko);
                 sobaPero.setOglas(oglasPero);
                 sobaIvica.setOglas(oglasIvica);
 
                 //ASSIGN DOM TO PAVILJON
-                paviljonSava.setDom(sava);
+                paviljonSava1.setDom(sava);
+                paviljonSava2.setDom(sava);
                 paviljonRadic.setDom(radic);
 
-                //ASSIGN KATOVI TO PAVILJON
+               /* //ASSIGN KATOVI TO PAVILJON
                 HashSet<Kat> katoviRadic = new HashSet<Kat>();
                 katoviRadic.add(prviRadic);
                 katoviRadic.add(drugiRadic);
@@ -254,7 +261,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 //ASSIGN PAVILJON TO KAT
                 prviRadic.setPaviljon(paviljonRadic);
                 drugiRadic.setPaviljon(paviljonRadic);
-                prviSava.setPaviljon(paviljonSava);
+                prviSava.setPaviljon(paviljonSava);*/
 
                 //ASSIGN SOBE TO KAT
                 HashSet<Soba> sobePrvaRadic = new HashSet<>();
@@ -263,9 +270,9 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 sobePrvaRadic.add(sobaPero);
                 sobeDrugaRadic.add(sobaIvica);
                 sobePrvaSava.add(sobaMarko);
-                prviRadic.setSobe(sobePrvaRadic);
+               /* prviRadic.setSobe(sobePrvaRadic);
                 prviSava.setSobe(sobePrvaSava);
-                drugiRadic.setSobe(sobeDrugaRadic);
+                drugiRadic.setSobe(sobeDrugaRadic);*/
 
                 //ASSIGN OGLAS TO STUDENT
                 ivica.setOglas(oglasIvica);
@@ -312,7 +319,6 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 zagreb.setDomovi(domovi);
 
 
-
                 //ASSIGN SC TO GRAD
                 zagreb.setStudentskiCentar(studentskiCentar);
 
@@ -324,7 +330,8 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 HashSet<Paviljon> paviljoniRadic = new HashSet<>();
                 HashSet<Paviljon> paviljoniSava = new HashSet<>();
                 paviljoniRadic.add(paviljonRadic);
-                paviljoniSava.add(paviljonSava);
+                paviljoniSava.add(paviljonSava1);
+                paviljoniSava.add(paviljonSava2);
                 radic.setPaviljoni(paviljoniRadic);
                 sava.setPaviljoni(paviljoniSava);
 
@@ -387,19 +394,23 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 oglasi.add(oglasMarko);
                 oglasi.add(oglasPero);
 
-                HashSet<Kat> katovi= new HashSet<>();
+                /*HashSet<Kat> katovi= new HashSet<>();
                 katovi.add(prviRadic);
                 katovi.add(drugiRadic);
-                katovi.add(prviSava);
+                katovi.add(prviSava);*/
 
                 HashSet<Paviljon> paviljoni = new HashSet<>();
                 paviljoni.add(paviljonRadic);
-                paviljoni.add(paviljonSava);
+                paviljoni.add(paviljonSava1);
 
                 HashSet<Soba> sobe = new HashSet<>();
                 sobe.add(sobaIvica);
                 sobe.add(sobaMarko);
                 sobe.add(sobaPero);
+
+
+                marko.setSoba(sobaMarko);
+                sobaMarko.setStudent(marko);
 
                 gradRepository.save(zagreb);
                 gradRepository.save(osijek);
@@ -411,7 +422,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 trazeniUvjetiRepository.saveAll(trazeniUvjeti);
                 statusOglasaRepository.saveAll(statusiOglasa);
                 studentRepository.saveAll(studentiZaSave);
-                katRepository.saveAll(katovi);
+                /*katRepository.saveAll(katovi);*/
                 paviljonRepository.saveAll(paviljoni);
                 sobaRepository.saveAll(sobe);
 

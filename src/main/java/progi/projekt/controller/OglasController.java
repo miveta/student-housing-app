@@ -6,10 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.OglasDTO;
 import progi.projekt.model.Oglas;
 import progi.projekt.service.OglasService;
-import progi.projekt.service.StudentService;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
