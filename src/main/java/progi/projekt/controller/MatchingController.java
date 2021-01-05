@@ -12,6 +12,11 @@ import java.util.*;
 
 ///Kontroler koji stvara i azurira listu kandidatnih soba/veza, listu valjanih parova i odgovarajuce oglase
 
+/*todo: napravit pozivanje:
+	kandidatiRun, matchRun svakih 5 min?
+	lajkRun + parRun, confirmRun, confirmSCRun svakih 30 min?
+ */
+
 @RestController
 @RequestMapping("/match")
 public class MatchingController {
@@ -122,7 +127,8 @@ public class MatchingController {
 		//Prolazi po predanoj listi 'izvedeni' i oznacava oglase nevednih parova kao IZVEDEN
 
 		try {
-			matchingService.confirmSCFun(izvedeni);
+			//force je debugging flag; ako je =true svi parovi se oznace kao IZVEDENI
+			matchingService.confirmSCFun(izvedeni, false);
 			return ResponseEntity.ok("Navedeni potvrdjeni oglasi oznaceni kao IZVEDENI");
 
 		} catch (Exception e){

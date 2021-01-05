@@ -66,16 +66,43 @@ public class Par {
 		this.ignore = ignore;
 	}
 
+	/*
+	@Basic
+	@Column(name = "ceka", nullable = true)
+	private Boolean ceka;
+	*/
 
-	public Par(Oglas oglas1, Oglas oglas2, Boolean done) {
+
+	public Par(Oglas oglas1, Oglas oglas2) {
+		if (oglas1 != null || oglas2 != null) {
+			this.oglas1 = oglas1;
+			this.oglas2 = oglas2;
+			this.done = false;
+			this.lanac = false;
+			this.ignore = false;
+		} else
+			System.err.print("Dani oglasi ne smiju biti null!");
+	}
+
+	public Par(Oglas oglas1, Oglas oglas2, Boolean done, Boolean lanac, Boolean ignore) {
 		if (oglas1 != null || oglas2 != null) {
 			this.oglas1 = oglas1;
 			this.oglas2 = oglas2;
 			this.done = done;
+			this.lanac = lanac;
+			this.ignore = ignore;
 		} else
 			System.err.print("Dani oglasi ne smiju biti null!");
 	}
 
 	public Par() {
 	}
+
+	/*public Boolean getCeka() {
+		return ceka;
+	}
+
+	public void setCeka(Boolean ceka) {
+		this.ceka = ceka;
+	}*/
 }

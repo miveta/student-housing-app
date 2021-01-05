@@ -11,10 +11,7 @@ import progi.projekt.service.OglasService;
 import progi.projekt.service.SobaService;
 import progi.projekt.service.UvjetiService;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +41,17 @@ public class KandidatServiceImpl implements KandidatService {
 		//return new ArrayList<Kandidat>();
 	}
 
+	public void stvoriKand(Oglas oglas1, Oglas oglas2) {
+		Integer bliskost = calculateScore(oglas1, oglas2);
+		java.sql.Date stvoren = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+		Kandidat kand = new Kandidat(oglas1, oglas2, bliskost, stvoren, false);
+
+		oglas1.getKandidati().add(kand); //je li ovo persista? je li potrebno?
+		oglas2.getKandidati().add(kand);
+
+		save(kand);
+	}
+
 	@Override
 	public Boolean odgovaraju(Oglas oglas1, Oglas oglas2) {
 
@@ -58,7 +66,7 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Override
 	public int odgovaraIizTopN(Oglas oglas) {
-		//ako nekom od topN kandidata ogovara nasa soba vrati indeks tog kandidata. Inace vrati -1
+		//ako nekom od topN kandidata ogovara nasa soba vrati topN indeks tog kandidata. Inace vrati -1
 
 		List<Oglas> topN = topN(oglas);
 
@@ -78,10 +86,19 @@ public class KandidatServiceImpl implements KandidatService {
 		//primi oglas i vrati listu prvih N Oglasa kandidata sortirano po bliskosti
 
 		int N = SHORTLIST_VELICINA;
+		//todo: staviti poruku korisnicima da moraju ocjeniti barem N oglasa
+
+		//todo: ukljuciti provjeru flagova prilikom izrade topN
+		//mislim da je to dosta, tj da od tada sve kandidate/paraove
+		//mozemo tretirati kao clean
+
+		Comparator<Kandidat> compareByBliskost = Comparator.comparing(Kandidat::getBliskost);
+		Comparator<Kandidat> compareByStvoren = Comparator.comparing(Kandidat::getStvoren);
+		Comparator<Kandidat> compareByBlskThenStvrn = compareByBliskost.thenComparing(compareByStvoren);
 
 		List<Kandidat> top3kand = oglas.getKandidati()
 				.stream()
-				.sorted(Comparator.comparing(Kandidat::getBliskost))
+				.sorted(compareByBlskThenStvrn)
 				.limit(N)
 				.collect(Collectors.toList());
 
@@ -120,6 +137,31 @@ public class KandidatServiceImpl implements KandidatService {
 		Integer bliskost = uvjetiService.izracunajBliskost(soba2, uvjeti1);
 
 		return bliskost;
+	}
+
+	@Override
+	/**
+	 * Vraca Kandidata koji sadrzi predane oglase
+	 */
+	public Optional<Kandidat> kandidatParaOglasa(Oglas oglas1, Oglas oglas2) {
+		Optional<Kandidat> kandidatOpt = Optional.empty();
+
+		for (Kandidat kand : listAll(oglas1.getId())){
+			if (kandSadrziOglas(kand, oglas2)){
+				kandidatOpt = Optional.ofNullable(kand);
+				break;
+			}
+		}
+
+		return kandidatOpt;
+	}
+
+	@Override
+	/**
+	 * Vraca True ako predani kandidat sadrzi predani oglas
+	 */
+	public Boolean kandSadrziOglas(Kandidat kand, Oglas oglas) {
+		return kand.getOglas() == oglas || kand.getKandOglas() == oglas;
 	}
 
 	public Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti) {

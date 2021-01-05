@@ -10,5 +10,5 @@ public interface MatchingService {
 	void parFun();
 	void matchFun();
 	void confirmFun();
-	void confirmSCFun(List<Par> izvedeni);
+	void confirmSCFun(List<Par> izvedeni, Boolean force);
 }

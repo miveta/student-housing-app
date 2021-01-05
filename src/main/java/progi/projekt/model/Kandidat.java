@@ -1,10 +1,10 @@
 package progi.projekt.model;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "kandidat", schema = "public", catalog = "dc917r8jcempur")
 public class Kandidat {
 	@Id
 	@Column(name = "id_kandidat", nullable = false)
@@ -39,6 +39,12 @@ public class Kandidat {
 	@Column(name = "bliskost", nullable = true)
 	private Integer bliskost;
 
+	@Column(name = "ocjena1", nullable = true)
+	private Integer ocjena1;
+
+	@Column(name = "ocjena2", nullable = true)
+	private Integer ocjena2;
+
 	public Integer getBliskost() {
 		return bliskost;
 	}
@@ -50,6 +56,8 @@ public class Kandidat {
 	@Column(name = "ignore", nullable = true)
 	private Boolean ignore;
 
+	private Date stvoren;
+
 	public Boolean getIgnore() {
 		return ignore;
 	}
@@ -57,14 +65,13 @@ public class Kandidat {
 		this.ignore = ignore;
 	}
 
-	private Integer ocjena;
 
-
-	public Kandidat(Oglas oglas, Oglas kandOglas, Integer bliskost, Boolean ignore) {
+	public Kandidat(Oglas oglas, Oglas kandOglas, Integer bliskost, Date stvoren, Boolean ignore) {
 		if (oglas != null || kandOglas != null) {
 			this.oglas = oglas;
 			this.kandOglas = kandOglas;
 			this.bliskost = bliskost;
+			this.stvoren = stvoren;
 			this.ignore = ignore;
 		} else
 			System.err.print("Dani oglasi ne smiju biti null!");
@@ -73,17 +80,33 @@ public class Kandidat {
 	public Kandidat() {
 	}
 
-	public Integer getOcjena() {
-		return ocjena;
+	public Integer getOcjena1() {
+		return ocjena1;
 	}
 
-	public void setOcjena(Integer ocjena) {
-		this.ocjena = ocjena;
+	public void setOcjena1(Integer ocjena) {
+		this.ocjena1 = ocjena;
 	}
 
 	public UUID getIdOglas() {
 		return new UUID(0,0);
 		//return idOglas;	//TODO
+	}
+
+	public Integer getOcjena2() {
+		return ocjena2;
+	}
+
+	public void setOcjena2(Integer ocjena2) {
+		this.ocjena2 = ocjena2;
+	}
+
+	public Date getStvoren() {
+		return stvoren;
+	}
+
+	public void setStvoren(Date stvoren) {
+		this.stvoren = stvoren;
 	}
 /*
 	public void setIdOglas(UUID idOglas) {
