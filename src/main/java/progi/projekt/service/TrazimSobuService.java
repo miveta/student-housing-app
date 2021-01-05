@@ -10,8 +10,8 @@ import java.util.Set;
 
 public interface TrazimSobuService {
 
-    Set<Dom> findAllDom();
-    List<Paviljon> findAllPaviljon();
+    Set<Dom> findAllDom(String username);
+//    List<Paviljon> findAllPaviljon();
     Grad findGrad(String username);
     void update(TrazeniUvjeti uvjeti);
 }

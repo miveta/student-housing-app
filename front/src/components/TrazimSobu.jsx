@@ -1,11 +1,12 @@
 import React, { useEffect} from "react";
+import { Form, Button} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
 
 function TrazimSobu(props){
     const user = JSON.parse(localStorage.getItem("user"));
     const [grad, setGrad] = React.useState('');
-    const [domovi, setDomovi] = React.useState([{id: '', imaMenzu: '', naziv: ''}]) ;
-    const [paviljoni,setPaviljoni] = React.useState([{id: '', naziv: ''}]);
+    const [domovi, setDomovi] = React.useState({d:[{id: '', imaMenzu: '', naziv: '',paviljon: {id: '', naziv: ''}, checked: false}]}) ;
+    // const [paviljoni,setPaviljoni] = React.useState([{id: '', naziv: ''}]);
 
     const [uvjeti, setUvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [],brojKreveta: [], komentar: ''});
     const katovi = ['1', '2', '3', '4'];
@@ -20,6 +21,34 @@ function TrazimSobu(props){
         {name:"Zajednicka", value:"ZAJEDNICKA"},
         {name:"Nebitno", value:"NEBITNO"}
     ]
+
+    function onChangeDom(event){
+
+        const {name, value} = event.target;
+        setDomovi(prevState =>({
+              d: prevState.d.map(dom => {
+
+                if(dom.id === value) {
+                    return {
+                        ...dom,
+                        checked: !dom.checked
+                    };
+                }else{
+                    return {...dom};
+
+                }
+            })
+        }))
+        const ids = uvjeti[name].map(el => el.id);
+        if(event.target.checked){
+            uvjeti[name].push(value);
+        }else{
+            const index = ids.indexOf(value.id);
+            uvjeti[name].splice(index,1);
+        }
+
+
+    }
     function onChange(event){
         const {name, value} = event.target;
         const ids = uvjeti[name].map(el => el.id);
@@ -32,10 +61,10 @@ function TrazimSobu(props){
 
 
     }
-    function onChangek(event) {
-        const {name, value} = event.target;
-        setUvjeti(oldForm => ({...oldForm, [name]: value}));
-    }
+    // function onChangek(event) {
+    //     const {name, value} = event.target;
+    //     setUvjeti(oldForm => ({...oldForm, [name]: value}));
+    // }
 
 
 
@@ -56,11 +85,7 @@ function TrazimSobu(props){
         &katovi=${uvjeti["kat"]}&brojKreveta=${uvjeti["brojKreveta"]}&tipKupaonice=${uvjeti["tipKupaonice"]}&komentar=${uvjeti["komentar"]}`, options)
             .then(response => {
                 if (response.status === 200) {
-                    response.json().then(body => {
-                        props.onLogin(body)
                         props.history.push("/")
-
-                    });
                 }
                 else {
                     console.log(response.status)
@@ -87,7 +112,7 @@ function TrazimSobu(props){
                 }
             }).then(json => {
             setGrad(json);
-        }).then(fetch(`http://localhost:8080/trazimSobu/domovi`, options)
+        }).then(fetch(`http://localhost:8080/trazimSobu/domovi?user=${user.korisnickoIme}`, options)
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
@@ -96,66 +121,70 @@ function TrazimSobu(props){
                     console.log(response.status)
                 }
             }).then(json => {
-                setDomovi(json)
+                setDomovi({d:json})
             }))
-            .then(fetch(`http://localhost:8080/trazimSobu/paviljoni`, options)
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json()
-
-                } else {
-                    console.log(response.status)
-                }
-            }).then(json => {
-            setPaviljoni(json)
-        }))
+        //     .then(fetch(`http://localhost:8080/trazimSobu/paviljoni`, options)
+        //     .then(response => {
+        //         if (response.status === 200) {
+        //             return response.json()
+        //
+        //         } else {
+        //             console.log(response.status)
+        //         }
+        //     }).then(json => {
+        //     setPaviljoni(json)
+        // }))
     },[]);
 
 
 
 
-    return (
+     return (
 
         <div className="middle" >
-
+            <Form onSubmit={onSubmit}>
             <h3>Grad: {grad.naziv}</h3>
 
-            <form onSubmit={onSubmit}>
+
                 <label>
                     Dom:
 
                     <br/>
-                    {domovi.map(dom =>(
+                    {domovi.d.map(dom =>(
                         <li>
                             <label>
                                 <input
                                     type="checkbox"
-                                    onChange={onChange}
+                                    onChange={onChangeDom}
                                     value={dom.id}
                                     name="dom"
                                 />{dom.naziv}
                             </label>
-                        </li>
-                    ))}
-                </label>
-                <br/>
-                <label>
-                    Paviljon:
-
-                    <br/>
-                    {paviljoni.map(p =>(
-                        <li>
+                            {dom.checked &&(
+                             <div>
+                            {/*<br/>*/}
                             <label>
-                                <input
-                                    type="checkbox"
-                                    onChange={onChange}
-                                    value={p.id}
-                                    name="paviljon"
-                                />{p.naziv}
+                                Paviljon:
+
+                                <br/>
+                                {dom.paviljon.map(p =>(
+                                    <li>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                onChange={onChange}
+                                                value={p.id}
+                                                name="paviljon"
+                                            />{p.naziv}
+                                        </label>
+                                    </li>
+                                ))}
                             </label>
+                             </div>)}
                         </li>
                     ))}
                 </label>
+
 
                 <br/>
                 <label>
@@ -213,24 +242,25 @@ function TrazimSobu(props){
                     ))}
                 </label>
                 <br/>
-                <label>
-                    Komentar:
+                {/*<label>*/}
+                {/*    Komentar:*/}
 
-                    <br/>
-                    <input
-                        type="text"
-                        name="komentar"
-                        onChange={onChangek}
-                    />
+                {/*    <br/>*/}
+                {/*    <input*/}
+                {/*        type="text"*/}
+                {/*        name="komentar"*/}
+                {/*        onChange={onChangek}*/}
+                {/*    />*/}
 
-                </label>
+                {/*</label> zas uopce to imamo?*/}
                 <br/>
-                <input type="submit"  value="Submit" />
 
-            </form>
 
+
+
+            <Button type="submit" variant="dark" size="sm" block> Pohrani uvjete </Button>
+        </Form>
         </div>
-
     )
 }
 export default withRouter(TrazimSobu);

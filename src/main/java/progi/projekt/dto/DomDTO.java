@@ -1,20 +1,25 @@
 package progi.projekt.dto;
 
 import progi.projekt.model.Dom;
+import progi.projekt.model.Paviljon;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class DomDTO {
     private UUID id;
     private boolean imaMenzu;
     private String naziv;
+    private Set<PaviljonDTO> paviljon;
 
     public DomDTO(Dom dom) {
         this.id = dom.getId();
         this.imaMenzu = dom.isImaMenzu();
         this.naziv = dom.getNaziv();
+        this.paviljon = dom.getPaviljoni().stream().map(PaviljonDTO::new).collect(Collectors.toSet());
     }
 
     public UUID getId() {
@@ -40,6 +45,10 @@ public class DomDTO {
     public void setNaziv(String naziv) {
         this.naziv = naziv;
     }
+
+    public Set<PaviljonDTO> getPaviljon() {return paviljon;}
+
+    public void setPaviljon(Set<PaviljonDTO> paviljon) {this.paviljon = paviljon;}
 
     @Override
     public boolean equals(Object o) {

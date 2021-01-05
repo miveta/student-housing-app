@@ -54,18 +54,18 @@ public class TrazimSobuController {
     }
 
     @GetMapping("/domovi")
-    public Set<DomDTO> getDomovi() {
-        Set<Dom> domovi = trazimSobuService.findAllDom();
+    public Set<DomDTO> getDomovi(@RequestParam(value = "user") String username) {
+        Set<Dom> domovi = trazimSobuService.findAllDom(username);
         return domovi.stream().map(DomDTO::new).collect(Collectors.toSet());
 
     }
 
-    @GetMapping("/paviljoni")
-    public Set<PaviljonDTO> getPavljoni() {
-        List<Paviljon> paviljoni = trazimSobuService.findAllPaviljon();
-        return paviljoni.stream().map(PaviljonDTO::new).collect(Collectors.toSet());
-
-    }
+//    @GetMapping("/paviljoni")
+//    public Set<PaviljonDTO> getPavljoni() {
+//        List<Paviljon> paviljoni = trazimSobuService.findAllPaviljon();
+//        return paviljoni.stream().map(PaviljonDTO::new).collect(Collectors.toSet());
+//
+//    }
 
     @PostMapping(value = "/uvjeti", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> put(@RequestParam(value = "user") String username,
@@ -81,6 +81,7 @@ public class TrazimSobuController {
         if(uvjeti == null){
             uvjeti = new TrazeniUvjeti();
         }
+        uvjeti.setGodina(Calendar.getInstance().get(Calendar.YEAR));
         uvjeti.setKomentar(komentar);
         uvjeti.setTraziStudent(student);
         uvjeti.setGrad(student.getGrad());

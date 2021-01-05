@@ -14,9 +14,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class TrazimSobuServiceImpl implements TrazimSobuService {
-    private Student student;
-
-
 
     @Autowired
     GradRepository gradRepository;
@@ -29,7 +26,7 @@ public class TrazimSobuServiceImpl implements TrazimSobuService {
 
     @Override
     public Grad findGrad(String username){
-        student = studentRepository.findByKorisnickoIme(username);
+        Student student = studentRepository.findByKorisnickoIme(username);
         return student.getGrad();
     }
 
@@ -40,18 +37,18 @@ public class TrazimSobuServiceImpl implements TrazimSobuService {
 
 
     @Override
-    public Set<Dom> findAllDom() {
-        Grad grad = student.getGrad();
-        return grad.getDomovi();
+    public Set<Dom> findAllDom(String username) {
+        Student student = studentRepository.findByKorisnickoIme(username);
+        return student.getGrad().getDomovi();
     }
 
-    @Override
-    public List<Paviljon> findAllPaviljon() {
-        Set<Dom> domovi = student.getGrad().getDomovi();
-        List<Paviljon> paviljoni = new ArrayList<>();
-        for (Dom dom : domovi){
-            paviljoni.addAll(dom.getPaviljoni());
-        }
-        return  paviljoni;
-    }
+//    @Override
+//    public List<Paviljon> findAllPaviljon() {
+//        Set<Dom> domovi = student.getGrad().getDomovi();
+//        List<Paviljon> paviljoni = new ArrayList<>();
+//        for (Dom dom : domovi){
+//            paviljoni.addAll(dom.getPaviljoni());
+//        }
+//        return  paviljoni;
+//    }
 }
