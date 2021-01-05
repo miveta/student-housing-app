@@ -12,7 +12,14 @@ class Soba extends Component {
             gradovi: [],
             domovi: [],
             paviljoni: [],
-            paviljon: undefined
+            grad: '',
+            dom: '',
+            id: '',
+            brojKreveta: '',
+            kat: '',
+            komentar: '',
+            paviljon: undefined,
+            tipKupaonice: ''
         };
 
         this.user = cookie.load('principal');
@@ -20,65 +27,85 @@ class Soba extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
-    onSelectGrad = (event) => {
-        let imeGrada = event.target.value;
-
-        let grad = this.state.gradovi.filter(g => g.naziv === imeGrada)[0];
-
-        this.setSelectedGrad(grad)
-    }
-
-    setSelectedGrad(grad) {
-        let domovi = grad.domovi;
-        let paviljoni = domovi.length === 1 ? domovi[0].paviljoni : [];
-        let paviljon = paviljoni.length === 1 ? paviljoni[0] : undefined
-
-        this.setState({
-            domovi: domovi,
-            paviljoni: paviljoni,
-            paviljon: paviljon
-        })
-    }
-
-    onSelectDom = (event) => {
-        let imeDoma = event.target.value;
-
-        let dom = this.state.domovi.filter(d => d.naziv === imeDoma)[0];
-
-        this.setSelectedDom(dom)
-    }
-
-    setSelectedDom(dom) {
-        console.log(dom)
-        let paviljoni = dom.paviljoni;
-        let paviljon = paviljoni.length === 1 ? paviljoni[0] : undefined
-
-        this.setState({
-            paviljoni: paviljoni,
-            paviljon: paviljon
-        })
+    capitalize = (s) => {
+        s = s.toLowerCase()
+        return s.charAt(0).toUpperCase() + s.slice(1)
     }
 
     onSelectPaviljon = (event) => {
-        let imePaviljona = event.target.value;
+        let self = this;
 
-        let paviljon = this.state.paviljoni.filter(p => p.naziv === imePaviljona)[0];
+        let imePaviljona = event.target.value
+        let grad = self.state.gradovi.filter(g => g.naziv === self.state.grad)[0]
+        let dom = grad.domovi.filter(d => d.naziv === self.state.dom)[0]
+        let paviljon = dom.paviljoni.filter(p => p.naziv === imePaviljona)[0]
 
-        this.setSelectedPaviljon(paviljon)
+        self.setState({paviljon: paviljon})
     }
 
-    setSelectedPaviljon(paviljon) {
-        this.setState({
-            paviljon: paviljon
-        })
+    getDomovi = (imeGrada) => {
+        return this.state.gradovi.filter(grad =>
+            grad.naziv === imeGrada
+        ).map(grad =>
+            grad.domovi)[0]
     }
 
-    onChange(event) {
-        this.setState({change: true});
+    getPaviljoni = (imeDoma) => {
+        return this.state.domovi.filter(dom =>
+            dom.naziv === imeDoma
+        ).map(dom =>
+            dom.paviljoni)[0]
+    }
+
+    onChange = (event) => {
+        const {name, value} = event.target;
+
+        if (name === "grad") {
+            let domovi = this.getDomovi(value);
+            this.setState(state => ({...state, domovi: domovi}))
+        } else if (name === "dom") {
+            let paviljoni = this.getPaviljoni(value)
+            if (paviljoni.length === 1) {
+                this.setState(state => ({...state, paviljon: paviljoni[0]}))
+            }
+            this.setState(state => ({...state, paviljoni: paviljoni}))
+        }
+
+        this.setState(state => ({...state, [name]: value, change: true}))
     }
 
     onSubmit(e) {
+        let self = this;
+
         e.preventDefault();
+
+        const body = {
+            studentUsername: this.user.korisnickoIme,
+            idPaviljon: this.state.paviljon.id,
+            kat: this.state.kat,
+            brojKreveta: this.state.brojKreveta.toUpperCase(),
+            tipKupaonice: this.state.tipKupaonice.toUpperCase(),
+            komentar: this.state.komentar
+        };
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(body)
+        };
+
+
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/soba/spremi`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                }
+            }).then(json => {
+            self.setState({...json})
+        })
     }
 
     componentDidMount() {
@@ -94,25 +121,20 @@ class Soba extends Component {
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
-
                 } else {
                     console.log(response.status)
                 }
             }).then(json => {
             self.setState({gradovi: json})
-            self.setSelectedGrad(json[0])
         })
 
         fetch(`${process.env.REACT_APP_BACKEND_URL}/soba/student?student_username=${this.user.korisnickoIme}`, options)
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
-
-                } else {
-                    console.log(response.status)
                 }
             }).then(json => {
-            console.log(json)
+            self.setState({...json})
         })
     }
 
@@ -120,26 +142,22 @@ class Soba extends Component {
     render() {
         console.log(this.state)
         return (
-
             <div className="middle">
                 <Form onSubmit={this.onSubmit}>
                     <h3> Moja soba </h3>
                     <Form.Group>
                         <Form.Label> Grad </Form.Label>
-                        <Form.Control as="select" name="grad" defaultValue="Odaberi..." onChange={this.onSelectGrad}>
+                        <Form.Control as="select" name="grad" onChange={this.onChange} value={this.state.grad}>
                             {this.state.gradovi.map(grad => (
                                 <option id={grad.id}>{grad.naziv}</option>
                             ))}
                         </Form.Control>
 
                         <Form.Label> Dom </Form.Label>
-                        <Form.Control as="select" name="dom" onChange={this.onSelectDom}
-                                      disabled={this.state.domovi.length === 0}>
-                            {
-                                this.state.domovi.map(dom => (
-                                    <option id={dom.id}>{dom.naziv}</option>
-                                ))
-                            }
+                        <Form.Control as="select" name="dom" onChange={this.onChange} value={this.state.dom}>
+                            {this.state.domovi.map(dom => (
+                                <option id={dom.id}>{dom.naziv}</option>
+                            ))}
                         </Form.Control>
                     </Form.Group>
 
@@ -148,12 +166,18 @@ class Soba extends Component {
                             <Col xs={9}>
                                 <Form.Label> Paviljon </Form.Label>
                                 <Form.Control as="select" name="paviljon" onChange={this.onSelectPaviljon}
-                                              disabled={this.state.paviljoni.length === 0}>
+                                              value={this.state.paviljon !== undefined && this.state.paviljon.naziv}>
                                     {
-                                        this.state.paviljoni.map(paviljon => (
-
-                                            <option id={paviljon.id}>{paviljon.naziv}</option>
-                                        ))
+                                        this.state.gradovi.filter(grad =>
+                                            grad.naziv === this.state.grad
+                                        ).map(grad =>
+                                            grad.domovi.filter(
+                                                dom => dom.naziv === this.state.dom
+                                            ).map(dom =>
+                                                dom.paviljoni.map(paviljon => (
+                                                    <option id={paviljon.id}>{paviljon.naziv}</option>
+                                                ))
+                                            ))
                                     }
                                 </Form.Control>
                             </Col>
@@ -162,7 +186,8 @@ class Soba extends Component {
                                     <Form.Label> Kat </Form.Label>
                                     <Form.Control name="kat" type="number" min={0}
                                                   max={this.state.paviljon === undefined ? 0 : this.state.paviljon.brojKatova}
-                                                  autoCorrect={"on"} disabled={this.state.paviljon === undefined}/>
+                                                  disabled={this.state.paviljon === undefined}
+                                                  defaultValue={this.state.kat}/>
                                 </Form.Group>
                             </Col>
                         </Form.Row>
@@ -173,25 +198,29 @@ class Soba extends Component {
                         <Form.Row>
                             <Col>
                                 <Form.Label> Broj kreveta </Form.Label>
-                                <Form.Control as="select" defaultValue="Odaberi...">
-                                    <option> Jednokrevetna soba</option>
-                                    <option> Dvokrevetna soba</option>
-                                    <option> Trokrevetna soba</option>
-                                    <option> Višekrevetna soba</option>
+                                <Form.Control as="select" name="brojKreveta"
+                                              onChange={this.onChange} value={this.capitalize(this.state.brojKreveta)}>
+                                    <option>Jednokrevetna</option>
+                                    <option>Dvokrevetna</option>
+                                    <option>Trokrevetna</option>
+                                    <option>Višekrevetna</option>
                                 </Form.Control>
                             </Col>
                             <Col>
                                 <Form.Label> Tip kupaonice </Form.Label>
-                                <Form.Control as="select" defaultValue="Odaberi...">
-                                    <option> U sobi</option>
-                                    <option> Zajednički</option>
+                                <Form.Control as="select" name="tipKupaonice"
+                                              value={this.capitalize(this.state.tipKupaonice)}
+                                              onChange={this.onChange}>
+                                    <option> Privatna</option>
+                                    <option> Dijeljena</option>
                                 </Form.Control>
                             </Col>
                         </Form.Row>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label> Komentar </Form.Label>
-                        <Form.Control name="komentar" as="textarea" rows="3"/>
+                        <Form.Control name="komentar" as="textarea" rows="3" onChange={this.onChange}
+                                      defaultValue={this.state.komentar}/>
                     </Form.Group>
 
                     <Button type="submit" variant="dark" size="lg" block> Spremi promjene </Button>

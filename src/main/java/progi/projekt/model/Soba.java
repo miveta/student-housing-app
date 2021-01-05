@@ -1,5 +1,6 @@
 package progi.projekt.model;
 
+import org.hibernate.annotations.Type;
 import progi.projekt.model.enums.BrojKrevetaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 
@@ -38,6 +39,7 @@ public class Soba implements Serializable {
     private TipKupaoniceEnum tipKupaonice;
 
     @Lob
+    @Type(type = "text")
     private String komentar;
 
     public UUID getId() {
@@ -109,19 +111,13 @@ public class Soba implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Soba soba = (Soba) o;
-        return kat == soba.kat &&
-                Objects.equals(id, soba.id) &&
-                Objects.equals(paviljon, soba.paviljon) &&
-                Objects.equals(oglas, soba.oglas) &&
-                Objects.equals(student, soba.student) &&
-                brojKreveta == soba.brojKreveta &&
-                tipKupaonice == soba.tipKupaonice &&
-                Objects.equals(komentar, soba.komentar);
+        return
+                Objects.equals(id, soba.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, paviljon, kat, oglas, student, brojKreveta, tipKupaonice, komentar);
+        return Objects.hash(id);
     }
 
     @Override
@@ -130,8 +126,6 @@ public class Soba implements Serializable {
                 "id=" + id +
                 ", paviljon=" + paviljon +
                 ", kat=" + kat +
-                ", oglas=" + oglas +
-                ", student=" + student +
                 ", brojKreveta=" + brojKreveta +
                 ", tipKupaonice=" + tipKupaonice +
                 ", komentar='" + komentar + '\'' +

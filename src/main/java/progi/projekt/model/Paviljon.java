@@ -83,17 +83,12 @@ public class Paviljon implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Paviljon paviljon = (Paviljon) o;
-        return brojKatova == paviljon.brojKatova &&
-                Objects.equals(id, paviljon.id) &&
-                Objects.equals(naziv, paviljon.naziv) &&
-                Objects.equals(dom, paviljon.dom) &&
-                Objects.equals(sobe, paviljon.sobe) &&
-                kategorija == paviljon.kategorija;
+        return brojKatova == paviljon.brojKatova;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, naziv, brojKatova, dom, sobe, kategorija);
+        return Objects.hash(id);
     }
 
     @Override
@@ -103,7 +98,6 @@ public class Paviljon implements Serializable {
                 ", naziv='" + naziv + '\'' +
                 ", brojKatova=" + brojKatova +
                 ", dom=" + dom +
-                ", sobe=" + sobe +
                 ", kategorija=" + kategorija +
                 '}';
     }

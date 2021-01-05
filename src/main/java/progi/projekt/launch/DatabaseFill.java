@@ -201,10 +201,10 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
 
                 sobaIvica.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
                 Soba sobaMarko = new Soba();
-
                 sobaMarko.setBrojKreveta(BrojKrevetaEnum.DVOKREVETNA);
-
+                sobaMarko.setKomentar("komentarcic");
                 sobaMarko.setTipKupaonice(TipKupaoniceEnum.PRIVATNA);
+
                 Soba sobaPero = new Soba();
 
                 sobaPero.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
@@ -224,6 +224,11 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 paviljonSava1.setNaziv("Prvi");
                 paviljonSava1.setBrojKatova(4);
                 paviljonSava1.setKategorija(OznakeKategorijaEnum.III);
+
+                sobaMarko.setPaviljon(paviljonSava1);
+                HashSet<Soba> paviljonSava1Sobe = new HashSet<>();
+                paviljonSava1Sobe.add(sobaMarko);
+                paviljonSava1.setSobe(paviljonSava1Sobe);
 
                 Paviljon paviljonSava2 = new Paviljon();
                 paviljonSava2.setNaziv("Onaj pored roka");
@@ -408,7 +413,6 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 sobe.add(sobaMarko);
                 sobe.add(sobaPero);
 
-
                 marko.setSoba(sobaMarko);
                 sobaMarko.setStudent(marko);
 
@@ -425,6 +429,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 /*katRepository.saveAll(katovi);*/
                 paviljonRepository.saveAll(paviljoni);
                 sobaRepository.saveAll(sobe);
+
 
                 System.out.println("Umetnute pocetne vrijednosti");
 

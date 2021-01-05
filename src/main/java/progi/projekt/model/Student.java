@@ -47,11 +47,11 @@ public class Student implements Serializable, Korisnik {
     private TrazeniUvjeti uvjeti;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="oglas")
+    @JoinColumn(name = "oglas")
     private Oglas oglas;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="id_grad")
+    @JoinColumn(name = "id_grad")
     private Grad grad;
 
 
@@ -182,44 +182,17 @@ public class Student implements Serializable, Korisnik {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return obavijestiNaMail == student.obavijestiNaMail &&
-                Objects.equals(id, student.id) &&
-                Objects.equals(jmbag, student.jmbag) &&
-                Objects.equals(korisnickoIme, student.korisnickoIme) &&
-                Objects.equals(ime, student.ime) &&
-                Objects.equals(prezime, student.prezime) &&
-                Objects.equals(email, student.email) &&
-                Objects.equals(lozinka, student.lozinka) &&
-                Objects.equals(obavijesti, student.obavijesti) &&
-                Objects.equals(potvrdioOglas, student.potvrdioOglas) &&
-                Objects.equals(uvjeti, student.uvjeti) &&
-                Objects.equals(oglas, student.oglas) &&
-                Objects.equals(grad, student.grad) &&
-                Objects.equals(soba, student.soba);
+        return
+                Objects.equals(id, student.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, jmbag, korisnickoIme, ime, prezime, email, lozinka, obavijestiNaMail, obavijesti, potvrdioOglas, uvjeti, oglas, grad, soba);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", jmbag='" + jmbag + '\'' +
-                ", korisnickoIme='" + korisnickoIme + '\'' +
-                ", ime='" + ime + '\'' +
-                ", prezime='" + prezime + '\'' +
-                ", email='" + email + '\'' +
-                ", lozinka='" + lozinka + '\'' +
-                ", obavijestiNaMail=" + obavijestiNaMail +
-                ", obavijesti=" + obavijesti +
-                ", potvrdioOglas=" + potvrdioOglas +
-                ", uvjeti=" + uvjeti +
-                ", oglas=" + oglas +
-                ", grad=" + grad +
-                ", soba=" + soba +
-                '}';
+        return "Student{}";
     }
 }

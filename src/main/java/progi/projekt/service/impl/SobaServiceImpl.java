@@ -2,6 +2,7 @@ package progi.projekt.service.impl;
 
 import org.springframework.stereotype.Service;
 import progi.projekt.model.Grad;
+import progi.projekt.model.Paviljon;
 import progi.projekt.model.Soba;
 import progi.projekt.model.Student;
 import progi.projekt.repository.GradRepository;
@@ -9,6 +10,7 @@ import progi.projekt.repository.SobaRepository;
 import progi.projekt.repository.StudentRepository;
 import progi.projekt.service.SobaService;
 import progi.projekt.service.StudentService;
+import progi.projekt.service.UtilService;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,16 +25,28 @@ public class SobaServiceImpl implements SobaService {
     private GradRepository gradRepository;
     private StudentRepository studentRepository;
     private StudentService studentService;
+    private UtilService utilService;
 
-    public SobaServiceImpl(SobaRepository sobaRepository, GradRepository gradRepository, StudentRepository studentRepository, StudentService studentService) {
+    public SobaServiceImpl(SobaRepository sobaRepository, GradRepository gradRepository, StudentRepository studentRepository, StudentService studentService, UtilService utilService) {
         this.sobaRepository = sobaRepository;
         this.gradRepository = gradRepository;
         this.studentRepository = studentRepository;
         this.studentService = studentService;
+        this.utilService = utilService;
     }
 
     public List<Grad> findAllGrad() {
         return gradRepository.findAll();
+    }
+
+    @Override
+    public Soba save(Soba soba) {
+        return sobaRepository.saveAndFlush(soba);
+    }
+
+    @Override
+    public Soba update(Soba soba) {
+        return null;
     }
 
     @Override
@@ -43,6 +57,19 @@ public class SobaServiceImpl implements SobaService {
         Student student = optionalStudent.get();
 
         return sobaRepository.findByStudent(student);
+    }
+
+    @Override
+    public Optional<Soba> setFromStudentUsernameAndPaviljonId(Soba soba, String studentUsername, String paviljonId) {
+        Optional<Student> optionalStudent = studentService.findByKorisnickoIme(studentUsername);
+        Optional<Paviljon> optionalPaviljon = utilService.getPaviljonById(paviljonId);
+
+        if (optionalStudent.isEmpty() || optionalPaviljon.isEmpty()) return Optional.empty();
+
+        soba.setStudent(optionalStudent.get());
+        soba.setPaviljon(optionalPaviljon.get());
+
+        return Optional.of(soba);
     }
 
     @Override

@@ -87,10 +87,7 @@ public class Grad {
     public String toString() {
         return "Grad{" +
                 "id=" + id +
-                ", naziv='" + naziv + '\'' +
-                ", domovi=" + domovi +
-                ", studentskiCentar=" + studentskiCentar +
-                ", studenti=" + studenti +
+                ", naziv='" + naziv +
                 '}';
     }
 }
