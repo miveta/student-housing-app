@@ -9,6 +9,7 @@ import progi.projekt.repository.ParRepository;
 import progi.projekt.service.KandidatService;
 import progi.projekt.service.ParService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,10 +92,19 @@ public class ParServiceImpl implements ParService {
 	}
 
 	@Override
+	public boolean ifObaCEKA(Par par) {
+		var statusPrvogOglasa = par.getOglas1().getStatus().getStatus();
+		var statusDrugogOgalsa = par.getOglas2().getStatus().getStatus();
+
+		return statusPrvogOglasa == StatusOglasaEnum.CEKA && statusDrugogOgalsa == StatusOglasaEnum.CEKA;
+	}
+
+	@Override
 	public Integer TrostranaOcjena(Integer ocjenaAB, Integer ocjenaBC, Integer ocjenaCA) {
 		return (ocjenaAB + ocjenaBC + ocjenaCA) * 2/3;
 	}
 
+	//primi par i vrati oglas3, gdje je oglas 3 treci oglas lanaca
 	@Override
 	public Optional<Oglas> pronadjiTreciOglasIzLanca(Par par) {
 		List<Par> paroviC = listAll();
@@ -112,24 +122,86 @@ public class ParServiceImpl implements ParService {
 		return oglas3Opt;
 	}
 
+	//primi oglas1 i vrati listu [oglas1, oglas2, oglas3], gdje oglasi 1-3 cine lanac
 	@Override
-	public Optional<Par> pripadniParOglasa(Oglas oglas) {
+	public List<Oglas> pripadniOglasiLanca(Oglas oglas1) {
+		Par parAB = pripadniParOglasa(oglas1).get();
+		Oglas oglas2;
+		if (parAB.getOglas1() == oglas1){
+			oglas2 = parAB.getOglas2();
+		} else {
+			oglas2 = parAB.getOglas1();
+		}
+		Oglas oglas3 = pronadjiTreciOglasIzLanca(parAB).get();
+
+		List<Oglas> lanacOglasi = new ArrayList<>();
+		lanacOglasi.add(oglas1);
+		lanacOglasi.add(oglas2);
+		lanacOglasi.add(oglas3);
+
+		return lanacOglasi;
+	}
+
+	//primi oglas1 i vrati listu [parAB, parBC, parCA] koji zajedno cine lanac
+	@Override
+	public List<Par> pripadniParoviLanca(Oglas oglas1) {
+		List<Oglas> lanacOglasi = pripadniOglasiLanca(oglas1);
+
+		Par parAB = pripadniParAB(lanacOglasi.get(0), lanacOglasi.get(1)).get();
+		Par parBC = pripadniParAB(lanacOglasi.get(1), lanacOglasi.get(2)).get();
+		Par parCA = pripadniParAB(lanacOglasi.get(2), lanacOglasi.get(0)).get();
+
+		List<Par> lanacParovi = new ArrayList<>();
+
+		lanacParovi.add(parAB);
+		lanacParovi.add(parBC);
+		lanacParovi.add(parCA);
+
+		return lanacParovi;
+	}
+
+	@Override
+	public Optional<Par> pripadniParOglasa (Oglas oglas) {
 		Optional<Par> par = Optional.empty();
 
 		List<Par> paroviC = listAll();
 		for (Par parC : paroviC){
-			if (parSadrziOglas(parC, oglas)){
+			if (parC.getLanac() == false){
+				if (parSadrziOglas(parC, oglas)){
+					par = Optional.of(parC);
+					break;
+				}
+			}
+			else {
+				if (parC.getOglas1() == oglas){
+					par = Optional.of(parC);
+					break;
+				}
+			}
+
+		}
+		return par;
+	}
+
+	//note: ova metoda je predvidjena za rad sa lancima pa je
+	// redoslijed poslanih argumenata je bitan
+	@Override
+	public Optional<Par> pripadniParAB(Oglas oglasA, Oglas oglasB) {
+		Optional<Par> par = Optional.empty();
+
+		List<Par> paroviC = listAll();
+		for (Par parC : paroviC){
+			if (parC.getOglas1() == oglasA && parC.getOglas2() == oglasB){
 				par = Optional.of(parC);
 				break;
 			}
 		}
-		return Optional.empty();
+		return par;
 	}
 
 	@Override
 	public Optional<Kandidat> pripadniKandidatPara(Par par) {
-		Optional<Kandidat> kandidat = Optional.empty();
-
-		return Optional.empty();
+		Optional<Kandidat> kandidat = kandidatService.kandidatParaOglasa(par.getOglas1(), par.getOglas2());
+		return kandidat;
 	}
 }

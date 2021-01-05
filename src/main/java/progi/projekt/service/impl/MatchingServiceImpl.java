@@ -242,7 +242,11 @@ public class MatchingServiceImpl implements MatchingService {
 
 						trostranaOcjena = parService.TrostranaOcjena(ocjenaAB, ocjenaBC, ocjenaCA);
 					}
-					obostraneOcjene.put(par, trostranaOcjena);
+					List<Par> lanacParovi = parService.pripadniParoviLanca(par.getOglas1());
+					for (Par parLanca : lanacParovi){
+						obostraneOcjene.put(parLanca, trostranaOcjena);
+					}
+
 				} else {
 					//ovo se ne moze dogoditi jer se lanci uvijek rade skupa
 					//pepsi > coke
@@ -306,39 +310,37 @@ public class MatchingServiceImpl implements MatchingService {
 
 			//ako nemamo lanac
 			if (par.getLanac() == false){
-
-				if (parService.ifObaAKTIVAN(par)){
-					//oba studenta su prihvatila par (ignore != false) i oglas nije u medjuvremenu zauzet (oba == AKTIVAN)
-					if (par.getIgnore() == false){
-						par.setDone(true);
-						parService.potvrdiOglasePara(par);
-						MailService.PotvrdaZamjenePara(par);
-					}
-
-					//barem jedan od studenata nije prihvatio par
-					//todo za obavijestiService: odbijanjem para treba odraditi par.setIgnore(true)
-					else /* par.getIgnore() == true) */{
-						ponistiParIKandidat(par);
-
-						parService.vratiOglaseParaNaAKTIVAN(par);
-					}
-				}
-				else {
-					//jedan od oglasa je u medjuvremenu obrisan/ponisten
-					ponistiParIKandidat(par);
-				}
-
-
+				confirmFunLegwork(par);
 			}
 			//ako imamo lanac
 			else {
-				//todo
-				//kod lanaca par nije pravi par vec jednosmjerna razmjena
-				//tj oglas1 zeli sobu2, ali oglas2 ne zeli sobu1 nego sobu3
+				List<Par> lanacParovi = parService.pripadniParoviLanca(par.getOglas1());
+				for (Par parLanca : lanacParovi){
+					confirmFunLegwork(parLanca);
+				}
+			}
+		}
+	}
+
+	public void confirmFunLegwork(Par par) {
+		if (parService.ifObaCEKA(par)){
+			//oba studenta su prihvatila par (ignore != false) i oglas nije u medjuvremenu zauzet (oba == AKTIVAN)
+			if (par.getIgnore() == false){
+				par.setDone(true);
+				parService.potvrdiOglasePara(par);
+				MailService.PotvrdaZamjenePara(par);
 			}
 
-
-
+			//barem jedan od studenata nije prihvatio par
+			//todo za obavijestiService: odbijanjem para treba odraditi par.setIgnore(true)
+			else /* par.getIgnore() == true) */{
+				ponistiParIKandidat(par);
+				parService.vratiOglaseParaNaAKTIVAN(par);
+			}
+		}
+		else {
+			//jedan od oglasa je u medjuvremenu obrisan/ponisten
+			ponistiParIKandidat(par);
 		}
 	}
 

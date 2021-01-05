@@ -24,11 +24,19 @@ public interface ParService {
 
 	boolean ifObaAKTIVAN(Par par);
 
+	boolean ifObaCEKA(Par par);
+
 	Integer TrostranaOcjena(Integer ocjenaAB, Integer ocjenaBC, Integer ocjenaCA);
 
 	Optional<Oglas> pronadjiTreciOglasIzLanca(Par par);
 
+	List<Oglas> pripadniOglasiLanca(Oglas oglas1);
+
+	List<Par> pripadniParoviLanca(Oglas oglas1);
+
 	Optional<Par> pripadniParOglasa(Oglas oglas);
+
+	Optional<Par> pripadniParAB(Oglas oglasA, Oglas oglasB);
 
 	Optional<Kandidat> pripadniKandidatPara(Par par);
 }
