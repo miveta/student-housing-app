@@ -1,8 +1,5 @@
 package progi.projekt.service.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Key<K1, K2> {
 	public K1 key1;
 	public K2 key2;

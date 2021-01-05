@@ -33,13 +33,13 @@ public class KandidatServiceImpl implements KandidatService {
 	}
 
     //TODO: maknuto zbog UUID
-	/**/
-	@Override
-	public List<Kandidat> listAll(UUID oglasUuid) {
-		var oglas = oglasService.findById(oglasUuid.toString());
-		return kandidatRepo.findAllByOglas(oglas.get());
-		//return new ArrayList<Kandidat>();
-	}
+    /**/
+    @Override
+    public List<Kandidat> listAll(UUID oglasUuid) {
+        var oglas = oglasService.findById(oglasUuid.toString());
+        return kandidatRepo.findAllByOglas(oglas.get());
+        //return new ArrayList<Kandidat>();
+    }
 
 	public void stvoriKand(Oglas oglas1, Oglas oglas2) {
 		Integer bliskost = calculateScore(oglas1, oglas2);
@@ -55,35 +55,35 @@ public class KandidatServiceImpl implements KandidatService {
 	@Override
 	public Boolean odgovaraju(Oglas oglas1, Oglas oglas2) {
 
-		var uvjeti1 = oglas1.getStudent().getUvjeti();
-		var uvjeti2 = oglas2.getStudent().getUvjeti();
+        var uvjeti1 = oglas1.getStudent().getUvjeti();
+        var uvjeti2 = oglas2.getStudent().getUvjeti();
 
-		var soba1 = sobaService.getByStudentId(oglas1.getStudent().getId());
-		var soba2 = sobaService.getByStudentId(oglas2.getStudent().getId());
+        var soba1 = sobaService.getByStudentId(oglas1.getStudent().getId());
+        var soba2 = sobaService.getByStudentId(oglas2.getStudent().getId());
 
 		return (sobaMatchesUvjet(soba1, uvjeti2) && sobaMatchesUvjet(soba2, uvjeti1)) ? true : false;
 	}
 
-	@Override
-	public int odgovaraIizTopN(Oglas oglas) {
-		//ako nekom od topN kandidata ogovara nasa soba vrati topN indeks tog kandidata. Inace vrati -1
+    @Override
+    public int odgovaraIizTopN(Oglas oglas) {
+        //ako nekom od topN kandidata ogovara nasa soba vrati indeks tog kandidata. Inace vrati -1
 
-		List<Oglas> topN = topN(oglas);
+        List<Oglas> topN = topN(oglas);
 
-		int i = 0;
-		for (Oglas kand : topN) {
-			if (odgovaraju(oglas, kand)) {
-				return i;
-			} else {
-				i++;
-			}
-		}
-		return -1;
-	}
+        int i = 0;
+        for (Oglas kand : topN) {
+            if (odgovaraju(oglas, kand)) {
+                return i;
+            } else {
+                i++;
+            }
+        }
+        return -1;
+    }
 
-	@Override
-	public List<Oglas> topN(Oglas oglas) {
-		//primi oglas i vrati listu prvih N Oglasa kandidata sortirano po bliskosti
+    @Override
+    public List<Oglas> topN(Oglas oglas) {
+        //primi oglas i vrati listu prvih N Oglasa kandidata sortirano po bliskosti
 
 		int N = SHORTLIST_VELICINA;
 		//todo: staviti poruku korisnicima da moraju ocjeniti barem N oglasa

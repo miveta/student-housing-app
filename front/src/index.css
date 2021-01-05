@@ -55,10 +55,7 @@ body, html, .App, #root, .outer {
 
 .footer {
     box-shadow: 0 -5px 3px rgba(34, 35, 58, 0.2);
-    position:absolute;
-    bottom:0;
-    display:block;
-    width:100%
+    position: sticky;
 }
 
 .outer .form-control:focus {

@@ -80,4 +80,14 @@ public class Dom implements Serializable {
     public void setPaviljoni(Set<Paviljon> paviljoni) {
         this.paviljoni = paviljoni;
     }
+
+    @Override
+    public String toString() {
+        return "Dom{" +
+                "id=" + id +
+                ", imaMenzu=" + imaMenzu +
+                ", naziv='" + naziv + '\'' +
+                ", grad=" + grad +
+                '}';
+    }
 }

@@ -8,7 +8,9 @@ import progi.projekt.model.Kandidat;
 import progi.projekt.model.Par;
 import progi.projekt.service.KandidatService;
 import progi.projekt.service.MatchingService;
-import java.util.*;
+
+import java.util.List;
+import java.util.UUID;
 
 ///Kontroler koji stvara i azurira listu kandidatnih soba/veza, listu valjanih parova i odgovarajuce oglase
 

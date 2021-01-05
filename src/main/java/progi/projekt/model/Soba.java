@@ -1,7 +1,7 @@
 package progi.projekt.model;
 
+import org.hibernate.annotations.Type;
 import progi.projekt.model.enums.BrojKrevetaEnum;
-import progi.projekt.model.enums.OznakeKategorijaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 
 import javax.persistence.*;
@@ -16,16 +16,19 @@ public class Soba implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private Integer kat;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_paviljon")
+    private Paviljon paviljon;
 
+    private int kat;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_oglas")
     private Oglas oglas;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_paviljon")
-    private Paviljon paviljon;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_student")
+    private Student student;
 
     @Column(name = "broj_kreveta")
     @Enumerated(EnumType.STRING)
@@ -35,43 +38,49 @@ public class Soba implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipKupaoniceEnum tipKupaonice;
 
-    @Column(name = "kategorija")
-    @Enumerated(EnumType.STRING)
-    private OznakeKategorijaEnum kategorija;
+    @Lob
+    @Type(type = "text")
+    private String komentar;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Soba soba = (Soba) o;
-        return  Objects.equals(id, soba.id) &&
-                Objects.equals(kat, soba.kat) &&
-                Objects.equals(oglas, soba.oglas) &&
-                brojKreveta == soba.brojKreveta &&
-                tipKupaonice == soba.tipKupaonice &&
-                kategorija == soba.kategorija;
+    public UUID getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, kat, oglas, brojKreveta, tipKupaonice, kategorija);
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public Soba() {
+    public Paviljon getPaviljon() {
+        return paviljon;
     }
 
-    //Ništa ne smije biti null!
-    public Soba(Paviljon paviljon, BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija) {
-        if (brojKreveta != null && tipKupaonice != null && kategorija != null) {
-            this.brojKreveta = brojKreveta;
-            this.tipKupaonice = tipKupaonice;
-            this.kat = kat;
-        } else {
-            System.err.println("Ništa u kreaciji sobe ne smije biti null!");
-        }
+    public void setPaviljon(Paviljon paviljon) {
+        this.paviljon = paviljon;
     }
 
+    public int getKat() {
+        return kat;
+    }
 
+    public void setKat(int kat) {
+        this.kat = kat;
+    }
+
+    public Oglas getOglas() {
+        return oglas;
+    }
+
+    public void setOglas(Oglas oglas) {
+        this.oglas = oglas;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
 
     public BrojKrevetaEnum getBrojKreveta() {
         return brojKreveta;
@@ -89,44 +98,38 @@ public class Soba implements Serializable {
         this.tipKupaonice = tipKupaonice;
     }
 
-    public OznakeKategorijaEnum getKategorija() {
-        return kategorija;
+    public String getKomentar() {
+        return komentar;
     }
 
-    public void setKategorija(OznakeKategorijaEnum kategorija) {
-        this.kategorija = kategorija;
+    public void setKomentar(String komentar) {
+        this.komentar = komentar;
     }
 
-    public UUID getId() {
-        return id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Soba soba = (Soba) o;
+        return
+                Objects.equals(id, soba.id);
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
-    public Oglas getOglas() {
-        return oglas;
-    }
-
-    public void setOglas(Oglas oglas) {
-        this.oglas = oglas;
-    }
-
-    public Paviljon getPaviljon() {
-        return paviljon;
-    }
-
-    public void setPaviljon(Paviljon paviljon) {
-        this.paviljon = paviljon;
-    }
-
-    public int getKat() {
-        return kat;
-    }
-
-    public void setKat(int kat) {
-        this.kat = kat;
+    @Override
+    public String toString() {
+        return "Soba{" +
+                "id=" + id +
+                ", paviljon=" + paviljon +
+                ", kat=" + kat +
+                ", brojKreveta=" + brojKreveta +
+                ", tipKupaonice=" + tipKupaonice +
+                ", komentar='" + komentar + '\'' +
+                '}';
     }
 }
 

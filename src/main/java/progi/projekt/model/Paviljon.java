@@ -1,6 +1,5 @@
 package progi.projekt.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import progi.projekt.model.enums.OznakeKategorijaEnum;
 
 import javax.persistence.*;
@@ -10,7 +9,6 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@JsonIgnoreProperties({"dom"}) // dodano da se izbjegne rekuzija za fetch
 public class Paviljon implements Serializable {
     @Id
     @Column(name = "id_paviljon")
@@ -18,6 +16,8 @@ public class Paviljon implements Serializable {
     private UUID id;
 
     private String naziv;
+
+    private int brojKatova;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_dom")
@@ -34,23 +34,6 @@ public class Paviljon implements Serializable {
     @Enumerated(EnumType.STRING)
     private OznakeKategorijaEnum kategorija;
 
-    public Paviljon() {
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Paviljon paviljon = (Paviljon) o;
-        return id.equals(paviljon.id) &&
-                dom.equals(paviljon.dom);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, dom);
-    }
-
     public UUID getId() {
         return id;
     }
@@ -65,6 +48,14 @@ public class Paviljon implements Serializable {
 
     public void setNaziv(String naziv) {
         this.naziv = naziv;
+    }
+
+    public int getBrojKatova() {
+        return brojKatova;
+    }
+
+    public void setBrojKatova(int brojKatova) {
+        this.brojKatova = brojKatova;
     }
 
     public Dom getDom() {
@@ -83,8 +74,8 @@ public class Paviljon implements Serializable {
         this.trazeni_uvjeti = trazeni_uvjeti;
     }
 
-    public Set<Soba> getSobe() {
-        return sobe;
+    public void setSobe(Set<Soba> sobe) {
+        this.sobe = sobe;
     }
 
     public OznakeKategorijaEnum getKategorija() {
@@ -93,5 +84,29 @@ public class Paviljon implements Serializable {
 
     public void setKategorija(OznakeKategorijaEnum kategorija) {
         this.kategorija = kategorija;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Paviljon paviljon = (Paviljon) o;
+        return brojKatova == paviljon.brojKatova;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Paviljon{" +
+                "id=" + id +
+                ", naziv='" + naziv + '\'' +
+                ", brojKatova=" + brojKatova +
+                ", dom=" + dom +
+                ", kategorija=" + kategorija +
+                '}';
     }
 }

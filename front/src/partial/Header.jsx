@@ -15,10 +15,11 @@ class Header extends Component {
             title: 'Jeste li sigurni da se želite odjaviti?',
             type: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#33B5E7',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#12c2e9',
+            cancelButtonColor: '#f64571',
             cancelButtonText: 'Odustani',
-            confirmButtonText: 'Da, želim.'
+            confirmButtonText: 'Da, želim.',
+            heightAuto: false
         }).then(async (result) => {
             if (result.value) {
                 this.props.history.push("/");
@@ -29,32 +30,25 @@ class Header extends Component {
 
     render() {
         return (
-            <Navbar expand="lg" bg="light" className="justify-content-between header" sticky={"top"}>
+            <Navbar expand="lg" bg="light" className="header" sticky={"top"}>
                 <Navbar.Brand href="/">ZAMJENA SOBA</Navbar.Brand>
-                {this.props.authenticated
-                    ?
-                    <Nav className="justify-content-end">
-                        <Nav.Item>
+                <Navbar.Toggle/>
+                <Navbar.Collapse className="justify-content-end">
+                    {this.props.authenticated
+                        ?
+                        <Nav>
                             <Nav.Link href="/soba">Moja soba</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
                             <Nav.Link href="/trazimsobu">Tražim sobu</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
                             <Nav.Link href="/mojprofil">Moj profil</Nav.Link>
-                        </Nav.Item>
-                        <Button variant="light" onClick={this.logout}> Odjavi se </Button>
-                    </Nav>
-                    :
-                    <Nav className="justify-content-end">
-                        <Nav.Item>
+                            <Button variant="light" onClick={this.logout}> Odjavi se </Button>
+                        </Nav>
+                        :
+                        <Nav>
                             <Nav.Link href="/login">Prijava</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
                             <Nav.Link href="/register">Registracija</Nav.Link>
-                        </Nav.Item>
-                    </Nav>
-                }
+                        </Nav>
+                    }
+                </Navbar.Collapse>
             </Navbar>
         )
     }

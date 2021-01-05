@@ -10,6 +10,7 @@ import progi.projekt.service.StudentService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 //Ukoliko se provjera danih podataka radi preko asserta, assert baca IllegalArgumentException
 
@@ -36,6 +37,16 @@ public class StudentServiceImpl implements StudentService {
             //throw new JmbagNotFoundException("No user with email: '" + email + "'");
             return Optional.empty();
         }
+    }
+
+    @Override
+    public Optional<Student> findById(String id) {
+        return findById(UUID.fromString(id));
+    }
+
+    @Override
+    public Optional<Student> findById(UUID id) {
+        return studentRepository.findById(id);
     }
 
     @Override
