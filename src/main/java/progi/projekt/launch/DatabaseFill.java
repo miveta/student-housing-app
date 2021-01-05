@@ -213,28 +213,22 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
 
                 //Kreiraj soba
                 Soba sobaIvica = new Soba();
-                sobaIvica.setBroj(1);
+
                 sobaIvica.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
                 sobaIvica.setKategorija(OznakeKategorijaEnum.IV);
                 sobaIvica.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
                 Soba sobaMarko = new Soba();
-                sobaMarko.setBroj(1);
+
                 sobaMarko.setBrojKreveta(BrojKrevetaEnum.DVOKREVETNA);
                 sobaMarko.setKategorija(OznakeKategorijaEnum.II);
                 sobaMarko.setTipKupaonice(TipKupaoniceEnum.PRIVATNA);
                 Soba sobaPero = new Soba();
-                sobaPero.setBroj(5);
+
                 sobaPero.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
                 sobaPero.setKategorija(OznakeKategorijaEnum.III);
                 sobaPero.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
 
-                //Kreiraj kat
-                Kat prviRadic = new Kat();
-                Kat drugiRadic = new Kat();
-                Kat prviSava = new Kat();
-                prviRadic.setBroj(1);
-                prviSava.setBroj(1);
-                drugiRadic.setBroj(2);
+
 
                 //Kreiraj paviljon
                 Paviljon paviljonSava = new Paviljon();

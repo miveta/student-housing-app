@@ -75,7 +75,8 @@ public class TrazimSobuController {
                                     @RequestParam(value = "brojKreveta") String[] brojKreveta,
                                     @RequestParam(value = "tipKupaonice") String[] tipKupaonice,
                                     @RequestParam(value = "komentar") String komentar) {
-        Student student = studentRepository.findByKorisnickoIme(username);
+        Optional<Student> s = studentRepository.findByKorisnickoIme(username);
+        Student student = s.get();
         Set<Dom> dom = new HashSet<>();
         TrazeniUvjeti uvjeti = student.getUvjeti();
         if(uvjeti == null){

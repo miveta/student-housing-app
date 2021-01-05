@@ -4,11 +4,22 @@ import {withRouter} from 'react-router-dom';
 
 function TrazimSobu(props){
     const user = JSON.parse(localStorage.getItem("user"));
-    const [grad, setGrad] = React.useState('');
-    const [domovi, setDomovi] = React.useState({d:[{id: '', imaMenzu: '', naziv: '',paviljon: {id: '', naziv: ''}, checked: false}]}) ;
+    const [grad, setGrad] = React.useState({
+        id: '',
+        naziv: '',
+        domovi: [{
+            id: '',
+            imaMenzu: '',
+            naziv: '',
+            paviljoni: [{
+                id: '',
+                naziv: '',
+                kategorija: ''}],
+            checked: false}] });
+    //const [domovi, setDomovi] = React.useState({d:[{id: '', imaMenzu: '', naziv: '',paviljon: {id: '', naziv: ''}, checked: false}]}) ;
     // const [paviljoni,setPaviljoni] = React.useState([{id: '', naziv: ''}]);
 
-    const [uvjeti, setUvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [],brojKreveta: [], komentar: ''});
+    const [uvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [],brojKreveta: [], komentar: ''});
     const katovi = ['1', '2', '3', '4'];
     const kreveti = [
         {name:"Jednokrevetna", value:"JEDNOKREVETNA"},
@@ -25,8 +36,8 @@ function TrazimSobu(props){
     function onChangeDom(event){
 
         const {name, value} = event.target;
-        setDomovi(prevState =>({
-              d: prevState.d.map(dom => {
+        setGrad(prevState =>({
+              domovi: prevState.domovi.map(dom => {
 
                 if(dom.id === value) {
                     return {
@@ -80,7 +91,7 @@ function TrazimSobu(props){
 
         };
 
-        return fetch(`http://localhost:8080/trazimSobu/uvjeti?user=${user.korisnickoIme}&domovi=
+        return fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/uvjeti?user=${user.korisnickoIme}&domovi=
         ${uvjeti["dom"]}&paviljoni=${uvjeti["paviljon"]}
         &katovi=${uvjeti["kat"]}&brojKreveta=${uvjeti["brojKreveta"]}&tipKupaonice=${uvjeti["tipKupaonice"]}&komentar=${uvjeti["komentar"]}`, options)
             .then(response => {
@@ -102,7 +113,7 @@ function TrazimSobu(props){
             }
         };
 
-        fetch(`http://localhost:8080/trazimSobu/grad?user=${user.korisnickoIme}`, options)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/grad?user=${user.korisnickoIme}`, options)
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
@@ -111,18 +122,18 @@ function TrazimSobu(props){
                     console.log(response.status)
                 }
             }).then(json => {
-            setGrad(json);
-        }).then(fetch(`http://localhost:8080/trazimSobu/domovi?user=${user.korisnickoIme}`, options)
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json()
-
-                } else {
-                    console.log(response.status)
-                }
-            }).then(json => {
-                setDomovi({d:json})
-            }))
+            setGrad(json)
+        // }).then(fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/domovi?user=${user.korisnickoIme}`, options)
+        //     .then(response => {
+        //         if (response.status === 200) {
+        //             return response.json()
+        //
+        //         } else {
+        //             console.log(response.status)
+        //         }
+        //     }).then(json => {
+        //         setDomovi({d:json})
+        //     }))
         //     .then(fetch(`http://localhost:8080/trazimSobu/paviljoni`, options)
         //     .then(response => {
         //         if (response.status === 200) {
@@ -134,7 +145,7 @@ function TrazimSobu(props){
         //     }).then(json => {
         //     setPaviljoni(json)
         // }))
-    },[]);
+    })},[]);
 
 
 
@@ -150,7 +161,7 @@ function TrazimSobu(props){
                     Dom:
 
                     <br/>
-                    {domovi.d.map(dom =>(
+                    {grad.domovi.map(dom =>(
                         <li>
                             <label>
                                 <input
@@ -167,7 +178,7 @@ function TrazimSobu(props){
                                 Paviljon:
 
                                 <br/>
-                                {dom.paviljon.map(p =>(
+                                {dom.paviljoni.map(p =>(
                                     <li>
                                         <label>
                                             <input

@@ -130,7 +130,7 @@ public class KandidatServiceImpl implements KandidatService {
 	@Override
 	public Integer calculateScore(Oglas oglas1, Oglas oglas2) {
 		Soba soba2 = sobaService.getByStudentId(oglas2.getStudent().getId());
-		TrazeniUvjeti uvjeti1 = uvjetiService.findByOglas(oglas1);
+		TrazeniUvjeti uvjeti1 = uvjetiService.findByIdOglas(oglas1.getId());
 		/*Soba soba2 = oglas2.getStudent().getSoba();
 		TrazeniUvjeti uvjeti1 = uvjetiService.findByIdOglas(oglas1.getId());*/
 

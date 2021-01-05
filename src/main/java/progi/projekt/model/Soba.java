@@ -61,24 +61,17 @@ public class Soba implements Serializable {
     }
 
     //Ništa ne smije biti null!
-    public Soba(int brojSobe, int kat, Paviljon paviljon, BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija) {
+    public Soba(Paviljon paviljon, BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija) {
         if (brojKreveta != null && tipKupaonice != null && kategorija != null) {
             this.brojKreveta = brojKreveta;
             this.tipKupaonice = tipKupaonice;
-            this.broj = brojSobe;
             this.kat = kat;
         } else {
             System.err.println("Ništa u kreaciji sobe ne smije biti null!");
         }
     }
 
-    public int getBroj() {
-        return broj;
-    }
 
-    public void setBroj(int broj) {
-        this.broj = broj;
-    }
 
     public BrojKrevetaEnum getBrojKreveta() {
         return brojKreveta;

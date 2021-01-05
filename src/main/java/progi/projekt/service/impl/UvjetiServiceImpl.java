@@ -7,6 +7,7 @@ import progi.projekt.repository.OglasRepository;
 import progi.projekt.repository.TipKupaoniceRepository;
 import progi.projekt.service.UvjetiService;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,8 +24,9 @@ public class UvjetiServiceImpl implements UvjetiService {
 
     @Override
     public  TrazeniUvjeti findByIdOglas(UUID id) {
-        Oglas oglas = oglasRepository.findById(id);
-        Student student = oglas.getStudent();
+        Optional<Oglas> oglas = oglasRepository.findById(id);
+        if(oglas == null) return null;
+        Student student = oglas.get().getStudent();
         TrazeniUvjeti trazeniUvjeti = student.getUvjeti();
         return trazeniUvjeti;
     }

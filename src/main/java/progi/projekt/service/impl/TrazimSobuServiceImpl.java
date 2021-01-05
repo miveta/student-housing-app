@@ -26,8 +26,8 @@ public class TrazimSobuServiceImpl implements TrazimSobuService {
 
     @Override
     public Grad findGrad(String username){
-        Student student = studentRepository.findByKorisnickoIme(username);
-        return student.getGrad();
+        Optional<Student> student = studentRepository.findByKorisnickoIme(username);
+        return student.get().getGrad();
     }
 
     @Override
@@ -38,8 +38,8 @@ public class TrazimSobuServiceImpl implements TrazimSobuService {
 
     @Override
     public Set<Dom> findAllDom(String username) {
-        Student student = studentRepository.findByKorisnickoIme(username);
-        return student.getGrad().getDomovi();
+        Optional<Student> student = studentRepository.findByKorisnickoIme(username);
+        return student.get().getGrad().getDomovi();
     }
 
 //    @Override

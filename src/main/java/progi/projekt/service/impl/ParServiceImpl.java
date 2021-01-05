@@ -46,7 +46,7 @@ public class ParServiceImpl implements ParService {
 		oglas1.getStatus().setStatus(StatusOglasaEnum.CEKA);
 		oglas2.getStatus().setStatus(StatusOglasaEnum.CEKA);
 
-		par.setCeka(true);
+		//par.setCeka(true);
 
 		//todo:
 		//oglas1.obavijestiService.dodajPotvrdiZamjenuObavijest();
@@ -61,7 +61,7 @@ public class ParServiceImpl implements ParService {
 		oglas1.getStatus().setStatus(StatusOglasaEnum.POTVRDEN);
 		oglas2.getStatus().setStatus(StatusOglasaEnum.POTVRDEN);
 
-		par.setCeka(true);
+		//par.setCeka(true);
 
 		//todo:
 		//oglas1.obavijestiService.dodajPotvrdiZamjenuObavijest();
