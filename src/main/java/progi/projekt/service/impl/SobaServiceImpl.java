@@ -20,8 +20,6 @@ import java.util.UUID;
 public class SobaServiceImpl implements SobaService {
 
     private SobaRepository sobaRepository;
-
-
     private GradRepository gradRepository;
     private StudentRepository studentRepository;
     private StudentService studentService;

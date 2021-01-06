@@ -53,6 +53,7 @@ class MojOglas extends Component {
     submitSoba = (soba) => {
         let self = this;
 
+
         const body = {
             studentUsername: self.state.user.korisnickoIme,
             idPaviljon: soba.idPaviljon,
@@ -62,6 +63,7 @@ class MojOglas extends Component {
             komentar: soba.komentar
         };
 
+        console.log(body)
         const options = {
             method: 'POST',
             headers: {
@@ -87,7 +89,7 @@ class MojOglas extends Component {
         return (
             <div className="middle">
                 <Soba gradovi={this.state.gradovi} soba={this.state.soba} submitSoba={this.submitSoba}/>
-                <TrazimSobu korisnikImaSobu={this.state.soba && this.state.soba.id !== ''}/>
+                <TrazimSobu korisnikImaSobu={true}/>
             </div>
         )
     }

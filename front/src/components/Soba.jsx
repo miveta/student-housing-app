@@ -80,11 +80,11 @@ class Soba extends Component {
         let self = this
 
         let soba = {
-            idPaviljon: this.state.paviljon.id,
-            kat: this.state.kat,
-            brojKreveta: this.state.brojKreveta.toUpperCase(),
-            tipKupaonice: this.state.tipKupaonice.toUpperCase(),
-            komentar: this.state.komentar
+            idPaviljon: self.state.paviljon.id,
+            kat: self.state.kat,
+            brojKreveta: self.state.brojKreveta.toUpperCase(),
+            tipKupaonice: self.state.tipKupaonice.toUpperCase(),
+            komentar: self.state.komentar
         }
 
         self.props.submitSoba(soba)

@@ -14,7 +14,6 @@ public class Oglas {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(nullable = false)
     private String naslov;
 
     @Column(nullable = false)
