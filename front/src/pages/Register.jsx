@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import {Button, Col, Form} from 'react-bootstrap';
 import {Link, Redirect} from "react-router-dom";
-import MdEye from "react-ionicons/lib/MdEye";
-import MdEyeOff from "react-ionicons/lib/MdEyeOff";
+
 
 class Register extends Component {
     constructor(props) {
@@ -125,7 +124,10 @@ class Register extends Component {
                                               required/>
                             </Col>
                             <Col>
-                                <Button className="passwordShow" variant={"light"} onClick={this.showHide}>{this.state.type === 'input' ? <MdEye></MdEye> : <MdEyeOff></MdEyeOff>}</Button>
+                                <Button className="passwordShow" variant={"light"}
+                                        onClick={this.showHide}>{this.state.type === 'input' ?
+                                    <i className="fas fa-eye"/> :
+                                    <i className="fas fa-eye-slash"/>}</Button>
                             </Col>
                         </Form.Row>
                     </Form.Group>
