@@ -3,7 +3,7 @@ import {Button, Form} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
 import cookie from "react-cookies";
 
-function TrazimSobu(props){
+function TrazimSobu(props) {
     const user = cookie.load('principal');
     const [grad, setGrad] = React.useState({
         id: '',
@@ -15,32 +15,36 @@ function TrazimSobu(props){
             paviljoni: [{
                 id: '',
                 naziv: '',
-                kategorija: ''}],
-            checked: false}] });
+                kategorija: ''
+            }],
+            checked: false
+        }]
+    });
     //const [domovi, setDomovi] = React.useState({d:[{id: '', imaMenzu: '', naziv: '',paviljon: {id: '', naziv: ''}, checked: false}]}) ;
     // const [paviljoni,setPaviljoni] = React.useState([{id: '', naziv: ''}]);
 
-    const [uvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [],brojKreveta: [], komentar: ''});
+    const [uvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [], brojKreveta: [], komentar: ''});
     const katovi = ['1', '2', '3', '4'];
+
     const kreveti = [
-        {name:"Jednokrevetna", value:"JEDNOKREVETNA"},
-        {name:"Dvokrevetna", value:"DVOKREVETNA"},
-        {name:"Trokrevetna", value:"JEDNOKREVETNA"},
-        {name:"Nebitno", value:"NEBITNO"}
+        {name: "Jednokrevetna", value: "JEDNOKREVETNA"},
+        {name: "Dvokrevetna", value: "DVOKREVETNA"},
+        {name: "Trokrevetna", value: "JEDNOKREVETNA"},
+        {name: "Nebitno", value: "NEBITNO"}
     ]
     const kupaonice = [
-        {name:"Privatna", value:"PRIVATNA"},
-        {name:"Zajednicka", value:"ZAJEDNICKA"},
-        {name:"Nebitno", value:"NEBITNO"}
+        {name: "Privatna", value: "PRIVATNA"},
+        {name: "Zajednicka", value: "ZAJEDNICKA"},
+        {name: "Nebitno", value: "NEBITNO"}
     ]
 
-    function onChangeDom(event){
+    function onChangeDom(event) {
 
         const {name, value} = event.target;
-        setGrad(prevState =>({
-              id: prevState.id,
-              naziv: prevState.naziv,
-              domovi: prevState.domovi.map(dom => {
+        setGrad(prevState => ({
+            id: prevState.id,
+            naziv: prevState.naziv,
+            domovi: prevState.domovi.map(dom => {
 
                 if (dom.id === value) {
                     return {
@@ -77,25 +81,18 @@ function TrazimSobu(props){
 
     }
 
-    // function onChangek(event) {
-    //     const {name, value} = event.target;
-    //     setUvjeti(oldForm => ({...oldForm, [name]: value}));
-    // }
-
-
     function onSubmit(e) {
         e.preventDefault();
 
         let body = {
-
             studentUsername: user.korisnickoIme,
             domId: uvjeti["dom"],
             paviljoni: uvjeti["paviljon"],
             katovi: uvjeti["kat"],
             brojKreveta: uvjeti["brojKreveta"],
             tipKupaonice: uvjeti["tipKupaonice"]
-
         }
+
         const options = {
             method: 'POST',
             headers: {
@@ -136,36 +133,14 @@ function TrazimSobu(props){
                 }
             }).then(json => {
             setGrad(json)
-            // }).then(fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/domovi?user=${user.korisnickoIme}`, options)
-            //     .then(response => {
-            //         if (response.status === 200) {
-            //             return response.json()
-            //
-            //         } else {
-            //             console.log(response.status)
-            //         }
-            //     }).then(json => {
-            //         setDomovi({d:json})
-            //     }))
-            //     .then(fetch(`http://localhost:8080/trazimSobu/paviljoni`, options)
-            //     .then(response => {
-            //         if (response.status === 200) {
-            //             return response.json()
-            //
-            //         } else {
-            //             console.log(response.status)
-            //         }
-            //     }).then(json => {
-            //     setPaviljoni(json)
-            // }))
         })
     }, []);
 
 
     return (
 
-        <div className="middle">
-            <Form onSubmit={onSubmit}>
+        <div className="innerForm">
+            <Form onSubmit={onSubmit} disabled>
                 <h3>Grad: {grad.naziv}</h3>
 
 
@@ -265,21 +240,11 @@ function TrazimSobu(props){
                     ))}
                 </label>
                 <br/>
-                {/*<label>*/}
-                {/*    Komentar:*/}
 
-                {/*    <br/>*/}
-                {/*    <input*/}
-                {/*        type="text"*/}
-                {/*        name="komentar"*/}
-                {/*        onChange={onChangek}*/}
-                {/*    />*/}
-
-                {/*</label> zas uopce to imamo?*/}
                 <br/>
 
 
-                <Button type="submit" variant="dark" size="sm" block> Pohrani uvjete </Button>
+                <Button type="submit" variant="dark" size="sm" block> Spremi uvjete </Button>
             </Form>
         </div>
     )
