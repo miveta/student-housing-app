@@ -1,9 +1,10 @@
 import React, { useEffect} from "react";
 import { Form, Button} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
+import cookie from "react-cookies";
 
 function TrazimSobu(props){
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = cookie.load('principal');
     const [grad, setGrad] = React.useState({
         id: '',
         naziv: '',
@@ -37,6 +38,8 @@ function TrazimSobu(props){
 
         const {name, value} = event.target;
         setGrad(prevState =>({
+              id: prevState.id,
+              naziv: prevState.naziv,
               domovi: prevState.domovi.map(dom => {
 
                 if(dom.id === value) {
