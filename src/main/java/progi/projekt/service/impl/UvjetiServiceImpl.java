@@ -1,10 +1,13 @@
 package progi.projekt.service.impl;
 
 import org.springframework.stereotype.Service;
-import progi.projekt.model.*;
-import progi.projekt.repository.BrojKrevetaRepository;
+import progi.projekt.model.Oglas;
+import progi.projekt.model.Soba;
+import progi.projekt.model.Student;
+import progi.projekt.model.TrazeniUvjeti;
+import progi.projekt.model.enums.BrojKrevetaEnum;
+import progi.projekt.model.enums.TipKupaoniceEnum;
 import progi.projekt.repository.OglasRepository;
-import progi.projekt.repository.TipKupaoniceRepository;
 import progi.projekt.service.UvjetiService;
 
 import java.util.Optional;
@@ -13,19 +16,16 @@ import java.util.UUID;
 @Service
 public class UvjetiServiceImpl implements UvjetiService {
     public final OglasRepository oglasRepository;
-    public final BrojKrevetaRepository brojKrevetaRepository;
-    public final TipKupaoniceRepository tipKupaoniceRepository;
 
-    public UvjetiServiceImpl(OglasRepository oglasRepository, BrojKrevetaRepository brojKrevetaRepository, TipKupaoniceRepository tipKupaoniceRepository){
-        this.oglasRepository=oglasRepository;
-        this.brojKrevetaRepository=brojKrevetaRepository;
-        this.tipKupaoniceRepository=tipKupaoniceRepository;
+
+    public UvjetiServiceImpl(OglasRepository oglasRepository) {
+        this.oglasRepository = oglasRepository;
     }
 
     @Override
-    public  TrazeniUvjeti findByIdOglas(UUID id) {
+    public TrazeniUvjeti findByIdOglas(UUID id) {
         Optional<Oglas> oglas = oglasRepository.findById(id);
-        if(oglas == null) return null;
+        if (oglas == null) return null;
         Student student = oglas.get().getStudent();
         TrazeniUvjeti trazeniUvjeti = student.getUvjeti();
         return trazeniUvjeti;
@@ -38,8 +38,8 @@ public class UvjetiServiceImpl implements UvjetiService {
 
     @Override
     public Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti) {
-        BrojKreveta nebitno = brojKrevetaRepository.findByNaziv("NEBITNO");
-        TipKupaonice neb = tipKupaoniceRepository.findByTip("NEBITNO");
+        BrojKrevetaEnum nebitno = BrojKrevetaEnum.NEBITNO;
+        TipKupaoniceEnum neb = TipKupaoniceEnum.NEBITNO;
         return (uvjeti.getBrojKreveta().contains(soba.getBrojKreveta().name()) || uvjeti.getBrojKreveta().contains(nebitno) || uvjeti.getBrojKreveta().isEmpty()
                 && uvjeti.getTipKupaonice().contains(soba.getTipKupaonice().name()) || uvjeti.getTipKupaonice().contains(neb) || uvjeti.getTipKupaonice().isEmpty()
                 && uvjeti.getDomovi().contains(soba.getPaviljon().getDom()) || uvjeti.getDomovi().isEmpty()

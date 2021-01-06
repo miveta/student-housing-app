@@ -64,7 +64,6 @@ public class MatchingServiceImpl implements MatchingService {
 				}
 			}
 		}
-
 	}
 
 	//student u medjuvremenu lajka kandidate (ili bilo koji oglas)

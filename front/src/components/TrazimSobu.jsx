@@ -1,8 +1,8 @@
-import React, { useEffect} from "react";
-import { Form, Button} from 'react-bootstrap';
+import React, {useEffect} from "react";
+import {Button, Form} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
 
-function TrazimSobu(props){
+function TrazimSobu(props) {
     const user = JSON.parse(localStorage.getItem("user"));
     const [grad, setGrad] = React.useState({
         id: '',
@@ -14,91 +14,104 @@ function TrazimSobu(props){
             paviljoni: [{
                 id: '',
                 naziv: '',
-                kategorija: ''}],
-            checked: false}] });
+                kategorija: ''
+            }],
+            checked: false
+        }]
+    });
     //const [domovi, setDomovi] = React.useState({d:[{id: '', imaMenzu: '', naziv: '',paviljon: {id: '', naziv: ''}, checked: false}]}) ;
     // const [paviljoni,setPaviljoni] = React.useState([{id: '', naziv: ''}]);
 
-    const [uvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [],brojKreveta: [], komentar: ''});
+    const [uvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [], brojKreveta: [], komentar: ''});
     const katovi = ['1', '2', '3', '4'];
     const kreveti = [
-        {name:"Jednokrevetna", value:"JEDNOKREVETNA"},
-        {name:"Dvokrevetna", value:"DVOKREVETNA"},
-        {name:"Trokrevetna", value:"JEDNOKREVETNA"},
-        {name:"Nebitno", value:"NEBITNO"}
+        {name: "Jednokrevetna", value: "JEDNOKREVETNA"},
+        {name: "Dvokrevetna", value: "DVOKREVETNA"},
+        {name: "Trokrevetna", value: "JEDNOKREVETNA"},
+        {name: "Nebitno", value: "NEBITNO"}
     ]
     const kupaonice = [
-        {name:"Privatna", value:"PRIVATNA"},
-        {name:"Zajednicka", value:"ZAJEDNICKA"},
-        {name:"Nebitno", value:"NEBITNO"}
+        {name: "Privatna", value: "PRIVATNA"},
+        {name: "Zajednicka", value: "ZAJEDNICKA"},
+        {name: "Nebitno", value: "NEBITNO"}
     ]
 
-    function onChangeDom(event){
+    function onChangeDom(event) {
 
         const {name, value} = event.target;
-        setGrad(prevState =>({
-              domovi: prevState.domovi.map(dom => {
+        setGrad(prevState => ({
+            domovi: prevState.domovi.map(dom => {
 
-                if(dom.id === value) {
+                if (dom.id === value) {
                     return {
                         ...dom,
                         checked: !dom.checked
                     };
-                }else{
+                } else {
                     return {...dom};
 
                 }
             })
         }))
         const ids = uvjeti[name].map(el => el.id);
-        if(event.target.checked){
+        if (event.target.checked) {
             uvjeti[name].push(value);
-        }else{
+        } else {
             const index = ids.indexOf(value.id);
-            uvjeti[name].splice(index,1);
+            uvjeti[name].splice(index, 1);
         }
 
 
     }
-    function onChange(event){
+
+    function onChange(event) {
         const {name, value} = event.target;
         const ids = uvjeti[name].map(el => el.id);
-        if(event.target.checked){
+        if (event.target.checked) {
             uvjeti[name].push(value);
-        }else{
+        } else {
             const index = ids.indexOf(value.id);
-            uvjeti[name].splice(index,1);
+            uvjeti[name].splice(index, 1);
         }
 
 
     }
+
     // function onChangek(event) {
     //     const {name, value} = event.target;
     //     setUvjeti(oldForm => ({...oldForm, [name]: value}));
     // }
 
 
-
     function onSubmit(e) {
         e.preventDefault();
 
+        let body = {
+
+            studentUsername: user.korisnickoIme,
+            domId: uvjeti["dom"],
+            paviljoni: uvjeti["paviljon"],
+            katovi: uvjeti["kat"],
+            brojKreveta: uvjeti["brojKreveta"],
+            tipKupaonice: uvjeti["tipKupaonice"]
+
+        }
         const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
-
+            body: JSON.stringify(body)
         };
 
-        return fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/uvjeti?user=${user.korisnickoIme}&domovi=
-        ${uvjeti["dom"]}&paviljoni=${uvjeti["paviljon"]}
-        &katovi=${uvjeti["kat"]}&brojKreveta=${uvjeti["brojKreveta"]}&tipKupaonice=${uvjeti["tipKupaonice"]}&komentar=${uvjeti["komentar"]}`, options)
+        console.log(options)
+
+        return fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/uvjetiIveta`, options)
             .then(response => {
                 if (response.status === 200) {
-                        props.history.push("/")
-                }
-                else {
+                    props.history.push("/")
+                } else {
                     console.log(response.status)
                 }
             });
@@ -123,45 +136,44 @@ function TrazimSobu(props){
                 }
             }).then(json => {
             setGrad(json)
-        // }).then(fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/domovi?user=${user.korisnickoIme}`, options)
-        //     .then(response => {
-        //         if (response.status === 200) {
-        //             return response.json()
-        //
-        //         } else {
-        //             console.log(response.status)
-        //         }
-        //     }).then(json => {
-        //         setDomovi({d:json})
-        //     }))
-        //     .then(fetch(`http://localhost:8080/trazimSobu/paviljoni`, options)
-        //     .then(response => {
-        //         if (response.status === 200) {
-        //             return response.json()
-        //
-        //         } else {
-        //             console.log(response.status)
-        //         }
-        //     }).then(json => {
-        //     setPaviljoni(json)
-        // }))
-    })},[]);
+            // }).then(fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/domovi?user=${user.korisnickoIme}`, options)
+            //     .then(response => {
+            //         if (response.status === 200) {
+            //             return response.json()
+            //
+            //         } else {
+            //             console.log(response.status)
+            //         }
+            //     }).then(json => {
+            //         setDomovi({d:json})
+            //     }))
+            //     .then(fetch(`http://localhost:8080/trazimSobu/paviljoni`, options)
+            //     .then(response => {
+            //         if (response.status === 200) {
+            //             return response.json()
+            //
+            //         } else {
+            //             console.log(response.status)
+            //         }
+            //     }).then(json => {
+            //     setPaviljoni(json)
+            // }))
+        })
+    }, []);
 
 
+    return (
 
-
-     return (
-
-        <div className="middle" >
+        <div className="middle">
             <Form onSubmit={onSubmit}>
-            <h3>Grad: {grad.naziv}</h3>
+                <h3>Grad: {grad.naziv}</h3>
 
 
                 <label>
                     Dom:
 
                     <br/>
-                    {grad.domovi.map(dom =>(
+                    {grad.domovi.map(dom => (
                         <li>
                             <label>
                                 <input
@@ -171,27 +183,27 @@ function TrazimSobu(props){
                                     name="dom"
                                 />{dom.naziv}
                             </label>
-                            {dom.checked &&(
-                             <div>
-                            {/*<br/>*/}
-                            <label>
-                                Paviljon:
+                            {dom.checked && (
+                                <div>
+                                    {/*<br/>*/}
+                                    <label>
+                                        Paviljon:
 
-                                <br/>
-                                {dom.paviljoni.map(p =>(
-                                    <li>
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                onChange={onChange}
-                                                value={p.id}
-                                                name="paviljon"
-                                            />{p.naziv}
-                                        </label>
-                                    </li>
-                                ))}
-                            </label>
-                             </div>)}
+                                        <br/>
+                                        {dom.paviljoni.map(p => (
+                                            <li>
+                                                <label>
+                                                    <input
+                                                        type="checkbox"
+                                                        onChange={onChange}
+                                                        value={p.id}
+                                                        name="paviljon"
+                                                    />{p.naziv}
+                                                </label>
+                                            </li>
+                                        ))}
+                                    </label>
+                                </div>)}
                         </li>
                     ))}
                 </label>
@@ -202,7 +214,7 @@ function TrazimSobu(props){
                     Kat:
 
                     <br/>
-                    {katovi.map(p =>(
+                    {katovi.map(p => (
                         <li>
                             <label>
                                 <input
@@ -221,7 +233,7 @@ function TrazimSobu(props){
                     Broj kreveta:
 
                     <br/>
-                    {kreveti.map(p =>(
+                    {kreveti.map(p => (
                         <li>
                             <label>
                                 <input
@@ -239,7 +251,7 @@ function TrazimSobu(props){
                     Tip kupaonice:
 
                     <br/>
-                    {kupaonice.map(p =>(
+                    {kupaonice.map(p => (
                         <li>
                             <label>
                                 <input
@@ -267,11 +279,10 @@ function TrazimSobu(props){
                 <br/>
 
 
-
-
-            <Button type="submit" variant="dark" size="sm" block> Pohrani uvjete </Button>
-        </Form>
+                <Button type="submit" variant="dark" size="sm" block> Pohrani uvjete </Button>
+            </Form>
         </div>
     )
 }
+
 export default withRouter(TrazimSobu);

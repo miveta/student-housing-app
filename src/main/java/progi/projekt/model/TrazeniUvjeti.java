@@ -36,19 +36,11 @@ public class TrazeniUvjeti {
             inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
     private Set<Paviljon> paviljoni;
 
-    @ManyToMany
-    @JoinTable(
-            name = "kreveti_uvjeti",
-            joinColumns = @JoinColumn(name = "id_broj_kreveta"),
-            inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
-    private Set<BrojKreveta> brojKreveta;
+    @ElementCollection(targetClass = BrojKrevetaEnum.class)
+    private Set<BrojKrevetaEnum> brojKreveta;
 
-    @ManyToMany
-    @JoinTable(
-            name = "kupaonice_uvjeti",
-            joinColumns = @JoinColumn(name = "id_tip_kupaonice"),
-            inverseJoinColumns = @JoinColumn(name = "id_trazeni_uvjeti"))
-    private Set<TipKupaonice> tipKupaonice;
+    @ElementCollection(targetClass = TipKupaoniceEnum.class)
+    private Set<TipKupaoniceEnum> tipKupaonice;
 
     @Column(name = "kategorija")
     @Enumerated(EnumType.STRING)
@@ -64,8 +56,6 @@ public class TrazeniUvjeti {
 
     public TrazeniUvjeti() {
     }
-
-    //Ništa ne smije biti null osim komentara
 
 
     public Grad getGrad() {
@@ -84,19 +74,19 @@ public class TrazeniUvjeti {
         this.id = id;
     }
 
-    public Set<BrojKreveta> getBrojKreveta() {
+    public Set<BrojKrevetaEnum> getBrojKreveta() {
         return brojKreveta;
     }
 
-    public void setBrojKreveta(Set<BrojKreveta> brojKreveta) {
+    public void setBrojKreveta(Set<BrojKrevetaEnum> brojKreveta) {
         this.brojKreveta = brojKreveta;
     }
 
-    public Set<TipKupaonice> getTipKupaonice() {
+    public Set<TipKupaoniceEnum> getTipKupaonice() {
         return tipKupaonice;
     }
 
-    public void setTipKupaonice(Set<TipKupaonice> tipKupaonice) {
+    public void setTipKupaonice(Set<TipKupaoniceEnum> tipKupaonice) {
         this.tipKupaonice = tipKupaonice;
     }
 

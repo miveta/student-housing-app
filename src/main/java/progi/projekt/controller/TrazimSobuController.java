@@ -1,23 +1,19 @@
 package progi.projekt.controller;
 
-import org.apache.coyote.Request;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-
 import progi.projekt.dto.DomDTO;
 import progi.projekt.dto.GradDTO;
-import progi.projekt.dto.PaviljonDTO;
+import progi.projekt.forms.TrazimSobuForm;
 import progi.projekt.model.*;
-import progi.projekt.repository.*;
+import progi.projekt.model.enums.BrojKrevetaEnum;
+import progi.projekt.model.enums.TipKupaoniceEnum;
+import progi.projekt.service.SobaService;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.TrazimSobuService;
+import progi.projekt.service.UtilService;
 
-import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,31 +22,25 @@ import java.util.stream.Collectors;
 @RequestMapping("/trazimSobu")
 public class TrazimSobuController {
 
-    @Autowired
-    DomRepository domRepository;
-
-    @Autowired
-    PaviljonRepository paviljonRepository;
-
-    @Autowired
     private StudentService studentService;
 
-    @Autowired
-    BrojKrevetaRepository brojKrevetaRepository;
-
-    @Autowired
-    TipKupaoniceRepository tipKupaoniceRepository;
-
-    @Autowired
-    StudentRepository studentRepository;
-
-    @Autowired
     private TrazimSobuService trazimSobuService;
+
+    private UtilService utilService;
+
+    private SobaService sobaService;
+
+    public TrazimSobuController(StudentService studentService, TrazimSobuService trazimSobuService, UtilService utilService, SobaService sobaService) {
+        this.studentService = studentService;
+        this.trazimSobuService = trazimSobuService;
+        this.utilService = utilService;
+        this.sobaService = sobaService;
+    }
 
     @GetMapping("/grad")
     public GradDTO getGrad(@RequestParam(value = "user") String username) {
-        GradDTO grad = new GradDTO(trazimSobuService.findGrad(username));
-        return grad;
+        List<Grad> list = sobaService.findAllGrad();
+        return new GradDTO(list.get(0));
     }
 
     @GetMapping("/domovi")
@@ -67,62 +57,58 @@ public class TrazimSobuController {
 //
 //    }
 
-    @PostMapping(value = "/uvjeti", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> put(@RequestParam(value = "user") String username,
-                                    @RequestParam(value = "domovi") String[] domId,
-                                    @RequestParam(value = "paviljoni") String[] paviljoni,
-                                    @RequestParam(value = "katovi") String[] katovi,
-                                    @RequestParam(value = "brojKreveta") String[] brojKreveta,
-                                    @RequestParam(value = "tipKupaonice") String[] tipKupaonice,
-                                    @RequestParam(value = "komentar") String komentar) {
-        Optional<Student> s = studentRepository.findByKorisnickoIme(username);
-        Student student = s.get();
-        Set<Dom> dom = new HashSet<>();
-        TrazeniUvjeti uvjeti = student.getUvjeti();
-        if(uvjeti == null){
-            uvjeti = new TrazeniUvjeti();
+    @PostMapping(value = "/uvjetiIveta", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> uvjeti(@RequestBody TrazimSobuForm trazimSobuForm) {
+        Optional<Student> optionalStudent = studentService.findByKorisnickoIme(trazimSobuForm.getStudentUsername());
+
+        if (optionalStudent.isEmpty()) return ResponseEntity.badRequest().build();
+        Student student = optionalStudent.get();
+
+
+        TrazeniUvjeti trazeniUvjeti = student.getUvjeti();
+
+        if (trazeniUvjeti == null)
+            trazeniUvjeti = new TrazeniUvjeti();
+
+
+        trazeniUvjeti.setTraziStudent(student);
+        trazeniUvjeti.setGrad(student.getGrad());
+        trazeniUvjeti.setGodina(Calendar.getInstance().get(Calendar.YEAR));
+
+
+        Set<Integer> katovi = new HashSet<>(Arrays.asList(trazimSobuForm.getKatovi()));
+        trazeniUvjeti.setKatovi(katovi);
+
+
+        Set<Dom> domovi = new HashSet<>();
+        for (String domId : trazimSobuForm.getDomId()) {
+            Optional<Dom> optionalDom = utilService.getDomById(domId);
+            if (optionalDom.isEmpty())
+                return ResponseEntity.badRequest().build();
+            domovi.add(optionalDom.get());
         }
-        uvjeti.setGodina(Calendar.getInstance().get(Calendar.YEAR));
-        uvjeti.setKomentar(komentar);
-        uvjeti.setTraziStudent(student);
-        uvjeti.setGrad(student.getGrad());
-        Set<Integer> kat = new HashSet<>();
-        for(String k : katovi){
-            kat.add(Integer.parseInt(k));
+        trazeniUvjeti.setDomovi(domovi);
+
+
+        Set<Paviljon> paviljoni = new HashSet<>();
+        for (String paviljonId : trazimSobuForm.getPaviljoni()) {
+            Optional<Paviljon> optionalPaviljon = utilService.getPaviljonById(paviljonId);
+            if (optionalPaviljon.isEmpty()) return ResponseEntity.badRequest().build();
+            paviljoni.add(optionalPaviljon.get());
         }
-        uvjeti.setKatovi(kat);
-            for (String id : domId) {
-                Dom d = domRepository.findById(UUID.fromString(id));
-                dom.add(d);
-            }
-            uvjeti.setDomovi(dom);
-        Set<Paviljon> paviljon = new HashSet<>();
-        for (String id : paviljoni) {
-                Paviljon d = paviljonRepository.findById(UUID.fromString(id));
-                paviljon.add(d);
-            }
-            uvjeti.setPaviljoni(paviljon);
-
-            Set<BrojKreveta> brKreveta = new HashSet<>();
-            for (String b : brojKreveta) {
-                BrojKreveta temp = brojKrevetaRepository.findByNaziv(b);
-                brKreveta.add(temp);
-            }
-            uvjeti.setBrojKreveta(brKreveta);
+        trazeniUvjeti.setPaviljoni(paviljoni);
 
 
-            Set<TipKupaonice> tKupaonice = new HashSet<>();
-            for (String t : tipKupaonice) {
-                TipKupaonice temp = tipKupaoniceRepository.findByTip(t);
-                tKupaonice.add(temp);
-            }
-            uvjeti.setTipKupaonice(tKupaonice);
+        Set<BrojKrevetaEnum> brojKreveta = new HashSet<>(Arrays.asList(trazimSobuForm.getBrojKreveta()));
+        trazeniUvjeti.setBrojKreveta(brojKreveta);
 
-        trazimSobuService.update(uvjeti);
-        return ResponseEntity.ok("uvjeti uneseni");
+        Set<TipKupaoniceEnum> tipKupaonice = new HashSet<>(Arrays.asList(trazimSobuForm.getTipKupaonice()));
+        trazeniUvjeti.setTipKupaonice(tipKupaonice);
 
+
+        trazimSobuService.update(trazeniUvjeti);
+
+        return ResponseEntity.ok().build();
     }
-
-
 
 }

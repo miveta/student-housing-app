@@ -9,4 +9,6 @@ public interface OglasService {
     List<Oglas> listAll();
 
     Optional<Oglas> findById(String id);
+
+    Optional<Oglas> kreirajOglas();
 }
