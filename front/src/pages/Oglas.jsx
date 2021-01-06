@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {ButtonGroup, ToggleButton} from "react-bootstrap";
 import cookie from "react-cookies";
+import Lajkovi from "../components/Lajkovi";
 
 class Oglas extends Component {
 
@@ -26,14 +27,14 @@ class Oglas extends Component {
         //substring da maknemo id= i dobijemo čisti oglasId
         const oglasId = this.props.match.params.id.substring(3)
 
-        const optionsOglas = {
+        const options = {
             method: 'GET',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
         };
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/getoglas?oglas_id=${oglasId}`, optionsOglas)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/getoglas?oglas_id=${oglasId}`, options)
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(body => {
@@ -41,25 +42,6 @@ class Oglas extends Component {
                 }).catch(error => console.log(error))
             }
         });
-
-        if(self.state.isLoggedIn) {
-            let user = self.state.user;
-
-            const optionsLajk = {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
-            };
-
-            fetch(`${process.env.REACT_APP_BACKEND_URL}/lajk/ocjena?student_username=${user.korisnickoIme}&oglas_id=${oglasId}`, optionsLajk)
-                .then(response => {
-                    response.text().then(body => {
-                        self.setState({ocjena: body})
-                    });
-                }).catch(error => console.log(error));
-        }
     }
 
     change = (e) => {
@@ -92,7 +74,8 @@ class Oglas extends Component {
     render() {
 
         let oglas = this.state.oglas
-        //console.log(oglas)
+
+        console.log(oglas)
 
         return (
             <div className='inner'>
@@ -101,21 +84,7 @@ class Oglas extends Component {
                 <p>godina: {oglas.godina}</p>
                 <p>objavljen: {oglas.objavljen}</p>
 
-                <ButtonGroup size="sm" toggle>
-                    {this.ocjene.map((like, idx) => (
-                        <ToggleButton
-                            key={idx}
-                            type="radio"
-                            variant="outline-secondary"
-                            value={like.value}
-                            disabled={!this.state.isLoggedIn}
-                            checked={this.state.ocjena === like.value}
-                            onChange={(e) => this.change(e)}
-                        >
-                            {like.name}
-                        </ToggleButton>
-                    ))}
-                </ButtonGroup>
+                <Lajkovi oglas={oglas}></Lajkovi>
             </div>
         )
     }
