@@ -1,10 +1,7 @@
 package progi.projekt.forms;
 
-import progi.projekt.model.TrazeniUvjeti;
 import progi.projekt.model.enums.BrojKrevetaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
-
-import java.util.Calendar;
 
 public class TrazimSobuForm {
     private String studentUsername;
@@ -13,6 +10,15 @@ public class TrazimSobuForm {
     private Integer[] katovi;
     private BrojKrevetaEnum[] brojKreveta;
     private TipKupaoniceEnum[] tipKupaonice;
+
+    public TrazimSobuForm(String studentUsername, String[] domId, String[] paviljoni, Integer[] katovi, BrojKrevetaEnum[] brojKreveta, TipKupaoniceEnum[] tipKupaonice) {
+        this.studentUsername = studentUsername;
+        this.domId = domId;
+        this.paviljoni = paviljoni;
+        this.katovi = katovi;
+        this.brojKreveta = brojKreveta;
+        this.tipKupaonice = tipKupaonice;
+    }
 
     public String getStudentUsername() {
         return studentUsername;
@@ -62,7 +68,4 @@ public class TrazimSobuForm {
         this.tipKupaonice = tipKupaonice;
     }
 
-    public void fromTrazeniUvjetiForm(TrazeniUvjeti trazeniUvjeti) {
-        trazeniUvjeti.setGodina(Calendar.getInstance().get(Calendar.YEAR));
-    }
 }

@@ -39,14 +39,6 @@ public class Student implements Serializable, Korisnik {
     private List<Obavijest> obavijesti;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_status_oglasa")
-    private StatusOglasa potvrdioOglas;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_trazeni_uvjeti")
-    private TrazeniUvjeti uvjeti;
-
-    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "oglas")
     private Oglas oglas;
 
@@ -54,11 +46,9 @@ public class Student implements Serializable, Korisnik {
     @JoinColumn(name = "id_grad")
     private Grad grad;
 
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_soba")
     private Soba soba;
-
 
     @Override
     public String getTipKorisnika() {
@@ -73,6 +63,7 @@ public class Student implements Serializable, Korisnik {
         this.id = id;
     }
 
+    @Override
     public String getJmbag() {
         return jmbag;
     }
@@ -81,6 +72,7 @@ public class Student implements Serializable, Korisnik {
         this.jmbag = jmbag;
     }
 
+    @Override
     public String getKorisnickoIme() {
         return korisnickoIme;
     }
@@ -89,6 +81,7 @@ public class Student implements Serializable, Korisnik {
         this.korisnickoIme = korisnickoIme;
     }
 
+    @Override
     public String getIme() {
         return ime;
     }
@@ -97,6 +90,7 @@ public class Student implements Serializable, Korisnik {
         this.ime = ime;
     }
 
+    @Override
     public String getPrezime() {
         return prezime;
     }
@@ -105,6 +99,7 @@ public class Student implements Serializable, Korisnik {
         this.prezime = prezime;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
@@ -121,6 +116,7 @@ public class Student implements Serializable, Korisnik {
         this.lozinka = lozinka;
     }
 
+    @Override
     public boolean isObavijestiNaMail() {
         return obavijestiNaMail;
     }
@@ -129,33 +125,12 @@ public class Student implements Serializable, Korisnik {
         this.obavijestiNaMail = obavijestiNaMail;
     }
 
-    @Override
-    public String toString() {
-        return "Student";
-    }
-
     public List<Obavijest> getObavijesti() {
         return obavijesti;
     }
 
     public void setObavijesti(List<Obavijest> obavijesti) {
         this.obavijesti = obavijesti;
-    }
-
-    public StatusOglasa getPotvrdioOglas() {
-        return potvrdioOglas;
-    }
-
-    public void setPotvrdioOglas(StatusOglasa potvrdioOglas) {
-        this.potvrdioOglas = potvrdioOglas;
-    }
-
-    public TrazeniUvjeti getUvjeti() {
-        return uvjeti;
-    }
-
-    public void setUvjeti(TrazeniUvjeti uvjeti) {
-        this.uvjeti = uvjeti;
     }
 
     public Oglas getOglas() {
@@ -187,13 +162,11 @@ public class Student implements Serializable, Korisnik {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return
-                Objects.equals(id, student.id);
+        return Objects.equals(jmbag, student.jmbag);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(jmbag);
     }
-
 }

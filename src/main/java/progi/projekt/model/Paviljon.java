@@ -4,7 +4,6 @@ import progi.projekt.model.enums.OznakeKategorijaEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -86,18 +85,6 @@ public class Paviljon implements Serializable {
         this.kategorija = kategorija;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Paviljon paviljon = (Paviljon) o;
-        return brojKatova == paviljon.brojKatova;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 
     @Override
     public String toString() {

@@ -8,11 +8,9 @@ import progi.projekt.dto.GradDTO;
 import progi.projekt.forms.TrazimSobuForm;
 import progi.projekt.model.*;
 import progi.projekt.model.enums.BrojKrevetaEnum;
+import progi.projekt.model.enums.StatusOglasaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
-import progi.projekt.service.SobaService;
-import progi.projekt.service.StudentService;
-import progi.projekt.service.TrazimSobuService;
-import progi.projekt.service.UtilService;
+import progi.projekt.service.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,18 +21,17 @@ import java.util.stream.Collectors;
 public class TrazimSobuController {
 
     private StudentService studentService;
-
     private TrazimSobuService trazimSobuService;
-
     private UtilService utilService;
-
     private SobaService sobaService;
+    private OglasService oglasService;
 
-    public TrazimSobuController(StudentService studentService, TrazimSobuService trazimSobuService, UtilService utilService, SobaService sobaService) {
+    public TrazimSobuController(StudentService studentService, TrazimSobuService trazimSobuService, UtilService utilService, SobaService sobaService, OglasService oglasService) {
         this.studentService = studentService;
         this.trazimSobuService = trazimSobuService;
         this.utilService = utilService;
         this.sobaService = sobaService;
+        this.oglasService = oglasService;
     }
 
     @GetMapping("/grad")
@@ -63,17 +60,19 @@ public class TrazimSobuController {
 
         if (optionalStudent.isEmpty()) return ResponseEntity.badRequest().build();
         Student student = optionalStudent.get();
+        if (student.getSoba() == null) return ResponseEntity.badRequest().build();
 
+        TrazeniUvjeti trazeniUvjeti = null;
 
-        TrazeniUvjeti trazeniUvjeti = student.getUvjeti();
+        if (student.getOglas() != null) {
+            trazeniUvjeti = student.getOglas().getTrazeniUvjeti();
+        }
 
         if (trazeniUvjeti == null)
             trazeniUvjeti = new TrazeniUvjeti();
 
 
-        trazeniUvjeti.setTraziStudent(student);
         trazeniUvjeti.setGrad(student.getGrad());
-        trazeniUvjeti.setGodina(Calendar.getInstance().get(Calendar.YEAR));
 
 
         Set<Integer> katovi = new HashSet<>(Arrays.asList(trazimSobuForm.getKatovi()));
@@ -108,7 +107,11 @@ public class TrazimSobuController {
 
         trazimSobuService.update(trazeniUvjeti);
 
+        Optional<Oglas> optionalOglas = oglasService.findByStudentAndStatus(student, StatusOglasaEnum.AKTIVAN);
+        if (optionalOglas.isEmpty()) {
+            oglasService.spremiOglas(student, student.getSoba(), trazeniUvjeti);
+        }
+
         return ResponseEntity.ok().build();
     }
-
 }

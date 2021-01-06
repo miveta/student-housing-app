@@ -6,7 +6,6 @@ import progi.projekt.model.enums.TipKupaoniceEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -104,32 +103,6 @@ public class Soba implements Serializable {
 
     public void setKomentar(String komentar) {
         this.komentar = komentar;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Soba soba = (Soba) o;
-        return
-                Objects.equals(id, soba.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Soba{" +
-                "id=" + id +
-                ", paviljon=" + paviljon +
-                ", kat=" + kat +
-                ", brojKreveta=" + brojKreveta +
-                ", tipKupaonice=" + tipKupaonice +
-                ", komentar='" + komentar + '\'' +
-                '}';
     }
 }
 

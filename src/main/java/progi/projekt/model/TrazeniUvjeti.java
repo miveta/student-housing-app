@@ -42,29 +42,12 @@ public class TrazeniUvjeti {
     @ElementCollection(targetClass = TipKupaoniceEnum.class)
     private Set<TipKupaoniceEnum> tipKupaonice;
 
-    @Column(name = "kategorija")
-    @Enumerated(EnumType.STRING)
-    private OznakeKategorijaEnum kategorija;
+    @ElementCollection(targetClass = OznakeKategorijaEnum.class)
+    private Set<OznakeKategorijaEnum> kategorija;
 
-    private String komentar;
-    @Column(name = "godina")
-    private int godina;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_student")
-    private Student traziStudent;
-
-    public TrazeniUvjeti() {
-    }
-
-
-    public Grad getGrad() {
-        return grad;
-    }
-
-    public void setGrad(Grad grad) {
-        this.grad = grad;
-    }
+    @OneToOne
+    @JoinColumn(name = "id_oglas")
+    private Oglas oglas;
 
     public UUID getId() {
         return id;
@@ -74,36 +57,20 @@ public class TrazeniUvjeti {
         this.id = id;
     }
 
-    public Set<BrojKrevetaEnum> getBrojKreveta() {
-        return brojKreveta;
+    public Set<Integer> getKatovi() {
+        return katovi;
     }
 
-    public void setBrojKreveta(Set<BrojKrevetaEnum> brojKreveta) {
-        this.brojKreveta = brojKreveta;
+    public void setKatovi(Set<Integer> katovi) {
+        this.katovi = katovi;
     }
 
-    public Set<TipKupaoniceEnum> getTipKupaonice() {
-        return tipKupaonice;
+    public Grad getGrad() {
+        return grad;
     }
 
-    public void setTipKupaonice(Set<TipKupaoniceEnum> tipKupaonice) {
-        this.tipKupaonice = tipKupaonice;
-    }
-
-    public OznakeKategorijaEnum getKategorija() {
-        return kategorija;
-    }
-
-    public void setKategorija(OznakeKategorijaEnum kategorija) {
-        this.kategorija = kategorija;
-    }
-
-    public String getKomentar() {
-        return komentar;
-    }
-
-    public void setKomentar(String komentar) {
-        this.komentar = komentar;
+    public void setGrad(Grad grad) {
+        this.grad = grad;
     }
 
     public Set<Dom> getDomovi() {
@@ -122,27 +89,36 @@ public class TrazeniUvjeti {
         this.paviljoni = paviljoni;
     }
 
-    public int getGodina() {
-        return godina;
+    public Set<BrojKrevetaEnum> getBrojKreveta() {
+        return brojKreveta;
     }
 
-    public void setGodina(int godina) {
-        this.godina = godina;
+    public void setBrojKreveta(Set<BrojKrevetaEnum> brojKreveta) {
+        this.brojKreveta = brojKreveta;
     }
 
-    public Student getTraziStudent() {
-        return traziStudent;
+    public Set<TipKupaoniceEnum> getTipKupaonice() {
+        return tipKupaonice;
     }
 
-    public void setTraziStudent(Student traziStudent) {
-        this.traziStudent = traziStudent;
+    public void setTipKupaonice(Set<TipKupaoniceEnum> tipKupaonice) {
+        this.tipKupaonice = tipKupaonice;
     }
 
-    public Set<Integer> getKatovi() {
-        return katovi;
+    public Set<OznakeKategorijaEnum> getKategorija() {
+        return kategorija;
     }
 
-    public void setKatovi(Set<Integer> katovi) {
-        this.katovi = katovi;
+    public void setKategorija(Set<OznakeKategorijaEnum> kategorija) {
+        this.kategorija = kategorija;
     }
+
+    public Oglas getOglas() {
+        return oglas;
+    }
+
+    public void setOglas(Oglas oglas) {
+        this.oglas = oglas;
+    }
+
 }

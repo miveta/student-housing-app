@@ -107,7 +107,7 @@ function TrazimSobu(props) {
         return fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/uvjetiIveta`, options)
             .then(response => {
                 if (response.status === 200) {
-                    props.history.push("/")
+                    //props.history.push("/")
                 } else {
                     console.log(response.status)
                 }
@@ -139,7 +139,7 @@ function TrazimSobu(props) {
 
     return (
 
-        <div className="innerForm">
+        <div className="innerForm" hidden={!props.korisnikImaSobu}>
             <Form onSubmit={onSubmit} disabled>
                 <h3>Grad: {grad.naziv}</h3>
 

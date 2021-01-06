@@ -1,6 +1,5 @@
 package progi.projekt.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.OglasDTO;
@@ -15,8 +14,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/oglas")
 public class OglasController {
 
-    @Autowired
+
     private OglasService oglasService;
+
+    public OglasController(OglasService oglasService) {
+        this.oglasService = oglasService;
+    }
 
     @GetMapping("/list")
     public List<OglasDTO> listOglas() {
@@ -28,4 +31,5 @@ public class OglasController {
         Oglas oglas = oglasService.findById(oglasId).get();
         return ResponseEntity.ok(new OglasDTO(oglas));
     }
+
 }

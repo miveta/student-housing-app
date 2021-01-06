@@ -398,10 +398,10 @@ public class MatchingServiceImpl implements MatchingService {
 	public void confirmSCFun(List<Par> izvedeni) {
 		for (Par par : izvedeni) {
 			var oglas1 = par.getOglas1();
-			oglas1.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
+            oglas1.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
 
 			var oglas2 = par.getOglas2();
-			oglas2.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
+            oglas2.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
 		}
 	}
 
@@ -409,10 +409,10 @@ public class MatchingServiceImpl implements MatchingService {
 	public void confirmSCFun() {
 		for (Par par : parService.listAll()) {
 			var oglas1 = par.getOglas1();
-			oglas1.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
+            oglas1.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
 
 			var oglas2 = par.getOglas2();
-			oglas2.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
+            oglas2.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
 		}
 	}
 }

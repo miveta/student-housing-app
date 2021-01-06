@@ -1,5 +1,7 @@
 package progi.projekt.model;
 
+import progi.projekt.model.enums.StatusOglasaEnum;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
@@ -14,48 +16,37 @@ public class Oglas {
 
     @Column(nullable = false)
     private String naslov;
-    private String opis;
+
     @Column(nullable = false)
-    private int godina;
     private Date objavljen;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_status_oglasa")
-    private StatusOglasa status;
+
+    private StatusOglasaEnum statusOglasa;
 
     @OneToMany(mappedBy = "oglas", cascade = CascadeType.ALL)
     private List<Obavijest> obavijesti;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="id_student")
+    @JoinColumn(name = "id_student")
     private Student student;
-
-    /*@OneToMany(mappedBy="oglas",cascade = CascadeType.ALL)
-    private List<Lajk> lajkovi;*/
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "kandOglas")
     private List<Kandidat> kandidati;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="id_soba")
+    @JoinColumn(name = "id_soba")
     private Soba soba;
 
-    //Naslov i godina ne smiju biti null
-    public Oglas(String naslov, String opis, int godina, Date objavljen) {
-        if (naslov != null) {
-            this.naslov = naslov;
-            this.opis = opis;
-            this.godina = godina;
-            this.objavljen = objavljen;
-        } else
-            System.err.println("Naslov oglasa ne smije biti null!");
+    @OneToOne
+    @JoinColumn(name = "id_trazeni_uvjeti")
+    private TrazeniUvjeti trazeniUvjeti;
+
+    public UUID getId() {
+        return id;
     }
 
-    public Oglas() {
-    }
-
-    public void addObavijest(Obavijest obav) {
-        obavijesti.add(obav);
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getNaslov() {
@@ -66,22 +57,6 @@ public class Oglas {
         this.naslov = naslov;
     }
 
-    public String getOpis() {
-        return opis;
-    }
-
-    public void setOpis(String opis) {
-        this.opis = opis;
-    }
-
-    public int getGodina() {
-        return godina;
-    }
-
-    public void setGodina(int godina) {
-        this.godina = godina;
-    }
-
     public Date getObjavljen() {
         return objavljen;
     }
@@ -90,28 +65,20 @@ public class Oglas {
         this.objavljen = objavljen;
     }
 
+    public StatusOglasaEnum getStatusOglasa() {
+        return statusOglasa;
+    }
+
+    public void setStatusOglasa(StatusOglasaEnum statusOglasa) {
+        this.statusOglasa = statusOglasa;
+    }
+
     public List<Obavijest> getObavijesti() {
         return obavijesti;
     }
 
-    public StatusOglasa getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusOglasa status) {
-        this.status = status;
-    }
-
     public void setObavijesti(List<Obavijest> obavijesti) {
         this.obavijesti = obavijesti;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public Student getStudent() {
@@ -121,14 +88,6 @@ public class Oglas {
     public void setStudent(Student student) {
         this.student = student;
     }
-
- /*   public List<Lajk> getLajkovi() {
-        return lajkovi;
-    }
-
-    public void setLajkovi(List<Lajk> lajkovi) {
-        this.lajkovi = lajkovi;
-    }*/
 
     public List<Kandidat> getKandidati() {
         return kandidati;
@@ -144,5 +103,13 @@ public class Oglas {
 
     public void setSoba(Soba soba) {
         this.soba = soba;
+    }
+
+    public TrazeniUvjeti getTrazeniUvjeti() {
+        return trazeniUvjeti;
+    }
+
+    public void setTrazeniUvjeti(TrazeniUvjeti trazeniUvjeti) {
+        this.trazeniUvjeti = trazeniUvjeti;
     }
 }

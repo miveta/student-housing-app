@@ -51,14 +51,15 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Override
 	public Boolean odgovaraju(Oglas oglas1, Oglas oglas2) {
-
+		return true;
+/*
 		var uvjeti1 = oglas1.getStudent().getUvjeti();
 		var uvjeti2 = oglas2.getStudent().getUvjeti();
 
 		var soba1 = sobaService.getByStudentId(oglas1.getStudent().getId());
 		var soba2 = sobaService.getByStudentId(oglas2.getStudent().getId());
 
-        return (sobaMatchesUvjet(soba1.get(), uvjeti2) && sobaMatchesUvjet(soba2.get(), uvjeti1)) ? true : false;
+        return (sobaMatchesUvjet(soba1.get(), uvjeti2) && sobaMatchesUvjet(soba2.get(), uvjeti1)) ? true : false;*/
 	}
 
 	@Override
@@ -140,8 +141,8 @@ public class KandidatServiceImpl implements KandidatService {
 	public Optional<Kandidat> kandidatParaOglasa(Oglas oglas1, Oglas oglas2) {
 		Optional<Kandidat> kandidatOpt = Optional.empty();
 
-		for (Kandidat kand : listAll(oglas1.getId())){
-			if (kandSadrziOglas(kand, oglas2)){
+		for (Kandidat kand : listAll(oglas1.getId())) {
+			if (kandSadrziOglas(kand, oglas2)) {
 				kandidatOpt = Optional.ofNullable(kand);
 				break;
 			}
@@ -161,7 +162,7 @@ public class KandidatServiceImpl implements KandidatService {
 	@Override
 	public void ponistiKandidateOglasa(Oglas oglas) {
 		List<Kandidat> kandidati = listAll(oglas.getId());
-		for (Kandidat kand : kandidati){
+		for (Kandidat kand : kandidati) {
 			kand.setIgnore(true);
 		}
 	}

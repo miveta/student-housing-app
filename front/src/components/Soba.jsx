@@ -22,6 +22,7 @@ class Soba extends Component {
             tipKupaonice: ''
         };
 
+
         this.user = cookie.load('principal');
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -36,7 +37,7 @@ class Soba extends Component {
         let self = this;
 
         let imePaviljona = event.target.value
-        let grad = self.state.gradovi.filter(g => g.naziv === self.state.grad)[0]
+        let grad = self.props.gradovi.filter(g => g.naziv === self.state.grad)[0]
         let dom = grad.domovi.filter(d => d.naziv === self.state.dom)[0]
         let paviljon = dom.paviljoni.filter(p => p.naziv === imePaviljona)[0]
 
@@ -44,7 +45,7 @@ class Soba extends Component {
     }
 
     getDomovi = (imeGrada) => {
-        return this.state.gradovi.filter(grad =>
+        return this.props.gradovi.filter(grad =>
             grad.naziv === imeGrada
         ).map(grad =>
             grad.domovi)[0]
@@ -75,37 +76,18 @@ class Soba extends Component {
     }
 
     onSubmit(e) {
-        let self = this;
-
         e.preventDefault();
+        let self = this
 
-        const body = {
-            studentUsername: this.user.korisnickoIme,
+        let soba = {
             idPaviljon: this.state.paviljon.id,
             kat: this.state.kat,
             brojKreveta: this.state.brojKreveta.toUpperCase(),
             tipKupaonice: this.state.tipKupaonice.toUpperCase(),
             komentar: this.state.komentar
-        };
+        }
 
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify(body)
-        };
-
-
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/soba/spremi`, options)
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json()
-                }
-            }).then(json => {
-            self.setState({...json})
-        })
+        self.props.submitSoba(soba)
     }
 
     componentDidMount() {
@@ -117,16 +99,16 @@ class Soba extends Component {
             }
         };
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/soba/gradovi`, options)
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json()
-                } else {
-                    console.log(response.status)
-                }
-            }).then(json => {
-            self.setState({gradovi: json})
-        })
+        /*        fetch(`${process.env.REACT_APP_BACKEND_URL}/soba/gradovi`, options)
+                    .then(response => {
+                        if (response.status === 200) {
+                            return response.json()
+                        } else {
+                            console.log(response.status)
+                        }
+                    }).then(json => {
+                    self.setState({gradovi: json})
+                })*/
 
         fetch(`${process.env.REACT_APP_BACKEND_URL}/soba/student?student_username=${this.user.korisnickoIme}`, options)
             .then(response => {
@@ -141,6 +123,7 @@ class Soba extends Component {
     // todo vrati ono gdje je submit disabled dok god se ne naprave promjene
     render() {
         console.log(this.state)
+        console.log(this.props)
         return (
             <div className="innerForm">
                 <Form onSubmit={this.onSubmit}>
@@ -148,7 +131,7 @@ class Soba extends Component {
                     <Form.Group>
                         <Form.Label> Grad </Form.Label>
                         <Form.Control as="select" name="grad" onChange={this.onChange} value={this.state.grad}>
-                            {this.state.gradovi.map(grad => (
+                            {this.props.gradovi.map(grad => (
                                 <option id={grad.id}>{grad.naziv}</option>
                             ))}
                         </Form.Control>
@@ -168,7 +151,7 @@ class Soba extends Component {
                                 <Form.Control as="select" name="paviljon" onChange={this.onSelectPaviljon}
                                               value={this.state.paviljon !== undefined && this.state.paviljon.naziv}>
                                     {
-                                        this.state.gradovi.filter(grad =>
+                                        this.props.gradovi.filter(grad =>
                                             grad.naziv === this.state.grad
                                         ).map(grad =>
                                             grad.domovi.filter(

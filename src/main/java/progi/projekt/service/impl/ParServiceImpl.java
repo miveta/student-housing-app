@@ -41,7 +41,7 @@ public class ParServiceImpl implements ParService {
 
 	@Override
 	public boolean parSadrziOglas(Par par, Oglas oglas) {
-		return par.getOglas1() == oglas || par.getOglas2() == oglas ? true : false;
+		return par.getOglas1() == oglas || par.getOglas2() == oglas;
 	}
 
 	@Override
@@ -49,8 +49,8 @@ public class ParServiceImpl implements ParService {
 		Oglas oglas1 = par.getOglas1();
 		Oglas oglas2 = par.getOglas2();
 
-		oglas1.getStatus().setStatus(StatusOglasaEnum.CEKA);
-		oglas2.getStatus().setStatus(StatusOglasaEnum.CEKA);
+		oglas1.setStatusOglasa(StatusOglasaEnum.CEKA);
+		oglas2.setStatusOglasa(StatusOglasaEnum.CEKA);
 
 		//par.setCeka(true);
 
@@ -64,8 +64,8 @@ public class ParServiceImpl implements ParService {
 		Oglas oglas1 = par.getOglas1();
 		Oglas oglas2 = par.getOglas2();
 
-		oglas1.getStatus().setStatus(StatusOglasaEnum.POTVRDEN);
-		oglas2.getStatus().setStatus(StatusOglasaEnum.POTVRDEN);
+		oglas1.setStatusOglasa(StatusOglasaEnum.POTVRDEN);
+		oglas2.setStatusOglasa(StatusOglasaEnum.POTVRDEN);
 
 		//par.setCeka(true);
 
@@ -79,8 +79,8 @@ public class ParServiceImpl implements ParService {
 		Oglas oglas1 = par.getOglas1();
 		Oglas oglas2 = par.getOglas2();
 
-		oglas1.getStatus().setStatus(StatusOglasaEnum.AKTIVAN);
-		oglas2.getStatus().setStatus(StatusOglasaEnum.AKTIVAN);
+		oglas1.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
+		oglas2.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
 	}
 
 	@Override
@@ -90,16 +90,16 @@ public class ParServiceImpl implements ParService {
 
 	@Override
 	public boolean ifObaAKTIVAN(Par par) {
-		var statusPrvogOglasa = par.getOglas1().getStatus().getStatus();
-		var statusDrugogOgalsa = par.getOglas2().getStatus().getStatus();
+		var statusPrvogOglasa = par.getOglas1().getStatusOglasa();
+		var statusDrugogOgalsa = par.getOglas2().getStatusOglasa();
 
 		return statusPrvogOglasa == StatusOglasaEnum.AKTIVAN && statusDrugogOgalsa == StatusOglasaEnum.AKTIVAN;
 	}
 
 	@Override
 	public boolean ifObaCEKA(Par par) {
-		var statusPrvogOglasa = par.getOglas1().getStatus().getStatus();
-		var statusDrugogOgalsa = par.getOglas2().getStatus().getStatus();
+		var statusPrvogOglasa = par.getOglas1().getStatusOglasa();
+		var statusDrugogOgalsa = par.getOglas2().getStatusOglasa();
 
 		return statusPrvogOglasa == StatusOglasaEnum.CEKA && statusDrugogOgalsa == StatusOglasaEnum.CEKA;
 	}
@@ -171,7 +171,7 @@ public class ParServiceImpl implements ParService {
 
 		List<Par> paroviC = listAll();
 		for (Par parC : paroviC){
-			if (parC.getLanac() == false){
+			if (!parC.getLanac()) {
 				if (parSadrziOglas(parC, oglas)){
 					par = Optional.of(parC);
 					break;
@@ -215,7 +215,7 @@ public class ParServiceImpl implements ParService {
 	public void ponistiParoveOglasa(Oglas oglas) {
 		List<Par> parovi = listAll();
 		for (Par par : parovi){
-			if (par.getDone() != true) {
+			if (!par.getDone()) {
 				par.setIgnore(true);
 			}
 

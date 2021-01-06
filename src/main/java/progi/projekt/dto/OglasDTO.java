@@ -18,10 +18,8 @@ public class OglasDTO {
     public OglasDTO(Oglas oglas) {
         this.id = oglas.getId();
         this.naslov = oglas.getNaslov();
-        this.opis = oglas.getOpis();
-        this.godina = oglas.getGodina();
         this.objavljen = oglas.getObjavljen();
-        this.status = oglas.getStatus().getStatus();
+        this.status = oglas.getStatusOglasa();
         this.student = oglas.getStudent().getKorisnickoIme();
     }
 
