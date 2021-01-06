@@ -2,7 +2,6 @@ package progi.projekt.launch;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,6 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> {
@@ -37,19 +35,11 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
     private final SobaRepository sobaRepository;
 
     private final PaviljonRepository paviljonRepository;
-    private final BrojKrevetaRepository brojKrevetaRepository;
-    private final TipKupaoniceRepository tipKupaoniceRepository;
-    private JavaMailSender javaMailSender;
 
-    public DatabaseFill(StudentRepository studentRepository, DomRepository domRepository,
-                        GradRepository gradRepository, ObavijestRepository obavijestRepository,
-                        OglasRepository oglasRepository, StatusOglasaRepository statusOglasaRepository,
-                        TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository,
-                        StudentskiCentarRepository studentskiCentarRepository, SobaRepository sobaRepository,
-                         PaviljonRepository paviljonRepository, PasswordEncoder pswdEncoder,
-                        BrojKrevetaRepository brojKrevetaRepository, TipKupaoniceRepository tipKupaoniceRepository,
-                        JavaMailSender javaMailSender) {
-                        PaviljonRepository paviljonRepository, PasswordEncoder pswdEncoder) {
+    private final JavaMailSender javaMailSender;
+
+    public DatabaseFill(PasswordEncoder pswdEncoder, StudentRepository studentRepository, DomRepository domRepository, GradRepository gradRepository, ObavijestRepository obavijestRepository, OglasRepository oglasRepository, StatusOglasaRepository statusOglasaRepository, TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository, StudentskiCentarRepository studentskiCentarRepository, SobaRepository sobaRepository, PaviljonRepository paviljonRepository, JavaMailSender javaMailSender) {
+        this.pswdEncoder = pswdEncoder;
         this.studentRepository = studentRepository;
         this.domRepository = domRepository;
         this.gradRepository = gradRepository;
@@ -59,11 +49,8 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
         this.trazeniUvjetiRepository = trazeniUvjetiRepository;
         this.zaposlenikscRepository = zaposlenikscRepository;
         this.studentskiCentarRepository = studentskiCentarRepository;
-        this.pswdEncoder = pswdEncoder;
         this.sobaRepository = sobaRepository;
         this.paviljonRepository = paviljonRepository;
-        this.brojKrevetaRepository = brojKrevetaRepository;
-        this.tipKupaoniceRepository = tipKupaoniceRepository;
         this.javaMailSender = javaMailSender;
     }
 
@@ -226,9 +213,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 sobaMarko.setTipKupaonice(TipKupaoniceEnum.PRIVATNA);
 
                 Soba sobaPero = new Soba();
-                sobaPero.setBroj(5);
                 sobaPero.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
-                sobaPero.setKategorija(OznakeKategorijaEnum.III);
                 sobaPero.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
 
 

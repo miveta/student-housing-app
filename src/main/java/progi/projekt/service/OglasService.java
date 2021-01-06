@@ -10,5 +10,5 @@ public interface OglasService {
 
     Optional<Oglas> findById(String id);
 
-    Optional<Oglas> kreirajOglas();
+    //Optional<Oglas> kreirajOglas();
 }
