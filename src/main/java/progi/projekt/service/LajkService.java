@@ -17,4 +17,6 @@ public interface LajkService {
     Optional<Lajk> findLajk(Student student, Oglas oglas);
 
     Lajk update(Lajk l);
+
+    Lajk delete(Lajk l);
 }
