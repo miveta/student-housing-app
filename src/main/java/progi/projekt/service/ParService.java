@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface ParService {
 	List<Par> listAll();
 
+	List<Par> listAll(Oglas oglas);
+
 	Integer ObostranaOcjena(Integer ocjena1, Integer ocjena2);
 
 	boolean parSadrziOglas(Par par, Oglas oglas);
@@ -39,4 +41,6 @@ public interface ParService {
 	Optional<Par> pripadniParAB(Oglas oglasA, Oglas oglasB);
 
 	Optional<Kandidat> pripadniKandidatPara(Par par);
+
+	void ponistiParoveOglasa(Oglas oglas);
 }

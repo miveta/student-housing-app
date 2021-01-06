@@ -19,19 +19,19 @@ import java.util.Optional;
 @RequestMapping("/lajk")
 public class LajkController {
 
-    @Autowired
-    private LajkService lajkService;
+	@Autowired
+	private LajkService lajkService;
 
-    @Autowired
-    private StudentService studentService;
+	@Autowired
+	private StudentService studentService;
 
-    @Autowired
-    private OglasService oglasService;
+	@Autowired
+	private OglasService oglasService;
 
-    @GetMapping
-    public List<Lajk> listLajks() {
-        return lajkService.listAll();
-    }
+	@GetMapping
+	public List<Lajk> listLajks() {
+		return lajkService.listAll();
+	}
 
     @GetMapping(value = "/ocjena")
     public String ocjena(@RequestParam(value = "student_username") String studentUsername,
@@ -39,34 +39,34 @@ public class LajkController {
         Optional<Student> studentOpt = studentService.findByKorisnickoIme(studentUsername);
         Optional<Oglas> oglasOpt = oglasService.findById(oglasId);
 
-        LajkId lajkId = new LajkId(studentOpt.get(), oglasOpt.get());
-        Optional<Lajk> lajkOpt = lajkService.findLajk(lajkId); // zapravo nije bilo potrebno, i da ga nađe trenutno nam ne treba postojeća ocjena
+		LajkId lajkId = new LajkId(studentOpt.get(), oglasOpt.get());
+		Optional<Lajk> lajkOpt = lajkService.findLajk(lajkId); // zapravo nije bilo potrebno, i da ga nađe trenutno nam ne treba postojeća ocjena
 
-        if (lajkOpt.isPresent()) {
-            return String.valueOf(lajkOpt.get().getOcjena());
-        } else {
-            return "";
-        }
-    }
+		if (lajkOpt.isPresent()) {
+			return String.valueOf(lajkOpt.get().getOcjena());
+		} else {
+			return "";
+		}
+	}
 
-    @PutMapping(value = "/update")
-    public ResponseEntity<?> update(@RequestParam(value = "student_username") String studentUsername,
-                                    @RequestParam(value = "oglas_id") String oglasId,
-                                    @RequestParam(value = "ocjena") int ocjena) {
-        Optional<Student> studentOpt = studentService.findByKorisnickoIme(studentUsername);
-        Optional<Oglas> oglasOpt = oglasService.findById(oglasId);
+	@PutMapping(value = "/update")
+	public ResponseEntity<?> update(@RequestParam(value = "student_username") String studentUsername,
+									@RequestParam(value = "oglas_id") String oglasId,
+									@RequestParam(value = "ocjena") int ocjena) {
+		Optional<Student> studentOpt = studentService.findByKorisnickoIme(studentUsername);
+		Optional<Oglas> oglasOpt = oglasService.findById(oglasId);
 
-        LajkId lajkId = new LajkId(studentOpt.get(), oglasOpt.get());
-        // Optional<Lajk> lajkOpt = lajkService.findLajk(lajkId); // zapravo nije bilo potrebno, i da ga nađe trenutno nam ne treba postojeća ocjena
+		LajkId lajkId = new LajkId(studentOpt.get(), oglasOpt.get());
+		// Optional<Lajk> lajkOpt = lajkService.findLajk(lajkId); // zapravo nije bilo potrebno, i da ga nađe trenutno nam ne treba postojeća ocjena
 
-        Lajk lajk = new Lajk();
-        lajk.setLajkId(lajkId);
-        lajk.setOcjena(ocjena);
+		Lajk lajk = new Lajk();
+		lajk.setLajkId(lajkId);
+		lajk.setOcjena(ocjena);
 
 
-        Lajk updatedLajk = lajkService.update(lajk);
+		Lajk updatedLajk = lajkService.update(lajk);
 
-        return ResponseEntity.ok(updatedLajk);
-    }
+		return ResponseEntity.ok(updatedLajk);
+	}
 
 }

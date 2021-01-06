@@ -1,9 +1,10 @@
 import React, {useEffect} from "react";
 import {Button, Form} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
+import cookie from "react-cookies";
 
-function TrazimSobu(props) {
-    const user = JSON.parse(localStorage.getItem("user"));
+function TrazimSobu(props){
+    const user = cookie.load('principal');
     const [grad, setGrad] = React.useState({
         id: '',
         naziv: '',
@@ -14,33 +15,32 @@ function TrazimSobu(props) {
             paviljoni: [{
                 id: '',
                 naziv: '',
-                kategorija: ''
-            }],
-            checked: false
-        }]
-    });
+                kategorija: ''}],
+            checked: false}] });
     //const [domovi, setDomovi] = React.useState({d:[{id: '', imaMenzu: '', naziv: '',paviljon: {id: '', naziv: ''}, checked: false}]}) ;
     // const [paviljoni,setPaviljoni] = React.useState([{id: '', naziv: ''}]);
 
-    const [uvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [], brojKreveta: [], komentar: ''});
+    const [uvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [],brojKreveta: [], komentar: ''});
     const katovi = ['1', '2', '3', '4'];
     const kreveti = [
-        {name: "Jednokrevetna", value: "JEDNOKREVETNA"},
-        {name: "Dvokrevetna", value: "DVOKREVETNA"},
-        {name: "Trokrevetna", value: "JEDNOKREVETNA"},
-        {name: "Nebitno", value: "NEBITNO"}
+        {name:"Jednokrevetna", value:"JEDNOKREVETNA"},
+        {name:"Dvokrevetna", value:"DVOKREVETNA"},
+        {name:"Trokrevetna", value:"JEDNOKREVETNA"},
+        {name:"Nebitno", value:"NEBITNO"}
     ]
     const kupaonice = [
-        {name: "Privatna", value: "PRIVATNA"},
-        {name: "Zajednicka", value: "ZAJEDNICKA"},
-        {name: "Nebitno", value: "NEBITNO"}
+        {name:"Privatna", value:"PRIVATNA"},
+        {name:"Zajednicka", value:"ZAJEDNICKA"},
+        {name:"Nebitno", value:"NEBITNO"}
     ]
 
-    function onChangeDom(event) {
+    function onChangeDom(event){
 
         const {name, value} = event.target;
-        setGrad(prevState => ({
-            domovi: prevState.domovi.map(dom => {
+        setGrad(prevState =>({
+              id: prevState.id,
+              naziv: prevState.naziv,
+              domovi: prevState.domovi.map(dom => {
 
                 if (dom.id === value) {
                     return {

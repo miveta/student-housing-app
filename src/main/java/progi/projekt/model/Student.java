@@ -129,6 +129,11 @@ public class Student implements Serializable, Korisnik {
         this.obavijestiNaMail = obavijestiNaMail;
     }
 
+    @Override
+    public String toString() {
+        return "Student";
+    }
+
     public List<Obavijest> getObavijesti() {
         return obavijesti;
     }
@@ -191,8 +196,4 @@ public class Student implements Serializable, Korisnik {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "Student{}";
-    }
 }

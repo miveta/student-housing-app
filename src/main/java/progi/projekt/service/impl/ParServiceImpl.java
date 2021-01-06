@@ -30,6 +30,11 @@ public class ParServiceImpl implements ParService {
 	}
 
 	@Override
+	public List<Par> listAll(Oglas oglas) {
+		return parRepo.findAllByOglas1OrOglas2(oglas,oglas);
+	}
+
+	@Override
 	public Integer ObostranaOcjena(Integer ocjena1, Integer ocjena2) {
 		return ocjena1 + ocjena2;
 	}
@@ -203,5 +208,17 @@ public class ParServiceImpl implements ParService {
 	public Optional<Kandidat> pripadniKandidatPara(Par par) {
 		Optional<Kandidat> kandidat = kandidatService.kandidatParaOglasa(par.getOglas1(), par.getOglas2());
 		return kandidat;
+	}
+
+
+	@Override
+	public void ponistiParoveOglasa(Oglas oglas) {
+		List<Par> parovi = listAll();
+		for (Par par : parovi){
+			if (par.getDone() != true) {
+				par.setIgnore(true);
+			}
+
+		}
 	}
 }
