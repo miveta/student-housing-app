@@ -122,8 +122,6 @@ class Soba extends Component {
 
     // todo vrati ono gdje je submit disabled dok god se ne naprave promjene
     render() {
-        console.log(this.state)
-        console.log(this.props)
         return (
             <div className="innerForm">
                 <Form onSubmit={this.onSubmit}>

@@ -9,6 +9,7 @@ import progi.projekt.forms.SobaForm;
 import progi.projekt.model.Grad;
 import progi.projekt.model.Soba;
 import progi.projekt.service.SobaService;
+import progi.projekt.service.StudentService;
 import progi.projekt.service.UtilService;
 
 import java.util.List;
@@ -22,10 +23,12 @@ public class SobaController {
 
     private SobaService sobaService;
     private UtilService utilService;
+    private StudentService studentService;
 
-    public SobaController(SobaService sobaService, UtilService utilService) {
+    public SobaController(SobaService sobaService, UtilService utilService, StudentService studentService) {
         this.sobaService = sobaService;
         this.utilService = utilService;
+        this.studentService = studentService;
     }
 
 
@@ -46,7 +49,6 @@ public class SobaController {
 
     @PostMapping(value = "/spremi", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveSoba(@RequestBody SobaForm sobaForm) {
-
         Optional<Soba> optionalSoba = sobaService.getByStudentUsername(sobaForm.getStudentUsername());
 
         Soba soba;
@@ -61,9 +63,7 @@ public class SobaController {
             sobaForm.fromSobaForm(soba);
         }
 
-
         soba = sobaService.save(soba);
         return ResponseEntity.ok(new SobaDTO(soba));
     }
-
 }
