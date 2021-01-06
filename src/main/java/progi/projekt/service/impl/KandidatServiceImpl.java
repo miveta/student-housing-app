@@ -58,7 +58,7 @@ public class KandidatServiceImpl implements KandidatService {
 		var soba1 = sobaService.getByStudentId(oglas1.getStudent().getId());
 		var soba2 = sobaService.getByStudentId(oglas2.getStudent().getId());
 
-		return (sobaMatchesUvjet(soba1, uvjeti2) && sobaMatchesUvjet(soba2, uvjeti1)) ? true : false;
+        return (sobaMatchesUvjet(soba1.get(), uvjeti2) && sobaMatchesUvjet(soba2.get(), uvjeti1)) ? true : false;
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Override
 	public Integer calculateScore(Oglas oglas1, Oglas oglas2) {
-		Soba soba2 = sobaService.getByStudentId(oglas2.getStudent().getId());
+        Soba soba2 = sobaService.getByStudentId(oglas2.getStudent().getId()).get();
 		TrazeniUvjeti uvjeti1 = uvjetiService.findByIdOglas(oglas1.getId());
 		/*Soba soba2 = oglas2.getStudent().getSoba();
 		TrazeniUvjeti uvjeti1 = uvjetiService.findByIdOglas(oglas1.getId());*/
