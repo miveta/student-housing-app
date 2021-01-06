@@ -1,6 +1,9 @@
 import React, {Component} from "react";
-import {Button, Form} from 'react-bootstrap';
+import {Button, Col, Form} from 'react-bootstrap';
 import {Link, Redirect} from "react-router-dom";
+import MdEye from 'react-ionicons/lib/MdEye';
+import MdEyeOff from 'react-ionicons/lib/MdEyeOff'
+
 
 
 class Login extends Component {
@@ -87,11 +90,17 @@ class Login extends Component {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label> Lozinka </Form.Label>
-                        <Form.Control name="password" type={this.state.type} // tu ne trebaju placeholderi
-                                      onChange={this.onChange}
-                                      required/>
+                        <Form.Row>
+                            <Col xs={10}>
+                                <Form.Control name="password" type={this.state.type} // tu ne trebaju placeholderi
+                                              onChange={this.onChange}
+                                              required/>
+                            </Col>
+                            <Col>
+                                <Button className="passwordShow" variant={"light"} onClick={this.showHide}>{this.state.type === 'input' ? <MdEye></MdEye> : <MdEyeOff></MdEyeOff>}</Button>
+                            </Col>
+                        </Form.Row>
                     </Form.Group>
-                        <Button className="passwordShow" variant="dark" size="sm" onClick={this.showHide}>{this.state.type === 'input' ? 'Sakrij lozinku' : 'Prikaži lozinku'}</Button>
                     <p className="errorMessage">
                         {this.state.error}
                     </p>

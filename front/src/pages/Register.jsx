@@ -1,6 +1,8 @@
 import React, {Component} from "react";
-import {Button, Form} from 'react-bootstrap';
+import {Button, Col, Form} from 'react-bootstrap';
 import {Link, Redirect} from "react-router-dom";
+import MdEye from "react-ionicons/lib/MdEye";
+import MdEyeOff from "react-ionicons/lib/MdEyeOff";
 
 class Register extends Component {
     constructor(props) {
@@ -13,10 +15,19 @@ class Register extends Component {
             email: '',
             lozinka: '',
             error: '',
-            redirect: false
+            redirect: false,
+            type: 'password'
         };
+        this.showHide = this.showHide.bind(this);
     }
 
+    showHide(e){
+        e.preventDefault();
+        e.stopPropagation();
+        this.setState({
+            type: this.state.type === 'input' ? 'password' : 'input'
+        })
+    }
 
     onChange = (event) => {
         const {name, value} = event.target;
@@ -107,10 +118,16 @@ class Register extends Component {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label> Lozinka* (minimalno 5 znakova)</Form.Label>
-                        <Form.Control name="lozinka" type="password" placeholder={this.state.lozinka}
-                                      onChange={this.onChange}
-                                      required/>
-
+                        <Form.Row>
+                            <Col xs={10}>
+                                <Form.Control name="password" type={this.state.type} placeholder={this.state.lozinka}
+                                              onChange={this.onChange}
+                                              required/>
+                            </Col>
+                            <Col>
+                                <Button className="passwordShow" variant={"light"} onClick={this.showHide}>{this.state.type === 'input' ? <MdEye></MdEye> : <MdEyeOff></MdEyeOff>}</Button>
+                            </Col>
+                        </Form.Row>
                     </Form.Group>
                     <p className="errorMessage">
                         {this.state.error}
