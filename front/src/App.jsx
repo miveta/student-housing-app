@@ -3,9 +3,6 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import {Redirect, Route, Switch} from "react-router-dom";
 import cookie from 'react-cookies';
-
-import Soba from "./components/Soba";
-import TrazimSobu from "./components/TrazimSobu";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Homepage from "./pages/Homepage";
@@ -14,6 +11,7 @@ import Footer from "./partial/Footer";
 import MojProfil from "./pages/MojProfil"
 import UrediProfil from "./components/UrediProfil";
 import Oglas from "./pages/Oglas";
+import MojOglas from "./pages/MojOglas";
 
 
 const PrivateRoute = ({component: Component, ...rest}) => (
@@ -69,8 +67,8 @@ class App extends Component {
                         <Route exact path="/register"
                                component={() => <Register authenticate={this.authenticate}
                                                           authenticated={this.state.authenticated}/>}/>
-                        <Route exact path="/soba" component={Soba}/>
-                        <Route exact path="/trazimsobu" component={TrazimSobu}/>
+                        <Route exact path="/soba" component={MojOglas}/>
+
                         <Route path='/' exact component={() => <Homepage isLoggedIn={this.state.authenticated}/>}/>
                         <Route exact path="/mojprofil" component={() => <MojProfil isLoggedIn={this.state.authenticated} onLogout={this.logout}/>}/>
                         <Route exact path="/mojprofil/uredi" component={() => <UrediProfil onLogin={this.authenticate}/>}/>

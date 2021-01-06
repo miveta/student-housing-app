@@ -135,16 +135,16 @@ class Soba extends Component {
                 }
             }).then(json => {
             self.setState({...json})
-        })
+        }).catch(e => console.log(e))
     }
 
     // todo vrati ono gdje je submit disabled dok god se ne naprave promjene
     render() {
         console.log(this.state)
         return (
-            <div className="middle">
+            <div className="innerForm">
                 <Form onSubmit={this.onSubmit}>
-                    <h3> Moja soba </h3>
+                    <h3> Nudim sobu </h3>
                     <Form.Group>
                         <Form.Label> Grad </Form.Label>
                         <Form.Control as="select" name="grad" onChange={this.onChange} value={this.state.grad}>
