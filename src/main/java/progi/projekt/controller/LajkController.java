@@ -69,4 +69,19 @@ public class LajkController {
 		return ResponseEntity.ok(updatedLajk);
 	}
 
+	@DeleteMapping(value = "/delete")
+	public ResponseEntity<?> delete(@RequestParam(value = "student_username") String studentUsername,
+									@RequestParam(value = "oglas_id") String oglasId) {
+		Optional<Student> studentOpt = studentService.findByKorisnickoIme(studentUsername);
+		Optional<Oglas> oglasOpt = oglasService.findById(oglasId);
+
+		LajkId lajkId = new LajkId(studentOpt.get(), oglasOpt.get());
+
+		Lajk lajk = new Lajk();
+		lajk.setLajkId(lajkId);
+
+		Lajk deleted = lajkService.delete(lajk);
+
+		return ResponseEntity.ok(deleted);
+	}
 }

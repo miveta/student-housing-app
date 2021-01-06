@@ -5,7 +5,7 @@ import Lajkovi from "../components/Lajkovi";
 
 class Oglas extends Component {
 
-    constructor(props) {
+     constructor(props) {
         super(props)
         this.state = {
             user: cookie.load('principal'),
@@ -14,18 +14,11 @@ class Oglas extends Component {
         }
     }
 
-    ocjene = [
-        {name: 'Sviđa mi se🙂', value: '1'},
-        {name: 'Jako mi se sviđa😁', value: '2'},
-        {name: 'To je to😍', value: '3'},
-        {name: 'Nemoj više prikazivati❌', value: '4'},
-    ];
-
     componentDidMount() {
         let self = this
 
         //substring da maknemo id= i dobijemo čisti oglasId
-        const oglasId = this.props.match.params.id.substring(3)
+        const oglasId = this.props.match.params.id.substring(3);
 
         const options = {
             method: 'GET',
@@ -38,44 +31,16 @@ class Oglas extends Component {
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(body => {
-                    self.setState({oglas: body})
-                }).catch(error => console.log(error))
-            }
-        });
-    }
-
-    change = (e) => {
-        let self = this;
-        let ocjena = e.target.value;
-        let user = self.state.user;
-        const oglasId = this.props.match.params.id.substring(3)
-
-        this.setState({ocjena: ocjena});
-
-        const options = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        };
-
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/lajk/update?student_username=${user.korisnickoIme}&oglas_id=${oglasId}&ocjena=${ocjena}`, options)
-            .then(response => {
-                if (response.status === 200) {
-                } else {
-                    response.text().then(body => {
-                        console.log(body);
-                    });
+                        self.setState({oglas: body})
+                    }).catch(error => console.log(error))
                 }
-            }).catch(error => console.log(error));
-    };
+            });
+    }
 
     render() {
 
         let oglas = this.state.oglas
-
-        console.log(oglas)
+        let oglasId = this.props.match.params.id.substring(3);
 
         return (
             <div className='inner'>
@@ -84,7 +49,7 @@ class Oglas extends Component {
                 <p>godina: {oglas.godina}</p>
                 <p>objavljen: {oglas.objavljen}</p>
 
-                <Lajkovi oglas={oglas}></Lajkovi>
+                <Lajkovi oglasId={oglasId}></Lajkovi>
             </div>
         )
     }

@@ -1,12 +1,13 @@
 import React, {Component} from "react";
 import cookie from "react-cookies";
-import {ButtonGroup, ToggleButton} from "react-bootstrap";
+import {Button, ButtonGroup, ToggleButton} from "react-bootstrap";
 
 class Lajkovi extends Component{
     constructor(props) {
         super(props);
         this.state = {
             user: cookie.load('principal'),
+            oglas: '',
             isLoggedIn: cookie.load('isAuth'),
             ocjena: ''
         }
@@ -19,16 +20,32 @@ class Lajkovi extends Component{
         {name: 'Nemoj više prikazivati❌', value: '4'},
     ];
 
-    componentDidMount() {
+    async componentDidMount() {
         let self = this;
 
         let user = self.state.user;
         let oglas = self.props.oglas;
-        console.log("lajk")
-        console.log(oglas)
 
         if(this.state.isLoggedIn) {
-            const options = {
+            //ovo za fetchanje oglasa je ovdje jer inace baca nullpointer
+            const optionsOglas = {
+                method: 'GET',
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                }
+            };
+
+            fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/getoglas?oglas_id=${self.props.oglasId}`, optionsOglas)
+                .then(response => {
+                    if (response.status === 200) {
+                        response.json().then(body => {
+                            self.setState({oglas: body})
+                        }).catch(error => console.log(error))
+                    }
+                });
+
+
+            const optionsLajk = {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +53,7 @@ class Lajkovi extends Component{
                 }
             };
 
-            fetch(`${process.env.REACT_APP_BACKEND_URL}/lajk/ocjena?student_username=${user.korisnickoIme}&oglas_id=${oglas.id}`, options)
+            await fetch(`${process.env.REACT_APP_BACKEND_URL}/lajk/ocjena?student_username=${this.state.user.korisnickoIme}&oglas_id=${self.props.oglasId}`, optionsLajk)
                 .then(response => {
                     response.text().then(body => {
                         self.setState({ocjena: body})
@@ -49,8 +66,7 @@ class Lajkovi extends Component{
         let self = this;
         let ocjena = e.target.value;
         let user = self.state.user;
-        let oglas = self.props.oglas;
-
+        let oglas = self.state.oglas;
         this.setState({ocjena: ocjena});
 
         const options = {
@@ -72,6 +88,30 @@ class Lajkovi extends Component{
             }).catch(error => console.log(error));
     };
 
+    clearInput = () => {
+        let self = this;
+        let user = self.state.user;
+        let oglas = self.state.oglas;
+        this.setState({ocjena: ''});
+
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        };
+
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/lajk/delete?student_username=${user.korisnickoIme}&oglas_id=${oglas.id}`, options)
+            .then(response => {
+                if (response.status === 200) {
+                } else {
+                    response.text().then(body => {
+                        console.log(body);
+                    });
+                }
+            }).catch(error => console.log(error));
+    }
     render() {
         return (
             <ButtonGroup size="sm" toggle>
@@ -88,6 +128,7 @@ class Lajkovi extends Component{
                         {like.name}
                     </ToggleButton>
                 ))}
+                <Button variant="outline-secondary" onClick={this.clearInput}>Poništi odabir</Button>
             </ButtonGroup>
         )
     }

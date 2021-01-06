@@ -17,7 +17,7 @@ class OglasCard extends Component {
                 <br/>
                 {oglas.opis && <p>{oglas.opis}</p>}
                 <br/>
-                <Lajkovi oglas={oglas}></Lajkovi>
+                <Lajkovi oglasId={oglas.id}></Lajkovi>
             </div>
         )
     }
