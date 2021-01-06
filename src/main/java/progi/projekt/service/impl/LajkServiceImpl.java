@@ -54,4 +54,10 @@ public class LajkServiceImpl implements LajkService {
             throw new SavingException("Exception while saving lajk. Original message: '" + e.getMessage() + "'");
         }
     }
+
+    @Override
+    public Lajk delete(Lajk lajk) throws SavingException {
+        lajkRepository.delete(lajk);
+        return null;
+    }
 }
