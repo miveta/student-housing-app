@@ -22,31 +22,28 @@ import java.util.*;
 public class MatchingController {
 	private final MatchingService matchingService;
 	private final KandidatService kandidatService;
+	private KandidatService oglasService;
 
 
 	public MatchingController(
 			MatchingService matchingService,
-			KandidatService kandidatService
+			KandidatService kandidatService,
+			KandidatService oglasService
 			)
 	{
 		this.matchingService = matchingService;
 		this.kandidatService = kandidatService;
+		this.oglasService = oglasService;
 	}
 
 
 	@GetMapping("/")
 	public String demo() {
-		return "MatchingController";
+		return "Matching Controller";
 	}
 
 
-	@GetMapping(value = "/kandidati", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public List<Kandidat> kandidati(@RequestBody UUID oglasUuid) {
-		return kandidatService.listAll(oglasUuid);
-	}
-
-
-	@PostMapping("/kandidatiRun")
+	@GetMapping("/kandidatiRun")
 	public ResponseEntity<?> kandidatiRun() {
 		//prolazi po svim oglasima i stvara kandidat parove
 
@@ -62,7 +59,7 @@ public class MatchingController {
 	//u medjuvremenu je student na stranici svog oglasa ocjenio ponudjene kandidate
 
 
-	@PostMapping("/lajkRun")
+	@GetMapping("/lajkRun")
 	public ResponseEntity<?> lajkRun() {
 		//poziva se uz metodu iz LajkControllera. Stvara kandidata i par ako je student ocjenio oglas koji mu inicijalno
 		// nije ponudjen kao par pa nije mogao biti u topN pa niti postati par
@@ -76,7 +73,7 @@ public class MatchingController {
 	}
 
 
-	@PostMapping("/parRun")
+	@GetMapping("/parRun")
 	public ResponseEntity<?> parRun() {
 		//prolazi po svim oglasima i puni tablicu 'par'
 
@@ -89,7 +86,7 @@ public class MatchingController {
 	}
 
 
-	@PostMapping("/matchRun")
+	@GetMapping("/matchRun")
 	public ResponseEntity<?> matchRun() {
 		//sece po tablici 'par' i ovisno o obostranoj ocjeni para "rezervira" najbolje ocjenjeni par
 
@@ -105,7 +102,7 @@ public class MatchingController {
 	//u medjuvremenu su oba studenta prihvatila/odbila konacnu potvrdu
 
 
-	@PostMapping("/confirmRun")
+	@GetMapping("/confirmRun")
 	public ResponseEntity<?> confirmRun() {
 		//Cita rezultat konacnih potvrda para i:
 		//ako su oba studenta prihvatila: oznacuje par.done = true, oglas.status=POTVRDEN i salje mail u SC
@@ -127,8 +124,20 @@ public class MatchingController {
 		//Prolazi po predanoj listi 'izvedeni' i oznacava oglase nevednih parova kao IZVEDEN
 
 		try {
-			//force je debugging flag; ako je =true svi parovi se oznace kao IZVEDENI
-			matchingService.confirmSCFun(izvedeni, false);
+			matchingService.confirmSCFun(izvedeni);
+			return ResponseEntity.ok("Navedeni potvrdjeni oglasi oznaceni kao IZVEDENI");
+
+		} catch (Exception e){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
+	@GetMapping(value = "/confirmSCRun", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> confirmSCRun() {
+		//debug verzija koja sve oglase oznacava kao IZVEDEN
+
+		try {
+			matchingService.confirmSCFun();
 			return ResponseEntity.ok("Navedeni potvrdjeni oglasi oznaceni kao IZVEDENI");
 
 		} catch (Exception e){

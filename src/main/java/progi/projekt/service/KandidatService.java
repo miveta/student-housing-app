@@ -26,4 +26,6 @@ public interface KandidatService {
 	Optional<Kandidat> kandidatParaOglasa(Oglas oglas1, Oglas oglas2);
 
 	Boolean kandSadrziOglas(Kandidat kand, Oglas oglas);
+
+	void ponistiKandidateOglasa(Oglas oglas);
 }

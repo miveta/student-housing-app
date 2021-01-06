@@ -32,13 +32,10 @@ public class KandidatServiceImpl implements KandidatService {
 		this.uvjetiService = uvjetiService;
 	}
 
-    //TODO: maknuto zbog UUID
-	/**/
 	@Override
 	public List<Kandidat> listAll(UUID oglasUuid) {
 		var oglas = oglasService.findById(oglasUuid.toString());
 		return kandidatRepo.findAllByOglas(oglas.get());
-		//return new ArrayList<Kandidat>();
 	}
 
 	public void stvoriKand(Oglas oglas1, Oglas oglas2) {
@@ -88,16 +85,13 @@ public class KandidatServiceImpl implements KandidatService {
 		int N = SHORTLIST_VELICINA;
 		//todo: staviti poruku korisnicima da moraju ocjeniti barem N oglasa
 
-		//todo: ukljuciti provjeru flagova prilikom izrade topN
-		//mislim da je to dosta, tj da od tada sve kandidate/paraove
-		//mozemo tretirati kao clean
-
 		Comparator<Kandidat> compareByBliskost = Comparator.comparing(Kandidat::getBliskost);
 		Comparator<Kandidat> compareByStvoren = Comparator.comparing(Kandidat::getStvoren);
 		Comparator<Kandidat> compareByBlskThenStvrn = compareByBliskost.thenComparing(compareByStvoren);
 
 		List<Kandidat> top3kand = oglas.getKandidati()
 				.stream()
+				.filter(kand -> kand.getIgnore() != true)
 				.sorted(compareByBlskThenStvrn)
 				.limit(N)
 				.collect(Collectors.toList());
@@ -162,6 +156,14 @@ public class KandidatServiceImpl implements KandidatService {
 	 */
 	public Boolean kandSadrziOglas(Kandidat kand, Oglas oglas) {
 		return kand.getOglas() == oglas || kand.getKandOglas() == oglas;
+	}
+
+	@Override
+	public void ponistiKandidateOglasa(Oglas oglas) {
+		List<Kandidat> kandidati = listAll(oglas.getId());
+		for (Kandidat kand : kandidati){
+			kand.setIgnore(true);
+		}
 	}
 
 	public Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti) {

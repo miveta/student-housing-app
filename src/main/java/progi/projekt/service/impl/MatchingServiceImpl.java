@@ -44,7 +44,7 @@ public class MatchingServiceImpl implements MatchingService {
 
 		List<Oglas> oglasi = oglasService.listAll();
 
-		//dodavanje novih kandidata
+		//stvaranje novih kandidata
 		for (Oglas oglas1 : oglasi){
 			for (Oglas oglas2 : oglasi){
 				if (kandidatService.odgovaraju(oglas1, oglas2) && kandidatService.josNisuKandidat(oglas1, oglas2)){
@@ -150,6 +150,9 @@ public class MatchingServiceImpl implements MatchingService {
 			- holik
 		*/
 
+
+		/*
+		//VERZIJA ZA IZVLACENJE OCJENA IZ KANDIDATA
 		//izvlacenje ocjena iz kandidata u 2D dict [{oglasOcjenjivac, oglasOcjenjeni}] = ocjena
 		//prvo iteriramo po oglasima a ne kandidatima kako bi polje ocjena bilo sortirano po vremenu stvaranja oglasa
 		//tj tko prije stvori oglas taj ima vecu prednost u matchanju
@@ -183,6 +186,37 @@ public class MatchingServiceImpl implements MatchingService {
 						});
 			}
 		}
+		*/
+
+		//VERZIJA ZA IZVLACENJE OCJENA IZ LAJKA
+		//iteriramo po oglasima a ne lajkovima kako bi polje ocjena bilo sortirano po vremenu stvaranja oglasa
+		//tj tko prije stvori oglas taj ima vecu prednost u matchanju
+		//zato je polje oglasi sortirano po datumu objave
+		for (Oglas oglas : oglasi) {
+			UUID studentID = oglas.getStudent().getId();
+			List<Lajk> lajkovi = lajkService.listAll();
+			for (Lajk lajk : lajkovi) {
+				if (lajk.getLajkId().getStudent().getId() == studentID) {
+					UUID id1 = oglas.getId();
+					UUID id2 = lajk.getLajkId().getOglas().getId();
+					Key key = new Key(id1, id2);
+
+					Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
+
+					ocjenaOptional.ifPresentOrElse(
+							(ocjena) ->
+							{
+								ocjene.put(key, ocjena);
+							},
+							() ->
+							{
+								//ako ocjena jos nije unesena u rjecnik upisujemo -1
+								ocjene.put(key, -1);
+							});
+				}
+			}
+		}
+
 
 		//racuanje obostranih ocjena i pospremanje u rijecnik
 		Hashtable<Par, Integer> obostraneOcjene = new Hashtable<Par, Integer>();
@@ -233,7 +267,7 @@ public class MatchingServiceImpl implements MatchingService {
 					if (	ocjenaABOptional.isEmpty() ||
 							ocjenaBCOptional.isEmpty() ||
 							ocjenaCAOptional.isEmpty()){
-								trostranaOcjena = -1;
+						trostranaOcjena = -1;
 					}
 					else{
 						Integer ocjenaAB = ocjenaABOptional.get();
@@ -328,6 +362,10 @@ public class MatchingServiceImpl implements MatchingService {
 			if (par.getIgnore() == false){
 				par.setDone(true);
 				parService.potvrdiOglasePara(par);
+				kandidatService.ponistiKandidateOglasa(par.getOglas1());
+				kandidatService.ponistiKandidateOglasa(par.getOglas2());
+				parService.ponistiParoveOglasa(par.getOglas1());
+				parService.ponistiParoveOglasa(par.getOglas2());
 				MailService.PotvrdaZamjenePara(par);
 			}
 
@@ -356,27 +394,26 @@ public class MatchingServiceImpl implements MatchingService {
 		kandidatOptional.ifPresent(kandidat -> kandidat.setIgnore(true));
 	}
 
+
 	@Override
-	public void confirmSCFun(List<Par> izvedeni, Boolean force) {
-		//Prolazi po predanoj listi 'izvedeni' i oznacava oglase nevednih parova kao IZVEDEN
-		if (force==false){
-			for (Par par : izvedeni) {
-				var oglas1 = par.getOglas1();
-				oglas1.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
+	public void confirmSCFun(List<Par> izvedeni) {
+		for (Par par : izvedeni) {
+			var oglas1 = par.getOglas1();
+			oglas1.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
 
-				var oglas2 = par.getOglas2();
-				oglas2.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
-			}
+			var oglas2 = par.getOglas2();
+			oglas2.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
 		}
-		else {
-			for (Par par : parService.listAll()) {
-				var oglas1 = par.getOglas1();
-				oglas1.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
+	}
 
-				var oglas2 = par.getOglas2();
-				oglas2.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
-			}
+	@Override
+	public void confirmSCFun() {
+		for (Par par : parService.listAll()) {
+			var oglas1 = par.getOglas1();
+			oglas1.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
+
+			var oglas2 = par.getOglas2();
+			oglas2.getStatus().setStatus(StatusOglasaEnum.IZVEDEN);
 		}
-
 	}
 }
