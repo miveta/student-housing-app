@@ -1,12 +1,13 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {ButtonGroup, ToggleButton} from "react-bootstrap";
+import cookie from "react-cookies";
 
 class OglasCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: JSON.parse(localStorage.getItem("user")),
+            user: cookie.load('principal'),
             ocjena: ''
         }
     }
@@ -19,27 +20,29 @@ class OglasCard extends Component {
     ];
 
     componentDidMount() {
-        console.log(this.props)
+        //console.log(this.props)
         let self = this;
 
         let user = self.state.user;
         let oglas = self.props.oglas;
 
+        if(this.props.isLoggedIn) {
+            const options = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                }
+            };
 
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        };
-
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/lajk/ocjena?student_username=${user.korisnickoIme}&oglas_id=${oglas.id}`, options)
-            .then(response => {
-                response.text().then(body => {
-                    self.setState({ocjena: body})
-                });
-            }).catch(error => console.log(error));
+            fetch(`${process.env.REACT_APP_BACKEND_URL}/lajk/ocjena?student_username=${user.korisnickoIme}&oglas_id=${oglas.id}`, options)
+                .then(response => {
+                    response.text().then(body => {
+                        console.log(body)
+                        self.setState({ocjena: body})
+                    });
+                }).catch(error => console.log(error));
+        }
     }
 
     change = (e) => {
