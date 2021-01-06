@@ -60,16 +60,16 @@ public class SobaServiceImpl implements SobaService {
     }
 
     @Override
-    public Optional<Soba> setFromStudentUsernameAndPaviljonId(Soba soba, String studentUsername, String paviljonId) {
+    public Soba setFromStudentUsernameAndPaviljonId(Soba soba, String studentUsername, String paviljonId) {
         Optional<Student> optionalStudent = studentService.findByKorisnickoIme(studentUsername);
         Optional<Paviljon> optionalPaviljon = utilService.getPaviljonById(paviljonId);
 
-        if (optionalStudent.isEmpty() || optionalPaviljon.isEmpty()) return Optional.empty();
+        if (optionalStudent.isEmpty() || optionalPaviljon.isEmpty()) return null;
 
         soba.setStudent(optionalStudent.get());
         soba.setPaviljon(optionalPaviljon.get());
 
-        return Optional.of(soba);
+        return soba;
     }
 
     @Override

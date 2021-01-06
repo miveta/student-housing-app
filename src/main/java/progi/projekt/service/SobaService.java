@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SobaService {
-    Optional<Soba> setFromStudentUsernameAndPaviljonId(Soba soba, String studentId, String paviljonId);
+    Soba setFromStudentUsernameAndPaviljonId(Soba soba, String studentId, String paviljonId);
 
     Optional<Soba> getByStudentUsername(String username);
 

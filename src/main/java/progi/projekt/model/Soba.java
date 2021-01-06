@@ -25,8 +25,7 @@ public class Soba implements Serializable {
     @JoinColumn(name = "id_oglas")
     private Oglas oglas;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_korisnik")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "soba")
     private Student student;
 
     @Column(name = "broj_kreveta")

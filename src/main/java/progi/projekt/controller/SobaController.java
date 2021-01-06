@@ -8,6 +8,7 @@ import progi.projekt.dto.SobaDTO;
 import progi.projekt.forms.SobaForm;
 import progi.projekt.model.Grad;
 import progi.projekt.model.Soba;
+import progi.projekt.model.Student;
 import progi.projekt.service.SobaService;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.UtilService;
@@ -54,16 +55,21 @@ public class SobaController {
         Soba soba;
         if (optionalSoba.isEmpty()) {
             soba = new Soba();
-            sobaForm.fromSobaForm(soba);
-            optionalSoba = sobaService.setFromStudentUsernameAndPaviljonId(soba, sobaForm.getStudentUsername(), sobaForm.getIdPaviljon());
+            soba = sobaService.setFromStudentUsernameAndPaviljonId(soba, sobaForm.getStudentUsername(), sobaForm.getIdPaviljon());
 
-            if (optionalSoba.isEmpty()) return ResponseEntity.badRequest().build();
+            if (soba == null) return ResponseEntity.badRequest().build();
         } else {
             soba = optionalSoba.get();
-            sobaForm.fromSobaForm(soba);
         }
 
+        sobaForm.fromSobaForm(soba);
         soba = sobaService.save(soba);
+
+        Optional<Student> optionalStudent = studentService.findByKorisnickoIme(sobaForm.getStudentUsername());
+        Student student = optionalStudent.get();
+        student.setSoba(soba);
+        studentService.update(student);
+
         return ResponseEntity.ok(new SobaDTO(soba));
     }
 }
