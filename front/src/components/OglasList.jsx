@@ -30,9 +30,7 @@ function OglasList(props) {
                 )
             }
         </div>
-
     );
-
 }
 
 export default OglasList;

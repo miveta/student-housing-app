@@ -54,7 +54,6 @@ public class Par {
 		this.lanac = lanac;
 	}
 
-
 	@Basic
 	@Column(name = "ignore", nullable = true)
 	private Boolean ignore;
@@ -71,7 +70,6 @@ public class Par {
 	@Column(name = "ceka", nullable = true)
 	private Boolean ceka;
 	*/
-
 
 	public Par(Oglas oglas1, Oglas oglas2) {
 		if (oglas1 != null || oglas2 != null) {

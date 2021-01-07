@@ -38,6 +38,12 @@ class App extends Component {
         this.state = {
             authenticated: cookie.load('isAuth') === 'true'
         }
+
+
+    }
+
+    clickHandler = () => {
+        this.client.publish({destination: '/obavijesti/greetings', body: 'Hello world'});
     }
 
     authenticate = (cb) => {

@@ -64,9 +64,6 @@ class Lajkovi extends Component {
         }
     }
 
-    onHover = (e) => {
-
-    }
     change = (e) => {
         let self = this;
         let ocjena = e.target.value;

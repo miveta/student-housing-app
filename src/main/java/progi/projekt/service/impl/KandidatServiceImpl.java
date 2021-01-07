@@ -19,7 +19,6 @@ public class KandidatServiceImpl implements KandidatService {
 	private static final int SHORTLIST_VELICINA = 3;
 	//veci broj -> brzi i blazi algoritam
 
-
 	private KandidatRepository kandidatRepo;
 	private SobaService sobaService;
 	private OglasService oglasService;
@@ -104,7 +103,6 @@ public class KandidatServiceImpl implements KandidatService {
 
 		return top;
 	}
-
 
 	@Override
 	public Boolean josNisuKandidat(Oglas oglas1, Oglas oglas2) {
