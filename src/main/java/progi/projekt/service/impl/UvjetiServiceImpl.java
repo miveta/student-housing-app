@@ -30,18 +30,19 @@ public class UvjetiServiceImpl implements UvjetiService {
 
     @Override
     public Integer izracunajBliskost(Soba soba, TrazeniUvjeti uvjeti) {
-        return 0;
+        int rezultat = 0;
+        if(soba.getStudent().getGrad().equals(uvjeti.getGrad())) rezultat++;
+        if(uvjeti.getDomovi().contains(soba.getPaviljon().getDom()) || uvjeti.getDomovi().isEmpty()) rezultat++;
+        if(uvjeti.getPaviljoni().contains(soba.getPaviljon()) || uvjeti.getPaviljoni().isEmpty()) rezultat++;
+        if(uvjeti.getKatovi().contains(soba.getKat()) || uvjeti.getKatovi().isEmpty()) rezultat++;
+        if(uvjeti.getBrojKreveta().contains(soba.getBrojKreveta()) || uvjeti.getBrojKreveta().isEmpty() || uvjeti.getBrojKreveta().contains(BrojKrevetaEnum.NEBITNO)) rezultat++;
+        if(uvjeti.getTipKupaonice().contains(soba.getTipKupaonice()) || uvjeti.getTipKupaonice().isEmpty() || uvjeti.getTipKupaonice().contains(TipKupaoniceEnum.NEBITNO)) rezultat++;
+        return rezultat;
     }
 
     @Override
     public Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti) {
-        BrojKrevetaEnum nebitno = BrojKrevetaEnum.NEBITNO;
-        TipKupaoniceEnum neb = TipKupaoniceEnum.NEBITNO;
-        return (uvjeti.getBrojKreveta().contains(soba.getBrojKreveta()) || uvjeti.getBrojKreveta().contains(nebitno) || uvjeti.getBrojKreveta().isEmpty()
-                && uvjeti.getTipKupaonice().contains(soba.getTipKupaonice()) || uvjeti.getTipKupaonice().contains(neb) || uvjeti.getTipKupaonice().isEmpty()
-                && uvjeti.getDomovi().contains(soba.getPaviljon().getDom()) || uvjeti.getDomovi().isEmpty()
-                && uvjeti.getGrad().equals(soba.getPaviljon().getDom().getGrad())
-                && uvjeti.getKatovi().contains(soba.getKat()) || uvjeti.getKatovi().isEmpty());
+        return true;
     }
 
 }
