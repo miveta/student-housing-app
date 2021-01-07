@@ -9,8 +9,8 @@
 				\label{fig:sustav}
 			\end{figure}
 			
-			Programski jezik koji smo odabralni za izradu aplikacije je java s razvojnim okvirom Spring Boot te javaScript. Odabrano razvojno okruženje je IntelliJ IDEA. 
-			Aplikacija je organizirana u dva sloja: frontend i backend. Za izradu frontenda koristi se React.React je javaScript biblioteka koja služi za izradu jednostranične aplikacije. Frontend i backend komuniciraju pomoću RESTa. REST se bazira na HTTP protokolu. Backend se sastoji od pet komponenti:
+			Programski jezik koji smo odabrali za izradu aplikacije je Java s razvojnim okvirom Spring Boot te JavaScript. Odabrano razvojno okruženje je IntelliJ IDEA. 
+			Aplikacija je organizirana u dva sloja: frontend i backend. Za izradu frontenda koristi se React - JavaScript biblioteka koja služi za izradu jednostraničnih aplikacija. Frontend i backend međusobno komuniciraju pomoću RESTa. REST se bazira na HTTP protokolu. Backend se sastoji od pet komponenti:
 		\begin{itemize}
 		\item Kontroler - služi za komunikaciju s frontendom. Zaprima HTTP zathtjev te određuje koja će se funkcionalnost izvršavati
 		\item Servis - u njima se odvijaju poslovne logike i sve funkcionalnosti aplikacije
@@ -398,5 +398,35 @@
 				\caption{Dijagrami razreda - dio Security}
 				\label{fig:security}
 			\end{figure}
+		
+		\eject
+		
+		\section{Dijagram stanja}
+		
+		
+		Dijagram stanja je ponašajni UML dijagram koji opisuje dinamično ponašanje nekog dijela sustava prikazom konačnog broja stanja objekata te prijelaze između stanja koji su potaknuti događajima. Na dijagramu na slici 4.7 prikazan je dijagram stanja za prijavljenog korisnika. Kada se korisnik prijavi (ili registrira) prikazuje mu se početna stranica na kojoj su vidljivi oglasi koji odgovaraju njegovim kriterijima. Za svaki oglas korisnik može vidjeti dodatne informacije o sobi. Klikom na "Moj profil" prikazuju se svi podaci koje korisnik može ažurirati (osim podatka JMBAG te korisničkog imena). Također može izbrisati svoj profil. Klikom na "Moja soba" korisnik u formu unosi podatke o svojoj sobi te opcionalan komentar, dok klikom na "Tražim sobu" postavlja željene kriterije za traženu sobu.
+		
+		\begin{figure}[H]
+			\includegraphics[scale=0.4]{dijagrami/dijagramStanja} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\centering
+			\caption{Dijagram stanja}
+			\label{fig:dijagramStanja}
+		\end{figure}
+		
+		
+		\eject 
+		
+		\section{Dijagram aktivnosti}
+		
+		\textbf{\textit{dio 2. revizije}}\\
+		
+		\textit{Potrebno je priložiti dijagram aktivnosti s pripadajućim opisom. Dijagram aktivnosti treba prikazivati značajan dio sustava.}
+		
+		\eject
+		\section{Dijagram komponenti}
+		
+		\textbf{\textit{dio 2. revizije}}\\
+		
+		\textit{Potrebno je priložiti dijagram komponenti s pripadajućim opisom. Dijagram komponenti treba prikazivati strukturu cijele aplikacije.}
 		
 		
