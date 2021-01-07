@@ -17,7 +17,6 @@ public interface SobaService {
 
     Optional<Soba> getById(UUID id);
 
-
     Soba save(Soba soba);
 
     Soba update(Soba soba);

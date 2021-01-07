@@ -130,6 +130,7 @@ class Lajkovi extends Component {
                                 type="radio"
                                 variant="outline-light"
                                 value={like.value}
+                                disabled={!this.state.isLoggedIn}
                                 checked={this.state.ocjena === like.value}
                                 onChange={(e) => this.change(e)}
                             >
@@ -137,7 +138,9 @@ class Lajkovi extends Component {
                             </ToggleButton>
                         </Tooltip>
                     ))}
-                    <Button variant={"likes"} onClick={this.clearInput}>Poništi odabir</Button>
+                    <Button variant={"likes"} onClick={this.clearInput} disabled={!this.state.isLoggedIn}>
+                        Poništi odabir
+                    </Button>
                 </ButtonGroup>
             </div>
         )
