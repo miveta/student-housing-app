@@ -10,17 +10,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import progi.projekt.dto.GradDTO;
 import progi.projekt.dto.KorisnikDTO;
 import progi.projekt.forms.LoginForm;
 import progi.projekt.forms.RegisterForm;
+import progi.projekt.model.Grad;
 import progi.projekt.model.Korisnik;
 import progi.projekt.model.Student;
 import progi.projekt.security.AuthenticationHandler;
 import progi.projekt.security.KorisnikUserDetailsService;
 import progi.projekt.service.StudentService;
+import progi.projekt.service.UtilService;
 import progi.projekt.service.ZaposlenikSCService;
 
-
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
@@ -28,23 +31,21 @@ import java.util.Optional;
 @RequestMapping("/auth")
 public class AuthController {
 	private final KorisnikUserDetailsService korisnikUserDetailsService;
-
 	private final AuthenticationHandler authenticationHandler;
-
 	private final StudentService studentService;
-
 	private final ZaposlenikSCService zaposlenikscService;
-
 	private final PasswordEncoder pswdEncoder;
+	private final UtilService utilService;
 
 	public AuthController(KorisnikUserDetailsService korisnikUserDetailsService,
 						  AuthenticationHandler authenticationHandler, StudentService studentService,
-						  ZaposlenikSCService zaposlenikscService, PasswordEncoder pswdEncoder) {
+						  ZaposlenikSCService zaposlenikscService, PasswordEncoder pswdEncoder, UtilService utilService) {
 		this.korisnikUserDetailsService = korisnikUserDetailsService;
 		this.authenticationHandler = authenticationHandler;
 		this.studentService = studentService;
 		this.zaposlenikscService = zaposlenikscService;
 		this.pswdEncoder = pswdEncoder;
+		this.utilService = utilService;
 	}
 
 	//'@AuthenticationPrincipal WebRequest request' je argument za citanje cijelog requesta
@@ -78,9 +79,14 @@ public class AuthController {
 
 		// ne provjeravamo zaposlenike zato što se oni unose u bazu preko backenda
 
+		Optional<Grad> optionalGrad = utilService.getGradByNaziv(registerForm.getNazivGrada());
+		if (optionalGrad.isEmpty()) return ResponseEntity.badRequest().body("Taj grad ne postoji u bazi!");
+
 		//izrada Student modela
 		String passhash = pswdEncoder.encode(registerForm.getLozinka());
 		Student student = registerForm.fromRegisterForm(passhash);
+		student.setGrad(optionalGrad.get());
+
 		student = studentService.createStudent(student);
 
 		//login nakon registracije
@@ -131,5 +137,11 @@ public class AuthController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
+	}
+
+	@GetMapping("/grad")
+	public GradDTO getGrad(@RequestParam(value = "user") String username) {
+		List<Grad> list = utilService.findAllGrad();
+		return new GradDTO(list.get(0));
 	}
 }

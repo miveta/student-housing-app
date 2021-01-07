@@ -1,10 +1,8 @@
 package progi.projekt.service;
 
-import progi.projekt.model.Grad;
 import progi.projekt.model.Soba;
 import progi.projekt.model.Student;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,8 +16,6 @@ public interface SobaService {
     Optional<Soba> getByStudent(Student student);
 
     Optional<Soba> getById(UUID id);
-
-    List<Grad> findAllGrad();
 
     Soba save(Soba soba);
 

@@ -7,9 +7,6 @@ class Homepage extends Component {
         this.state = {
             oglasi: []
         };
-
-        console.log(this.props)
-
     }
 
     componentDidMount() {

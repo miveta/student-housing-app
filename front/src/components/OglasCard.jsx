@@ -1,7 +1,5 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
-import {ButtonGroup, ToggleButton} from "react-bootstrap";
-import cookie from "react-cookies";
 import Lajkovi from "./Lajkovi";
 
 class OglasCard extends Component {
@@ -21,7 +19,6 @@ class OglasCard extends Component {
             </div>
         )
     }
-
 
 }
 

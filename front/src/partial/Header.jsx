@@ -37,9 +37,8 @@ class Header extends Component {
                     {this.props.authenticated
                         ?
                         <Nav>
-                            <Nav.Link href="/soba">Moja soba</Nav.Link>
-                            <Nav.Link href="/trazimsobu">Tražim sobu</Nav.Link>
-                            <Nav.Link href="/mojprofil">Moj profil</Nav.Link>
+                            <Nav.Link href="/oglasi">Oglasi</Nav.Link>
+                            <Nav.Link href="/mojprofil">Profil</Nav.Link>
                             <Button variant="light" onClick={this.logout}> Odjavi se </Button>
                         </Nav>
                         :

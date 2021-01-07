@@ -40,12 +40,25 @@ body, html, .App, #root {
     transition: all .3s;
 }
 
+
 .innerForm {
     min-width: 450px;
     width: 50%;
     margin: auto auto 15px;
     background: #ffffff;
     padding: 40px 55px 45px 55px;
+    box-shadow: 0 14px 80px rgba(34, 35, 58, 0.2);
+    border-radius: 15px;
+}
+
+.btn-likes {
+    background-color: #e5e3e3;
+}
+
+.likes {
+    display: inline-flex;
+    box-sizing: border-box;
+    background: #e5e3e3;
     box-shadow: 0 14px 80px rgba(34, 35, 58, 0.2);
     border-radius: 15px;
 }
@@ -122,4 +135,12 @@ body, html, .App, #root {
     margin: 20px;
     text-align: left;
     padding: 10px
+}
+
+.formLabel {
+    font-weight: bold;
+}
+
+.formLabel {
+    font-weight: bold;
 }

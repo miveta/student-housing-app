@@ -9,12 +9,15 @@ import progi.projekt.forms.SobaForm;
 import progi.projekt.model.Grad;
 import progi.projekt.model.Soba;
 import progi.projekt.model.Student;
+import progi.projekt.model.Student;
+import progi.projekt.service.OglasService;
 import progi.projekt.service.SobaService;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.UtilService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @CrossOrigin
@@ -24,18 +27,19 @@ public class SobaController {
 
     private SobaService sobaService;
     private UtilService utilService;
+    private OglasService oglasService;
     private StudentService studentService;
 
-    public SobaController(SobaService sobaService, UtilService utilService, StudentService studentService) {
+    public SobaController(SobaService sobaService, UtilService utilService, OglasService oglasService, StudentService studentService) {
         this.sobaService = sobaService;
         this.utilService = utilService;
+        this.oglasService = oglasService;
         this.studentService = studentService;
     }
 
-
     @GetMapping("/gradovi")
     public List<GradDTO> getSviGradovi() {
-        List<Grad> gradovi = sobaService.findAllGrad();
+        List<Grad> gradovi = utilService.findAllGrad();
         return gradovi.stream().map(GradDTO::new).collect(Collectors.toList());
     }
 
@@ -71,5 +75,11 @@ public class SobaController {
         studentService.update(student);
 
         return ResponseEntity.ok(new SobaDTO(soba));
+    }
+
+    @GetMapping(value = "/getsoba")
+    public ResponseEntity<?> getSoba(@RequestParam(value = "oglas_id") String oglasId) {
+        Student student = oglasService.findById(oglasId).get().getStudent();
+        return ResponseEntity.ok(new SobaDTO(student.getSoba()));
     }
 }

@@ -16,12 +16,32 @@ class Register extends Component {
             lozinka: '',
             error: '',
             redirect: false,
-            type: 'password'
+            type: 'password',
+            gradovi: []
         };
         this.showHide = this.showHide.bind(this);
+
+        let options = {
+            method: 'GET',
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        };
+
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/soba/gradovi`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                } else {
+                    console.log(response.status)
+                }
+            }).then(json => {
+            this.setState({gradovi: json})
+            if (json.length >= 1) this.setState({grad: json[0].naziv})
+        })
     }
 
-    showHide(e){
+    showHide(e) {
         e.preventDefault();
         e.stopPropagation();
         this.setState({
@@ -33,7 +53,6 @@ class Register extends Component {
         const {name, value} = event.target;
         this.setState(state => ({...state, [name]: value}))
     };
-
 
     onSubmit = (e) => {
         e.preventDefault();
@@ -48,7 +67,8 @@ class Register extends Component {
             jmbag: self.state.jmbag,
             username: self.state.username,
             email: self.state.email,
-            lozinka: self.state.lozinka
+            lozinka: self.state.lozinka,
+            nazivGrada: self.state.grad
         };
 
         const options = {
@@ -90,34 +110,37 @@ class Register extends Component {
                     <h3>Registracija</h3>
 
                     <Form.Group>
-                        <Form.Label> Ime </Form.Label> *
+                        <Form.Label> Ime </Form.Label>
                         <Form.Control name="ime" type="text" placeholder={this.state.name} onChange={this.onChange}
                                       required/>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label> Prezime* </Form.Label>
+                        <Form.Label> Prezime </Form.Label>
                         <Form.Control name="prezime" type="text" placeholder={this.state.prezime}
                                       onChange={this.onChange} required
                                       maxLength="10" minLength="10"/>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label> JMBAG* (mora biti 10 znamenki) </Form.Label>
+                        <Form.Label> JMBAG </Form.Label>
                         <Form.Control name="jmbag" type="text" placeholder={this.state.jmbag} onChange={this.onChange}
                                       required/>
+                        <Form.Text className={"textMuted"}>
+                            JMBAG se sastoji od 10 znamenki!
+                        </Form.Text>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label> Korisničko ime* </Form.Label>
+                        <Form.Label> Korisničko ime </Form.Label>
                         <Form.Control name="username" type="text" placeholder={this.state.username}
                                       onChange={this.onChange}
                                       required/>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label> Email* </Form.Label>
+                        <Form.Label> Email </Form.Label>
                         <Form.Control name="email" type="email" placeholder={this.state.email} onChange={this.onChange}
                                       required/>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label> Lozinka* (minimalno 5 znakova)</Form.Label>
+                        <Form.Label> Lozinka </Form.Label>
                         <Form.Row>
                             <Col xs={10}>
                                 <Form.Control name="lozinka" type={this.state.type} placeholder={this.state.lozinka}
@@ -130,17 +153,26 @@ class Register extends Component {
                                     <MdEyeOff></MdEyeOff>}</Button>
                             </Col>
                         </Form.Row>
+                        <Form.Text className={"textMuted"}>
+                            Lozinka se treba sastojati od najmanje 5 znakova!
+                        </Form.Text>
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label> U kojem gradu studiraš? </Form.Label>
+                        <Form.Control as="select" name="grad" onChange={this.onChange} value={this.state.grad}>
+                            {this.state.gradovi.map(grad => (
+                                <option id={grad.id}>{grad.naziv}</option>
+                            ))}
+                        </Form.Control>
                     </Form.Group>
                     <p className="errorMessage">
                         {this.state.error}
                     </p>
+
                     <Button type="submit" variant="dark" size="lg" block disabled={!this.isValid()}> Registriraj
                         se </Button>
                     <p className="already-registered text-right">
                         <Link to="/login">Već si registriran?</Link>
-                    </p>
-                    <p>
-                        Polja označena * ne smiju ostati prazna!
                     </p>
                 </Form>
             </div>

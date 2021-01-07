@@ -1,27 +1,13 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {Button, Form} from 'react-bootstrap';
-import {withRouter} from 'react-router-dom';
 import cookie from "react-cookies";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import {withRouter} from "react-router-dom";
 
 function TrazimSobu(props) {
     const user = cookie.load('principal');
-    const [grad, setGrad] = React.useState({
-        id: '',
-        naziv: '',
-        domovi: [{
-            id: '',
-            imaMenzu: '',
-            naziv: '',
-            paviljoni: [{
-                id: '',
-                naziv: '',
-                kategorija: ''
-            }],
-            checked: false
-        }]
-    });
-    //const [domovi, setDomovi] = React.useState({d:[{id: '', imaMenzu: '', naziv: '',paviljon: {id: '', naziv: ''}, checked: false}]}) ;
-    // const [paviljoni,setPaviljoni] = React.useState([{id: '', naziv: ''}]);
+    const [grad, setGrad] = React.useState(props.grad);
 
     const [uvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [], brojKreveta: [], komentar: ''});
     const katovi = ['1', '2', '3', '4'];
@@ -98,7 +84,6 @@ function TrazimSobu(props) {
             body: JSON.stringify(body)
         };
 
-        console.log(options)
 
         return fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/uvjetiIveta`, options)
             .then(response => {
@@ -111,120 +96,109 @@ function TrazimSobu(props) {
 
     }
 
-    useEffect(() => {
-        const options = {
-            method: 'GET',
-            headers: {
-                'Access-Control-Allow-Origin': '*'
-            }
-        };
-
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/grad?user=${user.korisnickoIme}`, options)
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json()
-
-                } else {
-                    console.log(response.status)
-                }
-            }).then(json => {
-            setGrad(json)
-        })
-    }, []);
-
-
-    console.log(grad)
 
     return (
-        <div className="innerForm" hidden={!props.korisnikImaSobu}>
+        <div className="innerForm">
             <Form onSubmit={onSubmit} disabled>
                 <h3>Tražim sobu</h3>
-                <h6>Grad {grad.naziv}</h6>
-
-
-                <Form.Label>Dom</Form.Label>
-                {grad.domovi.map((dom) => (
-                    <div key={dom.id} className="mb-3">
-                        <Form.Check
-                            onChange={onChangeDom}
-                            key={dom.id}
-                            type="checkbox"
-                            id={dom.id}
-                            name="dom"
-                            value={dom.id}
-                            label={dom.naziv}
-                        />
-                        {dom.checked &&
-                        <Form.Group>
-                            <Form.Label>Paviljon</Form.Label>
-                            {dom.paviljoni.map(p => (
-                                <Form.Check
-                                    onChange={onChange}
-                                    name="paviljon"
-                                    key={p.id}
-                                    type="checkbox"
-                                    id={p.id}
-                                    value={p.id}
-                                    label={p.naziv}
-                                />
-
-                            ))}
-                        </Form.Group>
-                        }
-
-                    </div>
-                ))}
-
-
                 <Form.Group>
                     <Form.Label>Kat</Form.Label>
-                    {katovi.map((p, index) => (
-                        <Form.Check
-                            onChange={onChange}
-                            name="kat"
-                            key={index}
-                            type="checkbox"
-                            id={index}
-                            value={p}
-                            label={p}
-                        />
-                    ))}
+                    <Row>
+                        {katovi.map((p, index) => (
+                            <Col xs={1}>
+                                <Form.Check
+                                    onChange={onChange}
+                                    name="kat"
+                                    key={index}
+                                    type="checkbox"
+                                    id={index}
+                                    value={p}
+                                    label={p}
+                                />
+                            </Col>
+                        ))}
+                    </Row>
                 </Form.Group>
-
                 <Form.Group>
                     <Form.Label>Broj kreveta</Form.Label>
-                    {kreveti.map((p, index) => (
-                        <Form.Check
-                            onChange={onChange}
-                            name="brojKreveta"
-                            key={index}
-                            type="checkbox"
-                            id={index}
-                            value={p.value}
-                            label={p.name}
-                        />
-                    ))}
+                    <Row>
+                        {kreveti.map((p, index) => (
+                            <Col>
+                                <Form.Check
+                                    onChange={onChange}
+                                    name="brojKreveta"
+                                    key={index}
+                                    type="checkbox"
+                                    id={index}
+                                    value={p.value}
+                                    label={p.name}
+                                />
+                            </Col>
+                        ))}
+                    </Row>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Tip kupaonice</Form.Label>
-                    {kupaonice.map((p, index) => (
-                        <Form.Check
-                            onChange={onChange}
-                            name="tipKupaonice"
-                            key={index}
-                            type="checkbox"
-                            id={index}
-                            value={p.value}
-                            label={p.name}
-                        />
-                    ))}
+                    <Row>
+                        {kupaonice.map((p, index) => (
+                            <Col xs={3}>
+                                <Form.Check
+                                    onChange={onChange}
+                                    name="tipKupaonice"
+                                    key={index}
+                                    type="checkbox"
+                                    id={index}
+                                    value={p.value}
+                                    label={p.name}
+                                /></Col>
+                        ))}
+                    </Row>
                 </Form.Group>
 
-
-                <Button type="submit" variant="dark" size="sm" block> Spremi uvjete </Button>
+                {
+                    grad.domovi.map(dom => (
+                        <Row>
+                            <Col>
+                                <Form.Label>Dom</Form.Label>
+                                <Form.Check
+                                    onChange={onChangeDom}
+                                    key={dom.id}
+                                    type="checkbox"
+                                    id={dom.id}
+                                    name="dom"
+                                    value={dom.id}
+                                    label={dom.naziv}
+                                />
+                            </Col>
+                            {
+                                dom.checked &&
+                                <Col>
+                                    <Form.Group>
+                                        <Form.Label>Paviljoni u domu {dom.naziv}</Form.Label>
+                                        {console.log(dom.paviljoni)}
+                                        {dom.paviljoni.map(p => (
+                                            <Form.Check
+                                                onChange={onChange}
+                                                name="paviljon"
+                                                key={p.id}
+                                                type="checkbox"
+                                                id={p.id}
+                                                value={p.id}
+                                                label={p.naziv}>
+                                            </Form.Check>
+                                        ))}
+                                    </Form.Group>
+                                </Col>
+                            }
+                        </Row>
+                    ))
+                }
+                <Button type="submit" variant="dark" block> Spremi promjene </Button>
             </Form>
         </div>
     )
+
+
 }
 
 export default withRouter(TrazimSobu);
