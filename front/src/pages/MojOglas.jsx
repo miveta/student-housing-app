@@ -9,15 +9,20 @@ class MojOglas extends Component {
         super(props);
         this.state = {
             user: cookie.load('principal'),
+            grad: {
+                id: '',
+                naziv: '',
+                domovi: []
+            },
             soba: {
                 id: '',
-                brojKreveta: '',
+                brojKreveta: 'Jednokrevetna',
                 kat: '',
                 komentar: '',
                 paviljon: undefined,
-                tipKupaonice: ''
+                tipKupaonice: 'Privatna'
             },
-            gradovi: []
+            changed: false
         }
 
         let options = {
@@ -35,10 +40,11 @@ class MojOglas extends Component {
                 }
             }).then(json => {
             this.state.soba = {...json};
-        }).catch(e => console.log(e))
+            this.state.changed = true
+        }).catch(e => console.log("korisnik jos nema sobu"))
 
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/soba/gradovi`, options)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/grad?user=${this.state.user.korisnickoIme}`, options)
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
@@ -46,24 +52,24 @@ class MojOglas extends Component {
                     console.log(response.status)
                 }
             }).then(json => {
-            this.setState({gradovi: json})
+            this.setState({grad: {...json}})
         })
     }
 
     submitSoba = (soba) => {
         let self = this;
 
-
         const body = {
             studentUsername: self.state.user.korisnickoIme,
             idPaviljon: soba.idPaviljon,
-            kat: soba.kat,
+            kat: soba.kat === "" ? 0 : soba.kat,
             brojKreveta: soba.brojKreveta.toUpperCase(),
             tipKupaonice: soba.tipKupaonice.toUpperCase(),
             komentar: soba.komentar
         };
 
         console.log(body)
+
         const options = {
             method: 'POST',
             headers: {
@@ -88,8 +94,14 @@ class MojOglas extends Component {
     render() {
         return (
             <div className="middle">
-                <Soba gradovi={this.state.gradovi} soba={this.state.soba} submitSoba={this.submitSoba}/>
-                <TrazimSobu korisnikImaSobu={true}/>
+                <Soba grad={this.state.grad} soba={this.state.soba} submitSoba={this.submitSoba}/>
+                {
+                    this.state.soba.id === '' ?
+                        <p>definirajte prvo svoju sobu</p>
+                        :
+                        <TrazimSobu grad={this.state.grad}/>
+                }
+
             </div>
         )
     }

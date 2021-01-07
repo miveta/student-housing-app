@@ -1,7 +1,6 @@
 package progi.projekt.service.impl;
 
 import org.springframework.stereotype.Service;
-import progi.projekt.model.Grad;
 import progi.projekt.model.Paviljon;
 import progi.projekt.model.Soba;
 import progi.projekt.model.Student;
@@ -12,7 +11,6 @@ import progi.projekt.service.SobaService;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.UtilService;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,9 +31,7 @@ public class SobaServiceImpl implements SobaService {
         this.utilService = utilService;
     }
 
-    public List<Grad> findAllGrad() {
-        return gradRepository.findAll();
-    }
+
 
     @Override
     public Soba save(Soba soba) {
@@ -54,7 +50,8 @@ public class SobaServiceImpl implements SobaService {
 
         Student student = optionalStudent.get();
 
-        return sobaRepository.findByStudent(student);
+        if (student.getSoba() != null) return Optional.of(student.getSoba());
+        return Optional.empty();
     }
 
     @Override

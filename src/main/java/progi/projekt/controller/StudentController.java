@@ -62,4 +62,5 @@ public class StudentController {
         studentService.delete(s);
         return ResponseEntity.ok(null);
     }
+
 }

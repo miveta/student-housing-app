@@ -29,6 +29,8 @@ public class RegisterForm {
 
     private boolean obavijestiNaMail;
 
+    private String nazivGrada;
+
     public RegisterForm() {
     }
 
@@ -88,6 +90,14 @@ public class RegisterForm {
         this.obavijestiNaMail = obavijestiNaMail;
     }
 
+    public String getNazivGrada() {
+        return nazivGrada;
+    }
+
+    public void setNazivGrada(String nazivGrada) {
+        this.nazivGrada = nazivGrada;
+    }
+
     public Student fromRegisterForm(String passhash) {
         Student student = new Student();
         student.setIme(this.ime);
@@ -95,7 +105,6 @@ public class RegisterForm {
         student.setJmbag(this.jmbag);
         student.setKorisnickoIme(this.username);
         student.setEmail(this.email);
-
         student.setLozinka(passhash);
 
         // po defaultu stavi da dobiva obavijesti na mail - hardkodirano
@@ -113,6 +122,7 @@ public class RegisterForm {
                 ", email='" + email + '\'' +
                 ", lozinka='" + lozinka + '\'' +
                 ", obavijestiNaMail=" + obavijestiNaMail +
+                ", nazivGrada='" + nazivGrada + '\'' +
                 '}';
     }
 }

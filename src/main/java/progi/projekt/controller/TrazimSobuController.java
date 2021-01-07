@@ -4,7 +4,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.DomDTO;
-import progi.projekt.dto.GradDTO;
 import progi.projekt.forms.TrazimSobuForm;
 import progi.projekt.model.*;
 import progi.projekt.model.enums.BrojKrevetaEnum;
@@ -12,7 +11,10 @@ import progi.projekt.model.enums.StatusOglasaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 import progi.projekt.service.*;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @CrossOrigin
@@ -34,12 +36,6 @@ public class TrazimSobuController {
         this.oglasService = oglasService;
     }
 
-    @GetMapping("/grad")
-    public GradDTO getGrad(@RequestParam(value = "user") String username) {
-        List<Grad> list = sobaService.findAllGrad();
-        return new GradDTO(list.get(0));
-    }
-
     @GetMapping("/domovi")
     public Set<DomDTO> getDomovi(@RequestParam(value = "user") String username) {
         Set<Dom> domovi = trazimSobuService.findAllDom(username);
@@ -47,12 +43,6 @@ public class TrazimSobuController {
 
     }
 
-//    @GetMapping("/paviljoni")
-//    public Set<PaviljonDTO> getPavljoni() {
-//        List<Paviljon> paviljoni = trazimSobuService.findAllPaviljon();
-//        return paviljoni.stream().map(PaviljonDTO::new).collect(Collectors.toSet());
-//
-//    }
 
     @PostMapping(value = "/uvjetiIveta", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uvjeti(@RequestBody TrazimSobuForm trazimSobuForm) {

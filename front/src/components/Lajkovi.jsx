@@ -1,8 +1,10 @@
 import React, {Component} from "react";
 import cookie from "react-cookies";
 import {Button, ButtonGroup, ToggleButton} from "react-bootstrap";
+import Tooltip from "@material-ui/core/Tooltip";
 
-class Lajkovi extends Component{
+
+class Lajkovi extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -14,10 +16,10 @@ class Lajkovi extends Component{
     }
 
     ocjene = [
-        {name: 'Sviđa mi se🙂', value: '1'},
-        {name: 'Jako mi se sviđa😁', value: '2'},
-        {name: 'To je to😍', value: '3'},
-        {name: 'Nemoj više prikazivati❌', value: '4'},
+        {name: '🙂', value: '1', description: 'Sviđa mi se'},
+        {name: '😁', value: '2', description: 'Jako mi se sviđa'},
+        {name: '😍', value: '3', description: 'To je to'},
+        {name: '❌', value: '4', description: 'Nemoj više prikazivati'},
     ];
 
     async componentDidMount() {
@@ -26,7 +28,7 @@ class Lajkovi extends Component{
         let user = self.state.user;
         let oglas = self.props.oglas;
 
-        if(this.state.isLoggedIn) {
+        if (this.state.isLoggedIn) {
             //ovo za fetchanje oglasa je ovdje jer inace baca nullpointer
             const optionsOglas = {
                 method: 'GET',
@@ -62,6 +64,9 @@ class Lajkovi extends Component{
         }
     }
 
+    onHover = (e) => {
+
+    }
     change = (e) => {
         let self = this;
         let ocjena = e.target.value;
@@ -112,25 +117,31 @@ class Lajkovi extends Component{
                 }
             }).catch(error => console.log(error));
     }
+
     render() {
+
         return (
-            <ButtonGroup size="sm" toggle>
-                {this.ocjene.map((like, idx) => (
-                    <ToggleButton
-                        key={idx}
-                        type="radio"
-                        variant="outline-secondary"
-                        value={like.value}
-                        disabled={!this.state.isLoggedIn}
-                        checked={this.state.ocjena === like.value}
-                        onChange={(e) => this.change(e)}
-                    >
-                        {like.name}
-                    </ToggleButton>
-                ))}
-                <Button variant="outline-secondary" onClick={this.clearInput}>Poništi odabir</Button>
-            </ButtonGroup>
+            <div className={"likes"}>
+                <ButtonGroup size="sm" toggle>
+                    {this.ocjene.map((like, idx) => (
+                        <Tooltip title={like.description}>
+                            <ToggleButton
+                                key={idx}
+                                type="radio"
+                                variant="outline-light"
+                                value={like.value}
+                                checked={this.state.ocjena === like.value}
+                                onChange={(e) => this.change(e)}
+                            >
+                                {like.name}
+                            </ToggleButton>
+                        </Tooltip>
+                    ))}
+                    <Button variant={"likes"} onClick={this.clearInput}>Poništi odabir</Button>
+                </ButtonGroup>
+            </div>
         )
     }
 }
+
 export default Lajkovi;

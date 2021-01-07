@@ -39,6 +39,8 @@ public class LajkController {
         Optional<Student> studentOpt = studentService.findByKorisnickoIme(studentUsername);
         Optional<Oglas> oglasOpt = oglasService.findById(oglasId);
 
+        if (studentOpt.isEmpty() || oglasOpt.isEmpty()) return "";
+
 		LajkId lajkId = new LajkId(studentOpt.get(), oglasOpt.get());
 		Optional<Lajk> lajkOpt = lajkService.findLajk(lajkId); // zapravo nije bilo potrebno, i da ga nađe trenutno nam ne treba postojeća ocjena
 

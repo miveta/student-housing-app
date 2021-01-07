@@ -67,7 +67,7 @@ class App extends Component {
                         <Route exact path="/register"
                                component={() => <Register authenticate={this.authenticate}
                                                           authenticated={this.state.authenticated}/>}/>
-                        <Route exact path="/soba" component={MojOglas}/>
+                        <Route exact path="/oglasi" component={MojOglas}/>
 
                         <Route path='/' exact component={() => <Homepage isLoggedIn={this.state.authenticated}/>}/>
                         <Route exact path="/mojprofil" component={() => <MojProfil isLoggedIn={this.state.authenticated} onLogout={this.logout}/>}/>

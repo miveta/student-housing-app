@@ -19,7 +19,6 @@ public class Oglas {
     @Column(nullable = false)
     private Date objavljen;
 
-
     private StatusOglasaEnum statusOglasa;
 
     @OneToMany(mappedBy = "oglas", cascade = CascadeType.ALL)

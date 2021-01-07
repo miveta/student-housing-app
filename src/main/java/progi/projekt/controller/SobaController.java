@@ -35,7 +35,7 @@ public class SobaController {
 
     @GetMapping("/gradovi")
     public List<GradDTO> getSviGradovi() {
-        List<Grad> gradovi = sobaService.findAllGrad();
+        List<Grad> gradovi = utilService.findAllGrad();
         return gradovi.stream().map(GradDTO::new).collect(Collectors.toList());
     }
 
