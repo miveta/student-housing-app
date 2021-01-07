@@ -1,6 +1,7 @@
 package progi.projekt.service.impl;
 
 import org.springframework.stereotype.Service;
+import progi.projekt.model.Grad;
 import progi.projekt.model.Paviljon;
 import progi.projekt.model.Soba;
 import progi.projekt.model.Student;
@@ -11,6 +12,7 @@ import progi.projekt.service.SobaService;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.UtilService;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

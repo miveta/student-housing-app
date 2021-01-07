@@ -134,8 +134,8 @@ public class MatchingController {
 		}
 	}
 
-	@GetMapping(value = "/confirmSCRun", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> confirmSCRun() {
+	@GetMapping(value = "/confirmSCDebugRun")
+	public ResponseEntity<?> confirmSCDebugRun() {
 		//debug verzija koja sve oglase oznacava kao IZVEDEN
 
 		try {
