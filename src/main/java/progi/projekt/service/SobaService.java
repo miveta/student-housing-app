@@ -2,6 +2,7 @@ package progi.projekt.service;
 
 import progi.projekt.model.Grad;
 import progi.projekt.model.Soba;
+import progi.projekt.model.Student;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,8 @@ public interface SobaService {
     Optional<Soba> getByStudentUsername(String username);
 
     Optional<Soba> getByStudentId(UUID id);
+
+    Optional<Soba> getByStudent(Student student);
 
     Optional<Soba> getById(UUID id);
 

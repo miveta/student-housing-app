@@ -44,7 +44,7 @@ public class KandidatServiceImpl implements KandidatService {
 		Kandidat kand = new Kandidat(oglas1, oglas2, bliskost, stvoren, false);
 
 		oglas1.getKandidati().add(kand); //je li ovo persista? je li potrebno?
-		oglas2.getKandidati().add(kand);
+		//oglas2.getKandidati().add(kand);
 
 		save(kand);
 	}
@@ -97,7 +97,7 @@ public class KandidatServiceImpl implements KandidatService {
 				.limit(N)
 				.collect(Collectors.toList());
 
-		List<Oglas> top = Collections.emptyList();
+		ArrayList<Oglas> top = new ArrayList<Oglas>();
 		for (Kandidat kand : top3kand) {
 			top.add(kand.getOglas());
 		}
@@ -113,7 +113,19 @@ public class KandidatServiceImpl implements KandidatService {
 		var kandidati1 = oglas1.getKandidati();
 		var kandidati2 = oglas2.getKandidati();
 
-		return !kandidati1.contains(oglas2) && !kandidati2.contains(oglas1) ? true : false;
+		//return !kandidati1.contains(oglas2) && !kandidati2.contains(oglas1) ? true : false;
+
+		for (Kandidat kand1 : kandidati1){
+			//ako bilo koji od kandidata oglasa 1 sadrzi studenta oglasa 2, vec jesu kandidati
+			var kandStud1 = kand1.getOglas().getStudent().getId();
+			var kandStud2 = kand1.getKandOglas().getStudent().getId();
+			var postojeciKandStud = oglas2.getStudent().getId();
+
+			if (kandStud1 == postojeciKandStud || kandStud2 == postojeciKandStud){
+				return false;
+			}
+		}
+		return true;
 
 	}
 
@@ -124,7 +136,7 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Override
 	public Integer calculateScore(Oglas oglas1, Oglas oglas2) {
-        Soba soba2 = sobaService.getByStudentId(oglas2.getStudent().getId()).get();
+        Soba soba2 = sobaService.getByStudentUsername(oglas2.getStudent().getKorisnickoIme()).get();
 		TrazeniUvjeti uvjeti1 = uvjetiService.findByIdOglas(oglas1.getId());
 		/*Soba soba2 = oglas2.getStudent().getSoba();
 		TrazeniUvjeti uvjeti1 = uvjetiService.findByIdOglas(oglas1.getId());*/
@@ -164,6 +176,7 @@ public class KandidatServiceImpl implements KandidatService {
 		List<Kandidat> kandidati = listAll(oglas.getId());
 		for (Kandidat kand : kandidati) {
 			kand.setIgnore(true);
+			save(kand);
 		}
 	}
 

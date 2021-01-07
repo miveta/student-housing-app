@@ -12,6 +12,7 @@ import MojProfil from "./pages/MojProfil"
 import UrediProfil from "./components/UrediProfil";
 import Oglas from "./pages/Oglas";
 import MojOglas from "./pages/MojOglas";
+import TrazimSobu from "./components/TrazimSobu";
 
 
 const PrivateRoute = ({component: Component, ...rest}) => (
@@ -70,6 +71,7 @@ class App extends Component {
                         <Route exact path="/soba" component={MojOglas}/>
 
                         <Route path='/' exact component={() => <Homepage isLoggedIn={this.state.authenticated}/>}/>
+                        <Route exact path="/trazimsobu" component={TrazimSobu}/>
                         <Route exact path="/mojprofil" component={() => <MojProfil isLoggedIn={this.state.authenticated} onLogout={this.logout}/>}/>
                         <Route exact path="/mojprofil/uredi" component={() => <UrediProfil onLogin={this.authenticate}/>}/>
                         <Route exact path="/oglas/:id" component={Oglas}/>

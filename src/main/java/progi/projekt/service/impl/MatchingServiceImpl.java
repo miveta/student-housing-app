@@ -47,9 +47,13 @@ public class MatchingServiceImpl implements MatchingService {
 		//stvaranje novih kandidata
 		for (Oglas oglas1 : oglasi){
 			for (Oglas oglas2 : oglasi){
-				if (kandidatService.odgovaraju(oglas1, oglas2) && kandidatService.josNisuKandidat(oglas1, oglas2)){
-					kandidatService.stvoriKand(oglas1, oglas2);
+				//todo: maknuti naslov == null kada se poprave oglasi u database fillu
+				if (oglas1 != oglas2 && (oglas1.getNaslov() == null) && (oglas2.getNaslov() == null)){
+					if (kandidatService.odgovaraju(oglas1, oglas2) && kandidatService.josNisuKandidat(oglas1, oglas2)){
+						kandidatService.stvoriKand(oglas1, oglas2);
+					}
 				}
+
 			}
 		}
 
@@ -300,7 +304,8 @@ public class MatchingServiceImpl implements MatchingService {
 			konacniParOptional.ifPresent(
 					(konacniPar) ->
 					{
-						Par par = parovi.get(konacniPar.getIdPar());
+						//Par par = parovi.get(konacniPar.getIdPar()); //get radi sa indeksom da doi
+						Par par = konacniPar;
 						if (par.getLanac() == false){
 							//nema lanca
 							//parService.save(par);
@@ -360,12 +365,13 @@ public class MatchingServiceImpl implements MatchingService {
 			//oba studenta su prihvatila par (ignore != false) i oglas nije u medjuvremenu zauzet (oba == AKTIVAN)
 			if (par.getIgnore() == false){
 				par.setDone(true);
+				parService.save(par);
 				parService.potvrdiOglasePara(par);
 				kandidatService.ponistiKandidateOglasa(par.getOglas1());
 				kandidatService.ponistiKandidateOglasa(par.getOglas2());
 				parService.ponistiParoveOglasa(par.getOglas1());
 				parService.ponistiParoveOglasa(par.getOglas2());
-				MailService.PotvrdaZamjenePara(par);
+				//MailService.PotvrdaZamjenePara(par);
 			}
 
 			//barem jedan od studenata nije prihvatio par
@@ -383,6 +389,7 @@ public class MatchingServiceImpl implements MatchingService {
 
 	public void ponistiParIKandidat(Par par) {
 		par.setIgnore(true);
+		parService.save(par);
 
 		Optional<Kandidat> kandidatOptional = par.getOglas1().getKandidati()
 				.stream()
@@ -390,7 +397,10 @@ public class MatchingServiceImpl implements MatchingService {
 						&& kand.getKandOglas().getId() == par.getOglas2().getId())
 				.findFirst();
 
-		kandidatOptional.ifPresent(kandidat -> kandidat.setIgnore(true));
+		kandidatOptional.ifPresent(kandidat -> {
+			kandidat.setIgnore(true);
+			kandidatService.save(kandidat);
+		});
 	}
 
 

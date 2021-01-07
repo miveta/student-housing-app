@@ -5,6 +5,7 @@ import progi.projekt.model.Kandidat;
 import progi.projekt.model.Oglas;
 import progi.projekt.model.Par;
 import progi.projekt.model.enums.StatusOglasaEnum;
+import progi.projekt.repository.OglasRepository;
 import progi.projekt.repository.ParRepository;
 import progi.projekt.service.KandidatService;
 import progi.projekt.service.ParService;
@@ -18,10 +19,12 @@ public class ParServiceImpl implements ParService {
 
 	private ParRepository parRepo;
 	private KandidatService kandidatService;
+	private OglasRepository oglasRepo;
 
-	public ParServiceImpl(ParRepository parRepo, KandidatService kandidatService) {
+	public ParServiceImpl(ParRepository parRepo, KandidatService kandidatService, OglasRepository oglasRepo) {
 		this.parRepo = parRepo;
 		this.kandidatService = kandidatService;
+		this.oglasRepo = oglasRepo;
 	}
 
 	@Override
@@ -52,6 +55,9 @@ public class ParServiceImpl implements ParService {
 		oglas1.setStatusOglasa(StatusOglasaEnum.CEKA);
 		oglas2.setStatusOglasa(StatusOglasaEnum.CEKA);
 
+		oglasRepo.save(oglas1);
+		oglasRepo.save(oglas2);
+
 		//par.setCeka(true);
 
 		//todo:
@@ -67,6 +73,9 @@ public class ParServiceImpl implements ParService {
 		oglas1.setStatusOglasa(StatusOglasaEnum.POTVRDEN);
 		oglas2.setStatusOglasa(StatusOglasaEnum.POTVRDEN);
 
+		oglasRepo.save(oglas1);
+		oglasRepo.save(oglas2);
+
 		//par.setCeka(true);
 
 		//todo:
@@ -81,6 +90,9 @@ public class ParServiceImpl implements ParService {
 
 		oglas1.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
 		oglas2.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
+
+		oglasRepo.save(oglas1);
+		oglasRepo.save(oglas2);
 	}
 
 	@Override
@@ -217,6 +229,7 @@ public class ParServiceImpl implements ParService {
 		for (Par par : parovi){
 			if (!par.getDone()) {
 				par.setIgnore(true);
+				save(par);
 			}
 
 		}

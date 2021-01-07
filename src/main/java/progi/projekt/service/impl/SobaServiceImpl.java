@@ -54,7 +54,7 @@ public class SobaServiceImpl implements SobaService {
 
         Student student = optionalStudent.get();
 
-        return sobaRepository.findByStudent(student);
+        return Optional.of(student.getSoba());
     }
 
     @Override
@@ -73,6 +73,11 @@ public class SobaServiceImpl implements SobaService {
     @Override
     public Optional<Soba> getByStudentId(UUID id) {
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<Soba> getByStudent(Student student) {
+        return sobaRepository.findByStudent(student);
     }
 
     @Override
