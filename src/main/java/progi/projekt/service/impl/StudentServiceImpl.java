@@ -105,6 +105,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public void save(Student stud) {
+        studentRepository.save(stud);
+    }
+
+    @Override
     public Student update(Student student) throws SavingException {
         try {
             return studentRepository.saveAndFlush(student);

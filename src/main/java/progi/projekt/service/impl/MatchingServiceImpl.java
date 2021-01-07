@@ -1,10 +1,7 @@
 package progi.projekt.service.impl;
 
 import org.springframework.stereotype.Service;
-import progi.projekt.model.Kandidat;
-import progi.projekt.model.Lajk;
-import progi.projekt.model.Oglas;
-import progi.projekt.model.Par;
+import progi.projekt.model.*;
 import progi.projekt.model.enums.StatusOglasaEnum;
 import progi.projekt.service.*;
 import progi.projekt.service.util.Key;
@@ -81,7 +78,8 @@ public class MatchingServiceImpl implements MatchingService {
 		List<Lajk> lajkovi = lajkService.listAll();
 
 		for (Lajk lajk : lajkovi){
-			Oglas oglas1 = lajk.getLajkId().getStudent().getOglas();
+			Student stud = lajk.getLajkId().getStudent();
+			Oglas oglas1 = stud.getOglas();
 			Oglas oglas2 = lajk.getLajkId().getOglas();
 
 			if (kandidatService.josNisuKandidat(oglas1, oglas2)){

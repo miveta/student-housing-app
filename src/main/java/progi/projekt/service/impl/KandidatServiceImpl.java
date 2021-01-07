@@ -41,15 +41,25 @@ public class KandidatServiceImpl implements KandidatService {
 	public void stvoriKand(Oglas oglas1, Oglas oglas2) {
 		Integer bliskost = calculateScore(oglas1, oglas2);
 		java.sql.Date stvoren = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-		Kandidat kand = new Kandidat(oglas1, oglas2, bliskost, stvoren, false);
 
-		oglas1.getKandidati().add(kand); //je li ovo persista? je li potrebno?
-		oglas2.getKandidati().add(kand);
+		Kandidat kand = new Kandidat(oglas2, oglas1, bliskost, stvoren, false);
 
+		oglas1.getKandidati().add(kand);
 		oglasService.save(oglas1);
+
+		oglas2.getKandidati().add(kand);
 		oglasService.save(oglas2);
 
-		save(kand);
+
+		System.out.print("oglas1 kandidati count: " + oglas1.getKandidati().stream().count() + "\n");
+		System.out.print("oglas2 kandidati count: " + oglas2.getKandidati().stream().count() + "\n");
+
+
+
+		if (!kandidatRepo.findAll().contains(kand)){
+			save(kand);
+		}
+
 	}
 
 	@Override

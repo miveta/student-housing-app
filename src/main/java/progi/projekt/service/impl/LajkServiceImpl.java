@@ -60,4 +60,9 @@ public class LajkServiceImpl implements LajkService {
         lajkRepository.delete(lajk);
         return null;
     }
+
+    @Override
+    public void save(Lajk lajk) {
+        lajkRepository.save(lajk);
+    }
 }

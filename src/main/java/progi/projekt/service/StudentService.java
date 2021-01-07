@@ -33,4 +33,6 @@ public interface StudentService {
     Student delete(Student student) throws SavingException;
 
     List<Obavijest> getObavijest(String username);
+
+	void save(Student stud);
 }

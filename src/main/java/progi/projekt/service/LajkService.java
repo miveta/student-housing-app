@@ -19,4 +19,6 @@ public interface LajkService {
     Lajk update(Lajk l);
 
     Lajk delete(Lajk l);
+
+	void save(Lajk lajk);
 }

@@ -2,6 +2,7 @@ package progi.projekt.model;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -112,4 +113,23 @@ public class Kandidat {
 	public void setIdOglas(UUID idOglas) {
 		this.idOglas = idOglas;
 	}*/
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Kandidat kandidat = (Kandidat) o;
+		//todo: popraviti (ovo i dalje dodaje duplikat kandidata)
+		return Objects.equals(oglas, kandidat.oglas) &&
+				Objects.equals(kandOglas, kandidat.kandOglas) &&
+				Objects.equals(oglas, kandidat.kandOglas) &&
+				Objects.equals(kandOglas, kandidat.oglas) &&
+				Objects.equals(bliskost, kandidat.bliskost) &&
+				Objects.equals(stvoren, kandidat.stvoren);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(oglas, kandOglas, bliskost, stvoren);
+	}
 }
