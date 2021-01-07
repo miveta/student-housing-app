@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
 import OglasList from "../components/OglasList";
+import cookie from "react-cookies";
+import {Col, Nav, Row, Tab} from "react-bootstrap";
 
 class Homepage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            oglasi: []
+            user: cookie.load('principal'),
+            oglasi: [],
+            kandOglasi: []
         };
     }
 
@@ -25,13 +29,53 @@ class Homepage extends Component {
                     ).catch(error => console.log(error))
                 }
             });
+
+        if (this.state.user !== undefined) {
+            fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/kandidati/student?student_username=${this.state.user.korisnickoIme}`, options)
+                .then(response => {
+                    if (response.status === 200) {
+                        response.json().then(body =>
+                            this.setState({kandOglasi: body})
+                        ).catch(error => console.log(error))
+                    }
+                });
+        }
+        console.log(this.state)
     }
 
     render() {
         return (
             <div className="middle">
-                <h2>Oglasi</h2>
-                <OglasList oglasi={this.state.oglasi} isLoggedIn={this.props.isLoggedIn}/>
+                <Tab.Container id="left-tabs-example" defaultActiveKey="first" className={"left-tabs"}>
+                    <Row>
+                        <Col sm={2}>
+                            <Nav variant="pills" className="flex-column">
+                                <Nav.Item>
+                                    <Nav.Link eventKey="first">Svi oglasi</Nav.Link>
+                                </Nav.Item>
+                                {
+                                    this.state.user && <Nav.Item>
+                                        <Nav.Link eventKey="second">Preporučeni oglasi</Nav.Link>
+                                    </Nav.Item>
+                                }
+
+                            </Nav>
+                        </Col>
+                        <Col>
+                            <Tab.Content>
+                                <Tab.Pane eventKey="first">
+                                    <OglasList oglasi={this.state.oglasi} isLoggedIn={this.props.isLoggedIn}/>
+                                </Tab.Pane>
+                                {
+                                    this.state.user &&
+                                    <Tab.Pane eventKey="second">
+                                        <OglasList oglasi={this.state.kandOglasi} isLoggedIn={this.props.isLoggedIn}/>
+                                    </Tab.Pane>
+                                }
+                            </Tab.Content>
+                        </Col>
+                    </Row>
+                </Tab.Container>
             </div>
         )
     }

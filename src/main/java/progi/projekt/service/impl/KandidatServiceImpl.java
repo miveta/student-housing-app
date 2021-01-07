@@ -44,7 +44,10 @@ public class KandidatServiceImpl implements KandidatService {
 		Kandidat kand = new Kandidat(oglas1, oglas2, bliskost, stvoren, false);
 
 		oglas1.getKandidati().add(kand); //je li ovo persista? je li potrebno?
-		//oglas2.getKandidati().add(kand);
+		oglas2.getKandidati().add(kand);
+
+		oglasService.save(oglas1);
+		oglasService.save(oglas2);
 
 		save(kand);
 	}
@@ -153,10 +156,9 @@ public class KandidatServiceImpl implements KandidatService {
 	public Optional<Kandidat> kandidatParaOglasa(Oglas oglas1, Oglas oglas2) {
 		Optional<Kandidat> kandidatOpt = Optional.empty();
 
-		for (Kandidat kand : listAll(oglas1.getId())) {
+		for (Kandidat kand : oglas1.getKandidati()) {
 			if (kandSadrziOglas(kand, oglas2)) {
-				kandidatOpt = Optional.ofNullable(kand);
-				break;
+				return Optional.ofNullable(kand);
 			}
 		}
 
@@ -168,7 +170,7 @@ public class KandidatServiceImpl implements KandidatService {
 	 * Vraca True ako predani kandidat sadrzi predani oglas
 	 */
 	public Boolean kandSadrziOglas(Kandidat kand, Oglas oglas) {
-		return kand.getOglas() == oglas || kand.getKandOglas() == oglas;
+		return kand.getOglas().equals(oglas) || kand.getKandOglas().equals(oglas);
 	}
 
 	@Override

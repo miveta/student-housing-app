@@ -92,7 +92,6 @@ class MojOglas extends Component {
         })
     }
 
-
     render() {
         return (
             <div className="middle">
@@ -109,6 +108,9 @@ class MojOglas extends Component {
                         }
                     </Col>
                 </Row>
+
+                <h2> Preporučeni oglasi </h2>
+
             </div>
         )
     }

@@ -10,7 +10,6 @@ class Header extends Component {
     }
 
     logout = async () => {
-
         Swal.fire({
             title: 'Jeste li sigurni da se želite odjaviti?',
             type: 'warning',

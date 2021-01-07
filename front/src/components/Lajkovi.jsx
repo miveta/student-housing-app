@@ -8,7 +8,7 @@ class Lajkovi extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: cookie.load('principal'),
+            user: props.user,
             oglas: '',
             isLoggedIn: cookie.load('isAuth'),
             ocjena: ''
@@ -121,7 +121,7 @@ class Lajkovi extends Component {
     render() {
 
         return (
-            <div className={"likes"}>
+            <div className={"likes"} hidden={!this.state.user}>
                 <ButtonGroup size="sm" toggle>
                     {this.ocjene.map((like, idx) => (
                         <Tooltip title={like.description}>
@@ -130,7 +130,6 @@ class Lajkovi extends Component {
                                 type="radio"
                                 variant="outline-light"
                                 value={like.value}
-                                disabled={!this.state.isLoggedIn}
                                 checked={this.state.ocjena === like.value}
                                 onChange={(e) => this.change(e)}
                             >
