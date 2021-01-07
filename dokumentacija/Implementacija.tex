@@ -3,9 +3,13 @@
 		
 		\section{Korištene tehnologije i alati}
 		
-			\textbf{\textit{dio 2. revizije}}
-			
-			 \textit{Detaljno navesti sve tehnologije i alate koji su primijenjeni pri izradi dokumentacije i aplikacije. Ukratko ih opisati, te navesti njihovo značenje i mjesto primjene. Za svaki navedeni alat i tehnologiju je potrebno \textbf{navesti internet poveznicu} gdje se mogu preuzeti ili više saznati o njima}.
+			 Komunikacija među članovima projektnog tima ostvarena je pomoću platforme  \underline{Microsoft Teams} \footnote{https://www.microsoft.com/en-us/microsoft-365/microsoft-teams/group-chat-software} preko koje su održavani video sastanci te pomoću mobilne aplikacije za razmjenu poruka \underline{WhatsApp}  \footnote{https://www.whatsapp.com}. Za pisanje dokumentacije korišten je programski jezik za dokumente \underline{LaTeX} \footnote{https://www.latex-project.org/} i LaTeX uređivač \underline{Texstudio} \footnote{https://www.texstudio.org/}, za izradu različitih UML dijagrama korišten je alat \underline{Astah UML} \footnote{https://astah.net/products/astah-community/}, dok je za izradu ER dijagrama baze podataka korišten alat za baze podataka \underline{DBeaver} \footnote{https://dbeaver.io/}. Za upravljanje inačicama datoteka projekta korišten je distribuirani sustav \underline{Git} \footnote{https://git-scm.com/}, a repozitorij projektne grupe uspostavljen je na \underline{GitLabu} \footnote{https://about.gitlab.com/}. GitLab je web hosting usluga koja podržava rad sustava Git.
+			 
+			 Za razvojno okruženje korišten je \underline{IntelliJ IDEA} \footnote{https://www.jetbrains.com/idea/}, integrirano razvojno okruženje (IDE) koje je razvila tvrtka JetBrains. Ponajviše je namijenjeno za Javu, no podržava i mnogo drugih programskih jezika kao što su Kotlin, Scala, Python i drugi. Koristi se za razvoj, modeliranje i \textit{deployment} web i mobilnih aplikacija. 
+			 
+			 Za izradu web aplikacije korišten je radni okvir \underline{Spring Boot} \footnote{https://spring.io/projects/spring-boot}. Spring Boot je specijalizacija radnog okvira Spring a omogućuje jednostavnije i brže oblikovanje web aplikacija tako što u svojoj automatskoj konfiguraciji više uobičajenih dijelova web aplikacije već ima podešeno. Od programskih jezika koriste se objektno orijentirani jezik \underline{Java} \footnote{https://www.java.com/en/} za izradu \textit{backend} sloja aplikacije  skriptni programski jezik \underline{JavaScript} \footnote{https://www.javascript.com/} te knjižnica \underline{React} \footnote{https://reactjs.org/}  za izradu \textit{frontend} sloja. Knjižnicu React razvija tvrtka Facebook a pisana je u jeziku JavaScript i sadrži mnogo paketa te je tako fleksibilna za različite aplikacije. 
+			 
+			 Baza podataka nalazi se na javno dostupnom poslužitelju \underline{Heroku} \footnote{https://www.heroku.com/}.
 			
 			
 			\eject 
@@ -38,11 +42,17 @@
 		
 		
 		\section{Dijagram razmještaja}
+		
+			Dijagram razmještaja statički je UML dijagram koji prikazuje i opisuje topologiju sustava te programsku potporu za implementaciju sustava. Korisnik, to jest klijent na svom osobnom računalu koristi web preglednik za pristup web aplikaciji. Na poslužiteljskom računalu nalazi se Tomcat web poslužitelj te PostgreSQL poslužitelj baze podataka. Komunikacija između klijenta i poslužitelja odvija se preko protokola aplikacijskog sloja HTTP.
 			
-			\textbf{\textit{dio 2. revizije}}
+			\begin{figure}[H]
+				\includegraphics[scale=0.5]{dijagrami/DeployDiagram} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razmještaja}
+				\label{fig:dijagramRazmjestaja}
+			\end{figure}
 			
-			 \textit{Potrebno je umetnuti \textbf{specifikacijski} dijagram razmještaja i opisati ga. Moguće je umjesto specifikacijskog dijagrama razmještaja umetnuti dijagram razmještaja instanci, pod uvjetom da taj dijagram bolje opisuje neki važniji dio sustava.}
-			
+			 
 			\eject 
 		
 		\section{Upute za puštanje u pogon}
