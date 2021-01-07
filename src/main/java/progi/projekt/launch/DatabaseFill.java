@@ -341,12 +341,12 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 paviljonCvjetno1.setDom(cvjetno);
                 paviljonCvjetno2.setDom(cvjetno);
                 paviljonCvjetno3.setDom(cvjetno);
-                paviljonIGK1.setDom(cvjetno);
-                paviljonIGK2.setDom(cvjetno);
-                paviljonIGK3.setDom(cvjetno);
-                paviljonKPS1.setDom(cvjetno);
-                paviljonKPS2.setDom(cvjetno);
-                paviljonKPS3.setDom(cvjetno);
+                paviljonIGK1.setDom(igk);
+                paviljonIGK2.setDom(igk);
+                paviljonIGK3.setDom(igk);
+                paviljonKPS1.setDom(kps);
+                paviljonKPS2.setDom(kps);
+                paviljonKPS3.setDom(kps);
 
                 //ASSIGN OGLAS TO STUDENT
                 ivica.setOglas(oglasIvica);
