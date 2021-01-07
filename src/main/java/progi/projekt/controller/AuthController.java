@@ -23,7 +23,6 @@ import progi.projekt.service.StudentService;
 import progi.projekt.service.UtilService;
 import progi.projekt.service.ZaposlenikSCService;
 
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
@@ -100,16 +99,16 @@ public class AuthController {
 	}
 
 	/*
-	//front mora poslati 'loginForm' objekt, controller vraca 200 za dobre podatke, 401 za lose
-	//body responsa je orignalna poruka o gresci
-	//postman:
-	//Header: Content-Type=application/json
-	//body:
-		{
-			"username": "user",
-			"password": "pass"
-		}
-	*/
+    //front mora poslati 'loginForm' objekt, controller vraca 200 za dobre podatke, 401 za lose
+    //body responsa je orignalna poruka o gresci
+    //postman:
+    //Header: Content-Type=application/json
+    //body:
+        {
+            "username": "user",
+            "password": "pass"
+        }
+    */
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> login(@RequestBody LoginForm data) {
 		try {
@@ -141,7 +140,12 @@ public class AuthController {
 
 	@GetMapping("/grad")
 	public GradDTO getGrad(@RequestParam(value = "user") String username) {
-		List<Grad> list = utilService.findAllGrad();
-		return new GradDTO(list.get(0));
+		Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
+
+		if (optionalStudent.isEmpty()) return null;
+
+		Student student = optionalStudent.get();
+
+		return new GradDTO(student.getGrad());
 	}
 }

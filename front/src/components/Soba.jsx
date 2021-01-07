@@ -97,14 +97,15 @@ class Soba extends Component {
 
             if (this.state.paviljon === undefined && this.state.dom !== '') {
                 let pav = this.props.grad.domovi.filter(d => d.naziv === this.state.dom)[0].paviljoni[0]
-                this.setState({paviljon: pav})
+                if (pav !== undefined) {
+                    this.setState({paviljon: pav})
+                }
             }
         }
 
-        console.log(this.state)
         return (
-            <div className="innerForm">
-                <Form onSubmit={this.onSubmit}>
+
+            <Form onSubmit={this.onSubmit} className={"innerForm"}>
                     <h3> Nudim sobu </h3>
                     <Form.Group>
                         <Form.Label> Dom </Form.Label>
@@ -182,7 +183,7 @@ class Soba extends Component {
 
                     <Button type="submit" variant="dark" size="lg" block> Spremi promjene </Button>
                 </Form>
-            </div>
+
         )
     }
 }

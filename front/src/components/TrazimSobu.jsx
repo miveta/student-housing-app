@@ -98,104 +98,104 @@ function TrazimSobu(props) {
 
 
     return (
-        <div className="innerForm">
-            <Form onSubmit={onSubmit} disabled>
-                <h3>Tražim sobu</h3>
-                <Form.Group>
-                    <Form.Label>Kat</Form.Label>
-                    <Row>
-                        {katovi.map((p, index) => (
-                            <Col xs={1}>
-                                <Form.Check
-                                    onChange={onChange}
-                                    name="kat"
-                                    key={index}
-                                    type="checkbox"
-                                    id={index}
-                                    value={p}
-                                    label={p}
-                                />
-                            </Col>
-                        ))}
-                    </Row>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Broj kreveta</Form.Label>
-                    <Row>
-                        {kreveti.map((p, index) => (
-                            <Col>
-                                <Form.Check
-                                    onChange={onChange}
-                                    name="brojKreveta"
-                                    key={index}
-                                    type="checkbox"
-                                    id={index}
-                                    value={p.value}
-                                    label={p.name}
-                                />
-                            </Col>
-                        ))}
-                    </Row>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Tip kupaonice</Form.Label>
-                    <Row>
-                        {kupaonice.map((p, index) => (
-                            <Col xs={3}>
-                                <Form.Check
-                                    onChange={onChange}
-                                    name="tipKupaonice"
-                                    key={index}
-                                    type="checkbox"
-                                    id={index}
-                                    value={p.value}
-                                    label={p.name}
-                                /></Col>
-                        ))}
-                    </Row>
-                </Form.Group>
 
-                {
-                    grad.domovi.map(dom => (
-                        <Row>
+        <Form onSubmit={onSubmit} disabled className={"innerForm"}>
+            <h3>Tražim sobu</h3>
+            <Form.Group>
+                <Form.Label>Kat</Form.Label>
+                <Row>
+                    {katovi.map((p, index) => (
+                        <Col xs={1}>
+                            <Form.Check
+                                onChange={onChange}
+                                name="kat"
+                                key={index}
+                                type="checkbox"
+                                id={index}
+                                value={p}
+                                label={p}
+                            />
+                        </Col>
+                    ))}
+                </Row>
+            </Form.Group>
+            <Form.Group>
+                <Form.Label>Broj kreveta</Form.Label>
+                <Row>
+                    {kreveti.map((p, index) => (
+                        <Col>
+                            <Form.Check
+                                onChange={onChange}
+                                name="brojKreveta"
+                                key={index}
+                                type="checkbox"
+                                id={index}
+                                value={p.value}
+                                label={p.name}
+                            />
+                        </Col>
+                    ))}
+                </Row>
+            </Form.Group>
+            <Form.Group>
+                <Form.Label>Tip kupaonice</Form.Label>
+                <Row>
+                    {kupaonice.map((p, index) => (
+                        <Col xs={3}>
+                            <Form.Check
+                                onChange={onChange}
+                                name="tipKupaonice"
+                                key={index}
+                                type="checkbox"
+                                id={index}
+                                value={p.value}
+                                label={p.name}
+                            /></Col>
+                    ))}
+                </Row>
+            </Form.Group>
+
+            {
+                grad.domovi.map(dom => (
+                    <Row>
+                        <Col>
+                            <Form.Label>Dom</Form.Label>
+                            <Form.Check
+                                onChange={onChangeDom}
+                                key={dom.id}
+                                type="checkbox"
+                                id={dom.id}
+                                name="dom"
+                                value={dom.id}
+                                label={dom.naziv}
+                            />
+                        </Col>
+                        {
+                            dom.checked &&
                             <Col>
-                                <Form.Label>Dom</Form.Label>
-                                <Form.Check
-                                    onChange={onChangeDom}
-                                    key={dom.id}
-                                    type="checkbox"
-                                    id={dom.id}
-                                    name="dom"
-                                    value={dom.id}
-                                    label={dom.naziv}
-                                />
+                                <Form.Group>
+                                    <Form.Label>Paviljoni u domu {dom.naziv}</Form.Label>
+                                    {console.log(dom.paviljoni)}
+                                    {dom.paviljoni.map(p => (
+                                        <Form.Check
+                                            onChange={onChange}
+                                            name="paviljon"
+                                            key={p.id}
+                                            type="checkbox"
+                                            id={p.id}
+                                            value={p.id}
+                                            label={p.naziv}>
+                                        </Form.Check>
+                                    ))}
+                                </Form.Group>
                             </Col>
-                            {
-                                dom.checked &&
-                                <Col>
-                                    <Form.Group>
-                                        <Form.Label>Paviljoni u domu {dom.naziv}</Form.Label>
-                                        {console.log(dom.paviljoni)}
-                                        {dom.paviljoni.map(p => (
-                                            <Form.Check
-                                                onChange={onChange}
-                                                name="paviljon"
-                                                key={p.id}
-                                                type="checkbox"
-                                                id={p.id}
-                                                value={p.id}
-                                                label={p.naziv}>
-                                            </Form.Check>
-                                        ))}
-                                    </Form.Group>
-                                </Col>
-                            }
-                        </Row>
-                    ))
-                }
-                <Button type="submit" variant="dark" block> Spremi promjene </Button>
-            </Form>
-        </div>
+                        }
+                    </Row>
+                ))
+            }
+            <Button type="submit" variant="dark" size="lg" block> Spremi promjene </Button>
+        </Form>
+
     )
 
 

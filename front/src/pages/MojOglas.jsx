@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import TrazimSobu from "../components/TrazimSobu";
 import Soba from "../components/Soba";
 import cookie from "react-cookies";
+import {Col, Row} from "react-bootstrap";
 
 
 class MojOglas extends Component {
@@ -94,14 +95,19 @@ class MojOglas extends Component {
     render() {
         return (
             <div className="middle">
-                <Soba grad={this.state.grad} soba={this.state.soba} submitSoba={this.submitSoba}/>
-                {
-                    this.state.soba.id === '' ?
-                        <p>definirajte prvo svoju sobu</p>
-                        :
-                        <TrazimSobu grad={this.state.grad}/>
-                }
-
+                <Row className={"outerForm"}>
+                    <Col>
+                        <Soba grad={this.state.grad} soba={this.state.soba} submitSoba={this.submitSoba}/>
+                    </Col>
+                    <Col>
+                        {
+                            this.state.soba.id === '' ?
+                                <p>definirajte prvo svoju sobu</p>
+                                :
+                                <TrazimSobu grad={this.state.grad}/>
+                        }
+                    </Col>
+                </Row>
             </div>
         )
     }
