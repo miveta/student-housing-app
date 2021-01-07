@@ -28,13 +28,13 @@ public class OglasController {
     }
 
     @GetMapping("/getoglas")
-    public ResponseEntity<?> getOglas(@RequestParam(value= "oglas_id") String oglasId) {
+    public ResponseEntity<?> getOglas(@RequestParam(value = "oglas_id") String oglasId) {
         Oglas oglas = oglasService.findById(oglasId).get();
         return ResponseEntity.ok(new OglasDTO(oglas));
     }
 
     @GetMapping(value = "/listKandidati")
     public List<KandidatDTO> listKandidati(@RequestParam(value = "oglas_id") String oglasId) {
-
+        return null;
     }
 }
