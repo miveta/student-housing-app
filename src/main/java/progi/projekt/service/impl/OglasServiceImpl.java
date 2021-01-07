@@ -32,6 +32,11 @@ public class OglasServiceImpl implements OglasService {
         return oglasRepository.findAll();
     }
 
+    @Override
+    public void save(Oglas oglas) {
+        oglasRepository.save(oglas);
+    }
+
 
     public Optional<Oglas> findById(String oglasId) {
         try {

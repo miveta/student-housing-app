@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface OglasService {
     List<Oglas> listAll();
 
+    void save (Oglas oglas);
+
     Optional<Oglas> findById(String id);
 
     Oglas spremiOglas(Student student, Soba soba, TrazeniUvjeti trazeniUvjeti);

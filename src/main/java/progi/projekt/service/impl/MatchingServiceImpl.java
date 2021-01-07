@@ -64,6 +64,7 @@ public class MatchingServiceImpl implements MatchingService {
 				if (kandidat.getOglas().getId() == oglas.getId() || kandidat.getKandOglas().getId() == oglas.getId()) {
 					if (!kandidati.contains(kandidat)) {
 						oglas.getKandidati().add(kandidat);
+						oglasService.save(oglas);
 					}
 				}
 			}
