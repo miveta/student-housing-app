@@ -2,7 +2,10 @@ package progi.projekt.forms;
 
 import progi.projekt.model.Student;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class RegisterForm {
     @NotBlank(message = "Morate unijeti svoje ime!")
@@ -21,9 +24,12 @@ public class RegisterForm {
     @Email(message = "Vaš mail mora imati strukturu maila!")
     private String email;
 
-    @NotNull
     @Size(min = 5)
     private String lozinka;
+
+    private boolean obavijestiNaMail;
+
+    private String nazivGrada;
 
     public RegisterForm() {
     }
@@ -76,6 +82,22 @@ public class RegisterForm {
         this.lozinka = lozinka;
     }
 
+    public boolean isObavijestiNaMail() {
+        return obavijestiNaMail;
+    }
+
+    public void setObavijestiNaMail(boolean obavijestiNaMail) {
+        this.obavijestiNaMail = obavijestiNaMail;
+    }
+
+    public String getNazivGrada() {
+        return nazivGrada;
+    }
+
+    public void setNazivGrada(String nazivGrada) {
+        this.nazivGrada = nazivGrada;
+    }
+
     public Student fromRegisterForm(String passhash) {
         Student student = new Student();
         student.setIme(this.ime);
@@ -83,11 +105,10 @@ public class RegisterForm {
         student.setJmbag(this.jmbag);
         student.setKorisnickoIme(this.username);
         student.setEmail(this.email);
-
         student.setLozinka(passhash);
 
         // po defaultu stavi da dobiva obavijesti na mail - hardkodirano
-        student.setObavijestiNaMail(true);
+        student.setObavijestiNaMail(this.obavijestiNaMail);
         return student;
     }
 
@@ -100,6 +121,8 @@ public class RegisterForm {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", lozinka='" + lozinka + '\'' +
+                ", obavijestiNaMail=" + obavijestiNaMail +
+                ", nazivGrada='" + nazivGrada + '\'' +
                 '}';
     }
 }

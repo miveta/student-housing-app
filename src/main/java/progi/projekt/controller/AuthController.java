@@ -5,23 +5,22 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import progi.projekt.dto.GradDTO;
 import progi.projekt.dto.KorisnikDTO;
-import progi.projekt.dto.OglasDTO;
 import progi.projekt.forms.LoginForm;
 import progi.projekt.forms.RegisterForm;
+import progi.projekt.model.Grad;
 import progi.projekt.model.Korisnik;
-import progi.projekt.model.Oglas;
 import progi.projekt.model.Student;
 import progi.projekt.security.AuthenticationHandler;
 import progi.projekt.security.KorisnikUserDetailsService;
 import progi.projekt.service.StudentService;
+import progi.projekt.service.UtilService;
 import progi.projekt.service.ZaposlenikSCService;
 
 import java.util.Optional;
@@ -31,27 +30,25 @@ import java.util.Optional;
 @RequestMapping("/auth")
 public class AuthController {
 	private final KorisnikUserDetailsService korisnikUserDetailsService;
-
 	private final AuthenticationHandler authenticationHandler;
-
 	private final StudentService studentService;
-
 	private final ZaposlenikSCService zaposlenikscService;
-
 	private final PasswordEncoder pswdEncoder;
+	private final UtilService utilService;
 
 	public AuthController(KorisnikUserDetailsService korisnikUserDetailsService,
 						  AuthenticationHandler authenticationHandler, StudentService studentService,
-						  ZaposlenikSCService zaposlenikscService, PasswordEncoder pswdEncoder) {
+						  ZaposlenikSCService zaposlenikscService, PasswordEncoder pswdEncoder, UtilService utilService) {
 		this.korisnikUserDetailsService = korisnikUserDetailsService;
 		this.authenticationHandler = authenticationHandler;
 		this.studentService = studentService;
 		this.zaposlenikscService = zaposlenikscService;
 		this.pswdEncoder = pswdEncoder;
+		this.utilService = utilService;
 	}
 
 	//'@AuthenticationPrincipal WebRequest request' je argument za citanje cijelog requesta
-	//'@RequestBody LoginForm loginForm' je argument za citanje cijelog bodya requesta
+	//'@RequestBody LoginForm loginForm' je argument za citanje objekta iz bodya requesta
 	//'@AuthenticationPrincipal User userLoginData' vraca podatke o korisniku u security contextu
 
 	//region Backend testiranje sessiona
@@ -81,9 +78,14 @@ public class AuthController {
 
 		// ne provjeravamo zaposlenike zato što se oni unose u bazu preko backenda
 
+		Optional<Grad> optionalGrad = utilService.getGradByNaziv(registerForm.getNazivGrada());
+		if (optionalGrad.isEmpty()) return ResponseEntity.badRequest().body("Taj grad ne postoji u bazi!");
+
 		//izrada Student modela
 		String passhash = pswdEncoder.encode(registerForm.getLozinka());
 		Student student = registerForm.fromRegisterForm(passhash);
+		student.setGrad(optionalGrad.get());
+
 		student = studentService.createStudent(student);
 
 		//login nakon registracije
@@ -97,16 +99,16 @@ public class AuthController {
 	}
 
 	/*
-	//front mora poslati 'loginForm' objekt, controller vraca 200 za dobre podatke, 401 za lose
-	//body responsa je orignalna poruka o gresci
-	//postman:
-	//Header: Content-Type=application/json
-	//body:
-		{
-			"username": "user",
-			"password": "pass"
-		}
-	*/
+    //front mora poslati 'loginForm' objekt, controller vraca 200 za dobre podatke, 401 za lose
+    //body responsa je orignalna poruka o gresci
+    //postman:
+    //Header: Content-Type=application/json
+    //body:
+        {
+            "username": "user",
+            "password": "pass"
+        }
+    */
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> login(@RequestBody LoginForm data) {
 		try {
@@ -123,7 +125,7 @@ public class AuthController {
 			// authentication handler will throw a badcredentials exception if the student doesnt exist before it reaches this step
 			Korisnik korisnik;
 
-			Optional<Student> student = studentService.findBykorisnickoIme(data.getUsername());
+            Optional<Student> student = studentService.findByKorisnickoIme(data.getUsername());
 			korisnik = student.isPresent() ? student.get() : zaposlenikscService.findBykorisnickoIme(data.getUsername()).get();
 
 			KorisnikDTO korisnikDTO = new KorisnikDTO(korisnik);
@@ -134,5 +136,16 @@ public class AuthController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
+	}
+
+	@GetMapping("/grad")
+	public GradDTO getGrad(@RequestParam(value = "user") String username) {
+		Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
+
+		if (optionalStudent.isEmpty()) return null;
+
+		Student student = optionalStudent.get();
+
+		return new GradDTO(student.getGrad());
 	}
 }

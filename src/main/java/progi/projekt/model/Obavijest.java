@@ -16,12 +16,13 @@ public class Obavijest {
     private String tekst;
 
     private boolean procitana;
+
     private Date vrijeme;
 
-    @ManyToMany(targetEntity = Student.class, mappedBy = "obavijesti", cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Student.class, mappedBy = "obavijesti", cascade = CascadeType.MERGE)
     private List<Student> studenti;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_oglas")
     private Oglas oglas;
 
@@ -78,7 +79,7 @@ public class Obavijest {
         return studenti;
     }
 
-    public void setStudenti(List<Student> studenti) {
+    public void setStudent(List<Student> studenti) {
         this.studenti = studenti;
     }
 
@@ -89,4 +90,5 @@ public class Obavijest {
     public void setOglas(Oglas oglas) {
         this.oglas = oglas;
     }
+
 }

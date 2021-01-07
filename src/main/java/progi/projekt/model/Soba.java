@@ -1,28 +1,32 @@
 package progi.projekt.model;
 
+import org.hibernate.annotations.Type;
 import progi.projekt.model.enums.BrojKrevetaEnum;
-import progi.projekt.model.enums.OznakeKategorijaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class Soba implements Serializable {
     @Id
-    private int broj;
+    @Column(name = "id_soba")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-    @Id
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_paviljon")
+    private Paviljon paviljon;
+
     private int kat;
 
-    @Id
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumns({
-            @JoinColumn(name = "id_paviljon"),
-            @JoinColumn(name = "id_dom")
-    })
-    private Paviljon paviljon;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_oglas")
+    private Oglas oglas;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "soba")
+    private Student student;
 
     @Column(name = "broj_kreveta")
     @Enumerated(EnumType.STRING)
@@ -32,47 +36,24 @@ public class Soba implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipKupaoniceEnum tipKupaonice;
 
-    @Column(name = "kategorija")
-    @Enumerated(EnumType.STRING)
-    private OznakeKategorijaEnum kategorija;
+    @Lob
+    @Type(type = "text")
+    private String komentar;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Soba soba = (Soba) o;
-        return kat == soba.kat &&
-                broj == soba.broj &&
-                paviljon.equals(soba.paviljon);
+    public UUID getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(broj, kat, paviljon);
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public Soba() {
+    public Paviljon getPaviljon() {
+        return paviljon;
     }
 
-    //Ništa ne smije biti null!
-    public Soba(int brojSobe, int kat, Paviljon paviljon, BrojKrevetaEnum brojKreveta, TipKupaoniceEnum tipKupaonice, OznakeKategorijaEnum kategorija) {
-        if (paviljon != null && brojKreveta != null && tipKupaonice != null && kategorija != null) {
-            this.paviljon = paviljon;
-            this.brojKreveta = brojKreveta;
-            this.tipKupaonice = tipKupaonice;
-            this.broj = brojSobe;
-            this.kat = kat;
-        } else {
-            System.err.println("Ništa u kreaciji sobe ne smije biti null!");
-        }
-    }
-
-    public int getBroj() {
-        return broj;
-    }
-
-    public void setBroj(int broj) {
-        this.broj = broj;
+    public void setPaviljon(Paviljon paviljon) {
+        this.paviljon = paviljon;
     }
 
     public int getKat() {
@@ -83,12 +64,20 @@ public class Soba implements Serializable {
         this.kat = kat;
     }
 
-    public Paviljon getPaviljon() {
-        return paviljon;
+    public Oglas getOglas() {
+        return oglas;
     }
 
-    public void setPaviljon(Paviljon paviljon) {
-        this.paviljon = paviljon;
+    public void setOglas(Oglas oglas) {
+        this.oglas = oglas;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public BrojKrevetaEnum getBrojKreveta() {
@@ -107,11 +96,12 @@ public class Soba implements Serializable {
         this.tipKupaonice = tipKupaonice;
     }
 
-    public OznakeKategorijaEnum getKategorija() {
-        return kategorija;
+    public String getKomentar() {
+        return komentar;
     }
 
-    public void setKategorija(OznakeKategorijaEnum kategorija) {
-        this.kategorija = kategorija;
+    public void setKomentar(String komentar) {
+        this.komentar = komentar;
     }
 }
+

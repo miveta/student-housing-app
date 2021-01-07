@@ -4,9 +4,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import progi.projekt.model.Student;
 
-@Repository
-public interface StudentRepository extends JpaRepository<Student, Long> {
-    Student findByEmail(String email);
+import java.util.Optional;
+import java.util.UUID;
 
-    Student findByKorisnickoIme(String korisnickoIme);
+@Repository
+public interface StudentRepository extends JpaRepository<Student, UUID> {
+    Optional<Student> findByEmail(String email);
+
+    Optional<Student> findByKorisnickoIme(String korisnickoIme);
+
+    Optional<Student> findByJmbag(String jmbag);
 }

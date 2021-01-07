@@ -2,6 +2,7 @@ package progi.projekt.launch;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import progi.projekt.model.*;
@@ -14,6 +15,7 @@ import progi.projekt.repository.*;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 @Component
@@ -27,24 +29,28 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
     private final GradRepository gradRepository;
     private final ObavijestRepository obavijestRepository;
     private final OglasRepository oglasRepository;
-    private final StatusOglasaRepository statusOglasaRepository;
     private final TrazeniUvjetiRepository trazeniUvjetiRepository;
     private final ZaposlenikscRepository zaposlenikscRepository;
     private final StudentskiCentarRepository studentskiCentarRepository;
+    private final SobaRepository sobaRepository;
 
-    public DatabaseFill(StudentRepository studentRepository, DomRepository domRepository,
-                        GradRepository gradRepository, ObavijestRepository obavijestRepository,
-                        OglasRepository oglasRepository, StatusOglasaRepository statusOglasaRepository, TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository, StudentskiCentarRepository studentskiCentarRepository, PasswordEncoder pswdEncoder) {
+    private final PaviljonRepository paviljonRepository;
+
+    private final JavaMailSender javaMailSender;
+
+    public DatabaseFill(PasswordEncoder pswdEncoder, StudentRepository studentRepository, DomRepository domRepository, GradRepository gradRepository, ObavijestRepository obavijestRepository, OglasRepository oglasRepository, TrazeniUvjetiRepository trazeniUvjetiRepository, ZaposlenikscRepository zaposlenikscRepository, StudentskiCentarRepository studentskiCentarRepository, SobaRepository sobaRepository, PaviljonRepository paviljonRepository, JavaMailSender javaMailSender) {
+        this.pswdEncoder = pswdEncoder;
         this.studentRepository = studentRepository;
         this.domRepository = domRepository;
         this.gradRepository = gradRepository;
         this.obavijestRepository = obavijestRepository;
         this.oglasRepository = oglasRepository;
-        this.statusOglasaRepository = statusOglasaRepository;
         this.trazeniUvjetiRepository = trazeniUvjetiRepository;
         this.zaposlenikscRepository = zaposlenikscRepository;
         this.studentskiCentarRepository = studentskiCentarRepository;
-        this.pswdEncoder = pswdEncoder;
+        this.sobaRepository = sobaRepository;
+        this.paviljonRepository = paviljonRepository;
+        this.javaMailSender = javaMailSender;
     }
 
 
@@ -64,9 +70,18 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         //Izvedi skriptu jedino ako nista nije u bazi (inace baca error za umetanje identicnih vrijednosti)
-        //PAVLIJONI NE RADE
-        //SOBE NE RADE
-        //LAJKOVI NE RADE
+        //LAJKOVI NE RADE???? nisam probo
+
+        //Odkomentiraj ovo da posaljes mail denisu da si pokrenuo program
+        /*
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setSubject("Uvjeti sobe više ne pašu vašim zahtjevima");
+        msg.setText("Mail radi!");
+        msg.setTo("denis.durasinovic@gmail.com");
+        javaMailSender.send(msg);
+        System.out.println("Mail poslan");*/
+
+
         try {
             if (studentRepository.count() == 0) {
                 //Kreiraj studente
@@ -74,8 +89,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 ivica.setEmail("ivica@gmail.com");
                 ivica.setIme("Ivica");
                 ivica.setPrezime("Ivic");
-                // todo promijeni
-                ivica.setKorisnickoIme("ivi14");
+                ivica.setKorisnickoIme("ivi");
                 ivica.setLozinka(hashPassword("123456"));
                 ivica.setObavijestiNaMail(false);
                 ivica.setJmbag("0036567891");
@@ -111,6 +125,18 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 stefko.setKorisnickoIme("stef567");
 
                 //Kreiraj grad
+                Grad osijek = new Grad();
+                osijek.setNaziv("Osijek");
+
+                //Kreiraj domove
+                Dom osijek1 = new Dom();
+                Dom osijek2 = new Dom();
+                osijek1.setImaMenzu(true);
+                osijek1.setNaziv("Osijek1");
+                osijek2.setImaMenzu(false);
+                osijek2.setNaziv("Osijek2");
+
+                //Kreiraj grad
                 Grad zagreb = new Grad();
                 zagreb.setNaziv("Zagreb");
 
@@ -126,50 +152,40 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 TrazeniUvjeti uvjetiMarko = new TrazeniUvjeti();
                 TrazeniUvjeti uvjetiPero = new TrazeniUvjeti();
                 TrazeniUvjeti uvjetiIvica = new TrazeniUvjeti();
-                uvjetiIvica.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
-                uvjetiIvica.setKategorija(OznakeKategorijaEnum.II);
-                uvjetiIvica.setTipKupaonice(TipKupaoniceEnum.NEBITNO);
-                uvjetiIvica.setGodina(2020);
-                uvjetiIvica.setKomentar("Trazim sobu!");
 
-                uvjetiMarko.setBrojKreveta(BrojKrevetaEnum.DVOKREVETNA);
-                uvjetiMarko.setKategorija(OznakeKategorijaEnum.I);
-                uvjetiMarko.setTipKupaonice(TipKupaoniceEnum.PRIVATNA);
-                uvjetiMarko.setGodina(2020);
-                uvjetiMarko.setKomentar("Trazim i ja sobu!");
-
-                uvjetiPero.setBrojKreveta(BrojKrevetaEnum.TROKREVETNA);
-                uvjetiPero.setKategorija(OznakeKategorijaEnum.II);
-                uvjetiPero.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
-                uvjetiPero.setGodina(2020);
-                uvjetiPero.setKomentar("");
+                uvjetiIvica.setKategorija(Collections.singleton(OznakeKategorijaEnum.II));
+                uvjetiMarko.setKategorija(Collections.singleton(OznakeKategorijaEnum.I));
+                uvjetiPero.setKategorija(Collections.singleton(OznakeKategorijaEnum.II));
 
                 //Kreiraj oglase
                 Oglas oglasMarko = new Oglas();
                 Oglas oglasPero = new Oglas();
                 Oglas oglasIvica = new Oglas();
-                oglasIvica.setGodina(2020);
+
                 oglasIvica.setNaslov("Trokrevetna soba kategorije II");
-                oglasIvica.setOpis("Dobro ocuvana soba na drugom katu, blizu menze");
                 oglasIvica.setObjavljen(Date.valueOf("2020-10-01"));
 
-                oglasMarko.setGodina(2020);
                 oglasMarko.setNaslov("Jednokrevetna soba kategorije I");
-                oglasMarko.setOpis("Dobro ocuvana soba na trecem katu");
                 oglasMarko.setObjavljen(Date.valueOf("2020-10-05"));
 
-                oglasPero.setGodina(2020);
                 oglasPero.setNaslov("Dvokrevetna soba kategorije II");
-                oglasPero.setOpis("/");
                 oglasPero.setObjavljen(Date.valueOf("2020-10-07"));
 
-                //Kreiraj statuse
-                StatusOglasa statusMarko = new StatusOglasa();
-                StatusOglasa statusPero = new StatusOglasa();
-                StatusOglasa statusIvica = new StatusOglasa();
-                statusIvica.setStatus(StatusOglasaEnum.POTVRDEN);
-                statusMarko.setStatus(StatusOglasaEnum.AKTIVAN);
-                statusPero.setStatus(StatusOglasaEnum.AKTIVAN);
+                HashSet<TrazeniUvjeti> trazeniUvjeti = new HashSet<>();
+                trazeniUvjeti.add(uvjetiIvica);
+                trazeniUvjeti.add(uvjetiMarko);
+                trazeniUvjeti.add(uvjetiPero);
+                trazeniUvjetiRepository.saveAll(trazeniUvjeti);
+
+                oglasIvica.setTrazeniUvjeti(uvjetiIvica);
+                uvjetiIvica.setOglas(oglasIvica);
+
+                oglasMarko.setTrazeniUvjeti(uvjetiMarko);
+                uvjetiMarko.setOglas(oglasMarko);
+
+                oglasPero.setTrazeniUvjeti(uvjetiPero);
+                uvjetiPero.setOglas(oglasPero);
+
 
                 //Kreiraj obavijest
                 Obavijest obavijestZaIvicu = new Obavijest();
@@ -177,20 +193,85 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 obavijestZaIvicu.setTekst("Pero je potvrdio tvoj oglas!");
                 obavijestZaIvicu.setVrijeme(Date.valueOf("2020-10-8"));
 
+                //Kreiraj soba
+                Soba sobaIvica = new Soba();
+
+                sobaIvica.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
+
+                sobaIvica.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
+                Soba sobaMarko = new Soba();
+
+                sobaMarko.setBrojKreveta(BrojKrevetaEnum.DVOKREVETNA);
+                sobaMarko.setKomentar("komentarcic");
+                sobaMarko.setTipKupaonice(TipKupaoniceEnum.PRIVATNA);
+
+                Soba sobaPero = new Soba();
+                sobaPero.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
+                sobaPero.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
+
+
+                //Kreiraj paviljon
+                Paviljon paviljonSava1 = new Paviljon();
+                paviljonSava1.setNaziv("Prvi");
+                paviljonSava1.setBrojKatova(4);
+                paviljonSava1.setKategorija(OznakeKategorijaEnum.III);
+
+                sobaMarko.setPaviljon(paviljonSava1);
+                HashSet<Soba> paviljonSava1Sobe = new HashSet<>();
+                paviljonSava1Sobe.add(sobaMarko);
+                paviljonSava1.setSobe(paviljonSava1Sobe);
+
+                Paviljon paviljonSava2 = new Paviljon();
+                paviljonSava2.setNaziv("Onaj pored roka");
+                paviljonSava2.setBrojKatova(2);
+                paviljonSava2.setKategorija(OznakeKategorijaEnum.I);
+
+                Paviljon paviljonRadic = new Paviljon();
+                paviljonRadic.setNaziv("Peti");
 
                 //Linkaj sve------------------------------------------------------------------------------
+
+
+                //ASSIGN OGLAS TO SOBA
+                sobaMarko.setOglas(oglasMarko);
+                sobaPero.setOglas(oglasPero);
+                sobaIvica.setOglas(oglasIvica);
+
+                //ASSIGN DOM TO PAVILJON
+                paviljonSava1.setDom(sava);
+                paviljonSava2.setDom(sava);
+                paviljonRadic.setDom(radic);
+
+               /* //ASSIGN KATOVI TO PAVILJON
+                HashSet<Kat> katoviRadic = new HashSet<Kat>();
+                katoviRadic.add(prviRadic);
+                katoviRadic.add(drugiRadic);
+                HashSet<Kat> katoviSava = new HashSet<Kat>();
+                katoviSava.add(prviSava);
+                paviljonRadic.setKatovi(katoviRadic);
+                paviljonSava.setKatovi(katoviSava);
+
+                //ASSIGN PAVILJON TO KAT
+                prviRadic.setPaviljon(paviljonRadic);
+                drugiRadic.setPaviljon(paviljonRadic);
+                prviSava.setPaviljon(paviljonSava);*/
+
+                //ASSIGN SOBE TO KAT
+                /*HashSet<Soba> sobePrvaRadic = new HashSet<>();
+                HashSet<Soba> sobeDrugaRadic = new HashSet<>();
+                HashSet<Soba> sobePrvaSava = new HashSet<>();
+                sobePrvaRadic.add(sobaPero);
+                sobeDrugaRadic.add(sobaIvica);
+                sobePrvaSava.add(sobaMarko);*/
+               /* prviRadic.setSobe(sobePrvaRadic);
+                prviSava.setSobe(sobePrvaSava);
+                drugiRadic.setSobe(sobeDrugaRadic);*/
+
                 //ASSIGN OGLAS TO STUDENT
                 ivica.setOglas(oglasIvica);
                 marko.setOglas(oglasMarko);
                 pero.setOglas(oglasPero);
 
-                //ASSIGN TRAZENIUVJETI TO  STUDENT
-                ivica.setUvjeti(uvjetiIvica);
-                marko.setUvjeti(uvjetiMarko);
-                pero.setUvjeti(uvjetiPero);
-
-                //ASSIGN POTVRDENIOGLAS TO STUDENT
-                pero.setPotvrdioOglas(statusIvica);
 
                 //ASSIGN GRAD TO STUDENT
                 ivica.setGrad(zagreb);
@@ -209,40 +290,52 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 stefko.setZaposlenSC(studentskiCentar);
 
                 //ASSIGN DOMOVI TO GRAD
+                HashSet<Dom> domoviOsije = new HashSet<>();
+                domoviOsije.add(osijek1);
+                domoviOsije.add(osijek2);
+                osijek.setDomovi(domoviOsije);
+
+                osijek1.setGrad(osijek);
+                osijek2.setGrad(osijek);
+
+                //ASSIGN DOMOVI TO GRAD
                 HashSet<Dom> domovi = new HashSet<>();
                 domovi.add(radic);
                 domovi.add(sava);
                 zagreb.setDomovi(domovi);
 
+
                 //ASSIGN SC TO GRAD
                 zagreb.setStudentskiCentar(studentskiCentar);
 
-                //ASSIGN GRAD TO DOMOVI
+                //ASSIGN GRAD TO DOMO
                 radic.setGrad(zagreb);
                 sava.setGrad(zagreb);
 
-                //ASSIGN STUDENT TO TRAZIUVJETI
-                uvjetiIvica.setTraziStudent(ivica);
-                uvjetiMarko.setTraziStudent(marko);
-                uvjetiPero.setTraziStudent(pero);
+                //ASSIGN PAVILJONI TO DOM
+                HashSet<Paviljon> paviljoniRadic = new HashSet<>();
+                HashSet<Paviljon> paviljoniSava = new HashSet<>();
+                paviljoniRadic.add(paviljonRadic);
+                paviljoniSava.add(paviljonSava1);
+                paviljoniSava.add(paviljonSava2);
+                radic.setPaviljoni(paviljoniRadic);
+                sava.setPaviljoni(paviljoniSava);
+
 
                 //ASSIGN STATUS TO OGLAS
-                oglasIvica.setStatus(statusIvica);
-                oglasMarko.setStatus(statusMarko);
-                oglasPero.setStatus(statusPero);
+                oglasIvica.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
+                oglasMarko.setStatusOglasa(StatusOglasaEnum.POTVRDEN);
+                oglasPero.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
 
                 //ASSIGN STUDENT TO OGLAS
                 oglasIvica.setStudent(ivica);
                 oglasMarko.setStudent(marko);
                 oglasPero.setStudent(pero);
 
-                //ASSIGN OGLAS TO STATUS
-                statusIvica.setOglas(oglasIvica);
-                statusMarko.setOglas(oglasMarko);
-                statusPero.setOglas(oglasPero);
-
-                //ASSIGN POTVRDIOSTUDENT TO STATUS
-                statusIvica.setPotvrdioOglas(pero);
+                //ASSIGN SOBA TO OGLAS
+                oglasIvica.setSoba(sobaIvica);
+                oglasMarko.setSoba(sobaMarko);
+                oglasPero.setSoba(sobaPero);
 
                 //ASSIGN OGLAS TO OBAVIJEST
                 obavijestZaIvicu.setOglas(oglasIvica);
@@ -250,7 +343,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 //ASSIGN IVICA TO OBAVIJEST
                 ArrayList<Student> ivicaList = new ArrayList<>();
                 ivicaList.add(ivica);
-                obavijestZaIvicu.setStudenti(ivicaList);
+                obavijestZaIvicu.setStudent(ivicaList);
 
 
                 //Saveaj sve---------------------------------------------------------------------------
@@ -259,33 +352,44 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 studentiZaSave.add(marko);
                 studentiZaSave.add(pero);
 
-                HashSet<TrazeniUvjeti> trazeniUvjeti = new HashSet<>();
-                trazeniUvjeti.add(uvjetiIvica);
-                trazeniUvjeti.add(uvjetiMarko);
-                trazeniUvjeti.add(uvjetiPero);
-
-                HashSet<StatusOglasa> statusiOglasa = new HashSet<>();
-                statusiOglasa.add(statusIvica);
-                statusiOglasa.add(statusMarko);
-                statusiOglasa.add(statusPero);
 
                 HashSet<Oglas> oglasi = new HashSet<>();
                 oglasi.add(oglasIvica);
                 oglasi.add(oglasMarko);
                 oglasi.add(oglasPero);
 
+                /*HashSet<Kat> katovi= new HashSet<>();
+                katovi.add(prviRadic);
+                katovi.add(drugiRadic);
+                katovi.add(prviSava);*/
+
+                HashSet<Paviljon> paviljoni = new HashSet<>();
+                paviljoni.add(paviljonRadic);
+                paviljoni.add(paviljonSava1);
+
+                HashSet<Soba> sobe = new HashSet<>();
+                sobe.add(sobaIvica);
+                sobe.add(sobaMarko);
+                sobe.add(sobaPero);
+
+                marko.setSoba(sobaMarko);
+                sobaMarko.setStudent(marko);
+
+
                 gradRepository.save(zagreb);
+                gradRepository.save(osijek);
+                oglasRepository.saveAll(oglasi);
                 zaposlenikscRepository.save(stefko);
                 studentskiCentarRepository.save(studentskiCentar);
                 domRepository.saveAll(domovi);   //domovi napravljena u procesu linkanja iznad
                 obavijestRepository.save(obavijestZaIvicu);
-                oglasRepository.saveAll(oglasi);
                 trazeniUvjetiRepository.saveAll(trazeniUvjeti);
-                statusOglasaRepository.saveAll(statusiOglasa);
                 studentRepository.saveAll(studentiZaSave);
+                paviljonRepository.saveAll(paviljoni);
+                sobaRepository.saveAll(sobe);
+
 
                 System.out.println("Umetnute pocetne vrijednosti");
-
             }
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

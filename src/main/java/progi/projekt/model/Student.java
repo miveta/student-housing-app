@@ -3,6 +3,7 @@ package progi.projekt.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -31,73 +32,38 @@ public class Student implements Serializable, Korisnik {
     @Column(nullable = false, name = "hash_lozinke")
     private String lozinka;
 
+    @Column(nullable = false, name = "obavijesti_na_mail")
     private boolean obavijestiNaMail;
 
     @ManyToMany(targetEntity = Obavijest.class, cascade = CascadeType.ALL)
     private List<Obavijest> obavijesti;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_status_oglasa")
-    private StatusOglasa potvrdioOglas;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_trazeni_uvjeti")
-    private TrazeniUvjeti uvjeti;
-
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="oglas")
+    @JoinColumn(name = "oglas")
     private Oglas oglas;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="id_grad")
+    @JoinColumn(name = "id_grad")
     private Grad grad;
 
-    public Student() {
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_soba")
+    private Soba soba;
 
     @Override
     public String getTipKorisnika() {
         return "student";
     }
 
-    //Sve osim obavijestiNaMail ne smije biti null!
-    //JMBAG mora biti velicine 10
-
-    /*
-     * zakomentirano zato što bi sada
-     * validaciju bi trebao odraditi controller s anotacijom @valid
-     * provjeri RegisterForm - tamo se anotacijama mogu dodavati pravila
-     * */
-    /*
-    public Student(String jmbag, String korisnickoIme, String ime, String prezime, String email, String lozinka, boolean obavijestiNaMail) {
-        if (korisnickoIme != null && ime != null && prezime != null && email != null && lozinka != null) {
-            if (jmbag.length() == 10) {
-                this.jmbag = jmbag;
-                this.korisnickoIme = korisnickoIme;
-                this.ime = ime;
-                this.prezime = prezime;
-                this.email = email;
-                this.lozinka = lozinka;
-                this.obavijestiNaMail = obavijestiNaMail;
-            } else {
-                System.err.println("Jmbag mora imati 10 znamenaka!");
-            }
-        } else {
-            System.err.println("Pri kreaciji studenta nista ne smije biti null osim obavijestiNaMail!");
-        }
+    public UUID getId() {
+        return id;
     }
 
-     */
-
-    public List<Obavijest> getObavijesti() {
-        return obavijesti;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public void setObavijesti(List<Obavijest> obavijesti) {
-        this.obavijesti = obavijesti;
-    }
-
+    @Override
     public String getJmbag() {
         return jmbag;
     }
@@ -106,6 +72,7 @@ public class Student implements Serializable, Korisnik {
         this.jmbag = jmbag;
     }
 
+    @Override
     public String getKorisnickoIme() {
         return korisnickoIme;
     }
@@ -114,6 +81,7 @@ public class Student implements Serializable, Korisnik {
         this.korisnickoIme = korisnickoIme;
     }
 
+    @Override
     public String getIme() {
         return ime;
     }
@@ -122,6 +90,7 @@ public class Student implements Serializable, Korisnik {
         this.ime = ime;
     }
 
+    @Override
     public String getPrezime() {
         return prezime;
     }
@@ -130,10 +99,10 @@ public class Student implements Serializable, Korisnik {
         this.prezime = prezime;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
-
 
     public void setEmail(String email) {
         this.email = email;
@@ -147,6 +116,7 @@ public class Student implements Serializable, Korisnik {
         this.lozinka = lozinka;
     }
 
+    @Override
     public boolean isObavijestiNaMail() {
         return obavijestiNaMail;
     }
@@ -155,28 +125,12 @@ public class Student implements Serializable, Korisnik {
         this.obavijestiNaMail = obavijestiNaMail;
     }
 
-    public StatusOglasa getPotvrdioOglas() {
-        return potvrdioOglas;
+    public List<Obavijest> getObavijesti() {
+        return obavijesti;
     }
 
-    public void setPotvrdioOglas(StatusOglasa potvrdioOglas) {
-        this.potvrdioOglas = potvrdioOglas;
-    }
-
-    public TrazeniUvjeti getUvjeti() {
-        return uvjeti;
-    }
-
-    public void setUvjeti(TrazeniUvjeti uvjeti) {
-        this.uvjeti = uvjeti;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    public void setObavijesti(List<Obavijest> obavijesti) {
+        this.obavijesti = obavijesti;
     }
 
     public Oglas getOglas() {
@@ -193,5 +147,26 @@ public class Student implements Serializable, Korisnik {
 
     public void setGrad(Grad grad) {
         this.grad = grad;
+    }
+
+    public Soba getSoba() {
+        return soba;
+    }
+
+    public void setSoba(Soba soba) {
+        this.soba = soba;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(jmbag, student.jmbag);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(jmbag);
     }
 }

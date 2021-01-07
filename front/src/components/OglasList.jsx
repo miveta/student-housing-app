@@ -1,8 +1,9 @@
 import React from 'react';
 import OglasCard from './OglasCard';
 
-function OglasList() {
+function OglasList(props) {
     const [oglasi, setOglasi] = React.useState([]);
+    const isLoggedIn = props.isLoggedIn;
 
     const options = {
         method: 'GET',
@@ -25,8 +26,8 @@ function OglasList() {
             {
                 oglasi.map(oglas =>
                     <OglasCard key={oglas.id}
-                               oglas={oglas}/>
-               )
+                               oglas={oglas} isLoggedIn={isLoggedIn}/>
+                )
             }
         </div>
 

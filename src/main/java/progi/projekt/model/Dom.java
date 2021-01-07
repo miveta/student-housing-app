@@ -1,11 +1,14 @@
 package progi.projekt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@JsonIgnoreProperties({"grad", "paviljoni"}) // dodano da se izbjegne rekuzija za fetch
 public class Dom implements Serializable {
     @Id
     @Column(name = "id_dom")
@@ -21,21 +24,11 @@ public class Dom implements Serializable {
     @JoinColumn(name = "id_grad")
     private Grad grad;
 
-    @OneToMany(mappedBy = "dom", cascade = CascadeType.ALL)
-    private Set<Paviljon> paviljoni;
+    @ManyToMany(mappedBy = "domovi")
+    private Set<TrazeniUvjeti> trazeni_uvjeti;
 
-    //Naziv i grad ne smiju biti null!
-    public Dom(String naziv, Grad grad, boolean imaMenzu) {
-        if (naziv != null) {
-            if (grad != null) {
-                this.naziv = naziv;
-                this.grad = grad;
-                this.imaMenzu = imaMenzu;
-            } else
-                System.err.print("Grad u konstruktoru doma ne smije biti null!");
-        } else
-            System.err.print("Naziv doma ne smije biti null!");
-    }
+    @OneToMany(mappedBy = "dom", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Paviljon> paviljoni;
 
     public Dom() {
     }
@@ -68,6 +61,14 @@ public class Dom implements Serializable {
         return id;
     }
 
+    public Set<TrazeniUvjeti> getTrazeni_uvjeti() {
+        return trazeni_uvjeti;
+    }
+
+    public void setTrazeni_uvjeti(Set<TrazeniUvjeti> trazeni_uvjeti) {
+        this.trazeni_uvjeti = trazeni_uvjeti;
+    }
+
     public void setId(UUID id) {
         this.id = id;
     }
@@ -78,5 +79,15 @@ public class Dom implements Serializable {
 
     public void setPaviljoni(Set<Paviljon> paviljoni) {
         this.paviljoni = paviljoni;
+    }
+
+    @Override
+    public String toString() {
+        return "Dom{" +
+                "id=" + id +
+                ", imaMenzu=" + imaMenzu +
+                ", naziv='" + naziv + '\'' +
+                ", grad=" + grad +
+                '}';
     }
 }

@@ -2,6 +2,7 @@ package progi.projekt.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,8 +16,11 @@ public class Grad {
     @Column(nullable = false)
     private String naziv;
 
-    @OneToMany(mappedBy = "grad", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "grad", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Dom> domovi;
+
+    @OneToMany(mappedBy = "grad", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<TrazeniUvjeti> trazeniUvjeti;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_sc")
@@ -25,26 +29,12 @@ public class Grad {
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "grad")
     private List<Student> studenti;
 
-    //Naziv i studentskiCentar ne smiju biti null
-    public Grad(String naziv, StudentskiCentar studentskiCentar, Set<Dom> domovi) {
-        if (naziv != null) {
-            if (studentskiCentar != null) {
-                this.naziv = naziv;
-                this.studentskiCentar = studentskiCentar;
-                this.domovi = domovi;
-            } else {
-                System.err.print("SC ne smije biti null pri kreiranju grada!");
-            }
-        } else {
-            System.err.println("Naziv grada ne smije biti null!");
-        }
+    public UUID getId() {
+        return id;
     }
 
-    public Grad() {
-    }
-
-    public void addDom(Dom dom) {
-        this.domovi.add(dom);
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getNaziv() {
@@ -71,19 +61,36 @@ public class Grad {
         this.studentskiCentar = studentskiCentar;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public List<Student> getStudenti() {
         return studenti;
     }
 
     public void setStudenti(List<Student> studenti) {
         this.studenti = studenti;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Grad grad = (Grad) o;
+        return Objects.equals(id, grad.id) &&
+                Objects.equals(naziv, grad.naziv) &&
+                Objects.equals(domovi, grad.domovi) &&
+                Objects.equals(studentskiCentar, grad.studentskiCentar) &&
+                Objects.equals(studenti, grad.studenti);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, naziv, domovi, studentskiCentar, studenti);
+    }
+
+    @Override
+    public String toString() {
+        return "Grad{" +
+                "id=" + id +
+                ", naziv='" + naziv +
+                '}';
     }
 }
