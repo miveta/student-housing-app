@@ -1,8 +1,9 @@
 import React, {Component, useState} from "react";
-import {Button, Form, Modal} from "react-bootstrap";
+import {Button, Col, Form, Modal} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import cookie from 'react-cookies';
 import {withRouter} from 'react-router-dom';
+import Row from "react-bootstrap/Row";
 
 
 class MojProfil extends Component {
@@ -57,13 +58,73 @@ class MojProfil extends Component {
     render() {
         return (
             <div className="inner">
+                <h2>
+                    Moj profil
+                </h2>
+                <br></br>
+                <Form>
+                    <Form.Group as={Row}>
+                        <Form.Label className={"formLabel"} column xs="10">
+                            Ime
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Label column sm="10">
+                                {this.user.ime}
+                            </Form.Label>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                        <Form.Label className={"formLabel"} column xs="10">
+                            Prezime
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Label column sm="10">
+                                {this.user.prezime}
+                            </Form.Label>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                        <Form.Label className={"formLabel"} column xs="10">
+                            JMBAG
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Label column sm="10">
+                                {this.user.jmbag}
+                            </Form.Label>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                        <Form.Label className={"formLabel"} column xs="10">
+                            Korisničko ime
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Label column sm="10">
+                                {this.user.korisnickoIme}
+                            </Form.Label>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                        <Form.Label className={"formLabel"} column xs="10">
+                            Email
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Label column sm="10">
+                                {this.user.email}
+                            </Form.Label>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                        <Form.Label className={"formLabel"} column xs="10">
+                            Obavijesti na mail
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Label column sm="10">
+                                {this.user.obavijestiNaMail ? "Da" : "Ne"}
+                            </Form.Label>
+                        </Col>
+                    </Form.Group>
+                </Form>
 
-                <p>Ime: {this.user.ime} </p>
-                <p>Prezime: {this.user.prezime}</p>
-                <p>JMBAG: {this.user.jmbag} </p>
-                <p>Korisničko ime: {this.user.korisnickoIme} </p>
-                <p>Email: {this.user.email}</p>
-                <p>Obavijesti na mail: {this.user.obavijestiNaMail ? "Da" : "Ne"}</p>
                 <Link to="/mojprofil/uredi">
                 <Button
                     type="submit"

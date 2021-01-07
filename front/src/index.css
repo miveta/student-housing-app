@@ -136,3 +136,7 @@ body, html, .App, #root {
     text-align: left;
     padding: 10px
 }
+
+.formLabel {
+    font-weight: bold;
+}

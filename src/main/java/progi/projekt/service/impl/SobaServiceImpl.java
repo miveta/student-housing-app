@@ -75,6 +75,11 @@ public class SobaServiceImpl implements SobaService {
     }
 
     @Override
+    public Optional<Soba> getByStudent(Student student) {
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<Soba> getById(UUID id) {
         return sobaRepository.findById(id);
     }
