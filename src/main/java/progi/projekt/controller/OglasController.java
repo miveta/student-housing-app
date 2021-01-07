@@ -2,6 +2,7 @@ package progi.projekt.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import progi.projekt.dto.KandidatDTO;
 import progi.projekt.dto.OglasDTO;
 import progi.projekt.model.Oglas;
 import progi.projekt.service.OglasService;
@@ -32,4 +33,8 @@ public class OglasController {
         return ResponseEntity.ok(new OglasDTO(oglas));
     }
 
+    @GetMapping(value = "/listKandidati")
+    public List<KandidatDTO> listKandidati(@RequestParam(value = "oglas_id") String oglasId) {
+
+    }
 }

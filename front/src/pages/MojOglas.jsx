@@ -23,6 +23,7 @@ class MojOglas extends Component {
                 paviljon: undefined,
                 tipKupaonice: 'Privatna'
             },
+            kandidati: [],
             changed: false
         }
 

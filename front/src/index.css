@@ -51,6 +51,7 @@ body, html, .App, #root {
     height: 100%;
     background: #ffffff;
     padding: 30px 45px 35px 45px;
+    box-shadow: 0 5px 5px rgba(34, 35, 58, 0.2);
     border-radius: 15px;
 }
 
