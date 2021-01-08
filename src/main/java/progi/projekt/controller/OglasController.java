@@ -16,6 +16,7 @@ import progi.projekt.service.StudentService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,80 +25,103 @@ import java.util.stream.Collectors;
 public class OglasController {
 
 
-    private OglasService oglasService;
-    private LajkService lajkService;
-    private KandidatService kandidatService;
-    private StudentService studentService;
+	private OglasService oglasService;
+	private LajkService lajkService;
+	private KandidatService kandidatService;
+	private StudentService studentService;
 
-    public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService) {
-        this.oglasService = oglasService;
-        this.lajkService = lajkService;
-        this.kandidatService = kandidatService;
-        this.studentService = studentService;
-    }
+	public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService) {
+		this.oglasService = oglasService;
+		this.lajkService = lajkService;
+		this.kandidatService = kandidatService;
+		this.studentService = studentService;
+	}
 
-    @GetMapping("/list")
-    public List<OglasDTO> listOglas() {
-        return oglasService.listAll().stream().map(OglasDTO::new).collect(Collectors.toList());
-    }
+	@GetMapping("/list")
+	public List<OglasDTO> listOglas() {
+		return oglasService.listAll().stream().map(OglasDTO::new).collect(Collectors.toList());
+	}
 
-    @GetMapping("/getoglas")
-    public ResponseEntity<?> getOglas(@RequestParam(value = "oglas_id") String oglasId) {
-        Oglas oglas = oglasService.findById(oglasId).get();
-        return ResponseEntity.ok(new OglasDTO(oglas));
-    }
+	@GetMapping("/getoglas")
+	public ResponseEntity<?> getOglas(@RequestParam(value = "oglas_id") String oglasId) {
+		Oglas oglas = oglasService.findById(oglasId).get();
+		return ResponseEntity.ok(new OglasDTO(oglas));
+	}
 
-    @GetMapping(value = "/kandidati/student")
-    public List<OglasDTO> kandidatiStudent(@RequestParam(value = "student_username") String username) {
-        Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
-        if (optionalStudent.isEmpty()) return null;
+	@GetMapping(value = "/kandidati/student")
+	public List<OglasDTO> kandidatiStudent(@RequestParam(value = "student_username") String username) {
+		Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
+		if (optionalStudent.isEmpty()) return null;
 
-        Student student = optionalStudent.get();
+		Student student = optionalStudent.get();
 
-        if (student.getOglas() == null) return null;
+		if (student.getOglas() == null) return null;
 
-        List<Oglas> oglasKandidati = new ArrayList<>();
-        student.getOglas().getKandidati().forEach(kandidat -> {
-            if (kandidat.getOglas().getId().equals(student.getOglas().getId())) {
-                oglasKandidati.add(kandidat.getKandOglas());
-            } else oglasKandidati.add(kandidat.getOglas());
-        });
+		List<Oglas> oglasKandidati = new ArrayList<>();
+		student.getOglas().getKandidati().forEach(kandidat -> {
+			if (kandidat.getOglas().getId().equals(student.getOglas().getId())) {
+				oglasKandidati.add(kandidat.getKandOglas());
+			} else oglasKandidati.add(kandidat.getOglas());
+		});
 
-        return oglasKandidati.stream().map(OglasDTO::new).collect(Collectors.toList());
-    }
+		return oglasKandidati.stream().map(OglasDTO::new).collect(Collectors.toList());
+	}
 
-    @GetMapping(value = "/listKandidati")
-    public List<KandidatDTO> listKandidati(@RequestParam(value = "oglas_id") String oglasId) {
-        Optional<Oglas> oglasOpt = oglasService.findById(oglasId);
-        ArrayList<KandidatDTO> kandidatiDTO = new ArrayList<>();
+	@GetMapping(value = "/listKandidati")
+	public ArrayList<KandidatDTO> listKandidati(@RequestParam(value = "oglas_id") String oglasId) {
+		List<Oglas> oglasi = oglasService.listAll();
 
-        if (oglasOpt.isPresent()) {
-            Oglas oglas = oglasOpt.get();
+		//force update oglasa unutar svakog studenta
+		List<Student> studenti = studentService.listAll();
+		for (Oglas oglas : oglasi){
+			for (Student stud : studenti){
+				if (stud.getId() == oglas.getStudent().getId()){
+					stud.setOglas(oglas);
+					studentService.save(stud);
+				}
+			}
+		}
 
-            List<Lajk> lajkovi = lajkService.listAll();
-            for (Lajk lajk : lajkovi) {
-                if (lajk.getLajkId().getOglas().equals(oglas)) {
-                    Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
-                    Kandidat tmp = kandidatService.kandidatParaOglasa(oglas, lajk.getLajkId().getOglas()).get();
-                    KandidatDTO tmpDTO = new KandidatDTO(tmp);
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
 
-                    ocjenaOptional.ifPresentOrElse(
-                            (ocjena) ->
-                            {
-                                tmpDTO.setKandOcjena(ocjena);
-                            },
-                            () ->
-                            {
-                                //ako ocjena jos nije unesena upisujemo -1
-                                tmpDTO.setKandOcjena(-1);
-                            });
 
-                    kandidatiDTO.add(tmpDTO);
-                }
-            }
-            return kandidatiDTO;
-        }
+		Optional<Oglas> oglasOpt = oglasService.findById(oglasId.toString());
+		ArrayList<KandidatDTO> kandidatiDTO = new ArrayList<>();
 
-        return kandidatiDTO;
-    }
+		if (oglasOpt.isPresent()) {
+			Oglas oglas = oglasService.findById(oglasId).get();
+
+			List<Lajk> lajkovi = lajkService.listAll();
+			for (Lajk lajk : lajkovi) {
+				if (lajk.getLajkId().getOglas().equals(oglas)) {
+					Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
+					Oglas drugiOglas = lajk.getLajkId().getStudent().getOglas();
+
+					Optional<Kandidat> tmpOpt = kandidatService.kandidatParaOglasa(oglas, drugiOglas);
+					if (tmpOpt.isPresent()){
+						Kandidat tmp = tmpOpt.get();
+						KandidatDTO tmpDTO = new KandidatDTO(tmp);
+
+						ocjenaOptional.ifPresentOrElse(
+								(ocjena) ->
+								{
+									tmpDTO.setKandOcjena(ocjena);
+								},
+								() ->
+								{
+									//ako ocjena jos nije unesena upisujemo -1
+									tmpDTO.setKandOcjena(-1);
+								});
+
+						kandidatiDTO.add(tmpDTO);
+					}
+
+				}
+			}
+		}
+
+
+		return kandidatiDTO;
+	}
 }

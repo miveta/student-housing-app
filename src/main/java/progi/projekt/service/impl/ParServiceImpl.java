@@ -97,6 +97,12 @@ public class ParServiceImpl implements ParService {
 
 	@Override
 	public void save(Par par) {
+		List<Par> parovi = listAll();
+		for (Par parTmp : parovi){
+			if (parTmp.getOglas1() == par.getOglas1() && parTmp.getOglas2() == par.getOglas2()) return;
+			if (parTmp.getOglas1() == par.getOglas2() && parTmp.getOglas2() == par.getOglas1()) return;
+		}
+		if (par.getOglas1() == par.getOglas2()) return;
 		parRepo.save(par);
 	}
 

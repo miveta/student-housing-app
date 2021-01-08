@@ -34,25 +34,35 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Override
 	public List<Kandidat> listAll(UUID oglasUuid) {
+		updateLocalKands();
 		var oglas = oglasService.findById(oglasUuid.toString());
 		return kandidatRepo.findAllByOglas(oglas.get());
 	}
 
 	public void stvoriKand(Oglas oglas1, Oglas oglas2) {
+//		System.out.print("oglas1 initial kandidati count: " + oglas1.getKandidati().stream().count() + "\n");
+//		System.out.print("oglas2 initial kandidati count: " + oglas2.getKandidati().stream().count() + "\n");
+
+		//force update kandidata unutar svakog oglasa
+		updateLocalKands();
+
+//		System.out.print("oglas1 update kandidati count: " + oglas1.getKandidati().stream().count() + "\n");
+//		System.out.print("oglas2 update kandidati count: " + oglas2.getKandidati().stream().count() + "\n");
+
 		Integer bliskost = calculateScore(oglas1, oglas2);
 		java.sql.Date stvoren = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 
-		Kandidat kand = new Kandidat(oglas2, oglas1, bliskost, stvoren, false);
+		Kandidat kand = new Kandidat(oglas1, oglas2, bliskost, stvoren, false);
 
 		oglas1.getKandidati().add(kand);
-		oglasService.save(oglas1);
+		oglasService.save(oglas1); //TODO: fix ovo, pa makniti updateLocalKands()
 
 		oglas2.getKandidati().add(kand);
 		oglasService.save(oglas2);
 
 
-		System.out.print("oglas1 kandidati count: " + oglas1.getKandidati().stream().count() + "\n");
-		System.out.print("oglas2 kandidati count: " + oglas2.getKandidati().stream().count() + "\n");
+//		System.out.print("oglas1 kandidati count: " + oglas1.getKandidati().stream().count() + "\n");
+//		System.out.print("oglas2 kandidati count: " + oglas2.getKandidati().stream().count() + "\n");
 
 
 
@@ -79,6 +89,8 @@ public class KandidatServiceImpl implements KandidatService {
 	public int odgovaraIizTopN(Oglas oglas) {
 		//ako nekom od topN kandidata ogovara nasa soba vrati topN indeks tog kandidata. Inace vrati -1
 
+		updateLocalKands();
+
 		List<Oglas> topN = topN(oglas);
 
 		int i = 0;
@@ -95,6 +107,8 @@ public class KandidatServiceImpl implements KandidatService {
 	@Override
 	public List<Oglas> topN(Oglas oglas) {
 		//primi oglas i vrati listu prvih N Oglasa kandidata sortirano po bliskosti
+
+		updateLocalKands();
 
 		int N = SHORTLIST_VELICINA;
 		//todo: staviti poruku korisnicima da moraju ocjeniti barem N oglasa
@@ -122,6 +136,8 @@ public class KandidatServiceImpl implements KandidatService {
 	@Override
 	public Boolean josNisuKandidat(Oglas oglas1, Oglas oglas2) {
 		//vraca true ako dva oglasa nisu vec kandidat
+
+		updateLocalKands();
 
 		var kandidati1 = oglas1.getKandidati();
 		var kandidati2 = oglas2.getKandidati();
@@ -166,6 +182,8 @@ public class KandidatServiceImpl implements KandidatService {
 	public Optional<Kandidat> kandidatParaOglasa(Oglas oglas1, Oglas oglas2) {
 		Optional<Kandidat> kandidatOpt = Optional.empty();
 
+		updateLocalKands();
+
 		for (Kandidat kand : oglas1.getKandidati()) {
 			if (kandSadrziOglas(kand, oglas2)) {
 				return Optional.ofNullable(kand);
@@ -185,6 +203,7 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Override
 	public void ponistiKandidateOglasa(Oglas oglas) {
+		updateLocalKands();
 		List<Kandidat> kandidati = listAll(oglas.getId());
 		for (Kandidat kand : kandidati) {
 			kand.setIgnore(true);
@@ -192,7 +211,24 @@ public class KandidatServiceImpl implements KandidatService {
 		}
 	}
 
+	@Override
+	public void updateLocalKands() {
+		List<Oglas> oglasi = oglasService.listAll();
+		for (Oglas oglas : oglasi){
+			List<Kandidat> kandidati = listAll();
+			for (Kandidat kandidat : kandidati){
+				if (kandidat.getOglas().getId() == oglas.getId() || kandidat.getKandOglas().getId() == oglas.getId()) {
+					if (!oglas.getKandidati().contains(kandidat)) {
+						oglas.getKandidati().add(kandidat);
+						oglasService.save(oglas);
+					}
+				}
+			}
+		}
+	}
+
 	public Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti) {
+		updateLocalKands();
 		return uvjetiService.sobaMatchesUvjet(soba, uvjeti);
 	}
 }

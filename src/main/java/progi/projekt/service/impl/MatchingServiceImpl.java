@@ -50,8 +50,8 @@ public class MatchingServiceImpl implements MatchingService {
 						kandidatService.stvoriKand(oglas1, oglas2);
 					}
 				}
-
 			}
+
 		}
 
 		//popunjavanje liste postojecih kandidata svakog oglasa iz liste svih kandidata
@@ -75,6 +75,10 @@ public class MatchingServiceImpl implements MatchingService {
 		//poziva se uz metodu iz LajkControllera. Stvara kandidata/par ako je student ocjenio oglas koji mu inicijalno
 		// nije ponudjen kao par pa nije mogao biti u topN pa niti postati par
 
+
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
+
 		List<Lajk> lajkovi = lajkService.listAll();
 
 		for (Lajk lajk : lajkovi){
@@ -92,6 +96,10 @@ public class MatchingServiceImpl implements MatchingService {
 	@Override
 	public void parFun() {
 		//prolazi po svim oglasima i stvara parove
+
+
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
 
 		List<Oglas> oglasi = oglasService.listAll();
 
@@ -131,6 +139,9 @@ public class MatchingServiceImpl implements MatchingService {
 	@Override
 	public void matchFun() {
 		//po tablici 'par' i ovisno o obostranoj ocjeni para "rezervira" najbolje ocjenjeni par
+
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
 
 
 		//kopiranje ocjene iz liste lajkova u rjecnik dvostrukog kljuca (id_oglas1, id_oglas2)
@@ -342,6 +353,9 @@ public class MatchingServiceImpl implements MatchingService {
 
 		//tj, ako je lanac=true onda gledamo 3 oglasa, ne samo 2
 
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
+
 		List<Par> parovi = parService.listAll();
 		for (Par par : parovi){
 
@@ -360,6 +374,9 @@ public class MatchingServiceImpl implements MatchingService {
 	}
 
 	public void confirmFunLegwork(Par par) {
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
+
 		if (parService.ifObaCEKA(par)){
 			//oba studenta su prihvatila par (ignore != false) i oglas nije u medjuvremenu zauzet (oba == AKTIVAN)
 			if (par.getIgnore() == false){
