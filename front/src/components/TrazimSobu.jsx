@@ -9,8 +9,8 @@ function TrazimSobu(props) {
     const user = cookie.load('principal');
     const [grad, setGrad] = React.useState(props.grad);
 
-    const [uvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [], brojKreveta: [], komentar: ''});
-    const katovi = ['1', '2', '3', '4'];
+    const [uvjeti] = React.useState(props.uvjeti);
+    const kat = [1, 2, 3, 4];
 
     const kreveti = [
         {name: "Jednokrevetna", value: "JEDNOKREVETNA"},
@@ -52,6 +52,7 @@ function TrazimSobu(props) {
     }
 
     function onChange(event) {
+        console.log(uvjeti)
         const {name, value} = event.target;
         const ids = uvjeti[name].map(el => el.id);
 
@@ -63,36 +64,21 @@ function TrazimSobu(props) {
         }
     }
 
+
+
     function onSubmit(e) {
         e.preventDefault();
 
         let body = {
             studentUsername: user.korisnickoIme,
-            domId: uvjeti["dom"],
-            paviljoni: uvjeti["paviljon"],
-            katovi: uvjeti["kat"],
+            domId: uvjeti["domId"],
+            paviljoni: uvjeti["paviljoni"],
+            katovi: uvjeti["katovi"],
             brojKreveta: uvjeti["brojKreveta"],
             tipKupaonice: uvjeti["tipKupaonice"]
         }
+        props.submitUvjeti(body);
 
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify(body)
-        };
-
-
-        return fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/uvjetiIveta`, options)
-            .then(response => {
-                if (response.status === 200) {
-                    //props.history.push("/")
-                } else {
-                    console.log(response.status)
-                }
-            });
 
     }
 
@@ -103,12 +89,13 @@ function TrazimSobu(props) {
             <h3>Tražim sobu</h3>
             <Form.Group>
                 <Form.Label>Kat</Form.Label>
-                <Row>
-                    {katovi.map((p, index) => (
-                        <Col xs={1}>
+                <Row key={1}>
+                    {kat.map((p, index) => (
+                        <Col xs={1} key={index}>
                             <Form.Check
+                                defaultChecked={uvjeti.katovi.includes(p)}
                                 onChange={onChange}
-                                name="kat"
+                                name="katovi"
                                 key={index}
                                 type="checkbox"
                                 id={index}
@@ -121,10 +108,11 @@ function TrazimSobu(props) {
             </Form.Group>
             <Form.Group>
                 <Form.Label>Broj kreveta</Form.Label>
-                <Row>
+                <Row key={2}>
                     {kreveti.map((p, index) => (
-                        <Col>
+                        <Col key={index}>
                             <Form.Check
+                                defaultChecked={uvjeti.brojKreveta.includes(p.value)}
                                 onChange={onChange}
                                 name="brojKreveta"
                                 key={index}
@@ -139,10 +127,11 @@ function TrazimSobu(props) {
             </Form.Group>
             <Form.Group>
                 <Form.Label>Tip kupaonice</Form.Label>
-                <Row>
+                <Row key={3}>
                     {kupaonice.map((p, index) => (
-                        <Col xs={3}>
+                        <Col xs={3} key={index}>
                             <Form.Check
+                                defaultChecked={uvjeti.tipKupaonice.includes(p.value)}
                                 onChange={onChange}
                                 name="tipKupaonice"
                                 key={index}
@@ -157,29 +146,31 @@ function TrazimSobu(props) {
 
             {
                 grad.domovi.map(dom => (
-                    <Row>
-                        <Col>
+                    <Row key={dom.id+1}>
+                        <Col key={dom.id}>
                             <Form.Label>Dom</Form.Label>
                             <Form.Check
+                                defaultChecked={uvjeti.domId.includes(dom.id)}
                                 onChange={onChangeDom}
                                 key={dom.id}
                                 type="checkbox"
                                 id={dom.id}
-                                name="dom"
+                                name="domId"
                                 value={dom.id}
                                 label={dom.naziv}
                             />
                         </Col>
                         {
-                            dom.checked &&
-                            <Col>
+                            (uvjeti.domId.includes(dom.id) || dom.checked) &&
+                            <Col key={dom.naziv}>
                                 <Form.Group>
                                     <Form.Label>Paviljoni u domu {dom.naziv}</Form.Label>
                                     {console.log(dom.paviljoni)}
                                     {dom.paviljoni.map(p => (
                                         <Form.Check
+                                            defaultChecked={uvjeti.paviljoni.includes(p.id)}
                                             onChange={onChange}
-                                            name="paviljon"
+                                            name="paviljoni"
                                             key={p.id}
                                             type="checkbox"
                                             id={p.id}

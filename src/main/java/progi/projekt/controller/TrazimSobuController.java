@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.DomDTO;
+import progi.projekt.dto.UvjetiDTO;
 import progi.projekt.forms.TrazimSobuForm;
 import progi.projekt.model.*;
 import progi.projekt.model.enums.BrojKrevetaEnum;
@@ -43,6 +44,18 @@ public class TrazimSobuController {
 
     }
 
+    @GetMapping("/zadano")
+    public UvjetiDTO zadano(@RequestParam(value = "user") String username){
+        Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
+        Student student = optionalStudent.get();
+        TrazeniUvjeti trazeniUvjeti = null;
+        if (student.getOglas() != null) {
+            trazeniUvjeti = student.getOglas().getTrazeniUvjeti();
+        }
+        if (trazeniUvjeti == null)
+            trazeniUvjeti = new TrazeniUvjeti();
+        return new UvjetiDTO(trazeniUvjeti);
+    }
 
     @PostMapping(value = "/uvjetiIveta", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uvjeti(@RequestBody TrazimSobuForm trazimSobuForm) {
@@ -102,6 +115,6 @@ public class TrazimSobuController {
             oglasService.spremiOglas(student, student.getSoba(), trazeniUvjeti);
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(trazimSobuForm);
     }
 }
