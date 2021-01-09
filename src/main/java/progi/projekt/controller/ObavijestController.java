@@ -1,123 +1,47 @@
 package progi.projekt.controller;
 
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import progi.projekt.model.Obavijest;
-import progi.projekt.model.Oglas;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.web.bind.annotation.*;
+import progi.projekt.dto.ObavijestDTO;
 import progi.projekt.model.Student;
-import progi.projekt.repository.ObavijestRepository;
+import progi.projekt.service.ObavijestService;
+import progi.projekt.service.StudentService;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/obavijesti")
 public class ObavijestController {
-    private ObavijestRepository obavijestRepository;
-    private JavaMailSender javaMailSender;
+    private ObavijestService obavijestService;
+    private StudentService studentService;
 
-    public ObavijestController(ObavijestRepository obavijestRepository) {
-        this.obavijestRepository = obavijestRepository;
+    public ObavijestController(ObavijestService obavijestService, StudentService studentService) {
+        this.obavijestService = obavijestService;
+        this.studentService = studentService;
     }
 
-    //Stvara obavijest/i ako se soba promijeni i ne pase vise tom korisniku/ima
-    public void notifyRoomConstraintsNoLongerValid(List<Student> studenti, Oglas oglas) {
-        Obavijest obavijest = new Obavijest();
-        obavijest.setVrijeme(new Date(System.currentTimeMillis()));
-        obavijest.setProcitana(false);
-        obavijest.setOglas(oglas);
-        obavijest.setStudent(studenti);
-        obavijest.setTekst("Oglas studenta " + oglas.getStudent().getIme() + " " + oglas.getStudent().getPrezime()
-                + " je promjenjen, te više ne paše vašim uvjetima.");
-        obavijestRepository.save(obavijest);
+    @MessageMapping("/user-all")
+    @SendTo("/topic/user")
+    public List<ObavijestDTO> send(@Payload String studentUsername) {
+        List<ObavijestDTO> obavijesti = new ArrayList<>();
 
-        //Posalji mail ako je ukljuceno automatsko slanje
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setSubject("Uvjeti sobe više ne pašu vašim zahtjevima");
-        msg.setText(obavijest.getTekst());
-        for(Student student:studenti){
-            if(student.isObavijestiNaMail()){
-                msg.setTo(student.getEmail());
-                javaMailSender.send(msg);
-            }
-        }
+        Optional<Student> optionalStudent = studentService.findByKorisnickoIme(studentUsername);
+        if (optionalStudent.isEmpty()) return obavijesti;
+        Student student = optionalStudent.get();
+
+        if (student.getObavijesti() == null || student.getObavijesti().isEmpty()) return obavijesti;
+        return student.getObavijesti().stream().map(ObavijestDTO::new).collect(Collectors.toList());
     }
 
-    //Daje obavijest svima koji su lajkali taj oglas da se soba promjenila
-    public void notifyRoomConstraintsChanged(Oglas oglas) {
-        /*Obavijest obavijest = new Obavijest();
-        obavijest.setVrijeme(new Date(System.currentTimeMillis()));
-        obavijest.setProcitana(false);
-        ArrayList<Student> studentiLiked = new ArrayList<>();
-        for(Lajk lajk: oglas.getLajkovi()) {
-            studentiLiked.add(lajk.getLikedByStudent());
-        }
-        obavijest.setStudent(studentiLiked);
-        obavijest.setTekst("Oglas studenta " + oglas.getStudent().getIme() + " "
-                + oglas.getStudent().getPrezime() + " izmjenjen.");
-        obavijest.setOglas(oglas);
-        obavijestRepository.save(obavijest);
-
-        //Posalji mail ako je ukljuceno automatsko slanje
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setSubject("Uvjeti sobe više ne pašu vašim zahtjevima");
-        msg.setText(obavijest.getTekst());
-        for(Student student:studentiLiked){
-            if(student.isObavijestiNaMail()){
-                msg.setTo(student.getEmail());
-                javaMailSender.send(msg);
-            }
-        }*/
-    }
-
-    //Slanje obavijesti da ti je netko lajkao sobu
-    public void notifyLiked(Oglas oglas, Student student) {
-        Obavijest obavijest = new Obavijest();
-        obavijest.setVrijeme(new Date(System.currentTimeMillis()));
-        obavijest.setProcitana(false);
-        obavijest.setOglas(oglas);
-        ArrayList<Student> students = new ArrayList<>();
-        students.add(oglas.getStudent());
-        obavijest.setStudent(students);
-        obavijest.setTekst(student.getIme() + " " + student.getPrezime() + " je lajkao vašu sobu!");
-        obavijestRepository.save(obavijest);
-
-        //Posalji mail ako je ukljuceno automatsko slanje
-        if(student.isObavijestiNaMail()){
-            SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setSubject("Netko je lajkao vašu sobu");
-            msg.setText(obavijest.getTekst());
-            msg.setTo(student.getEmail());
-            javaMailSender.send(msg);
-        }
-    }
-
-    //Obavijest potvrde zamjene -- prvi oglas predstavlja studenta kojem je konfirmirana zamijena, a drugi
-    //je oglas koji mu je dan na zamijenu
-    public void notifyExchanged(Oglas oglasZamijenjenog, Oglas oglasZamijene) {
-        Obavijest obavijest = new Obavijest();
-        obavijest.setVrijeme(new Date(System.currentTimeMillis()));
-        obavijest.setProcitana(false);
-        obavijest.setOglas(oglasZamijene);
-        ArrayList<Student> student = new ArrayList<>();
-        student.add(oglasZamijenjenog.getStudent());
-        obavijest.setStudent(student);
-        obavijest.setTekst("Vaša soba je uspješno zamijenjena sa sobom " + oglasZamijene.getStudent().getIme() + " " +
-                oglasZamijene.getStudent().getPrezime() + "!");
-        obavijestRepository.save(obavijest);
-
-        //Posalji mail ako je ukljuceno automatsko slanje
-        if(oglasZamijenjenog.getStudent().isObavijestiNaMail()){
-            SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setSubject("Zamjena sobe je potvrđena");
-            msg.setText(obavijest.getTekst());
-            msg.setTo(oglasZamijenjenog.getStudent().getEmail());
-            javaMailSender.send(msg);
-        }
+    @PostMapping(value = "/procitana")
+    public boolean oznaciProcitana(@RequestParam(value = "id") String obavijestId) {
+        return obavijestService.oznaciProcitana(UUID.fromString(obavijestId));
     }
 }

@@ -459,7 +459,9 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 //ASSIGN IVICA TO OBAVIJEST
                 ArrayList<Student> ivicaList = new ArrayList<>();
                 ivicaList.add(ivica);
+                ivicaList.add(marko);
                 obavijestZaIvicu.setStudent(ivicaList);
+
 
 
                 //Saveaj sve---------------------------------------------------------------------------
@@ -523,6 +525,8 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 sobaRepository.saveAll(sobe);
 
 
+                marko.setObavijesti(Collections.singletonList(obavijestZaIvicu));
+                studentRepository.save(marko);
                 System.out.println("Umetnute pocetne vrijednosti");
             }
         } catch (NoSuchAlgorithmException e) {

@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import Lajkovi from "./Lajkovi";
-import {Card} from "react-bootstrap";
 import * as cookie from "react-cookies";
 
 class OglasCard extends Component {

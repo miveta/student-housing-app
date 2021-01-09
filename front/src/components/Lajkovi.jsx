@@ -64,9 +64,6 @@ class Lajkovi extends Component {
         }
     }
 
-    onHover = (e) => {
-
-    }
     change = (e) => {
         let self = this;
         let ocjena = e.target.value;
@@ -119,7 +116,6 @@ class Lajkovi extends Component {
     }
 
     render() {
-
         return (
             <div className={"likes"} hidden={!this.state.user}>
                 <ButtonGroup size="sm" toggle>

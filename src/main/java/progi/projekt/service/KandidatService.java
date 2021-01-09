@@ -29,4 +29,6 @@ public interface KandidatService {
 	Boolean kandSadrziOglas(Kandidat kand, Oglas oglas);
 
 	void ponistiKandidateOglasa(Oglas oglas);
+
+    void updateLocalKands();
 }

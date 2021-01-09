@@ -215,7 +215,7 @@ public class KandidatServiceImpl implements KandidatService {
 	public void updateLocalKands() {
 		List<Oglas> oglasi = oglasService.listAll();
 		for (Oglas oglas : oglasi){
-			List<Kandidat> kandidati = listAll();
+            List<Kandidat> kandidati = listAll(oglas.getId());
 			for (Kandidat kandidat : kandidati){
 				if (kandidat.getOglas().getId() == oglas.getId() || kandidat.getKandOglas().getId() == oglas.getId()) {
 					if (!oglas.getKandidati().contains(kandidat)) {

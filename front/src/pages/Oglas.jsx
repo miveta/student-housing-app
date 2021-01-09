@@ -123,7 +123,7 @@ class Oglas extends Component {
                     </Form.Group>
                 </Form>
                 <br></br>
-                <Lajkovi oglasId={oglasId}></Lajkovi>
+                <Lajkovi oglasId={oglasId} user={this.state.user}></Lajkovi>
             </div>
         )
     }

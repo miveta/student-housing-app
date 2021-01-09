@@ -1,5 +1,8 @@
 package progi.projekt.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -35,7 +38,8 @@ public class Student implements Serializable, Korisnik {
     @Column(nullable = false, name = "obavijesti_na_mail")
     private boolean obavijestiNaMail;
 
-    @ManyToMany(targetEntity = Obavijest.class, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Obavijest.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Obavijest> obavijesti;
 
     @OneToOne(cascade = CascadeType.ALL)

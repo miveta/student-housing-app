@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Button, Nav, Navbar} from "react-bootstrap";
 import * as Swal from "sweetalert2";
 import {withRouter} from 'react-router-dom';
+import ObavijestiDropdown from "../components/ObavijestiDropdown";
 
 
 class Header extends Component {
@@ -38,6 +39,7 @@ class Header extends Component {
                         <Nav>
                             <Nav.Link href="/oglasi">Oglasi</Nav.Link>
                             <Nav.Link href="/mojprofil">Profil</Nav.Link>
+                            <ObavijestiDropdown getObavijesti={this.sendMessage} user={this.props.user}/>
                             <Button variant="light" onClick={this.logout}> Odjavi se </Button>
                         </Nav>
                         :

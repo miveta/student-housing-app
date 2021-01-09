@@ -2,6 +2,7 @@ package progi.projekt.model;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,8 +40,12 @@ public class Obavijest {
     public Obavijest() {
     }
 
-    public void addStudent(Student kor) {
-        studenti.add(kor);
+    public void addStudent(Student student) {
+        if (studenti == null) studenti = new ArrayList<>();
+        studenti.add(student);
+
+        if (student.getObavijesti() == null) student.setObavijesti(new ArrayList<>());
+        student.getObavijesti().add(this);
     }
 
     public String getTekst() {
