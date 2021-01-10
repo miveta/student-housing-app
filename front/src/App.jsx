@@ -46,8 +46,6 @@ class App extends Component {
         cookie.save('principal', cb, {path: '/', maxAge: 5 * 60 * 60});
         this.setState({authenticated: true});
         this.setState({user: cb});
-        this.sendMessage()
-        console.log(this)
     };
 
 
@@ -58,42 +56,8 @@ class App extends Component {
         this.setState({user: {}})
     };
 
-    sendMessage = () => {
-        this.clientRef.sendMessage('/app/user-all', JSON.stringify({
-            name: 'aname',
-            message: 'msg'
-        }));
-    };
-
-    /*    componentDidMount() {
-            console.log('Component did mount');
-            // The compat mode syntax is totally different, converting to v5 syntax
-            // Client is imported from '@stomp/stompjs'
-            this.client = new Client();
-
-            this.client.configure({
-                brokerURL: 'ws://localhost:8080/websocket-chat',
-                onConnect: () => {
-                    console.log('onConnect');
-
-
-                    this.client.subscribe('/topic/user', message => {
-                        alert(message.body);
-                    });
-                },
-                // Helps during debugging, remove in production
-                debug: (str) => {
-                    console.log(new Date(), str);
-                }
-            });
-
-            this.client.activate();
-        }*/
-
-
 
     render() {
-        console.log(this.state);
         return (
             <div className="App">
                 <Header authenticated={this.state.authenticated} logout={this.logout} user={this.state.user}/>

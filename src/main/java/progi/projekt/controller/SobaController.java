@@ -9,7 +9,6 @@ import progi.projekt.forms.SobaForm;
 import progi.projekt.model.Grad;
 import progi.projekt.model.Soba;
 import progi.projekt.model.Student;
-import progi.projekt.model.Student;
 import progi.projekt.service.OglasService;
 import progi.projekt.service.SobaService;
 import progi.projekt.service.StudentService;
@@ -68,6 +67,10 @@ public class SobaController {
 
         sobaForm.fromSobaForm(soba);
         soba = sobaService.save(soba);
+
+        String paviljonId = sobaForm.getIdPaviljon();
+        if (paviljonId == null) return ResponseEntity.badRequest().build();
+        if (!soba.getPaviljon().getId().equals(UUID.fromString(paviljonId))) sobaService.setPaviljon(soba, paviljonId);
 
         Optional<Student> optionalStudent = studentService.findByKorisnickoIme(sobaForm.getStudentUsername());
         Student student = optionalStudent.get();

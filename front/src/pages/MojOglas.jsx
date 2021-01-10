@@ -62,7 +62,8 @@ class MojOglas extends Component {
                 }
             }).then(json => {
             this.setState({grad: {...json}})
-        })
+        }).catch(e => console.log(e))
+
         fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/zadano?user=${this.state.user.korisnickoIme}`, options)
             .then(response => {
                 if (response.status === 200) {
@@ -71,8 +72,8 @@ class MojOglas extends Component {
                     console.log(response.status)
                 }
             }).then(json => {
-            this.setState({uvjeti: {...json}})
-        })
+            if (json !== undefined) this.state.uvjeti = {...json}
+        }).catch(e => console.log(e))
      }
 
     submitSoba = (soba) => {
@@ -80,7 +81,7 @@ class MojOglas extends Component {
 
         const body = {
             studentUsername: self.state.user.korisnickoIme,
-            domId: soba.domId,
+            idPaviljon: soba.idPaviljon,
             kat: soba.kat === "" ? 0 : soba.kat,
             brojKreveta: soba.brojKreveta.toUpperCase(),
             tipKupaonice: soba.tipKupaonice.toUpperCase(),
@@ -108,6 +109,7 @@ class MojOglas extends Component {
             self.setState({...json})
         })
     }
+
     submitUvjeti = (uvjeti) => {
         let self = this;
 

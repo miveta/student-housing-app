@@ -44,6 +44,17 @@ public class Par {
 	}
 
 	@Basic
+	@Column(name = "odobren", nullable = true)
+	private Boolean odobren;
+
+	public Boolean getOdobren() {
+		return odobren;
+	}
+	public void setOdobren(Boolean odobren) {
+		this.odobren = odobren;
+	}
+
+	@Basic
 	@Column(name = "lanac", nullable = true)
 	private Boolean lanac;
 
@@ -65,6 +76,14 @@ public class Par {
 	public void setIgnore(Boolean ignore) {
 		this.ignore = ignore;
 	}
+
+	@Basic
+	@Column(name = "prihvatioPrvi", nullable = true)
+	private Boolean prihvatioPrvi;
+
+	@Basic
+	@Column(name = "prihvatioDrugi", nullable = true)
+	private Boolean prihvatioDrugi;
 
 	/*
 	@Basic
@@ -96,6 +115,22 @@ public class Par {
 	}
 
 	public Par() {
+	}
+
+	public boolean getPrihvatioPrvi() {
+		return prihvatioPrvi;
+	}
+
+	public void setPrihvatioPrvi(boolean prihvatioPrvi) {
+		this.prihvatioPrvi = prihvatioPrvi;
+	}
+
+	public boolean getPrihvatioDrugi() {
+		return prihvatioDrugi;
+	}
+
+	public void setPrihvatioDrugi(boolean prihvatioDrugi) {
+		this.prihvatioDrugi = prihvatioDrugi;
 	}
 
 	/*public Boolean getCeka() {

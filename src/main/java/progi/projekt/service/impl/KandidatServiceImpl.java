@@ -34,7 +34,7 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Override
 	public List<Kandidat> listAll(UUID oglasUuid) {
-		updateLocalKands();
+		//updateLocalKands(); //fun fact, ovo radi inf loop
 		var oglas = oglasService.findById(oglasUuid.toString());
 		return kandidatRepo.findAllByOglas(oglas.get());
 	}

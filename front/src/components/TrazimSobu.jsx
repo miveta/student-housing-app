@@ -83,6 +83,7 @@ function TrazimSobu(props) {
     }
 
 
+    console.log(uvjeti)
     return (
 
         <Form onSubmit={onSubmit} disabled className={"innerForm"}>
@@ -93,7 +94,7 @@ function TrazimSobu(props) {
                     {kat.map((p, index) => (
                         <Col xs={1} key={index}>
                             <Form.Check
-                                defaultChecked={uvjeti.katovi.includes(p)}
+                                defaultChecked={uvjeti.katovi && uvjeti.katovi.includes(p)}
                                 onChange={onChange}
                                 name="katovi"
                                 key={index}
@@ -112,7 +113,7 @@ function TrazimSobu(props) {
                     {kreveti.map((p, index) => (
                         <Col key={index}>
                             <Form.Check
-                                defaultChecked={uvjeti.brojKreveta.includes(p.value)}
+                                defaultChecked={uvjeti.brojKreveta && uvjeti.brojKreveta.includes(p.value)}
                                 onChange={onChange}
                                 name="brojKreveta"
                                 key={index}
@@ -131,7 +132,7 @@ function TrazimSobu(props) {
                     {kupaonice.map((p, index) => (
                         <Col xs={3} key={index}>
                             <Form.Check
-                                defaultChecked={uvjeti.tipKupaonice.includes(p.value)}
+                                defaultChecked={uvjeti.tipKupaonice && uvjeti.tipKupaonice.includes(p.value)}
                                 onChange={onChange}
                                 name="tipKupaonice"
                                 key={index}
@@ -150,7 +151,7 @@ function TrazimSobu(props) {
                         <Col key={dom.id}>
                             <Form.Label>Dom</Form.Label>
                             <Form.Check
-                                defaultChecked={uvjeti.domId.includes(dom.id)}
+                                defaultChecked={uvjeti.domId && uvjeti.domId.includes(dom.id)}
                                 onChange={onChangeDom}
                                 key={dom.id}
                                 type="checkbox"
@@ -161,14 +162,13 @@ function TrazimSobu(props) {
                             />
                         </Col>
                         {
-                            (uvjeti.domId.includes(dom.id) || dom.checked) &&
+                            ((uvjeti.domID && uvjeti.domId.includes(dom.id)) || dom.checked) &&
                             <Col key={dom.naziv}>
                                 <Form.Group>
                                     <Form.Label>Paviljoni u domu {dom.naziv}</Form.Label>
-                                    {console.log(dom.paviljoni)}
                                     {dom.paviljoni.map(p => (
                                         <Form.Check
-                                            defaultChecked={uvjeti.paviljoni.includes(p.id)}
+                                            defaultChecked={uvjeti.paviljoni && uvjeti.paviljoni.includes(p.id)}
                                             onChange={onChange}
                                             name="paviljoni"
                                             key={p.id}
