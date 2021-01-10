@@ -19,9 +19,14 @@ class ObavijestiDropdown extends Component {
 
 
     getObavijesti = () => {
-        this.clientRef.sendMessage('/obavijesti/user-all',
-            this.props.user.korisnickoIme
-        );
+        try {
+            this.clientRef.sendMessage('/obavijesti/user-all',
+                this.props.user.korisnickoIme
+            );
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 
     procitajObavijest = (redak) => {
@@ -53,6 +58,7 @@ class ObavijestiDropdown extends Component {
                 <SockJsClient url='http://localhost:8080/websocket-chat/'
                               topics={['/topic/user']}
                               onConnect={() => {
+                                  console.log(this.clientRef)
                                   this.getObavijesti()
                                   console.log("connected");
                               }}
@@ -88,7 +94,7 @@ class ObavijestiDropdown extends Component {
                                                        activeClassName=""
                                                        style={{
                                                            'borderRight': !redak.procitana ? '10px solid #33B5E7' : '',
-                                                           /*'backgroundColor': redak.novo ? '#add8e6' : '',*/
+                                                           /*'backgroundColor': '#ffffff',*/
                                                        }}>
                                             <Dropdown.Item href={`/oglas/id=${redak.oglas.id}`}
                                                            onClick={() => this.procitajObavijest(redak)}>
