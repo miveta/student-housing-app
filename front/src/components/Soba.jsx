@@ -79,7 +79,6 @@ class Soba extends Component {
                     return response.json()
                 }
             }).then(json => {
-            console.log(json.paviljon.id)
             let dom = self.props.grad.domovi.filter(d => d.paviljoni.filter(p => p.id === json.paviljon.id).length !== 0)[0]
             self.setState({dom: dom.naziv, paviljoni: dom.paviljoni})
             self.setState({...json})
@@ -96,9 +95,7 @@ class Soba extends Component {
                 this.setState({paviljoni: dom.paviljoni})
             }
 
-
             if (this.state.paviljon === undefined && this.state.dom !== "") {
-                console.log("tu ulazim")
                 let pav = this.props.grad.domovi.filter(d => d.naziv === this.state.dom)[0].paviljoni[0]
                 if (pav !== undefined) {
                     this.setState({paviljon: pav})
@@ -106,7 +103,6 @@ class Soba extends Component {
             }
         }
 
-        console.log(this.state)
 
         return (
 
