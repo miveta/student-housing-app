@@ -80,7 +80,7 @@ class MojOglas extends Component {
 
         const body = {
             studentUsername: self.state.user.korisnickoIme,
-            domId: soba.domId,
+            idPaviljon: soba.idPaviljon,
             kat: soba.kat === "" ? 0 : soba.kat,
             brojKreveta: soba.brojKreveta.toUpperCase(),
             tipKupaonice: soba.tipKupaonice.toUpperCase(),
@@ -108,6 +108,7 @@ class MojOglas extends Component {
             self.setState({...json})
         })
     }
+
     submitUvjeti = (uvjeti) => {
         let self = this;
 
