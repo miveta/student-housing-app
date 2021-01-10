@@ -9,6 +9,8 @@ import java.util.UUID;
 public interface SobaService {
     Soba setFromStudentUsernameAndPaviljonId(Soba soba, String studentId, String paviljonId);
 
+    Soba setPaviljon(Soba soba, String paviljonId);
+
     Optional<Soba> getByStudentUsername(String username);
 
     Optional<Soba> getByStudentId(UUID id);

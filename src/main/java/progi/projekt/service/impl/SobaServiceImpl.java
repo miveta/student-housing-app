@@ -66,6 +66,16 @@ public class SobaServiceImpl implements SobaService {
     }
 
     @Override
+    public Soba setPaviljon(Soba soba, String paviljonId) {
+        Optional<Paviljon> optionalPaviljon = utilService.getPaviljonById(paviljonId);
+
+        if (optionalPaviljon.isEmpty()) return null;
+
+        soba.setPaviljon(optionalPaviljon.get());
+        return soba;
+    }
+
+    @Override
     public Optional<Soba> getByStudentId(UUID id) {
         return Optional.empty();
     }
