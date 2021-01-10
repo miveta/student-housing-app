@@ -4,19 +4,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.KandidatDTO;
 import progi.projekt.dto.OglasDTO;
-import progi.projekt.model.Kandidat;
-import progi.projekt.model.Lajk;
-import progi.projekt.model.Oglas;
-import progi.projekt.model.Student;
-import progi.projekt.service.KandidatService;
-import progi.projekt.service.LajkService;
-import progi.projekt.service.OglasService;
-import progi.projekt.service.StudentService;
+import progi.projekt.dto.ParDTO;
+import progi.projekt.model.*;
+import progi.projekt.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,12 +23,14 @@ public class OglasController {
 	private LajkService lajkService;
 	private KandidatService kandidatService;
 	private StudentService studentService;
+	private ParService parService;
 
-	public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService) {
+	public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService, ParService parService) {
 		this.oglasService = oglasService;
 		this.lajkService = lajkService;
 		this.kandidatService = kandidatService;
 		this.studentService = studentService;
+		this.parService = parService;
 	}
 
 	@GetMapping("/list")
@@ -123,5 +119,59 @@ public class OglasController {
 
 
 		return kandidatiDTO;
+	}
+
+
+	@GetMapping(value = "/listParovi")
+	public List<ParDTO> listParovi(@RequestParam(value = "oglas_id") String oglasId) {
+		//note: napravio sam ParDTO jer ako stavim Par u listu, toString je beskonacan jer oglas ima referencu na
+		// studenta koji opet ima referencu na oglas. Ista stvar sa domovima
+		// - holik
+
+		List<Oglas> oglasi = oglasService.listAll();
+
+		//force update oglasa unutar svakog studenta
+		List<Student> studenti = studentService.listAll();
+		for (Oglas oglas : oglasi){
+			for (Student stud : studenti){
+				if (stud.getId() == oglas.getStudent().getId()){
+					stud.setOglas(oglas);
+					studentService.save(stud);
+				}
+			}
+		}
+
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
+
+		Optional<Oglas> oglasOpt = oglasService.findById(oglasId.toString());
+
+
+		if (oglasOpt.isPresent()) {
+			Oglas oglas = oglasService.findById(oglasId).get();
+
+			Optional<Par> parOpt = parService.pripadniParOglasa(oglas);
+			if (parOpt.isPresent()){
+				Par par = parOpt.get();
+
+				ArrayList<ParDTO> paroviOglasa = new ArrayList<>();
+
+				if (par.getLanac() == false) {
+					//nije lanac
+					ParDTO parDTO = new ParDTO(par);
+					paroviOglasa.add(parDTO);
+				}
+				else {
+					//je lanac
+					List<Par> lanac = parService.pripadniParoviLanca(par.getOglas1());
+					for (Par parLanca : lanac){
+						ParDTO parDTO = new ParDTO(parLanca);
+						paroviOglasa.add(parDTO);
+					}
+				}
+				return paroviOglasa;
+			}
+		}
+		return new ArrayList<>();
 	}
 }
