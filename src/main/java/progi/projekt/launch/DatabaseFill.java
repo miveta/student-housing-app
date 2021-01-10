@@ -206,7 +206,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 Soba sobaIvica = new Soba();
 
                 sobaIvica.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
-
+                sobaIvica.setKomentar("mijenjam jer mi je daleko menza");
                 sobaIvica.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
                 Soba sobaMarko = new Soba();
 
@@ -216,6 +216,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
 
                 Soba sobaPero = new Soba();
                 sobaPero.setBrojKreveta(BrojKrevetaEnum.JEDNOKREVETNA);
+                sobaPero.setKomentar("dobra soba");
                 sobaPero.setTipKupaonice(TipKupaoniceEnum.DIJELJENA);
 
 
@@ -236,8 +237,12 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 paviljonlascina3.setKategorija(OznakeKategorijaEnum.I);
 
                 sobaMarko.setPaviljon(paviljonlascina1);
+                sobaIvica.setPaviljon(paviljonlascina1);
+                sobaPero.setPaviljon(paviljonlascina1);
                 HashSet<Soba> paviljonlascina1Sobe = new HashSet<>();
                 paviljonlascina1Sobe.add(sobaMarko);
+                paviljonlascina1Sobe.add(sobaIvica);
+                paviljonlascina1Sobe.add(sobaPero);
                 paviljonlascina1.setSobe(paviljonlascina1Sobe);
 
                 //kreiraj paviljone radic
@@ -503,6 +508,12 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
 
                 marko.setSoba(sobaMarko);
                 sobaMarko.setStudent(marko);
+
+                ivica.setSoba(sobaIvica);
+                sobaIvica.setStudent(ivica);
+
+                pero.setSoba(sobaPero);
+                sobaPero.setStudent(pero);
 
                 HashSet<Dom> domovi = new HashSet<>();
                 domovi.add(radic);

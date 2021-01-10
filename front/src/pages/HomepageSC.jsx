@@ -22,14 +22,14 @@ class HomepageSC extends Component {
         };
 
         //dodati podršku za back
-        /*fetch(`${process.env.REACT_APP_BACKEND_URL}/upiti/list`, options)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/listParoviWithFlags?ignore=${false}&done=${true}&odobren=${null}`, options)
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(body =>
                         this.setState({upiti: body})
                     ).catch(error => console.log(error))
                 }
-            });*/
+            });
     }
 
     render() {

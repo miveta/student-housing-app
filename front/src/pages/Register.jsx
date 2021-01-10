@@ -117,13 +117,12 @@ class Register extends Component {
                     <Form.Group>
                         <Form.Label> Prezime </Form.Label>
                         <Form.Control name="prezime" type="text" placeholder={this.state.prezime}
-                                      onChange={this.onChange} required
-                                      maxLength="10" minLength="10"/>
+                                      onChange={this.onChange} required/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label> JMBAG </Form.Label>
                         <Form.Control name="jmbag" type="text" placeholder={this.state.jmbag} onChange={this.onChange}
-                                      required/>
+                                      required maxLength="10" minLength="10"/>
                         <Form.Text className={"textMuted"}>
                             JMBAG se sastoji od 10 znamenki!
                         </Form.Text>

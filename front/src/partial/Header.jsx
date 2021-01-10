@@ -34,7 +34,7 @@ class Header extends Component {
 
     render() {
 
-        let isStudent = this.state.user.tipKorisnika === "student";
+        /*let isStudent = this.state.user.tipKorisnika === "student";*/
         return (
             <Navbar expand="lg" bg="light" className="header" sticky={"top"}>
                 <Navbar.Brand href="/">ZAMJENA SOBA</Navbar.Brand>
@@ -46,11 +46,10 @@ class Header extends Component {
                             {/*todo napraviti da se ne vidi Oglasi Profil i Obavijesti na stranici od zaposlenika*/}
                             {/*edit: treba li ipak ostaviti profil, pa tamo nesto dodati da se ne moze mijenjati i*/}
                             {/*brisati ak nisi student*/}
-                            {isStudent && <Row>
                                 <Nav.Link href="/oglasi">Oglasi</Nav.Link>
                                 <Nav.Link href="/mojprofil">Profil</Nav.Link>
                                 <ObavijestiDropdown getObavijesti={this.sendMessage} user={this.props.user}/>
-                            </Row>}
+
                             <Button variant="light" onClick={this.logout}> Odjavi se </Button>
                         </Nav>
                         :

@@ -77,7 +77,7 @@ class App extends Component {
                         <Route exact path="/oglas/:id" component={Oglas}/>
 
                         {/*todo sloziti privatne rute za studenta i zaposlenika, ovo sve iznad ne bi trebao moc vidjeti zaposlenik, a ovo ispod student*/}
-                        {this.state.authenticated && this.state.user.tipKorisnika === "zaposlenikSC" && <Route exact path="/homepagesc" component={HomepageSC}/>}
+                        {/*this.state.authenticated && this.state.user.tipKorisnika === "zaposlenikSC" && */<Route exact path="/homepagesc" component={HomepageSC}/>}
                     </Switch>
                 </div>
                 <Footer/>

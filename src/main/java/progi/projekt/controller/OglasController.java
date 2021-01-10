@@ -177,7 +177,9 @@ public class OglasController {
 
 
 	@GetMapping(value = "/listParoviWithFlags")
-	public List<ParDTO> listParoviWithFlags(@RequestParam Boolean ignore, Boolean done, Boolean odobren) {
+	public List<ParDTO> listParoviWithFlags(@RequestParam(value = "ignore") Boolean ignore,
+											@RequestParam(value = "done") Boolean done,
+											@RequestParam(value = "odobren") Boolean odobren) {
 		//note: napravio sam ParDTO jer ako stavim Par u listu, toString je beskonacan jer oglas ima referencu na
 		// studenta koji opet ima referencu na oglas. Ista stvar sa domovima
 		// - holik

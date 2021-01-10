@@ -21,8 +21,9 @@ public class Soba implements Serializable {
 
     private int kat;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_oglas")
+    /*@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_oglas")*/
+    @OneToOne(mappedBy = "soba")
     private Oglas oglas;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "soba")

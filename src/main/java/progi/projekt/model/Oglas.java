@@ -24,8 +24,9 @@ public class Oglas {
     @OneToMany(mappedBy = "oglas", cascade = CascadeType.ALL)
     private List<Obavijest> obavijesti;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_student")
+    //@OneToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "id_student")
+    @OneToOne(mappedBy = "oglas")
     private Student student;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "kandOglas")
