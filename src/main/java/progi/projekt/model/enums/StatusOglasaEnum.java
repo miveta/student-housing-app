@@ -7,5 +7,5 @@ package progi.projekt.model.enums;
 //POTVRDEN- neki student je potvrdio ovaj oglas, te se ceka da zaposlenik SC-a potvrdi zamjenu
 //IZVEDEN- oglas je proveden od strane SC-a
 public enum StatusOglasaEnum {
-    AKTIVAN, CEKA, OBRISAN, ARHIVIRAN, POTVRDEN, IZVEDEN
+    AKTIVAN, CEKA, OBRISAN, ARHIVIRAN, POTVRDEN, IZVEDEN, ODBIJEN
 }
