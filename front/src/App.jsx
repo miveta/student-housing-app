@@ -13,6 +13,7 @@ import UrediProfil from "./components/UrediProfil";
 import Oglas from "./pages/Oglas";
 import MojOglas from "./pages/MojOglas";
 import TrazimSobu from "./components/TrazimSobu";
+import HomepageSC from "./pages/HomepageSC";
 
 const PrivateRoute = ({component: Component, ...rest}) => (
     <Route
@@ -110,6 +111,9 @@ class App extends Component {
                         <Route exact path="/mojprofil" component={() => <MojProfil isLoggedIn={this.state.authenticated} onLogout={this.logout}/>}/>
                         <Route exact path="/mojprofil/uredi" component={() => <UrediProfil onLogin={this.authenticate}/>}/>
                         <Route exact path="/oglas/:id" component={Oglas}/>
+
+                        {/*todo sloziti privatne rute za studenta i zaposlenika, ovo sve iznad ne bi trebao moc vidjeti zaposlenik, a ovo ispod student*/}
+                        {this.state.authenticated && this.state.user.tipKorisnika === "zaposlenikSC" && <Route exact path="/homepagesc" component={HomepageSC}/>}
                     </Switch>
                 </div>
                 <Footer/>
