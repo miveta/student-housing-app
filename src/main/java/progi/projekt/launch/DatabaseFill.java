@@ -91,7 +91,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 ivica.setPrezime("Ivic");
                 ivica.setKorisnickoIme("ivi");
                 ivica.setLozinka(hashPassword("123456"));
-                ivica.setObavijestiNaMail(false);
+                ivica.setObavijestiNaMail(true);
                 ivica.setJmbag("0036567891");
 
                 Student marko = new Student();
@@ -100,7 +100,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 marko.setPrezime("Markic");
                 marko.setKorisnickoIme("mark32");
                 marko.setLozinka(hashPassword("password"));
-                marko.setObavijestiNaMail(false);
+                marko.setObavijestiNaMail(true);
                 marko.setJmbag("0036563532");
 
                 Student pero = new Student();
@@ -109,7 +109,7 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
                 pero.setPrezime("Peric");
                 pero.setKorisnickoIme("peri21");
                 pero.setLozinka(hashPassword("654321"));
-                pero.setObavijestiNaMail(false);
+                pero.setObavijestiNaMail(true);
                 pero.setJmbag("0036565167");
 
                 //Kreiraj SC

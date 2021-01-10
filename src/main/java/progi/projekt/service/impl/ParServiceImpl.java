@@ -8,6 +8,7 @@ import progi.projekt.model.enums.StatusOglasaEnum;
 import progi.projekt.repository.OglasRepository;
 import progi.projekt.repository.ParRepository;
 import progi.projekt.service.KandidatService;
+import progi.projekt.service.ObavijestService;
 import progi.projekt.service.ParService;
 
 import java.util.ArrayList;
@@ -20,11 +21,14 @@ public class ParServiceImpl implements ParService {
 	private ParRepository parRepo;
 	private KandidatService kandidatService;
 	private OglasRepository oglasRepo;
+	private ObavijestService obavijestService;
 
-	public ParServiceImpl(ParRepository parRepo, KandidatService kandidatService, OglasRepository oglasRepo) {
+	public ParServiceImpl(ParRepository parRepo, KandidatService kandidatService, OglasRepository oglasRepo,
+						  ObavijestService obavijestService) {
 		this.parRepo = parRepo;
 		this.kandidatService = kandidatService;
 		this.oglasRepo = oglasRepo;
+		this.obavijestService = obavijestService;
 	}
 
 	@Override
@@ -60,9 +64,8 @@ public class ParServiceImpl implements ParService {
 
 		//par.setCeka(true);
 
-		//todo:
-		//oglas1.obavijestiService.dodajPotvrdiZamjenuObavijest();
-		//oglas2.obavijestiService.dodajPotvrdiZamjenuObavijest();
+		obavijestService.notifyWaiting(oglas1, oglas2);
+		obavijestService.notifyWaiting(oglas2, oglas1);
 	}
 
 	@Override
@@ -78,9 +81,8 @@ public class ParServiceImpl implements ParService {
 
 		//par.setCeka(true);
 
-		//todo:
-		//oglas1.obavijestiService.dodajPotvrdiZamjenuObavijest();
-		//oglas2.obavijestiService.dodajPotvrdiZamjenuObavijest();
+		obavijestService.notifyExchanged(oglas1, oglas2);
+		obavijestService.notifyExchanged(oglas2, oglas1);
 	}
 
 	@Override

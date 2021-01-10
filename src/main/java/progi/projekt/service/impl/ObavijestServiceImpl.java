@@ -29,7 +29,7 @@ public class ObavijestServiceImpl implements ObavijestService {
     }
 
     @Override
-    public void notifyRoomConstraintsNoLongerValid(List<Student> studenti, Oglas oglas) {
+    public void notifyRoomConstraintsNoLongerValid(List<Student> studenti, Oglas oglas) {/*
         Obavijest obavijest = new Obavijest();
         obavijest.setVrijeme(new Date(System.currentTimeMillis()));
         obavijest.setProcitana(false);
@@ -48,7 +48,7 @@ public class ObavijestServiceImpl implements ObavijestService {
                 msg.setTo(student.getEmail());
                 javaMailSender.send(msg);
             }
-        }
+        }*/
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ObavijestServiceImpl implements ObavijestService {
 
         //Posalji mail ako je ukljuceno automatsko slanje
         SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setSubject("Uvjeti sobe više ne pašu vašim zahtjevima");
+        msg.setSubject("Uvjeti sobe su se promjenili!");
         msg.setText(obavijest.getTekst());
         for(Student student:studentiLiked){
             if(student.isObavijestiNaMail()){
@@ -96,6 +96,30 @@ public class ObavijestServiceImpl implements ObavijestService {
             msg.setSubject("Netko je lajkao vašu sobu");
             msg.setText(obavijest.getTekst());
             msg.setTo(student.getEmail());
+            javaMailSender.send(msg);
+        }
+    }
+
+    //todo: test obadva!!!
+    @Override
+    public void notifyWaiting(Oglas oglasZamijenjenog, Oglas oglasZamjene) {
+        Obavijest obavijest = new Obavijest();
+        obavijest.setVrijeme(new Date(System.currentTimeMillis()));
+        obavijest.setProcitana(false);
+        obavijest.setOglas(oglasZamjene);
+        ArrayList<Student> student = new ArrayList<>();
+        student.add(oglasZamijenjenog.getStudent());
+        obavijest.setStudent(student);
+        obavijest.setTekst("Čekate zamjenu sobe sa " + oglasZamjene.getStudent().getIme() + " " +
+                oglasZamjene.getStudent().getPrezime() + "!");
+        obavijestRepository.save(obavijest);
+
+        //Posalji mail ako je ukljuceno automatsko slanje
+        if (oglasZamijenjenog.getStudent().isObavijestiNaMail()) {
+            SimpleMailMessage msg = new SimpleMailMessage();
+            msg.setSubject("Zamjena sobe je u čekanju");
+            msg.setText(obavijest.getTekst());
+            msg.setTo(oglasZamijenjenog.getStudent().getEmail());
             javaMailSender.send(msg);
         }
     }

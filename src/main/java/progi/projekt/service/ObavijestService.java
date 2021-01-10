@@ -20,5 +20,8 @@ public interface ObavijestService {
     //je oglas koji mu je dan na zamijenu
     void notifyExchanged(Oglas oglasZamijenjenog, Oglas oglasZamjene);
 
+    //Isto kao i notifyExchanged, samo ovo daje obavijest da se potvrda ceka
+    void notifyWaiting(Oglas oglasZamijenjenog, Oglas oglasZamjene);
+
     boolean oznaciProcitana(UUID id);
 }

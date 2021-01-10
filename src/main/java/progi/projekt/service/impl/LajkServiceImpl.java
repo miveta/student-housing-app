@@ -8,6 +8,7 @@ import progi.projekt.model.Student;
 import progi.projekt.repository.LajkRepository;
 import progi.projekt.security.exception.SavingException;
 import progi.projekt.service.LajkService;
+import progi.projekt.service.ObavijestService;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +17,10 @@ import java.util.Optional;
 public class LajkServiceImpl implements LajkService {
 
     private LajkRepository lajkRepository;
+    private ObavijestService obavijestService;
 
-    public LajkServiceImpl(LajkRepository lajkRepository) {
+    public LajkServiceImpl(LajkRepository lajkRepository, ObavijestService obavijestService) {
+        this.obavijestService = obavijestService;
         this.lajkRepository = lajkRepository;
     }
 
@@ -48,6 +51,8 @@ public class LajkServiceImpl implements LajkService {
     @Override
     public Lajk update(Lajk l) {
         try {
+            if(l.getOcjena() != 4)
+                obavijestService.notifyLiked(l.getLajkId().getOglas(), l.getLajkId().getStudent());
             return lajkRepository.saveAndFlush(l);
         } catch (Exception e) {
             //lajkRepo baca exceptione koje mu proslijedi baza (e)?
@@ -63,6 +68,5 @@ public class LajkServiceImpl implements LajkService {
 
     @Override
     public void save(Lajk lajk) {
-        lajkRepository.save(lajk);
-    }
+        lajkRepository.save(lajk);}
 }
