@@ -347,9 +347,9 @@ public class MatchingServiceImpl implements MatchingService {
 	@Override
 	public void confirmFun() {
 		//Cita rezultat konacnih potvrda para i:
-		//ako su oba studenta prihvatila: oznacuje par.done = true, oglas.status=POTVRDEN i salje mail u SC
-		//ako oba studenta nisu prihvatila: oznacuje oba entiteta kandidat i par sa ignore (vise se ne spajaju/gledaju)
-		//i vraca oglas nazad na AKTIVAN
+		//ako su oba studenta prihvatila (par.done = true) oznacuje oglas.status=POTVRDEN i salje mail u SC
+		//ako oba studenta nisu prihvatila (par.ignore = true): oznacuje kandidat i par sa ignore (vise
+		// se ne spajaju/gledaju)
 
 		//tj, ako je lanac=true onda gledamo 3 oglasa, ne samo 2
 
@@ -379,14 +379,21 @@ public class MatchingServiceImpl implements MatchingService {
 
 		if (parService.ifObaCEKA(par)){
 			//oba studenta su prihvatila par (ignore != false) i oglas nije u medjuvremenu zauzet (oba == AKTIVAN)
-			if (par.getIgnore() == false){
+			if (par.getIgnore() == false && parService.obaStudPrihvatila(par) == true){
 				par.setDone(true);
 				parService.save(par);
+
+				//oglas.status=POTVRDJEN
 				parService.potvrdiOglasePara(par);
+
+				//for kand in kandidati setIgnore(true)
 				kandidatService.ponistiKandidateOglasa(par.getOglas1());
 				kandidatService.ponistiKandidateOglasa(par.getOglas2());
+
+				//for par in parovi if done!=true setIgnore(true)
 				parService.ponistiParoveOglasa(par.getOglas1());
 				parService.ponistiParoveOglasa(par.getOglas2());
+
 				//MailService.PotvrdaZamjenePara(par);
 			}
 
@@ -421,24 +428,19 @@ public class MatchingServiceImpl implements MatchingService {
 
 
 	@Override
-	public void confirmSCFun(List<Par> izvedeni) {
-		for (Par par : izvedeni) {
-			var oglas1 = par.getOglas1();
-            oglas1.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
-
-			var oglas2 = par.getOglas2();
-            oglas2.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
-		}
-	}
-
-	@Override
 	public void confirmSCFun() {
 		for (Par par : parService.listAll()) {
-			var oglas1 = par.getOglas1();
-            oglas1.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
-
-			var oglas2 = par.getOglas2();
-            oglas2.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
+			if (par.getOdobren() != null){
+				var oglas1 = par.getOglas1();
+				var oglas2 = par.getOglas2();
+				if (par.getOdobren() == true){
+					oglas1.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
+					oglas2.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
+				} else {
+					oglas1.setStatusOglasa(StatusOglasaEnum.ODBIJEN);
+					oglas2.setStatusOglasa(StatusOglasaEnum.ODBIJEN);
+				}
+			}
 		}
 	}
 }

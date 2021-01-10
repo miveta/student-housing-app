@@ -43,4 +43,6 @@ public interface ParService {
 	Optional<Kandidat> pripadniKandidatPara(Par par);
 
 	void ponistiParoveOglasa(Oglas oglas);
+
+	boolean obaStudPrihvatila(Par par);
 }

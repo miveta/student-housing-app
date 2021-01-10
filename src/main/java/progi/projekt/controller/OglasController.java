@@ -174,4 +174,39 @@ public class OglasController {
 		}
 		return new ArrayList<>();
 	}
+
+
+	@GetMapping(value = "/listParoviWithFlags")
+	public List<ParDTO> listParoviWithFlags(@RequestParam Boolean ignore, Boolean done, Boolean odobren) {
+		//note: napravio sam ParDTO jer ako stavim Par u listu, toString je beskonacan jer oglas ima referencu na
+		// studenta koji opet ima referencu na oglas. Ista stvar sa domovima
+		// - holik
+
+		List<Oglas> oglasi = oglasService.listAll();
+
+		//force update oglasa unutar svakog studenta
+		List<Student> studenti = studentService.listAll();
+		for (Oglas oglas : oglasi){
+			for (Student stud : studenti){
+				if (stud.getId() == oglas.getStudent().getId()){
+					stud.setOglas(oglas);
+					studentService.save(stud);
+				}
+			}
+		}
+
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
+
+		ArrayList<ParDTO> parovi = new ArrayList<>();
+
+		for (Par par : parService.listAll()){
+				if (par.getIgnore() == ignore && par.getDone() == done && par.getOdobren() == odobren){
+					ParDTO parDTO = new ParDTO(par);
+					parovi.add(parDTO);
+				}
+		}
+
+		return parovi;
+	}
 }

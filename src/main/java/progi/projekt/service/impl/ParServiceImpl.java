@@ -240,4 +240,9 @@ public class ParServiceImpl implements ParService {
 
 		}
 	}
+
+	@Override
+	public boolean obaStudPrihvatila(Par par) {
+		return par.getPrihvatioPrvi() == true && par.getPrihvatioDrugi() == true;
+	}
 }
