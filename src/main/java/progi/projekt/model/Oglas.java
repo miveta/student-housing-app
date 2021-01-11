@@ -26,7 +26,9 @@ public class Oglas {
 
     //@OneToOne(cascade = CascadeType.ALL)
     //@JoinColumn(name = "id_student")
-    @OneToOne(mappedBy = "oglas")
+    //@OneToOne(mappedBy = "oglas")
+    @ManyToOne
+    @JoinColumn(name = "id_student")
     private Student student;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "kandOglas")

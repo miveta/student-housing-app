@@ -10,10 +10,11 @@ public class OglasDTO {
     private UUID id;
     private String naslov;
     private String opis;
-    private int godina;
     private Date objavljen;
     private StatusOglasaEnum status;
     private String student;
+    private SobaDTO soba;
+    private UvjetiDTO uvjeti;
 
     public OglasDTO(Oglas oglas) {
         this.id = oglas.getId();
@@ -21,6 +22,8 @@ public class OglasDTO {
         this.objavljen = oglas.getObjavljen();
         this.status = oglas.getStatusOglasa();
         this.student = oglas.getStudent().getKorisnickoIme();
+        this.soba = new SobaDTO(oglas.getSoba());
+        this.uvjeti = new UvjetiDTO(oglas.getTrazeniUvjeti());
     }
 
     public UUID getId() {
@@ -45,14 +48,6 @@ public class OglasDTO {
 
     public void setOpis(String opis) {
         this.opis = opis;
-    }
-
-    public int getGodina() {
-        return godina;
-    }
-
-    public void setGodina(int godina) {
-        this.godina = godina;
     }
 
     public Date getObjavljen() {

@@ -23,7 +23,7 @@ public class Soba implements Serializable {
 
     /*@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_oglas")*/
-    @OneToOne(mappedBy = "soba")
+    @OneToOne(mappedBy = "soba", cascade = CascadeType.ALL)
     private Oglas oglas;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "soba")

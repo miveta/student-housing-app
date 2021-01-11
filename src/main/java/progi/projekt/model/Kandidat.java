@@ -12,10 +12,6 @@ public class Kandidat {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID idKandidat;
 
-	public UUID getIdKandidat() {
-		return idKandidat;
-	}
-
 	//TODO: kaj je ovo?
 	//@Column(name = "id_oglas", nullable = false)
 	//private UUID idOglas;
@@ -24,18 +20,10 @@ public class Kandidat {
 	@JoinColumn(name = "id_oglas")
 	private Oglas oglas;
 
-	public Oglas getOglas() {
-		return oglas;
-	}
-
-
 	//@Column(name = "id_kand_oglasa", nullable = false)
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_kand_oglasa")
 	private Oglas kandOglas;
-
-	public Oglas getKandOglas() { return kandOglas;	}
-
 
 	@Column(name = "bliskost", nullable = true)
 	private Integer bliskost;
@@ -46,25 +34,10 @@ public class Kandidat {
 	@Column(name = "ocjena2", nullable = true)
 	private Integer ocjena2;
 
-	public Integer getBliskost() {
-		return bliskost;
-	}
-	public void setBliskost(Integer bliskost) {
-		this.bliskost = bliskost;
-	}
-
-
 	@Column(name = "ignore", nullable = true)
 	private Boolean ignore;
 
 	private Date stvoren;
-
-	public Boolean getIgnore() {
-		return ignore;
-	}
-	public void setIgnore(Boolean ignore) {
-		this.ignore = ignore;
-	}
 
 
 	public Kandidat(Oglas oglas, Oglas kandOglas, Integer bliskost, Date stvoren, Boolean ignore) {
@@ -81,38 +54,6 @@ public class Kandidat {
 	public Kandidat() {
 	}
 
-	public Integer getOcjena1() {
-		return ocjena1;
-	}
-
-	public void setOcjena1(Integer ocjena) {
-		this.ocjena1 = ocjena;
-	}
-
-	public UUID getIdOglas() {
-		return new UUID(0,0);
-		//return idOglas;	//TODO
-	}
-
-	public Integer getOcjena2() {
-		return ocjena2;
-	}
-
-	public void setOcjena2(Integer ocjena2) {
-		this.ocjena2 = ocjena2;
-	}
-
-	public Date getStvoren() {
-		return stvoren;
-	}
-
-	public void setStvoren(Date stvoren) {
-		this.stvoren = stvoren;
-	}
-/*
-	public void setIdOglas(UUID idOglas) {
-		this.idOglas = idOglas;
-	}*/
 
 	@Override
 	public boolean equals(Object o) {
@@ -131,5 +72,69 @@ public class Kandidat {
 	@Override
 	public int hashCode() {
 		return Objects.hash(oglas, kandOglas, bliskost, stvoren);
+	}
+
+	public UUID getIdKandidat() {
+		return idKandidat;
+	}
+
+	public void setIdKandidat(UUID idKandidat) {
+		this.idKandidat = idKandidat;
+	}
+
+	public Oglas getOglas() {
+		return oglas;
+	}
+
+	public void setOglas(Oglas oglas) {
+		this.oglas = oglas;
+	}
+
+	public Oglas getKandOglas() {
+		return kandOglas;
+	}
+
+	public void setKandOglas(Oglas kandOglas) {
+		this.kandOglas = kandOglas;
+	}
+
+	public Integer getBliskost() {
+		return bliskost;
+	}
+
+	public void setBliskost(Integer bliskost) {
+		this.bliskost = bliskost;
+	}
+
+	public Integer getOcjena1() {
+		return ocjena1;
+	}
+
+	public void setOcjena1(Integer ocjena1) {
+		this.ocjena1 = ocjena1;
+	}
+
+	public Integer getOcjena2() {
+		return ocjena2;
+	}
+
+	public void setOcjena2(Integer ocjena2) {
+		this.ocjena2 = ocjena2;
+	}
+
+	public Boolean getIgnore() {
+		return ignore;
+	}
+
+	public void setIgnore(Boolean ignore) {
+		this.ignore = ignore;
+	}
+
+	public Date getStvoren() {
+		return stvoren;
+	}
+
+	public void setStvoren(Date stvoren) {
+		this.stvoren = stvoren;
 	}
 }
