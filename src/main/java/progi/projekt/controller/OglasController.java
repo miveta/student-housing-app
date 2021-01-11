@@ -1,11 +1,13 @@
 package progi.projekt.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.KandidatDTO;
 import progi.projekt.dto.OglasDTO;
 import progi.projekt.dto.ParDTO;
 import progi.projekt.model.*;
+import progi.projekt.model.enums.StatusOglasaEnum;
 import progi.projekt.service.*;
 
 import java.util.ArrayList;
@@ -47,55 +49,60 @@ public class OglasController {
 	}
 
 
-    @GetMapping(value = "/kandidati/student")
-    public List<OglasDTO> kandidatiStudent(@RequestParam(value = "student_username") String username) {
-        Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
-        if (optionalStudent.isEmpty()) return null;
+	@GetMapping(value = "/arhivirani")
+	public List<OglasDTO> arhivirani(@RequestParam(value = "student_username") String username) {
+		return studentService.oglasi(username, StatusOglasaEnum.AKTIVAN).stream().map(OglasDTO::new).collect(Collectors.toList());
+	}
 
-        Student student = optionalStudent.get();
+	@GetMapping(value = "/kandidati/student")
+	public List<OglasDTO> kandidatiStudent(@RequestParam(value = "student_username") String username) {
+		Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
+		if (optionalStudent.isEmpty()) return null;
 
-        if (student.getOglas() == null) return null;
+		Student student = optionalStudent.get();
 
-        List<Oglas> oglasKandidati = new ArrayList<>();
-        student.getOglas().getKandidati().forEach(kandidat -> {
-            if (kandidat.getOglas().getId().equals(student.getOglas().getId())) {
-                oglasKandidati.add(kandidat.getKandOglas());
-            } else oglasKandidati.add(kandidat.getOglas());
-        });
+		if (student.getAktivniOglas() == null) return null;
 
-        return oglasKandidati.stream().map(OglasDTO::new).collect(Collectors.toList());
-    }
+		List<Oglas> oglasKandidati = new ArrayList<>();
+		student.getAktivniOglas().getKandidati().forEach(kandidat -> {
+			if (kandidat.getOglas().getId().equals(student.getAktivniOglas().getId())) {
+				oglasKandidati.add(kandidat.getKandOglas());
+			} else oglasKandidati.add(kandidat.getOglas());
+		});
 
-    @GetMapping(value = "/listKandidati")
-    public ArrayList<KandidatDTO> listKandidati(@RequestParam(value = "oglas_id") String oglasId) {
-        List<Oglas> oglasi = oglasService.listAll();
+		return oglasKandidati.stream().map(OglasDTO::new).collect(Collectors.toList());
+	}
 
-        //force update oglasa unutar svakog studenta
-        List<Student> studenti = studentService.listAll();
-        for (Oglas oglas : oglasi) {
-            for (Student stud : studenti) {
-                if (stud.getId() == oglas.getStudent().getId()) {
-                    stud.setOglas(oglas);
-                    studentService.save(stud);
-                }
-            }
-        }
+	@GetMapping(value = "/listKandidati")
+	public ArrayList<KandidatDTO> listKandidati(@RequestParam(value = "oglas_id") String oglasId) {
+		List<Oglas> oglasi = oglasService.listAll();
 
-        //force update kandidata unutar svakog oglasa
-        kandidatService.updateLocalKands();
+		//force update oglasa unutar svakog studenta
+		List<Student> studenti = studentService.listAll();
+		for (Oglas oglas : oglasi){
+			for (Student stud : studenti){
+				if (stud.getId() == oglas.getStudent().getId()){
+					stud.setAktivniOglas(oglas);
+					studentService.save(stud);
+				}
+			}
+		}
+
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
 
 
-        Optional<Oglas> oglasOpt = oglasService.findById(oglasId.toString());
-        ArrayList<KandidatDTO> kandidatiDTO = new ArrayList<>();
+		Optional<Oglas> oglasOpt = oglasService.findById(oglasId.toString());
+		ArrayList<KandidatDTO> kandidatiDTO = new ArrayList<>();
 
-        if (oglasOpt.isPresent()) {
-            Oglas oglas = oglasService.findById(oglasId).get();
+		if (oglasOpt.isPresent()) {
+			Oglas oglas = oglasService.findById(oglasId).get();
 
-            List<Lajk> lajkovi = lajkService.listAll();
-            for (Lajk lajk : lajkovi) {
-                if (lajk.getLajkId().getOglas().equals(oglas)) {
-                    Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
-                    Oglas drugiOglas = lajk.getLajkId().getStudent().getOglas();
+			List<Lajk> lajkovi = lajkService.listAll();
+			for (Lajk lajk : lajkovi) {
+				if (lajk.getLajkId().getOglas().equals(oglas)) {
+					Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
+					Oglas drugiOglas = lajk.getLajkId().getStudent().getAktivniOglas();
 
                     Optional<Kandidat> tmpOpt = kandidatService.kandidatParaOglasa(oglas, drugiOglas);
                     if (tmpOpt.isPresent()) {
@@ -133,16 +140,17 @@ public class OglasController {
 
         List<Oglas> oglasi = oglasService.listAll();
 
-        //force update oglasa unutar svakog studenta
-        List<Student> studenti = studentService.listAll();
-        for (Oglas oglas : oglasi) {
-            for (Student stud : studenti) {
-                if (stud.getId() == oglas.getStudent().getId()) {
-                    stud.setOglas(oglas);
-                    studentService.save(stud);
-                }
-            }
-        }
+
+		//force update oglasa unutar svakog studenta
+		List<Student> studenti = studentService.listAll();
+		for (Oglas oglas : oglasi){
+			for (Student stud : studenti){
+				if (stud.getId() == oglas.getStudent().getId()){
+					stud.setAktivniOglas(oglas);
+					studentService.save(stud);
+				}
+			}
+		}
 
         //force update kandidata unutar svakog oglasa
         kandidatService.updateLocalKands();
@@ -209,7 +217,15 @@ public class OglasController {
             }
         }
 
-		return parovi;
+	@PostMapping(value = "/updateParSC", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> updateParSC(@RequestParam(value = "par_id") String parId,
+										@RequestParam(value = "odobren") Boolean odobren,
+										 @RequestParam(value = "zaposlenikKorisnickoIme") String username){
+		ZaposlenikSC zaposlenikSC = zaposlenikSCService.findBykorisnickoIme(username).get();
+
+
+
+		return ResponseEntity.ok(null);
 	}
 
 	@PostMapping(value = "/updatePar")

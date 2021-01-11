@@ -87,6 +87,8 @@ public class OglasServiceImpl implements OglasService {
         oglas.setObjavljen(Date.valueOf(LocalDate.now()));
 
         oglas = oglasRepository.save(oglas);
+        student.setAktivniOglas(oglas);
+        studentService.save(student);
         return oglas;
     }
 

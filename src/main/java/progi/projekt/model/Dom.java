@@ -33,6 +33,14 @@ public class Dom implements Serializable {
     public Dom() {
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public boolean isImaMenzu() {
         return imaMenzu;
     }
@@ -57,20 +65,12 @@ public class Dom implements Serializable {
         this.grad = grad;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
     public Set<TrazeniUvjeti> getTrazeni_uvjeti() {
         return trazeni_uvjeti;
     }
 
     public void setTrazeni_uvjeti(Set<TrazeniUvjeti> trazeni_uvjeti) {
         this.trazeni_uvjeti = trazeni_uvjeti;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public Set<Paviljon> getPaviljoni() {

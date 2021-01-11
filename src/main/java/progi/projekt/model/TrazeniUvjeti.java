@@ -45,8 +45,9 @@ public class TrazeniUvjeti {
     @ElementCollection(targetClass = OznakeKategorijaEnum.class)
     private Set<OznakeKategorijaEnum> kategorija;
 
-    @OneToOne
-    @JoinColumn(name = "id_oglas")
+    /*@OneToOne
+    @JoinColumn(name = "id_oglas")*/
+    @OneToOne(mappedBy = "trazeniUvjeti")
     private Oglas oglas;
 
     public UUID getId() {

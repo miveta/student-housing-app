@@ -40,7 +40,7 @@ public class TrazimSobuController {
     @GetMapping("/domovi")
     public Set<DomDTO> getDomovi(@RequestParam(value = "user") String username) {
         Set<Dom> domovi = trazimSobuService.findAllDom(username);
-        return domovi.stream().map(DomDTO::new).collect(Collectors.toSet());
+        return domovi.stream().map(DomDTO::new).sorted().collect(Collectors.toSet());
 
     }
 
@@ -49,8 +49,8 @@ public class TrazimSobuController {
         Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
         Student student = optionalStudent.get();
         TrazeniUvjeti trazeniUvjeti = null;
-        if (student.getOglas() != null) {
-            trazeniUvjeti = student.getOglas().getTrazeniUvjeti();
+        if (student.getAktivniOglas() != null) {
+            trazeniUvjeti = student.getAktivniOglas().getTrazeniUvjeti();
         }
         if (trazeniUvjeti == null)
             trazeniUvjeti = new TrazeniUvjeti();
@@ -67,8 +67,8 @@ public class TrazimSobuController {
 
         TrazeniUvjeti trazeniUvjeti = null;
 
-        if (student.getOglas() != null) {
-            trazeniUvjeti = student.getOglas().getTrazeniUvjeti();
+        if (student.getAktivniOglas() != null) {
+            trazeniUvjeti = student.getAktivniOglas().getTrazeniUvjeti();
         }
 
         if (trazeniUvjeti == null)

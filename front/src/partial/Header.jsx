@@ -1,13 +1,17 @@
 import React, {Component} from "react";
-import {Button, Nav, Navbar} from "react-bootstrap";
+import {Button, Col, Nav, Navbar, Row} from "react-bootstrap";
 import * as Swal from "sweetalert2";
 import {withRouter} from 'react-router-dom';
 import ObavijestiDropdown from "../components/ObavijestiDropdown";
+import cookie from "react-cookies";
 
 
 class Header extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            user: cookie.load('principal')
+        }
     }
 
     logout = async () => {
@@ -29,6 +33,8 @@ class Header extends Component {
     };
 
     render() {
+
+        /*let isStudent = this.state.user.tipKorisnika === "student";*/
         return (
             <Navbar expand="lg" bg="light" className="header" sticky={"top"}>
                 <Navbar.Brand href="/">ZAMJENA SOBA</Navbar.Brand>
@@ -37,9 +43,13 @@ class Header extends Component {
                     {this.props.authenticated
                         ?
                         <Nav>
-                            <Nav.Link href="/oglasi">Oglasi</Nav.Link>
-                            <Nav.Link href="/mojprofil">Profil</Nav.Link>
-                            <ObavijestiDropdown getObavijesti={this.sendMessage} user={this.props.user}/>
+                            {/*todo napraviti da se ne vidi Oglasi Profil i Obavijesti na stranici od zaposlenika*/}
+                            {/*edit: treba li ipak ostaviti profil, pa tamo nesto dodati da se ne moze mijenjati i*/}
+                            {/*brisati ak nisi student*/}
+                                <Nav.Link href="/oglasi">Oglasi</Nav.Link>
+                                <Nav.Link href="/mojprofil">Profil</Nav.Link>
+                                <ObavijestiDropdown getObavijesti={this.sendMessage} user={this.props.user}/>
+
                             <Button variant="light" onClick={this.logout}> Odjavi se </Button>
                         </Nav>
                         :

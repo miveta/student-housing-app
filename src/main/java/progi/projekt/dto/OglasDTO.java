@@ -10,7 +10,6 @@ public class OglasDTO {
     private UUID id;
     private String naslov;
     private String opis;
-    private int godina;
     private Date objavljen;
     private StatusOglasaEnum status;
     private String student;
@@ -49,14 +48,6 @@ public class OglasDTO {
 
     public void setOpis(String opis) {
         this.opis = opis;
-    }
-
-    public int getGodina() {
-        return godina;
-    }
-
-    public void setGodina(int godina) {
-        this.godina = godina;
     }
 
     public Date getObjavljen() {

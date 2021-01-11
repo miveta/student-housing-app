@@ -24,7 +24,10 @@ public class Oglas {
     @OneToMany(mappedBy = "oglas", cascade = CascadeType.ALL)
     private List<Obavijest> obavijesti;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    //@OneToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "id_student")
+    //@OneToOne(mappedBy = "oglas")
+    @ManyToOne
     @JoinColumn(name = "id_student")
     private Student student;
 
