@@ -59,6 +59,7 @@ class Soba extends Component {
             tipKupaonice: self.state.tipKupaonice.toUpperCase(),
             komentar: self.state.komentar
         }
+        window.location.reload();
 
         self.props.submitSoba(soba)
     }
