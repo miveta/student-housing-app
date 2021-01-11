@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import OglasList from "../oglasi/homepage/OglasList";
 import cookie from "react-cookies";
 import {Col, Nav, Row, Tab} from "react-bootstrap";
-import ArhiviraniOglasiList from "../oglasi/arhivirani/ArhiviraniOglasiList";
 
 class Homepage extends Component {
     constructor(props) {
@@ -67,8 +66,8 @@ class Homepage extends Component {
                         <Col>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
-                                    <ArhiviraniOglasiList oglasi={this.state.oglasi}
-                                                          isLoggedIn={this.props.isLoggedIn}/>
+                                    <OglasList oglasi={this.state.oglasi}
+                                               isLoggedIn={this.props.isLoggedIn}/>
                                 </Tab.Pane>
                                 {
                                     this.state.user &&
