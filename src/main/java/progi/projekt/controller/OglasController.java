@@ -24,13 +24,15 @@ public class OglasController {
 	private KandidatService kandidatService;
 	private StudentService studentService;
 	private ParService parService;
+	private ZaposlenikSCService zaposlenikSCService;
 
-	public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService, ParService parService) {
+	public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService, ParService parService, ZaposlenikSCService zaposlenikSCService) {
 		this.oglasService = oglasService;
 		this.lajkService = lajkService;
 		this.kandidatService = kandidatService;
 		this.studentService = studentService;
 		this.parService = parService;
+		this.zaposlenikSCService = zaposlenikSCService;
 	}
 
 	@GetMapping("/list")
@@ -208,5 +210,45 @@ public class OglasController {
 		}
 
 		return parovi;
+	}
+
+	@PostMapping(value = "/updatePar")
+	public ResponseEntity<?> updatePar(@RequestParam(value = "par_id") String parId,
+											@RequestParam(value = "odobren") Boolean odobren,
+											@RequestParam(value = "zaposlenikKorisnickoIme") String username) {
+
+		List<Oglas> oglasi = oglasService.listAll();
+
+		//force update oglasa unutar svakog studenta
+		List<Student> studenti = studentService.listAll();
+		for (Oglas oglas : oglasi){
+			for (Student stud : studenti){
+				if (stud.getId() == oglas.getStudent().getId()){
+					stud.setOglas(oglas);
+					studentService.save(stud);
+				}
+			}
+		}
+
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
+
+		Optional<Par> parOpt = parService.find(Integer.parseInt(parId));
+		Optional<ZaposlenikSC> zaposelnikOpt = zaposlenikSCService.findBykorisnickoIme(username);
+
+		if (parOpt.isPresent() && zaposelnikOpt.isPresent()){
+			Par par = parOpt.get();
+			ZaposlenikSC zaposlenik = zaposelnikOpt.get();
+
+			par.setOdobren(odobren);
+			par.setZaposlenikSC(zaposlenik);
+
+			parService.save(par);
+
+			return ResponseEntity.ok(new ParDTO(par));
+		}
+
+		//"Par nije pronadjen"
+		return ResponseEntity.notFound().build();
 	}
 }

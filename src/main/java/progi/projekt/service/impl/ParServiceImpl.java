@@ -39,6 +39,11 @@ public class ParServiceImpl implements ParService {
 	}
 
 	@Override
+	public Optional<Par> find(Integer idPar) {
+		return parRepo.findByIdPar(idPar);
+	}
+
+	@Override
 	public Integer ObostranaOcjena(Integer ocjena1, Integer ocjena2) {
 		return ocjena1 + ocjena2;
 	}

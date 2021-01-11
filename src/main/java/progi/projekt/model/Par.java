@@ -85,6 +85,10 @@ public class Par {
 	@Column(name = "prihvatioDrugi", nullable = true)
 	private Boolean prihvatioDrugi;
 
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "zaposlenikKorisnickoIme")
+	private ZaposlenikSC zaposlenikSC;
+
 	/*
 	@Basic
 	@Column(name = "ceka", nullable = true)
@@ -132,6 +136,15 @@ public class Par {
 	public void setPrihvatioDrugi(boolean prihvatioDrugi) {
 		this.prihvatioDrugi = prihvatioDrugi;
 	}
+
+	public ZaposlenikSC getZaposlenikSC() {
+		return zaposlenikSC;
+	}
+
+	public void setZaposlenikSC(ZaposlenikSC zaposlenik) {
+		this.zaposlenikSC = zaposlenik;
+	}
+
 
 	/*public Boolean getCeka() {
 		return ceka;
