@@ -10,6 +10,7 @@ class ZamjenaCard extends Component {
         this.state = {
             user: cookie.load('principal'),
             potvrden: false,
+            parId: '',
             oglas1: '',
             oglas2: '',
             soba1: '',
@@ -19,6 +20,7 @@ class ZamjenaCard extends Component {
 
     componentDidMount() {
         let self = this;
+        self.setState({parId: self.props.parId})
         const optionsOglas = {
             method: 'GET',
             headers: {
@@ -76,8 +78,26 @@ class ZamjenaCard extends Component {
         //get listu svih potvrdenih zamjena koje cekaju na odobrenje
     }
 
-    click = () => {
-        //post
+    click = (b) => {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        };
+
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/updateParSC?par_id=${this.state.parId}&odobren=${b}&zaposlenikKorisnickoIme=${this.state.user.korisnickoIme}`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    response.json().then(body => {
+                    });
+                } else {
+                    response.text().then(body => {
+                        console.log(body);
+                    });
+                }
+            }).catch(error => console.log(error));
     }
 
     render() {
@@ -92,10 +112,10 @@ class ZamjenaCard extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Button variant="primary" onClick={this.click} >
+                    <Button variant="primary" onClick={this.click(true)} >
                         Odobri
                     </Button>
-                    <Button variant="danger" >
+                    <Button variant="danger" onClick={this.click(false)}>
                         Odbij
                     </Button>
                 </Row>

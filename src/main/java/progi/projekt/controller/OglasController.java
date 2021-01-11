@@ -1,5 +1,6 @@
 package progi.projekt.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.KandidatDTO;
@@ -25,13 +26,15 @@ public class OglasController {
 	private KandidatService kandidatService;
 	private StudentService studentService;
 	private ParService parService;
+	private ZaposlenikSCService zaposlenikSCService;
 
-	public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService, ParService parService) {
+	public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService, ParService parService, ZaposlenikSCService zaposlenikSCService) {
 		this.oglasService = oglasService;
 		this.lajkService = lajkService;
 		this.kandidatService = kandidatService;
 		this.studentService = studentService;
 		this.parService = parService;
+		this.zaposlenikSCService = zaposlenikSCService;
 	}
 
 	@GetMapping("/list")
@@ -226,4 +229,17 @@ public class OglasController {
 		parovi.add(new ParDTO(new Par(oglas1, oglas2, true,false, false)));
 		return ResponseEntity.ok(parovi);
 	}
+
+	@PostMapping(value = "/updateParSC", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> updateParSC(@RequestParam(value = "par_id") String parId,
+										@RequestParam(value = "odobren") Boolean odobren,
+										 @RequestParam(value = "zaposlenikKorisnickoIme") String username){
+		ZaposlenikSC zaposlenikSC = zaposlenikSCService.findBykorisnickoIme(username).get();
+
+
+
+		return ResponseEntity.ok(null);
+	}
+
+
 }
