@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import OglasList from "../components/OglasList";
+import OglasList from "../oglasi/homepage/OglasList";
 import cookie from "react-cookies";
 import {Col, Nav, Row, Tab} from "react-bootstrap";
+import ArhiviraniOglasiList from "../oglasi/arhivirani/ArhiviraniOglasiList";
 
 class Homepage extends Component {
     constructor(props) {
@@ -30,6 +31,8 @@ class Homepage extends Component {
                 }
             });
 
+        console.log(this)
+
         if (this.state.user !== undefined) {
             fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/kandidati/student?student_username=${this.state.user.korisnickoIme}`, options)
                 .then(response => {
@@ -40,7 +43,7 @@ class Homepage extends Component {
                     }
                 });
         }
-        console.log(this.state)
+
     }
 
     render() {
@@ -64,7 +67,8 @@ class Homepage extends Component {
                         <Col>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
-                                    <OglasList oglasi={this.state.oglasi} isLoggedIn={this.props.isLoggedIn}/>
+                                    <ArhiviraniOglasiList oglasi={this.state.oglasi}
+                                                          isLoggedIn={this.props.isLoggedIn}/>
                                 </Tab.Pane>
                                 {
                                     this.state.user &&

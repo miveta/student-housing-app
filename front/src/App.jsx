@@ -18,7 +18,7 @@ const PrivateRoute = ({component: Component, ...rest}) => (
     <Route
         {...rest}
         render={props =>
-            App.state.authenticated ? (
+            cookie.load('isAuth') ? (
                 <Component {...props} />
             ) : (
                 <Redirect
@@ -30,6 +30,7 @@ const PrivateRoute = ({component: Component, ...rest}) => (
         }
     />
 );
+
 
 class App extends Component {
     constructor(props) {
@@ -71,8 +72,11 @@ class App extends Component {
 
                         <Route path='/' exact component={() => <Homepage isLoggedIn={this.state.authenticated}/>}/>
                         <Route exact path="/trazimsobu" component={TrazimSobu}/>
-                        <Route exact path="/mojprofil" component={() => <MojProfil isLoggedIn={this.state.authenticated} onLogout={this.logout}/>}/>
-                        <Route exact path="/mojprofil/uredi" component={() => <UrediProfil onLogin={this.authenticate}/>}/>
+                        <PrivateRoute exact path="/mojprofil"
+                                      component={() => <MojProfil isLoggedIn={this.state.authenticated}
+                                                                  onLogout={this.logout}/>}/>
+                        <PrivateRoute exact path="/mojprofil/uredi"
+                                      component={() => <UrediProfil onLogin={this.authenticate}/>}/>
                         <Route exact path="/oglas/:id" component={Oglas}/>
                     </Switch>
                 </div>
@@ -83,24 +87,3 @@ class App extends Component {
 }
 
 export default App;
-
-/*
-function PrivateRoute({ component: Component, ...rest }) {
-    return (
-        <Route
-            {...rest}
-            render={props =>
-                cookie.load('isAuth') === 'true' ? (
-                    <Component {...props}/>
-                ) : (
-                    <Redirect
-                        to={{
-                            pathname: "/login",
-
-                        }}
-                    />
-                )
-            }
-        />
-    );
-}*/

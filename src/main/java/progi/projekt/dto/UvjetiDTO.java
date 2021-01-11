@@ -4,29 +4,43 @@ import progi.projekt.model.TrazeniUvjeti;
 import progi.projekt.model.enums.BrojKrevetaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 
-import java.util.UUID;
-
 public class UvjetiDTO {
-    private String[] domId;
+    private DomDTO[] domovi;
     private String[] paviljoni;
     private Integer[] katovi;
     private BrojKrevetaEnum[] brojKreveta;
     private TipKupaoniceEnum[] tipKupaonice;
 
-    public UvjetiDTO(TrazeniUvjeti trazeniUvjeti){
-        this.domId = trazeniUvjeti.getDomovi().stream().map(p -> p.getId().toString()).toArray(String[]::new);
-        this.paviljoni = trazeniUvjeti.getPaviljoni().stream().map(p -> p.getId().toString()).toArray(String[]::new);
-        this.katovi = trazeniUvjeti.getKatovi().toArray(Integer[]::new);
-        this.brojKreveta = trazeniUvjeti.getBrojKreveta().toArray(BrojKrevetaEnum[]::new);
-        this.tipKupaonice = trazeniUvjeti.getTipKupaonice().toArray(TipKupaoniceEnum[]::new);
+    public UvjetiDTO(TrazeniUvjeti trazeniUvjeti) {
+        try {
+            this.domovi = trazeniUvjeti.getDomovi().stream().map(DomDTO::new).toArray(DomDTO[]::new);
+        } catch (NullPointerException ex) {
+        }
+        try {
+            this.paviljoni = trazeniUvjeti.getPaviljoni().stream().map(p -> p.getId().toString()).toArray(String[]::new);
+        } catch (NullPointerException ex) {
+        }
+        try {
+            this.katovi = trazeniUvjeti.getKatovi().toArray(Integer[]::new);
+        } catch (NullPointerException ex) {
+        }
+        try {
+            this.brojKreveta = trazeniUvjeti.getBrojKreveta().toArray(BrojKrevetaEnum[]::new);
+        } catch (NullPointerException ex) {
+        }
+        try {
+            this.tipKupaonice = trazeniUvjeti.getTipKupaonice().toArray(TipKupaoniceEnum[]::new);
+        } catch (NullPointerException ex) {
+        }
+
     }
 
-    public String[] getDomId() {
-        return domId;
+    public DomDTO[] getDomovi() {
+        return domovi;
     }
 
-    public void setDomId(String[] domId) {
-        this.domId = domId;
+    public void setDomovi(DomDTO[] domovi) {
+        this.domovi = domovi;
     }
 
     public String[] getPaviljoni() {

@@ -1,5 +1,6 @@
 package progi.projekt.controller;
 
+import org.hibernate.LazyInitializationException;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -37,7 +38,12 @@ public class ObavijestController {
         Student student = optionalStudent.get();
 
         if (student.getObavijesti() == null || student.getObavijesti().isEmpty()) return obavijesti;
-        return student.getObavijesti().stream().map(ObavijestDTO::new).collect(Collectors.toList());
+        try {
+            return student.getObavijesti().stream().map(ObavijestDTO::new).collect(Collectors.toList());
+        } catch (NullPointerException | LazyInitializationException ex) {
+            return new ArrayList<>();
+        }
+
     }
 
     @PostMapping(value = "/procitana")
