@@ -46,6 +46,20 @@ public class LajkServiceImpl implements LajkService {
     }
 
     @Override
+    public Optional<Lajk> findLajkDvaOglasa(Oglas oglas1, Oglas oglas2) {
+        List<Lajk> lajkovi = listAll();
+
+        for (Lajk lajkTmp : lajkovi){
+            Oglas oglasTmp1 = lajkTmp.getLajkId().getOglas();
+            Oglas oglasTmp2 = lajkTmp.getLajkId().getStudent().getOglas();
+            if (oglasTmp1 == oglas1 && oglasTmp2 == oglas2) return Optional.of(lajkTmp);
+            if (oglasTmp1 == oglas2 && oglasTmp2 == oglas1) return Optional.of(lajkTmp);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
     public Lajk update(Lajk l) {
         try {
             return lajkRepository.saveAndFlush(l);

@@ -6,10 +6,7 @@ import progi.projekt.model.Oglas;
 import progi.projekt.model.Soba;
 import progi.projekt.model.TrazeniUvjeti;
 import progi.projekt.repository.KandidatRepository;
-import progi.projekt.service.KandidatService;
-import progi.projekt.service.OglasService;
-import progi.projekt.service.SobaService;
-import progi.projekt.service.UvjetiService;
+import progi.projekt.service.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,12 +21,14 @@ public class KandidatServiceImpl implements KandidatService {
 	private SobaService sobaService;
 	private OglasService oglasService;
 	private UvjetiService uvjetiService;
+	private ParService parService;
 
-	public KandidatServiceImpl(KandidatRepository kandidatRepo, SobaService sobaService, OglasService oglasService, UvjetiService uvjetiService) {
+	public KandidatServiceImpl(KandidatRepository kandidatRepo, SobaService sobaService, OglasService oglasService, UvjetiService uvjetiService, ParService parService) {
 		this.kandidatRepo = kandidatRepo;
 		this.sobaService = sobaService;
 		this.oglasService = oglasService;
 		this.uvjetiService = uvjetiService;
+		this.parService = parService;
 	}
 
 	@Override
@@ -95,7 +94,7 @@ public class KandidatServiceImpl implements KandidatService {
 
 		int i = 0;
 		for (Oglas kand : topN) {
-			if (odgovaraju(oglas, kand)) {
+			if (odgovaraju(oglas, kand) && parService.josNisuPar(oglas, kand)) {
 				return i;
 			} else {
 				i++;
@@ -106,7 +105,7 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Override
 	public List<Oglas> topN(Oglas oglas) {
-		//primi oglas i vrati listu prvih N Oglasa kandidata sortirano po bliskosti
+		//primi oglas i vrati listu prvih N oglasa njegovih kandidata sortiranih po bliskosti pa datumu nastanka
 
 		updateLocalKands();
 
@@ -119,14 +118,19 @@ public class KandidatServiceImpl implements KandidatService {
 
 		List<Kandidat> top3kand = oglas.getKandidati()
 				.stream()
-				.filter(kand -> kand.getIgnore() != true)
+				.filter(kand -> kand.getIgnore() != null && kand.getIgnore() != true)
+				.filter(kand2 -> kand2.getIdOglas() != oglas.getId())
 				.sorted(compareByBlskThenStvrn)
 				.limit(N)
 				.collect(Collectors.toList());
 
 		ArrayList<Oglas> top = new ArrayList<Oglas>();
 		for (Kandidat kand : top3kand) {
-			top.add(kand.getOglas());
+			if (kand.getOglas() == oglas){
+				top.add(kand.getKandOglas());
+			} else {
+				top.add(kand.getOglas());
+			}
 		}
 
 		return top;

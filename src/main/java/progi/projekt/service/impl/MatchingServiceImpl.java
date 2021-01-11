@@ -39,13 +39,14 @@ public class MatchingServiceImpl implements MatchingService {
 	public void kandidatiFun() {
 		//prolazi po svim oglasima i stvara kandidat parove
 
+
 		List<Oglas> oglasi = oglasService.listAll();
 
 		//stvaranje novih kandidata
 		for (Oglas oglas1 : oglasi){
 			for (Oglas oglas2 : oglasi){
 				//todo: maknuti naslov == null kada se poprave oglasi u database fillu
-				if (oglas1 != oglas2 && (oglas1.getNaslov() == null) && (oglas2.getNaslov() == null)){
+				if (oglas1 != oglas2 && (oglas1.getNaslov() != null) && (oglas2.getNaslov() != null)){
 					if (kandidatService.odgovaraju(oglas1, oglas2) && kandidatService.josNisuKandidat(oglas1, oglas2)){
 						kandidatService.stvoriKand(oglas1, oglas2);
 					}
@@ -104,6 +105,10 @@ public class MatchingServiceImpl implements MatchingService {
 		List<Oglas> oglasi = oglasService.listAll();
 
 		for (Oglas oglas1 : oglasi){
+
+			//force update kandidata unutar svakog oglasa
+			kandidatService.updateLocalKands();
+
 			//ako jedan od nasih topN kandidata takodjer ima nas oglas kao topN kandidat stvaramo par
 			int i = kandidatService.odgovaraIizTopN(oglas1);
 			if (i != -1){
@@ -111,27 +116,31 @@ public class MatchingServiceImpl implements MatchingService {
 				Par par = new Par (oglas1, oglas2);
 				parService.save(par);
 			}
+
 			//ako nekom kandidatu naseg kandidata odgovaramo mi, imamo lanac
-			else {
-				Oglas oglasA = oglas1;
-				List<Oglas> topNOglasA = kandidatService.topN(oglasA);
-				for (Oglas oglasB : topNOglasA){
+			Oglas oglasA = oglas1;
+			List<Oglas> topNOglasA = kandidatService.topN(oglasA);
+			for (Oglas oglasB : topNOglasA){
+				if (oglasB != oglasA && parService.josNisuLanac(oglasA, oglasB)){
 					List<Oglas> topNOglasB = kandidatService.topN(oglasB);
 					for (Oglas oglasC : topNOglasB){
-						if (kandidatService.odgovaraju(oglasA, oglasC)){
-							kandidatService.stvoriKand(oglasA, oglasC);
-							kandidatService.stvoriKand(oglasB, oglasA);
+						if (oglasC != oglasB && oglasC != oglasA && parService.josNisuLanac(oglasA, oglasC)) {
+							if (kandidatService.odgovaraju(oglasA, oglasC)){
+								kandidatService.stvoriKand(oglasA, oglasC);
+								kandidatService.stvoriKand(oglasB, oglasA);
 
-							Par par1 = new Par (oglasA, oglasB, false, true, false);
-							Par par2 = new Par (oglasB, oglasC, false, true, false);
-							Par par3 = new Par (oglasC, oglasA, false, true, false);
-							parService.save(par1);
-							parService.save(par2);
-							parService.save(par3);
+								Par par1 = new Par (oglasA, oglasB, false, true, false);
+								Par par2 = new Par (oglasB, oglasC, false, true, false);
+								Par par3 = new Par (oglasC, oglasA, false, true, false);
+								parService.save(par1);
+								parService.save(par2);
+								parService.save(par3);
+							}
 						}
 					}
 				}
 			}
+
 		}
 
 	}
@@ -205,29 +214,30 @@ public class MatchingServiceImpl implements MatchingService {
 		//iteriramo po oglasima a ne lajkovima kako bi polje ocjena bilo sortirano po vremenu stvaranja oglasa
 		//tj tko prije stvori oglas taj ima vecu prednost u matchanju
 		//zato je polje oglasi sortirano po datumu objave
-		for (Oglas oglas : oglasi) {
-			UUID studentID = oglas.getStudent().getId();
-			List<Lajk> lajkovi = lajkService.listAll();
-			for (Lajk lajk : lajkovi) {
-				if (lajk.getLajkId().getStudent().getId() == studentID) {
-					UUID id1 = oglas.getId();
-					UUID id2 = lajk.getLajkId().getOglas().getId();
-					Key key = new Key(id1, id2);
+		for (Oglas oglas1 : oglasi) {
+			UUID studentID = oglas1.getStudent().getId();
+			for (Oglas oglas2 : oglasi){
+				Optional<Lajk> lajkOpt = lajkService.findLajkDvaOglasa(oglas1, oglas2);
 
-					Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
+				UUID id1 = oglas1.getId();
+				UUID id2 = oglas2.getId();
+				Key key = new Key(id1, id2);
 
-					ocjenaOptional.ifPresentOrElse(
-							(ocjena) ->
-							{
-								ocjene.put(key, ocjena);
-							},
-							() ->
-							{
-								//ako ocjena jos nije unesena u rjecnik upisujemo -1
-								ocjene.put(key, -1);
-							});
-				}
+				lajkOpt.ifPresentOrElse(
+						(lajk) ->
+						{
+							Integer ocjena = lajk.getOcjena();
+							ocjene.put(key, ocjena);
+						},
+						() ->
+						{
+							//ako ocjena jos nije unesena u rjecnik upisujemo -1
+							ocjene.put(key, -1);
+						});
+
+
 			}
+
 		}
 
 
@@ -308,7 +318,7 @@ public class MatchingServiceImpl implements MatchingService {
 					.stream()
 					.filter(parSa -> parService.parSadrziOglas(parSa, oglasI))
 					.filter(parAl -> parService.ifObaAKTIVAN(parAl)) //t ako su stanja oba oglasa == AKTIVAN
-					.sorted(Comparator.comparing(parSr -> obostraneOcjene.get(parSr)))
+					.sorted(Comparator.comparing(parSr -> obostraneOcjene.getOrDefault(parSr, -1)))
 					.findFirst();
 
 			konacniParOptional.ifPresent(

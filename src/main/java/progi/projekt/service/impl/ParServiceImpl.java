@@ -1,5 +1,6 @@
 package progi.projekt.service.impl;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import progi.projekt.model.Kandidat;
 import progi.projekt.model.Oglas;
@@ -21,7 +22,7 @@ public class ParServiceImpl implements ParService {
 	private KandidatService kandidatService;
 	private OglasRepository oglasRepo;
 
-	public ParServiceImpl(ParRepository parRepo, KandidatService kandidatService, OglasRepository oglasRepo) {
+	public ParServiceImpl(ParRepository parRepo, @Lazy KandidatService kandidatService, OglasRepository oglasRepo) {
 		this.parRepo = parRepo;
 		this.kandidatService = kandidatService;
 		this.oglasRepo = oglasRepo;
@@ -99,8 +100,10 @@ public class ParServiceImpl implements ParService {
 	public void save(Par par) {
 		List<Par> parovi = listAll();
 		for (Par parTmp : parovi){
-			if (parTmp.getOglas1() == par.getOglas1() && parTmp.getOglas2() == par.getOglas2()) return;
-			if (parTmp.getOglas1() == par.getOglas2() && parTmp.getOglas2() == par.getOglas1()) return;
+			if (par.getLanac() == parTmp.getLanac()){
+				if (parTmp.getOglas1() == par.getOglas1() && parTmp.getOglas2() == par.getOglas2()) return;
+				if (parTmp.getOglas1() == par.getOglas2() && parTmp.getOglas2() == par.getOglas1()) return;
+			}
 		}
 		if (par.getOglas1() == par.getOglas2()) return;
 		parRepo.save(par);
@@ -148,19 +151,26 @@ public class ParServiceImpl implements ParService {
 	//primi oglas1 i vrati listu [oglas1, oglas2, oglas3], gdje oglasi 1-3 cine lanac
 	@Override
 	public List<Oglas> pripadniOglasiLanca(Oglas oglas1) {
-		Par parAB = pripadniParOglasa(oglas1).get();
-		Oglas oglas2;
-		if (parAB.getOglas1() == oglas1){
-			oglas2 = parAB.getOglas2();
-		} else {
-			oglas2 = parAB.getOglas1();
-		}
-		Oglas oglas3 = pronadjiTreciOglasIzLanca(parAB).get();
-
 		List<Oglas> lanacOglasi = new ArrayList<>();
-		lanacOglasi.add(oglas1);
-		lanacOglasi.add(oglas2);
-		lanacOglasi.add(oglas3);
+		try{
+			Par parAB = pripadniParOglasa(oglas1).get();
+			Oglas oglas2;
+			if (parAB.getOglas1() == oglas1){
+				oglas2 = parAB.getOglas2();
+			} else {
+				oglas2 = parAB.getOglas1();
+			}
+			Oglas oglas3 = pronadjiTreciOglasIzLanca(parAB).get();
+
+			if (parAB.getLanac() == true) {
+				lanacOglasi.add(oglas1);
+				lanacOglasi.add(oglas2);
+				lanacOglasi.add(oglas3);
+			}
+
+		} catch (Exception e){
+			return lanacOglasi;
+		}
 
 		return lanacOglasi;
 	}
@@ -170,15 +180,20 @@ public class ParServiceImpl implements ParService {
 	public List<Par> pripadniParoviLanca(Oglas oglas1) {
 		List<Oglas> lanacOglasi = pripadniOglasiLanca(oglas1);
 
-		Par parAB = pripadniParAB(lanacOglasi.get(0), lanacOglasi.get(1)).get();
-		Par parBC = pripadniParAB(lanacOglasi.get(1), lanacOglasi.get(2)).get();
-		Par parCA = pripadniParAB(lanacOglasi.get(2), lanacOglasi.get(0)).get();
-
 		List<Par> lanacParovi = new ArrayList<>();
 
-		lanacParovi.add(parAB);
-		lanacParovi.add(parBC);
-		lanacParovi.add(parCA);
+		try {
+			Par parAB = pripadniParAB(lanacOglasi.get(0), lanacOglasi.get(1)).get();
+			Par parBC = pripadniParAB(lanacOglasi.get(1), lanacOglasi.get(2)).get();
+			Par parCA = pripadniParAB(lanacOglasi.get(2), lanacOglasi.get(0)).get();
+
+			lanacParovi.add(parAB);
+			lanacParovi.add(parBC);
+			lanacParovi.add(parCA);
+
+		} catch (Exception e){
+			return lanacParovi;
+		}
 
 		return lanacParovi;
 	}
@@ -244,5 +259,24 @@ public class ParServiceImpl implements ParService {
 	@Override
 	public boolean obaStudPrihvatila(Par par) {
 		return par.getPrihvatioPrvi() == true && par.getPrihvatioDrugi() == true;
+	}
+
+	@Override
+	public boolean josNisuPar(Oglas oglas, Oglas kand) {
+		Optional<Par> parOpt = pripadniParOglasa(oglas);
+		if (parOpt.isPresent()){
+			Par par = parOpt.get();
+			if (parSadrziOglas(par, kand) && par.getLanac() == false) return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean josNisuLanac(Oglas oglas, Oglas kand) {
+		List<Oglas> lanac = pripadniOglasiLanca(oglas);
+		if (lanac.size() != 0){
+			return false;
+		}
+		return true;
 	}
 }

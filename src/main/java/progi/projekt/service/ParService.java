@@ -45,4 +45,8 @@ public interface ParService {
 	void ponistiParoveOglasa(Oglas oglas);
 
 	boolean obaStudPrihvatila(Par par);
+
+	boolean josNisuPar(Oglas oglas, Oglas kand);
+
+	boolean josNisuLanac(Oglas oglas, Oglas kand);
 }
