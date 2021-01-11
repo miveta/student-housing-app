@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import OglasList from "../components/OglasList";
 import cookie from "react-cookies";
 import {Col, Nav, Row, Tab} from "react-bootstrap";
+import {withRouter} from "react-router-dom";
 
 class Homepage extends Component {
     constructor(props) {
@@ -11,6 +12,8 @@ class Homepage extends Component {
             oglasi: [],
             kandOglasi: []
         };
+
+        if (cookie.load('role') === 'zaposlenikSC') props.history.push("/homepagesc")
     }
 
     componentDidMount() {
@@ -81,4 +84,4 @@ class Homepage extends Component {
     }
 }
 
-export default Homepage;
+export default withRouter(Homepage);

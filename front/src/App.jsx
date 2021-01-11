@@ -5,14 +5,14 @@ import {Redirect, Route, Switch} from "react-router-dom";
 import cookie from 'react-cookies';
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Homepage from "./pages/Homepage";
+import Homepage from "./homepage/Homepage";
 import Header from "./partial/Header";
 import Footer from "./partial/Footer";
 import MojProfil from "./pages/MojProfil"
 import UrediProfil from "./components/UrediProfil";
 import Oglas from "./pages/Oglas";
 import MojOglas from "./pages/MojOglas";
-import HomepageSC from "./pages/HomepageSC";
+import HomepageSC from "./homepage/HomepageSC";
 
 const PrivateRoute = ({component: Component, ...rest}) => (
     <Route

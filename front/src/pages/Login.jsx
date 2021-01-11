@@ -24,6 +24,7 @@ class Login extends Component {
             type: this.state.type === 'input' ? 'password' : 'input'
         })
     }
+
     onChange = (event) => {
         const {name, value} = event.target;
         this.setState(state => ({...state, [name]: value}))
