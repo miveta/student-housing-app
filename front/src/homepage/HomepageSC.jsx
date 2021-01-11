@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import cookie from "react-cookies";
-import OglasList from "../components/OglasList";
 import {Col, Nav, Row, Tab} from "react-bootstrap";
 import ZamjenaList from "../components/ZamjenaList";
 
