@@ -19,35 +19,32 @@ import java.util.stream.Collectors;
 public class OglasController {
 
 
-    private OglasService oglasService;
-    private LajkService lajkService;
-    private KandidatService kandidatService;
-    private StudentService studentService;
-    private ParService parService;
+	private OglasService oglasService;
+	private LajkService lajkService;
+	private KandidatService kandidatService;
+	private StudentService studentService;
+	private ParService parService;
+	private ZaposlenikSCService zaposlenikSCService;
 
-    public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService, ParService parService) {
-        this.oglasService = oglasService;
-        this.lajkService = lajkService;
-        this.kandidatService = kandidatService;
-        this.studentService = studentService;
-        this.parService = parService;
-    }
+	public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService, ParService parService, ZaposlenikSCService zaposlenikSCService) {
+		this.oglasService = oglasService;
+		this.lajkService = lajkService;
+		this.kandidatService = kandidatService;
+		this.studentService = studentService;
+		this.parService = parService;
+		this.zaposlenikSCService = zaposlenikSCService;
+	}
 
-    @GetMapping("/list")
-    public List<OglasDTO> listOglas() {
-        List<Oglas> oglasi = oglasService.listAll();
+	@GetMapping("/list")
+	public List<OglasDTO> listOglas() {
+		return oglasService.listAll().stream().map(OglasDTO::new).collect(Collectors.toList());
+	}
 
-        return oglasi
-                .stream()
-                .map(OglasDTO::new)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/getoglas")
-    public ResponseEntity<?> getOglas(@RequestParam(value = "oglas_id") String oglasId) {
-        Oglas oglas = oglasService.findById(oglasId).get();
-        return ResponseEntity.ok(new OglasDTO(oglas));
-    }
+	@GetMapping("/getoglas")
+	public ResponseEntity<?> getOglas(@RequestParam(value = "oglas_id") String oglasId) {
+		Oglas oglas = oglasService.findById(oglasId).get();
+		return ResponseEntity.ok(new OglasDTO(oglas));
+	}
 
 
     @GetMapping(value = "/kandidati/student")
@@ -212,6 +209,46 @@ public class OglasController {
             }
         }
 
-        return parovi;
-    }
+		return parovi;
+	}
+
+	@PostMapping(value = "/updatePar")
+	public ResponseEntity<?> updatePar(@RequestParam(value = "par_id") String parId,
+											@RequestParam(value = "odobren") Boolean odobren,
+											@RequestParam(value = "zaposlenikKorisnickoIme") String username) {
+
+		List<Oglas> oglasi = oglasService.listAll();
+
+		//force update oglasa unutar svakog studenta
+		List<Student> studenti = studentService.listAll();
+		for (Oglas oglas : oglasi){
+			for (Student stud : studenti){
+				if (stud.getId() == oglas.getStudent().getId()){
+					stud.setOglas(oglas);
+					studentService.save(stud);
+				}
+			}
+		}
+
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
+
+		Optional<Par> parOpt = parService.find(Integer.parseInt(parId));
+		Optional<ZaposlenikSC> zaposelnikOpt = zaposlenikSCService.findBykorisnickoIme(username);
+
+		if (parOpt.isPresent() && zaposelnikOpt.isPresent()){
+			Par par = parOpt.get();
+			ZaposlenikSC zaposlenik = zaposelnikOpt.get();
+
+			par.setOdobren(odobren);
+			par.setZaposlenikSC(zaposlenik);
+
+			parService.save(par);
+
+			return ResponseEntity.ok(new ParDTO(par));
+		}
+
+		//"Par nije pronadjen"
+		return ResponseEntity.notFound().build();
+	}
 }

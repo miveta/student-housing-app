@@ -12,6 +12,8 @@ public interface ParService {
 
 	List<Par> listAll(Oglas oglas);
 
+	Optional<Par> find(Integer idPar);
+
 	Integer ObostranaOcjena(Integer ocjena1, Integer ocjena2);
 
 	boolean parSadrziOglas(Par par, Oglas oglas);

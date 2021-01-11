@@ -1,6 +1,7 @@
 package progi.projekt.dto;
 
 import progi.projekt.model.Par;
+import progi.projekt.model.ZaposlenikSC;
 
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ public class ParDTO {
 	private boolean done;
 	private boolean lanac;
 	private boolean ignore;
+	private boolean odobren;
+	private ZaposlenikSC zaposlenikSC;
 
 	public ParDTO(Par par) {
 		this.parID = par.getIdPar();
@@ -19,6 +22,8 @@ public class ParDTO {
 		this.done = par.getDone();
 		this.lanac = par.getLanac();
 		this.ignore = par.getIgnore();
+		this.odobren = par.getOdobren();
+		this.zaposlenikSC = par.getZaposlenikSC();
 	}
 
 	public int getParID() {
@@ -67,5 +72,21 @@ public class ParDTO {
 
 	public void setIgnore(boolean ignore) {
 		this.ignore = ignore;
+	}
+
+	public boolean isOdobren() {
+		return odobren;
+	}
+
+	public void setOdobren(boolean odobren) {
+		this.odobren = odobren;
+	}
+
+	public void setZaposlenikSC(ZaposlenikSC zaposlenikSC) {
+		this.zaposlenikSC = zaposlenikSC;
+	}
+
+	public ZaposlenikSC getZaposlenikSC() {
+		return zaposlenikSC;
 	}
 }
