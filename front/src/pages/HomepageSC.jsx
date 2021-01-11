@@ -6,7 +6,7 @@ import ZamjenaList from "../components/ZamjenaList";
 
 class HomepageSC extends Component {
     constructor(props) {
-        super();
+        super(props);
         this.state = {
             user: cookie.load('principal'),
             upiti: []
@@ -22,17 +22,19 @@ class HomepageSC extends Component {
         };
 
         //dodati podršku za back
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/listParoviWithFlags?ignore=${false}&done=${true}&odobren=${null}`, options)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/listParoviWithFlags`, options)
             .then(response => {
                 if (response.status === 200) {
-                    response.json().then(body =>
+                    response.json().then(body => {
                         this.setState({upiti: body})
-                    ).catch(error => console.log(error))
+                        console.log(this.state.upiti)
+                    }).catch(error => console.log(error))
                 }
             });
     }
 
     render() {
+
         return(
             <div className="middle">
                 <Tab.Container id="left-tabs-example" defaultActiveKey="first" className={"left-tabs"}>
@@ -53,7 +55,7 @@ class HomepageSC extends Component {
                         <Col>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
-                                    <ZamjenaList/>
+                                    <ZamjenaList upiti={this.state.upiti}/>
                                 </Tab.Pane>
                                 {
                                     this.state.user &&

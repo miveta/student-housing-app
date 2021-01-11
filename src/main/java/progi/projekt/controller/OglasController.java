@@ -177,14 +177,14 @@ public class OglasController {
 
 
 	@GetMapping(value = "/listParoviWithFlags")
-	public List<ParDTO> listParoviWithFlags(@RequestParam(value = "ignore") Boolean ignore,
+	public ResponseEntity<?>/*List<ParDTO>*/ listParoviWithFlags(/*@RequestParam(value = "ignore") Boolean ignore,
 											@RequestParam(value = "done") Boolean done,
-											@RequestParam(value = "odobren") Boolean odobren) {
+											@RequestParam(value = "odobren") Boolean odobren*/) {
 		//note: napravio sam ParDTO jer ako stavim Par u listu, toString je beskonacan jer oglas ima referencu na
 		// studenta koji opet ima referencu na oglas. Ista stvar sa domovima
 		// - holik
 
-		List<Oglas> oglasi = oglasService.listAll();
+		/*List<Oglas> oglasi = oglasService.listAll();
 
 		//force update oglasa unutar svakog studenta
 		List<Student> studenti = studentService.listAll();
@@ -207,8 +207,16 @@ public class OglasController {
 					ParDTO parDTO = new ParDTO(par);
 					parovi.add(parDTO);
 				}
-		}
+		}*/
 
-		return parovi;
+		List<ParDTO> parovi = new ArrayList<>();
+		List<OglasDTO> oglasi = oglasService.listAll().stream().map(OglasDTO::new).collect(Collectors.toList());
+		OglasDTO oglasdto1 = oglasi.get(0);
+		Oglas oglas1 = oglasService.findById(oglasdto1.getId().toString()).get();
+		OglasDTO oglasdto2 =  oglasi.get(1);
+		Oglas oglas2 = oglasService.findById(oglasdto2.getId().toString()).get();
+
+		parovi.add(new ParDTO(new Par(oglas1, oglas2, true,false, false)));
+		return ResponseEntity.ok(parovi);
 	}
 }
