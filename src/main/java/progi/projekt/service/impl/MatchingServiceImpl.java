@@ -83,7 +83,7 @@ public class MatchingServiceImpl implements MatchingService {
 
 		for (Lajk lajk : lajkovi){
 			Student stud = lajk.getLajkId().getStudent();
-			Oglas oglas1 = stud.getOglas();
+            Oglas oglas1 = stud.getAktivniOglas();
 			Oglas oglas2 = lajk.getLajkId().getOglas();
 
 			if (kandidatService.josNisuKandidat(oglas1, oglas2)){
@@ -416,7 +416,7 @@ public class MatchingServiceImpl implements MatchingService {
 
 		Optional<Kandidat> kandidatOptional = par.getOglas1().getKandidati()
 				.stream()
-				.filter(kand -> kand.getIdOglas() == par.getOglas1().getId()
+                .filter(kand -> kand.getOglas().getId() == par.getOglas1().getId()
 						&& kand.getKandOglas().getId() == par.getOglas2().getId())
 				.findFirst();
 

@@ -6,6 +6,7 @@ import progi.projekt.dto.KandidatDTO;
 import progi.projekt.dto.OglasDTO;
 import progi.projekt.dto.ParDTO;
 import progi.projekt.model.*;
+import progi.projekt.model.enums.StatusOglasaEnum;
 import progi.projekt.service.*;
 
 import java.util.ArrayList;
@@ -44,6 +45,12 @@ public class OglasController {
 		return ResponseEntity.ok(new OglasDTO(oglas));
 	}
 
+
+	@GetMapping(value = "/arhivirani")
+	public List<OglasDTO> arhivirani(@RequestParam(value = "student_username") String username) {
+		return studentService.oglasi(username, StatusOglasaEnum.AKTIVAN).stream().map(OglasDTO::new).collect(Collectors.toList());
+	}
+
 	@GetMapping(value = "/kandidati/student")
 	public List<OglasDTO> kandidatiStudent(@RequestParam(value = "student_username") String username) {
 		Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
@@ -51,11 +58,11 @@ public class OglasController {
 
 		Student student = optionalStudent.get();
 
-		if (student.getOglas() == null) return null;
+		if (student.getAktivniOglas() == null) return null;
 
 		List<Oglas> oglasKandidati = new ArrayList<>();
-		student.getOglas().getKandidati().forEach(kandidat -> {
-			if (kandidat.getOglas().getId().equals(student.getOglas().getId())) {
+		student.getAktivniOglas().getKandidati().forEach(kandidat -> {
+			if (kandidat.getOglas().getId().equals(student.getAktivniOglas().getId())) {
 				oglasKandidati.add(kandidat.getKandOglas());
 			} else oglasKandidati.add(kandidat.getOglas());
 		});
@@ -72,7 +79,7 @@ public class OglasController {
 		for (Oglas oglas : oglasi){
 			for (Student stud : studenti){
 				if (stud.getId() == oglas.getStudent().getId()){
-					stud.setOglas(oglas);
+					stud.setAktivniOglas(oglas);
 					studentService.save(stud);
 				}
 			}
@@ -92,7 +99,7 @@ public class OglasController {
 			for (Lajk lajk : lajkovi) {
 				if (lajk.getLajkId().getOglas().equals(oglas)) {
 					Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
-					Oglas drugiOglas = lajk.getLajkId().getStudent().getOglas();
+					Oglas drugiOglas = lajk.getLajkId().getStudent().getAktivniOglas();
 
 					Optional<Kandidat> tmpOpt = kandidatService.kandidatParaOglasa(oglas, drugiOglas);
 					if (tmpOpt.isPresent()){
@@ -135,7 +142,7 @@ public class OglasController {
 		for (Oglas oglas : oglasi){
 			for (Student stud : studenti){
 				if (stud.getId() == oglas.getStudent().getId()){
-					stud.setOglas(oglas);
+					stud.setAktivniOglas(oglas);
 					studentService.save(stud);
 				}
 			}
@@ -191,7 +198,7 @@ public class OglasController {
 		for (Oglas oglas : oglasi){
 			for (Student stud : studenti){
 				if (stud.getId() == oglas.getStudent().getId()){
-					stud.setOglas(oglas);
+					stud.setAktivniOglas(oglas);
 					studentService.save(stud);
 				}
 			}

@@ -4,7 +4,6 @@ import cookie from "react-cookies";
 import Lajkovi from "../components/Lajkovi";
 
 class Oglas extends Component {
-
      constructor(props) {
         super(props)
         this.state = {
@@ -33,6 +32,7 @@ class Oglas extends Component {
                 if (response.status === 200) {
                     response.json().then(body => {
                         self.setState({oglas: body})
+
                     }).catch(error => console.log(error))
                 }
             });

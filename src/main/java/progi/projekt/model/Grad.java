@@ -53,6 +53,14 @@ public class Grad {
         this.domovi = domovi;
     }
 
+    public Set<TrazeniUvjeti> getTrazeniUvjeti() {
+        return trazeniUvjeti;
+    }
+
+    public void setTrazeniUvjeti(Set<TrazeniUvjeti> trazeniUvjeti) {
+        this.trazeniUvjeti = trazeniUvjeti;
+    }
+
     public StudentskiCentar getStudentskiCentar() {
         return studentskiCentar;
     }
