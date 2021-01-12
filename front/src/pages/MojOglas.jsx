@@ -5,6 +5,7 @@ import cookie from "react-cookies";
 import {Col, Row} from "react-bootstrap";
 
 
+
 class MojOglas extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +25,7 @@ class MojOglas extends Component {
                 tipKupaonice: 'Privatna'
             },
             uvjeti: {
-                domId: [],
+                domovi: [],
                 paviljoni: [],
                 katovi: [],
                 brojKreveta: [],
@@ -61,7 +62,8 @@ class MojOglas extends Component {
                     console.log(response.status)
                 }
             }).then(json => {
-            this.setState({grad: {...json}})
+            this.setState({grad: {...json}});
+            //console.log(json)
         }).catch(e => console.log(e))
 
         fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/zadano?user=${this.state.user.korisnickoIme}`, options)
@@ -72,7 +74,8 @@ class MojOglas extends Component {
                     console.log(response.status)
                 }
             }).then(json => {
-            if (json !== undefined) this.state.uvjeti = {...json}
+             this.setState({uvjeti: {...json}});
+             //console.log(json)
         }).catch(e => console.log(e))
      }
 
@@ -115,7 +118,7 @@ class MojOglas extends Component {
 
         const body = {
             studentUsername: self.state.user.korisnickoIme,
-            domId: uvjeti.domId,
+            domId: uvjeti.domovi,
             paviljoni: uvjeti.paviljoni,
             katovi: uvjeti.katovi,
             brojKreveta: uvjeti.brojKreveta,

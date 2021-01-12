@@ -5,6 +5,7 @@ import progi.projekt.model.enums.OznakeKategorijaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -49,6 +50,13 @@ public class TrazeniUvjeti {
     @JoinColumn(name = "id_oglas")
     private Oglas oglas;
 
+    public TrazeniUvjeti(){
+        this.brojKreveta = new HashSet<>();
+        this.katovi = new HashSet<>();
+        this.domovi = new HashSet<>();
+        this.paviljoni = new HashSet<>();
+        this.tipKupaonice = new HashSet<>();
+    };
     public UUID getId() {
         return id;
     }

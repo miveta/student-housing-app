@@ -112,7 +112,8 @@ public class TrazimSobuController {
 
         Optional<Oglas> optionalOglas = oglasService.findByStudentAndStatus(student, StatusOglasaEnum.AKTIVAN);
         if (optionalOglas.isEmpty()) {
-            oglasService.spremiOglas(student, student.getSoba(), trazeniUvjeti);
+           student.setOglas(oglasService.spremiOglas(student, student.getSoba(), trazeniUvjeti));
+           studentService.save(student);
         }
 
         return ResponseEntity.ok(trazimSobuForm);

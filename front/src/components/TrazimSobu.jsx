@@ -25,6 +25,7 @@ function TrazimSobu(props) {
     ]
 
     function onChangeDom(event) {
+        console.log(uvjeti);
         const {name, value} = event.target;
 
         setGrad(prevState => ({
@@ -71,7 +72,7 @@ function TrazimSobu(props) {
 
         let body = {
             studentUsername: user.korisnickoIme,
-            domId: uvjeti["domId"],
+            domovi: uvjeti["domovi"],
             paviljoni: uvjeti["paviljoni"],
             katovi: uvjeti["katovi"],
             brojKreveta: uvjeti["brojKreveta"],
@@ -151,18 +152,18 @@ function TrazimSobu(props) {
                         <Col key={dom.id}>
                             <Form.Label>Dom</Form.Label>
                             <Form.Check
-                                defaultChecked={uvjeti.domId && uvjeti.domId.includes(dom.id)}
+                                defaultChecked={uvjeti.domovi && uvjeti.domovi.includes(dom.id)}
                                 onChange={onChangeDom}
                                 key={dom.id}
                                 type="checkbox"
                                 id={dom.id}
-                                name="domId"
+                                name="domovi"
                                 value={dom.id}
                                 label={dom.naziv}
                             />
                         </Col>
                         {
-                            ((uvjeti.domID && uvjeti.domId.includes(dom.id)) || dom.checked) &&
+                            ((uvjeti.domovi && uvjeti.domovi.includes(dom.id)) || dom.checked) &&
                             <Col key={dom.naziv}>
                                 <Form.Group>
                                     <Form.Label>Paviljoni u domu {dom.naziv}</Form.Label>
