@@ -7,6 +7,7 @@ import progi.projekt.model.Student;
 import progi.projekt.repository.GradRepository;
 import progi.projekt.repository.SobaRepository;
 import progi.projekt.repository.StudentRepository;
+import progi.projekt.service.MatchingService;
 import progi.projekt.service.SobaService;
 import progi.projekt.service.StudentService;
 import progi.projekt.service.UtilService;
@@ -22,13 +23,15 @@ public class SobaServiceImpl implements SobaService {
     private StudentRepository studentRepository;
     private StudentService studentService;
     private UtilService utilService;
+    private MatchingService matchingService;
 
-    public SobaServiceImpl(SobaRepository sobaRepository, GradRepository gradRepository, StudentRepository studentRepository, StudentService studentService, UtilService utilService) {
+    public SobaServiceImpl(SobaRepository sobaRepository, GradRepository gradRepository, StudentRepository studentRepository, StudentService studentService, UtilService utilService, MatchingService matchingService) {
         this.sobaRepository = sobaRepository;
         this.gradRepository = gradRepository;
         this.studentRepository = studentRepository;
         this.studentService = studentService;
         this.utilService = utilService;
+        this.matchingService = matchingService;
     }
 
     @Override
@@ -38,6 +41,8 @@ public class SobaServiceImpl implements SobaService {
 
     @Override
     public Soba update(Soba soba) {
+        matchingService.resetirajOglas(soba.getOglas().getId());
+        sobaRepository.save(soba);
         return null;
     }
 
