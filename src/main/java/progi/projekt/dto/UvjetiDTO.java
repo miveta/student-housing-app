@@ -5,7 +5,7 @@ import progi.projekt.model.enums.BrojKrevetaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 
 public class UvjetiDTO {
-    private DomDTO[] domovi;
+    private String[] domovi;
     private String[] paviljoni;
     private Integer[] katovi;
     private BrojKrevetaEnum[] brojKreveta;
@@ -13,7 +13,7 @@ public class UvjetiDTO {
 
     public UvjetiDTO(TrazeniUvjeti trazeniUvjeti) {
         try {
-            this.domovi = trazeniUvjeti.getDomovi().stream().map(DomDTO::new).toArray(DomDTO[]::new);
+            this.domovi = trazeniUvjeti.getDomovi().stream().map(p -> p.getId().toString()).toArray(String[]::new);
         } catch (NullPointerException ex) {
         }
         try {
@@ -35,11 +35,11 @@ public class UvjetiDTO {
 
     }
 
-    public DomDTO[] getDomovi() {
+    public String[] getDomovi() {
         return domovi;
     }
 
-    public void setDomovi(DomDTO[] domovi) {
+    public void setDomovi(String[] domovi) {
         this.domovi = domovi;
     }
 

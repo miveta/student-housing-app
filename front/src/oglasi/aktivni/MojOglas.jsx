@@ -100,7 +100,7 @@ class MojOglas extends Component {
                 tipKupaonice: 'Privatna'
             },
             uvjeti: {
-                domId: [],
+                domovi: [],
                 paviljoni: [],
                 katovi: [],
                 brojKreveta: [],
@@ -136,7 +136,8 @@ class MojOglas extends Component {
                     console.log(response.status)
                 }
             }).then(json => {
-            this.setState({grad: {...json}})
+            this.setState({grad: {...json}});
+            //console.log(json)
         }).catch(e => console.log(e))
 
         fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/zadano?user=${this.state.user.korisnickoIme}`, options)
@@ -147,8 +148,77 @@ class MojOglas extends Component {
                     console.log(response.status)
                 }
             }).then(json => {
-            if (json !== undefined) this.state.uvjeti = {...json}
+             this.setState({uvjeti: {...json}});
+             //console.log(json)
         }).catch(e => console.log(e))
+     }
+
+    submitSoba = (soba) => {
+        let self = this;
+
+        const body = {
+            studentUsername: self.state.user.korisnickoIme,
+            idPaviljon: soba.idPaviljon,
+            kat: soba.kat === "" ? 0 : soba.kat,
+            brojKreveta: soba.brojKreveta.toUpperCase(),
+            tipKupaonice: soba.tipKupaonice.toUpperCase(),
+            komentar: soba.komentar
+        };
+
+        console.log(body)
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(body)
+        };
+
+
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/soba/spremi`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                }
+            }).then(json => {
+            self.setState({...json})
+        })
+    }
+
+    submitUvjeti = (uvjeti) => {
+        let self = this;
+
+        const body = {
+            studentUsername: self.state.user.korisnickoIme,
+            domId: uvjeti.domId,
+            paviljoni: uvjeti.paviljoni,
+            katovi: uvjeti.katovi,
+            brojKreveta: uvjeti.brojKreveta,
+            tipKupaonice: uvjeti.tipKupaonice,
+
+        };
+
+        console.log(body)
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(body)
+        };
+
+
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/uvjetiIveta`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                }
+            }).then(json => {
+            self.setState({...json})
+        })
     }
 
     render() {
@@ -173,6 +243,7 @@ class MojOglas extends Component {
                 </Row>
                 <Button onClick={this.props.onArhiviraj} disabled={this.state.soba.id === ""}>Arhiviraj oglas</Button>
                 <h2> Preporučeni oglasi </h2>
+
             </div>
         )
     }
