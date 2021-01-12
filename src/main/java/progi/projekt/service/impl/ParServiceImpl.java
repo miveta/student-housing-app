@@ -64,8 +64,6 @@ public class ParServiceImpl implements ParService {
 		oglasRepo.save(oglas1);
 		oglasRepo.save(oglas2);
 
-		//par.setCeka(true);
-
 		//todo:
 		//oglas1.obavijestiService.dodajPotvrdiZamjenuObavijest();
 		//oglas2.obavijestiService.dodajPotvrdiZamjenuObavijest();

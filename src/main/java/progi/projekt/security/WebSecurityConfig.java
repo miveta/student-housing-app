@@ -6,18 +6,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import progi.projekt.security.jwt.JwtRequestFilter;
 
 @EnableWebSecurity //ukljucivanje provjere razine pristupa
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final KorisnikUserDetailsService korisnikUserDetailsService;
 
-    private final JwtRequestFilter jwtRequestFilter;
-
-    public WebSecurityConfig(KorisnikUserDetailsService korisnikUserDetailsService, JwtRequestFilter jwtRequestFilter) {
+    public WebSecurityConfig(KorisnikUserDetailsService korisnikUserDetailsService) {
         this.korisnikUserDetailsService = korisnikUserDetailsService;
-        this.jwtRequestFilter = jwtRequestFilter;
     }
 
     @Autowired
