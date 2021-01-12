@@ -72,9 +72,10 @@ public class Student implements Serializable, Korisnik {
             throw new IllegalArgumentException("aktivni oglas mora bit aktivan");
         Oglas oglas = getAktivniOglas();
 
-        if (oglas != null) throw new IllegalArgumentException("user smije imat samo jedan aktivan oglas");
+        if (oglas != null && !noviOglas.getId().equals(oglas.getId()))
+            throw new IllegalArgumentException("user smije imat samo jedan aktivan oglas");
 
-        oglasi = new HashSet<>();
+        if (oglasi == null) oglasi = new HashSet<>();
         oglasi.add(noviOglas);
     }
 

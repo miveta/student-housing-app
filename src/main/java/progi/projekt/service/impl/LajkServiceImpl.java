@@ -51,7 +51,7 @@ public class LajkServiceImpl implements LajkService {
 
         for (Lajk lajkTmp : lajkovi){
             Oglas oglasTmp1 = lajkTmp.getLajkId().getOglas();
-            Oglas oglasTmp2 = lajkTmp.getLajkId().getStudent().getOglas();
+            Oglas oglasTmp2 = lajkTmp.getLajkId().getStudent().getAktivniOglas();
             if (oglasTmp1 == oglas1 && oglasTmp2 == oglas2) return Optional.of(lajkTmp);
             if (oglasTmp1 == oglas2 && oglasTmp2 == oglas1) return Optional.of(lajkTmp);
         }

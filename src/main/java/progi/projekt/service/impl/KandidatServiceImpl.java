@@ -119,7 +119,7 @@ public class KandidatServiceImpl implements KandidatService {
 		List<Kandidat> top3kand = oglas.getKandidati()
 				.stream()
 				.filter(kand -> kand.getIgnore() != null && kand.getIgnore() != true)
-				.filter(kand2 -> kand2.getIdOglas() != oglas.getId())
+                .filter(kand2 -> kand2.getOglas().getId() != oglas.getId())
 				.sorted(compareByBlskThenStvrn)
 				.limit(N)
 				.collect(Collectors.toList());

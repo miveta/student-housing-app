@@ -5,7 +5,6 @@ import './arhiviraniOglasi.css'
 import SobaReadOnly from "../SobaReadOnly";
 import TrazimSobuReadOnly from "../TrazimSobuReadOnly";
 
-
 class ArhiviraniOglasCard extends Component {
     constructor(props) {
         super(props)
@@ -13,7 +12,12 @@ class ArhiviraniOglasCard extends Component {
         this.uvjeti = props.oglas.uvjeti
     }
 
+    onAktiviraj = () => {
+        this.props.onAktiviraj(this.props.oglas.id)
+    }
+
     render() {
+        console.log(this)
         return (
             <Row>
                 <Col>
@@ -21,7 +25,7 @@ class ArhiviraniOglasCard extends Component {
                 </Col>
                 <Col>
                     <TrazimSobuReadOnly uvjeti={this.uvjeti} title={"Tražim sobu"}/>
-                    <Button>Arhiviraj</Button>
+                    <Button onClick={this.onAktiviraj}>Aktiviraj</Button>
                 </Col>
             </Row>
         )

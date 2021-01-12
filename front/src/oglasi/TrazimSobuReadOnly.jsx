@@ -7,9 +7,19 @@ class TrazimSobuReadOnly extends Component {
         this.uvjeti = props.uvjeti
     }
 
+    style = {
+
+        alignItems: 'flex-start',
+        backgroundColor: '#e9ecef',
+        border: '1px solid #ced4da',
+        width: '100%',
+        display: 'grid'
+
+    }
+
     render() {
         return (
-            <Form>
+            <Form className={"readonly"}>
                 <h3>{this.props.title}</h3>
                 <Form.Group>
                     <Form.Label>Kat</Form.Label>
@@ -48,7 +58,8 @@ class TrazimSobuReadOnly extends Component {
                 </Form.Group>
 
                 <Form.Group>
-                    <DropdownButton title={"Domovi i paviljoni"} variant={"light"} block drop={"down"}>
+                    <DropdownButton className={"readonly"} title={"Domovi i paviljoni"} variant={"light"} block
+                                    drop={"down"}>
                         {
                             this.uvjeti.domovi && this.uvjeti.domovi.length === 0 ?
                                 (

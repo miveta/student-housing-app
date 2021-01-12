@@ -9,6 +9,7 @@ class Soba extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            change: false,
             paviljoni: [],
             grad: '',
             dom: '',
@@ -59,6 +60,7 @@ class Soba extends Component {
             tipKupaonice: self.state.tipKupaonice.toUpperCase(),
             komentar: self.state.komentar
         }
+
         window.location.reload();
 
         self.props.submitSoba(soba)
@@ -161,10 +163,9 @@ class Soba extends Component {
                             <Form.Label> Broj kreveta </Form.Label>
                             <Form.Control as="select" name="brojKreveta"
                                           onChange={this.onChange} value={this.capitalize(this.state.brojKreveta)}>
-                                <option>Jednokrevetna</option>
-                                <option>Dvokrevetna</option>
-                                <option>Trokrevetna</option>
-                                <option>Višekrevetna</option>
+                                {this.props.brojKreveta.map(broj => (
+                                    <option>{broj.name}</option>
+                                ))}
                             </Form.Control>
                         </Col>
                         <Col>
@@ -172,8 +173,9 @@ class Soba extends Component {
                             <Form.Control as="select" name="tipKupaonice"
                                           value={this.capitalize(this.state.tipKupaonice)}
                                           onChange={this.onChange}>
-                                <option> Privatna</option>
-                                <option> Dijeljena</option>
+                                {this.props.tipKupaonice.map(tip => (
+                                    <option>{tip.name}</option>
+                                ))}
                             </Form.Control>
                         </Col>
                     </Form.Row>
@@ -184,7 +186,8 @@ class Soba extends Component {
                                   defaultValue={this.state.komentar}/>
                 </Form.Group>
 
-                <Button type="submit" variant="dark" size="lg" block> Spremi promjene </Button>
+                <Button type="submit" variant="dark" size="lg" block disabled={!this.state.change}> Spremi
+                    promjene </Button>
             </Form>
 
         )

@@ -22,17 +22,13 @@ public class MatchingServiceImpl implements MatchingService {
 			OglasService oglasService,
 			KandidatService kandidatService,
 			ParService parService,
-			LajkService lajkService)
-	{
+			LajkService lajkService) {
 		this.studentService = studentService;
 		this.oglasService = oglasService;
 		this.kandidatService = kandidatService;
 		this.parService = parService;
 		this.lajkService = lajkService;
 	}
-
-
-
 
 
 	@Override
@@ -43,11 +39,11 @@ public class MatchingServiceImpl implements MatchingService {
 		List<Oglas> oglasi = oglasService.listAll();
 
 		//stvaranje novih kandidata
-		for (Oglas oglas1 : oglasi){
-			for (Oglas oglas2 : oglasi){
+		for (Oglas oglas1 : oglasi) {
+			for (Oglas oglas2 : oglasi) {
 				//todo: maknuti naslov == null kada se poprave oglasi u database fillu
-				if (oglas1 != oglas2 && (oglas1.getNaslov() != null) && (oglas2.getNaslov() != null)){
-					if (kandidatService.odgovaraju(oglas1, oglas2) && kandidatService.josNisuKandidat(oglas1, oglas2)){
+				if (oglas1 != oglas2 /*&& (oglas1.getNaslov() != null) && (oglas2.getNaslov() != null)*/) {
+					if (kandidatService.odgovaraju(oglas1, oglas2) && kandidatService.josNisuKandidat(oglas1, oglas2)) {
 						kandidatService.stvoriKand(oglas1, oglas2);
 					}
 				}
@@ -56,9 +52,9 @@ public class MatchingServiceImpl implements MatchingService {
 		}
 
 		//popunjavanje liste postojecih kandidata svakog oglasa iz liste svih kandidata
-		for (Oglas oglas : oglasi){
+		for (Oglas oglas : oglasi) {
 			List<Kandidat> kandidati = kandidatService.listAll(oglas.getId());
-			for (Kandidat kandidat : kandidati){
+			for (Kandidat kandidat : kandidati) {
 				if (kandidat.getOglas().getId() == oglas.getId() || kandidat.getKandOglas().getId() == oglas.getId()) {
 					if (!kandidati.contains(kandidat)) {
 						oglas.getKandidati().add(kandidat);
@@ -82,12 +78,12 @@ public class MatchingServiceImpl implements MatchingService {
 
 		List<Lajk> lajkovi = lajkService.listAll();
 
-		for (Lajk lajk : lajkovi){
+		for (Lajk lajk : lajkovi) {
 			Student stud = lajk.getLajkId().getStudent();
             Oglas oglas1 = stud.getAktivniOglas();
 			Oglas oglas2 = lajk.getLajkId().getOglas();
 
-			if (kandidatService.josNisuKandidat(oglas1, oglas2)){
+			if (kandidatService.josNisuKandidat(oglas1, oglas2)) {
 				kandidatService.stvoriKand(oglas1, oglas2);
 			}
 		}
@@ -104,34 +100,34 @@ public class MatchingServiceImpl implements MatchingService {
 
 		List<Oglas> oglasi = oglasService.listAll();
 
-		for (Oglas oglas1 : oglasi){
+		for (Oglas oglas1 : oglasi) {
 
 			//force update kandidata unutar svakog oglasa
 			kandidatService.updateLocalKands();
 
 			//ako jedan od nasih topN kandidata takodjer ima nas oglas kao topN kandidat stvaramo par
 			int i = kandidatService.odgovaraIizTopN(oglas1);
-			if (i != -1){
+			if (i != -1) {
 				Oglas oglas2 = kandidatService.topN(oglas1).get(i);
-				Par par = new Par (oglas1, oglas2);
+				Par par = new Par(oglas1, oglas2);
 				parService.save(par);
 			}
 
 			//ako nekom kandidatu naseg kandidata odgovaramo mi, imamo lanac
 			Oglas oglasA = oglas1;
 			List<Oglas> topNOglasA = kandidatService.topN(oglasA);
-			for (Oglas oglasB : topNOglasA){
-				if (oglasB != oglasA && parService.josNisuLanac(oglasA, oglasB)){
+			for (Oglas oglasB : topNOglasA) {
+				if (oglasB != oglasA && parService.josNisuLanac(oglasA, oglasB)) {
 					List<Oglas> topNOglasB = kandidatService.topN(oglasB);
-					for (Oglas oglasC : topNOglasB){
+					for (Oglas oglasC : topNOglasB) {
 						if (oglasC != oglasB && oglasC != oglasA && parService.josNisuLanac(oglasA, oglasC)) {
-							if (kandidatService.odgovaraju(oglasA, oglasC)){
+							if (kandidatService.odgovaraju(oglasA, oglasC)) {
 								kandidatService.stvoriKand(oglasA, oglasC);
 								kandidatService.stvoriKand(oglasB, oglasA);
 
-								Par par1 = new Par (oglasA, oglasB, false, true, false);
-								Par par2 = new Par (oglasB, oglasC, false, true, false);
-								Par par3 = new Par (oglasC, oglasA, false, true, false);
+								Par par1 = new Par(oglasA, oglasB, false, true, false);
+								Par par2 = new Par(oglasB, oglasC, false, true, false);
+								Par par3 = new Par(oglasC, oglasA, false, true, false);
 								parService.save(par1);
 								parService.save(par2);
 								parService.save(par3);
@@ -216,7 +212,7 @@ public class MatchingServiceImpl implements MatchingService {
 		//zato je polje oglasi sortirano po datumu objave
 		for (Oglas oglas1 : oglasi) {
 			UUID studentID = oglas1.getStudent().getId();
-			for (Oglas oglas2 : oglasi){
+			for (Oglas oglas2 : oglasi) {
 				Optional<Lajk> lajkOpt = lajkService.findLajkDvaOglasa(oglas1, oglas2);
 
 				UUID id1 = oglas1.getId();
@@ -235,7 +231,6 @@ public class MatchingServiceImpl implements MatchingService {
 							ocjene.put(key, -1);
 						});
 
-
 			}
 
 		}
@@ -244,8 +239,8 @@ public class MatchingServiceImpl implements MatchingService {
 		//racuanje obostranih ocjena i pospremanje u rijecnik
 		Hashtable<Par, Integer> obostraneOcjene = new Hashtable<Par, Integer>();
 		List<Par> parovi = parService.listAll();
-		for (Par par : parovi){
-			if (par.getLanac() == false){
+		for (Par par : parovi) {
+			if (par.getLanac() == false) {
 				//obican par
 				Key key1 = new Key(par.getOglas1().getId(), par.getOglas2().getId());
 				Key key2 = new Key(par.getOglas2().getId(), par.getOglas1().getId());
@@ -254,10 +249,9 @@ public class MatchingServiceImpl implements MatchingService {
 
 				Integer obostranaOcjena;
 				//ako bilo koji od studenata nije ocjenio par
-				if (ocjena1Optional.isEmpty() ||ocjena2Optional.isEmpty()){
+				if (ocjena1Optional.isEmpty() || ocjena2Optional.isEmpty()) {
 					obostranaOcjena = -1;
-				}
-				else{
+				} else {
 					Integer ocjena1 = ocjena1Optional.get();
 					Integer ocjena2 = ocjena2Optional.get();
 					obostranaOcjena = parService.ObostranaOcjena(ocjena1, ocjena2);
@@ -269,7 +263,7 @@ public class MatchingServiceImpl implements MatchingService {
 
 				Optional<Oglas> oglas3Opt = parService.pronadjiTreciOglasIzLanca(par);
 
-				if (oglas3Opt.isPresent()){
+				if (oglas3Opt.isPresent()) {
 					Key keyA;
 					Key keyB;
 					Key keyC;
@@ -287,12 +281,11 @@ public class MatchingServiceImpl implements MatchingService {
 					Integer trostranaOcjena;
 
 					//ako bilo koji od studenata nije ocjenio par
-					if (	ocjenaABOptional.isEmpty() ||
+					if (ocjenaABOptional.isEmpty() ||
 							ocjenaBCOptional.isEmpty() ||
-							ocjenaCAOptional.isEmpty()){
+							ocjenaCAOptional.isEmpty()) {
 						trostranaOcjena = -1;
-					}
-					else{
+					} else {
 						Integer ocjenaAB = ocjenaABOptional.get();
 						Integer ocjenaBC = ocjenaBCOptional.get();
 						Integer ocjenaCA = ocjenaCAOptional.get();
@@ -300,7 +293,7 @@ public class MatchingServiceImpl implements MatchingService {
 						trostranaOcjena = parService.TrostranaOcjena(ocjenaAB, ocjenaBC, ocjenaCA);
 					}
 					List<Par> lanacParovi = parService.pripadniParoviLanca(par.getOglas1());
-					for (Par parLanca : lanacParovi){
+					for (Par parLanca : lanacParovi) {
 						obostraneOcjene.put(parLanca, trostranaOcjena);
 					}
 
@@ -313,7 +306,7 @@ public class MatchingServiceImpl implements MatchingService {
 		}
 
 		//stvaranje para koji se salje studentu na potvrdu i postavljanje statusa oba oglasa u CEKA
-		for (Oglas oglasI : oglasi){
+		for (Oglas oglasI : oglasi) {
 			Optional<Par> konacniParOptional = parovi
 					.stream()
 					.filter(parSa -> parService.parSadrziOglas(parSa, oglasI))
@@ -326,16 +319,15 @@ public class MatchingServiceImpl implements MatchingService {
 					{
 						//Par par = parovi.get(konacniPar.getIdPar()); //get radi sa indeksom da doi
 						Par par = konacniPar;
-						if (par.getLanac() == false){
+						if (par.getLanac() == false) {
 							//nema lanca
 							//parService.save(par);
 							parService.rezervirajOglasePara(par);
-						}
-						else {
+						} else {
 							//lanac
 							Optional<Oglas> oglas3Opt = parService.pronadjiTreciOglasIzLanca(par);
 
-							if (oglas3Opt.isPresent()){
+							if (oglas3Opt.isPresent()) {
 								Par par2 = parService.pripadniParOglasa(oglas3Opt.get()).get();
 								parService.rezervirajOglasePara(par);
 								parService.rezervirajOglasePara(par2);
@@ -349,8 +341,6 @@ public class MatchingServiceImpl implements MatchingService {
 					}
 			);
 		}
-
-
 
 	}
 
@@ -367,16 +357,16 @@ public class MatchingServiceImpl implements MatchingService {
 		kandidatService.updateLocalKands();
 
 		List<Par> parovi = parService.listAll();
-		for (Par par : parovi){
+		for (Par par : parovi) {
 
 			//ako nemamo lanac
-			if (par.getLanac() == false){
+			if (par.getLanac() == false) {
 				confirmFunLegwork(par);
 			}
 			//ako imamo lanac
 			else {
 				List<Par> lanacParovi = parService.pripadniParoviLanca(par.getOglas1());
-				for (Par parLanca : lanacParovi){
+				for (Par parLanca : lanacParovi) {
 					confirmFunLegwork(parLanca);
 				}
 			}
@@ -387,9 +377,9 @@ public class MatchingServiceImpl implements MatchingService {
 		//force update kandidata unutar svakog oglasa
 		kandidatService.updateLocalKands();
 
-		if (parService.ifObaCEKA(par)){
+		if (parService.ifObaCEKA(par)) {
 			//oba studenta su prihvatila par (ignore != false) i oglas nije u medjuvremenu zauzet (oba == AKTIVAN)
-			if (par.getIgnore() == false && parService.obaStudPrihvatila(par) == true){
+			if (par.getIgnore() == false && parService.obaStudPrihvatila(par) == true) {
 				par.setDone(true);
 				parService.save(par);
 
@@ -409,12 +399,11 @@ public class MatchingServiceImpl implements MatchingService {
 
 			//barem jedan od studenata nije prihvatio par
 			//todo za obavijestiService: odbijanjem para treba odraditi par.setIgnore(true)
-			else /* par.getIgnore() == true) */{
+			else /* par.getIgnore() == true) */ {
 				ponistiParIKandidat(par);
 				parService.vratiOglaseParaNaAKTIVAN(par);
 			}
-		}
-		else {
+		} else {
 			//jedan od oglasa je u medjuvremenu obrisan/ponisten
 			ponistiParIKandidat(par);
 		}
@@ -440,10 +429,10 @@ public class MatchingServiceImpl implements MatchingService {
 	@Override
 	public void confirmSCFun() {
 		for (Par par : parService.listAll()) {
-			if (par.getOdobren() != null){
+			if (par.getOdobren() != null) {
 				var oglas1 = par.getOglas1();
 				var oglas2 = par.getOglas2();
-				if (par.getOdobren() == true){
+				if (par.getOdobren() == true) {
 					oglas1.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
 					oglas2.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
 				} else {

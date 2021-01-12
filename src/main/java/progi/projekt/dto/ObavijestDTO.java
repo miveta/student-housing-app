@@ -17,7 +17,8 @@ public class ObavijestDTO {
         this.tekst = obavijest.getTekst();
         this.procitana = obavijest.isProcitana();
         this.vrijeme = obavijest.getVrijeme();
-        this.oglas = new OglasDTO(obavijest.getOglas());
+        if (obavijest.getOglas() != null)
+            this.oglas = new OglasDTO(obavijest.getOglas());
     }
 
     public UUID getId() {

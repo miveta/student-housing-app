@@ -106,6 +106,20 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public boolean arhiviraj(String username, String oglasId) {
+        Optional<Student> optionalStudent = findByKorisnickoIme(username);
+        if (optionalStudent.isEmpty())
+            throw new UsernameNotFoundException("Student s tim korisničkim imenom ne postoji!");
+        Student student = optionalStudent.get();
+
+        Oglas aktivniOglas = student.getAktivniOglas();
+
+        if (aktivniOglas == null) return false;
+        if (!aktivniOglas.getStatusOglasa().equals(StatusOglasaEnum.AKTIVAN)) ;
+        return true;
+    }
+
+    @Override
     public void save(Student stud) {
         studentRepository.save(stud);
     }

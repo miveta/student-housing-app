@@ -6,13 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.GradDTO;
 import progi.projekt.dto.SobaDTO;
 import progi.projekt.forms.SobaForm;
-import progi.projekt.model.Grad;
-import progi.projekt.model.Soba;
-import progi.projekt.model.Student;
-import progi.projekt.service.OglasService;
-import progi.projekt.service.SobaService;
-import progi.projekt.service.StudentService;
-import progi.projekt.service.UtilService;
+import progi.projekt.model.*;
+import progi.projekt.model.enums.StatusOglasaEnum;
+import progi.projekt.service.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,12 +24,14 @@ public class SobaController {
     private UtilService utilService;
     private OglasService oglasService;
     private StudentService studentService;
+    private final TrazimSobuService trazimSobuService;
 
-    public SobaController(SobaService sobaService, UtilService utilService, OglasService oglasService, StudentService studentService) {
+    public SobaController(SobaService sobaService, UtilService utilService, OglasService oglasService, StudentService studentService, TrazimSobuService trazimSobuService) {
         this.sobaService = sobaService;
         this.utilService = utilService;
         this.oglasService = oglasService;
         this.studentService = studentService;
+        this.trazimSobuService = trazimSobuService;
     }
 
     @GetMapping("/gradovi")
@@ -44,11 +42,17 @@ public class SobaController {
 
 
     @GetMapping("/student")
-    public SobaDTO getStudentSoba(@RequestParam(value = "student_username") String studentUsername) {
-        Optional<Soba> optionalSoba = sobaService.getByStudentUsername(studentUsername);
+    public ResponseEntity<?> getStudentSoba(@RequestParam(value = "student_username") String studentUsername) {
+        Optional<Student> optionalStudent = studentService.findByKorisnickoIme(studentUsername);
+        if (optionalStudent.isEmpty())
+            return ResponseEntity.badRequest().body("Student s tim korisničkim imenom ne postoji!");
+        Student student = optionalStudent.get();
 
-        if (optionalSoba.isPresent()) return new SobaDTO(optionalSoba.get());
-        else return null;
+        Oglas aktivniOglas = student.getAktivniOglas();
+        if (aktivniOglas == null)
+            return ResponseEntity.ok(null);
+
+        else return ResponseEntity.ok(new SobaDTO(aktivniOglas.getSoba()));
     }
 
     @PostMapping(value = "/spremi", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -76,6 +80,14 @@ public class SobaController {
         Student student = optionalStudent.get();
         student.setSoba(soba);
         studentService.update(student);
+
+        Optional<Oglas> optionalOglas = oglasService.findByStudentAndStatus(student, StatusOglasaEnum.AKTIVAN);
+        if (optionalOglas.isEmpty()) {
+            TrazeniUvjeti trazeniUvjeti = new TrazeniUvjeti();
+            trazeniUvjeti.setGrad(student.getGrad());
+            trazimSobuService.update(trazeniUvjeti);
+            oglasService.spremiOglas(student, student.getSoba(), trazeniUvjeti);
+        }
 
         return ResponseEntity.ok(new SobaDTO(soba));
     }

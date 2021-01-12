@@ -8,7 +8,6 @@ import progi.projekt.dto.UvjetiDTO;
 import progi.projekt.forms.TrazimSobuForm;
 import progi.projekt.model.*;
 import progi.projekt.model.enums.BrojKrevetaEnum;
-import progi.projekt.model.enums.StatusOglasaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 import progi.projekt.service.*;
 
@@ -45,16 +44,18 @@ public class TrazimSobuController {
     }
 
     @GetMapping("/zadano")
-    public UvjetiDTO zadano(@RequestParam(value = "user") String username){
+    public ResponseEntity<?> zadano(@RequestParam(value = "user") String username) {
         Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
+        if (optionalStudent.isEmpty())
+            return ResponseEntity.badRequest().body("Student s tim korisničkim imenom ne postoji!");
         Student student = optionalStudent.get();
-        TrazeniUvjeti trazeniUvjeti = null;
-        if (student.getAktivniOglas() != null) {
-            trazeniUvjeti = student.getAktivniOglas().getTrazeniUvjeti();
-        }
-        if (trazeniUvjeti == null)
-            trazeniUvjeti = new TrazeniUvjeti();
-        return new UvjetiDTO(trazeniUvjeti);
+
+        Oglas aktivniOglas = student.getAktivniOglas();
+        if (aktivniOglas == null)
+            return ResponseEntity.ok(null);
+
+        if (aktivniOglas.getTrazeniUvjeti() == null) return null;
+        else return ResponseEntity.ok(new UvjetiDTO(aktivniOglas.getTrazeniUvjeti()));
     }
 
     @PostMapping(value = "/uvjetiIveta", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -107,13 +108,7 @@ public class TrazimSobuController {
         Set<TipKupaoniceEnum> tipKupaonice = new HashSet<>(Arrays.asList(trazimSobuForm.getTipKupaonice()));
         trazeniUvjeti.setTipKupaonice(tipKupaonice);
 
-
         trazimSobuService.update(trazeniUvjeti);
-
-        Optional<Oglas> optionalOglas = oglasService.findByStudentAndStatus(student, StatusOglasaEnum.AKTIVAN);
-        if (optionalOglas.isEmpty()) {
-            oglasService.spremiOglas(student, student.getSoba(), trazeniUvjeti);
-        }
 
         return ResponseEntity.ok(trazimSobuForm);
     }

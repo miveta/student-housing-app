@@ -36,6 +36,8 @@ public interface StudentService {
 
     List<Obavijest> getObavijest(String username);
 
+    boolean arhiviraj(String username, String oglasId);
+
 	void save(Student stud);
 
     List<Oglas> oglasi(String username, StatusOglasaEnum statusOglasa);

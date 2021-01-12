@@ -3,6 +3,7 @@ import OglasList from "../oglasi/homepage/OglasList";
 import cookie from "react-cookies";
 import {Col, Nav, Row, Tab} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
+import ParoviList from "../oglasi/parovi/ParoviList";
 
 class Homepage extends Component {
     constructor(props) {
@@ -51,6 +52,7 @@ class Homepage extends Component {
     render() {
         return (
             <div className="middle">
+                <ParoviList/>
                 <Tab.Container id="left-tabs-example" defaultActiveKey="first" className={"left-tabs"}>
                     <Row>
                         <Col sm={2}>

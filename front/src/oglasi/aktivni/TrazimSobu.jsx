@@ -12,17 +12,7 @@ function TrazimSobu(props) {
     const [uvjeti] = React.useState(props.uvjeti);
     const kat = [1, 2, 3, 4];
 
-    const kreveti = [
-        {name: "Jednokrevetna", value: "JEDNOKREVETNA"},
-        {name: "Dvokrevetna", value: "DVOKREVETNA"},
-        {name: "Trokrevetna", value: "JEDNOKREVETNA"},
-        {name: "Nebitno", value: "NEBITNO"}
-    ]
-    const kupaonice = [
-        {name: "Privatna", value: "PRIVATNA"},
-        {name: "Zajednicka", value: "ZAJEDNICKA"},
-        {name: "Nebitno", value: "NEBITNO"}
-    ]
+    const [change, setChange] = React.useState(false);
 
     function onChangeDom(event) {
         const {name, value} = event.target;
@@ -52,7 +42,8 @@ function TrazimSobu(props) {
     }
 
     function onChange(event) {
-        console.log(uvjeti)
+        setChange(true)
+
         const {name, value} = event.target;
         const ids = uvjeti[name].map(el => el.id);
 
@@ -78,7 +69,7 @@ function TrazimSobu(props) {
             tipKupaonice: uvjeti["tipKupaonice"]
         }
         props.submitUvjeti(body);
-
+        setChange(false)
 
     }
 
@@ -110,7 +101,7 @@ function TrazimSobu(props) {
             <Form.Group>
                 <Form.Label>Broj kreveta</Form.Label>
                 <Row key={2}>
-                    {kreveti.map((p, index) => (
+                    {props.brojKreveta.map((p, index) => (
                         <Col key={index}>
                             <Form.Check
                                 defaultChecked={uvjeti.brojKreveta && uvjeti.brojKreveta.includes(p.value)}
@@ -129,7 +120,7 @@ function TrazimSobu(props) {
             <Form.Group>
                 <Form.Label>Tip kupaonice</Form.Label>
                 <Row key={3}>
-                    {kupaonice.map((p, index) => (
+                    {props.tipKupaonice.map((p, index) => (
                         <Col xs={3} key={index}>
                             <Form.Check
                                 defaultChecked={uvjeti.tipKupaonice && uvjeti.tipKupaonice.includes(p.value)}
@@ -184,7 +175,7 @@ function TrazimSobu(props) {
                     </Row>
                 ))
             }
-            <Button type="submit" variant="dark" size="lg" block> Spremi promjene </Button>
+            <Button type="submit" variant="dark" size="lg" block disabled={!change}> Spremi promjene </Button>
         </Form>
 
     )

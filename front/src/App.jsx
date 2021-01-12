@@ -11,8 +11,8 @@ import Footer from "./partial/Footer";
 import MojProfil from "./pages/MojProfil"
 import UrediProfil from "./components/UrediProfil";
 import Oglas from "./pages/Oglas";
-import MojOglas from "./pages/MojOglas";
 import HomepageSC from "./homepage/HomepageSC";
+import OglasiPage from "./pages/OglasiPage";
 
 const PrivateRoute = ({component: Component, ...rest}) => (
     <Route
@@ -95,6 +95,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
+
                 <Header authenticated={this.state.authenticated} logout={this.logout} user={this.state.user}/>
                 <div className="outer">
                     <Switch>
@@ -110,7 +111,7 @@ class App extends Component {
                                                                   onLogout={this.logout}/>}/>
                         <PrivateRoute exact path="/mojprofil/uredi"
                                       component={() => <UrediProfil onLogin={this.authenticate}/>}/>
-                        <StudentRoute exact path="/oglasi" component={MojOglas}/>
+                        <StudentRoute exact path="/oglasi" component={OglasiPage}/>
                         <ZaposlenikRoute exact path="/homepagesc" component={HomepageSC}/>}
                     </Switch>
                 </div>

@@ -79,6 +79,7 @@ public class OglasServiceImpl implements OglasService {
         Oglas oglas;
         if (optionalOglas.isEmpty()) {
             oglas = new Oglas();
+            oglas.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
             oglas.setStudent(student);
         } else oglas = optionalOglas.get();
 

@@ -9,10 +9,10 @@ public class ParDTO {
 	private int parID;
 	private UUID oglas1ID;
 	private UUID oglas2ID;
-	private boolean done;
-	private boolean lanac;
-	private boolean ignore;
-	private boolean odobren;
+	private Boolean done;
+	private Boolean lanac;
+	private Boolean ignore;
+	private Boolean odobren;
 	private ZaposlenikSC zaposlenikSC;
 
 	public ParDTO(Par par) {
@@ -50,43 +50,43 @@ public class ParDTO {
 		this.oglas2ID = oglas2ID;
 	}
 
-	public boolean isDone() {
+	public Boolean getDone() {
 		return done;
 	}
 
-	public void setDone(boolean done) {
+	public void setDone(Boolean done) {
 		this.done = done;
 	}
 
-	public boolean isLanac() {
+	public Boolean getLanac() {
 		return lanac;
 	}
 
-	public void setLanac(boolean lanac) {
+	public void setLanac(Boolean lanac) {
 		this.lanac = lanac;
 	}
 
-	public boolean isIgnore() {
+	public Boolean getIgnore() {
 		return ignore;
 	}
 
-	public void setIgnore(boolean ignore) {
+	public void setIgnore(Boolean ignore) {
 		this.ignore = ignore;
 	}
 
-	public boolean isOdobren() {
+	public Boolean getOdobren() {
 		return odobren;
 	}
 
-	public void setOdobren(boolean odobren) {
+	public void setOdobren(Boolean odobren) {
 		this.odobren = odobren;
-	}
-
-	public void setZaposlenikSC(ZaposlenikSC zaposlenikSC) {
-		this.zaposlenikSC = zaposlenikSC;
 	}
 
 	public ZaposlenikSC getZaposlenikSC() {
 		return zaposlenikSC;
+	}
+
+	public void setZaposlenikSC(ZaposlenikSC zaposlenikSC) {
+		this.zaposlenikSC = zaposlenikSC;
 	}
 }
