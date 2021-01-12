@@ -12,28 +12,15 @@ import java.util.List;
 
 ///Kontroler koji stvara i azurira listu kandidatnih soba/veza, listu valjanih parova i odgovarajuce oglase
 
-/*todo: napravit pozivanje:
-	kandidatiRun, matchRun svakih 5 min?
-	lajkRun + parRun, confirmRun, confirmSCRun svakih 30 min?
- */
-
 @RestController
 @RequestMapping("/match")
 public class MatchingController {
 	private final MatchingService matchingService;
-	private final KandidatService kandidatService;
-	private KandidatService oglasService;
 
 
-	public MatchingController(
-			MatchingService matchingService,
-			KandidatService kandidatService,
-			KandidatService oglasService
-			)
+	public MatchingController(MatchingService matchingService)
 	{
 		this.matchingService = matchingService;
-		this.kandidatService = kandidatService;
-		this.oglasService = oglasService;
 	}
 
 

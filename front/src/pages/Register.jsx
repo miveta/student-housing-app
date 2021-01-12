@@ -117,7 +117,8 @@ class Register extends Component {
                     <Form.Group>
                         <Form.Label> Prezime </Form.Label>
                         <Form.Control name="prezime" type="text" placeholder={this.state.prezime}
-                                      onChange={this.onChange} required/>
+                                      onChange={this.onChange} required
+                                      />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label> JMBAG </Form.Label>
