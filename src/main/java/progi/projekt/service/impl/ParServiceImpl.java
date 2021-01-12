@@ -58,15 +58,27 @@ public class ParServiceImpl implements ParService {
 		Oglas oglas1 = par.getOglas1();
 		Oglas oglas2 = par.getOglas2();
 
-		oglas1.setStatusOglasa(StatusOglasaEnum.CEKA);
-		oglas2.setStatusOglasa(StatusOglasaEnum.CEKA);
+		if (par.getLanac() == false){
+			oglas1.setStatusOglasa(StatusOglasaEnum.CEKA);
+			oglas2.setStatusOglasa(StatusOglasaEnum.CEKA);
 
-		oglasRepo.save(oglas1);
-		oglasRepo.save(oglas2);
+			oglas1.setKonacniPar(par);
+			oglas2.setKonacniPar(par);
 
-		//todo:
-		//oglas1.obavijestiService.dodajPotvrdiZamjenuObavijest();
-		//oglas2.obavijestiService.dodajPotvrdiZamjenuObavijest();
+			oglasRepo.save(oglas1);
+			oglasRepo.save(oglas2);
+
+			//todo:
+			//oglas1.obavijestiService.dodajPotvrdiZamjenuObavijest(par);
+		} else {
+			oglas1.setStatusOglasa(StatusOglasaEnum.CEKA);
+			oglas1.setKonacniPar(par);
+
+			oglasRepo.save(oglas1);
+
+			//todo:
+			//oglas1.obavijestiService.dodajPotvrdiZamjenuObavijest(oglas1);
+		}
 	}
 
 	@Override
@@ -251,7 +263,7 @@ public class ParServiceImpl implements ParService {
 	public void ponistiParoveOglasa(Oglas oglas) {
 		List<Par> parovi = listAll();
 		for (Par par : parovi){
-			if (!par.getDone()) {
+			if (parSadrziOglas(par, oglas) && !par.getDone()) {
 				par.setIgnore(true);
 				save(par);
 			}

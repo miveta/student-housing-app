@@ -19,19 +19,19 @@ public class ScheduledTasks {
 	@Scheduled(fixedRate = CALL_DELAY)
 	public void runMatchingAlgorithm() {
 		if (ENABLE_SCHEDULER){
-			System.out.print("Running scheduled matching execution");
+			System.out.println("Running scheduled matching execution");
 
 			try {
 				Thread kandidatiThread = new Thread(() -> matchingService.kandidatiFun());
 				kandidatiThread.start();
 				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
 
-				Thread lajkThread = new Thread(() -> matchingService.lajkFun());
-				lajkThread.start();
-				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
-
 				Thread parThread = new Thread(() -> matchingService.parFun());
 				parThread.start();
+				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+
+				Thread lajkThread = new Thread(() -> matchingService.lajkFun());
+				lajkThread.start();
 				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
 
 				Thread matchThread = new Thread(() -> matchingService.matchFun());
@@ -47,7 +47,7 @@ public class ScheduledTasks {
 				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
 
 			} catch (InterruptedException e) {
-				System.err.print("Scheduled matching execution interrupted");
+				System.err.println("Scheduled matching execution interrupted");
 			}
 		}
 	}

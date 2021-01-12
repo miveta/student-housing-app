@@ -210,8 +210,10 @@ public class KandidatServiceImpl implements KandidatService {
 		updateLocalKands();
 		List<Kandidat> kandidati = listAll(oglas.getId());
 		for (Kandidat kand : kandidati) {
-			kand.setIgnore(true);
-			save(kand);
+			if (kandSadrziOglas(kand, oglas)){
+				kand.setIgnore(true);
+				save(kand);
+			}
 		}
 	}
 

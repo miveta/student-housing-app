@@ -33,8 +33,6 @@ public class MatchingServiceImpl implements MatchingService {
 
 
 
-
-
 	@Override
 	public void kandidatiFun() {
 		//prolazi po svim oglasima i stvara kandidat parove
@@ -69,30 +67,6 @@ public class MatchingServiceImpl implements MatchingService {
 		}
 	}
 
-	//student u medjuvremenu lajka kandidate (ili bilo koji oglas)
-
-	@Override
-	public void lajkFun() {
-		//poziva se uz metodu iz LajkControllera. Stvara kandidata/par ako je student ocjenio oglas koji mu inicijalno
-		// nije ponudjen kao par pa nije mogao biti u topN pa niti postati par
-
-
-		//force update kandidata unutar svakog oglasa
-		kandidatService.updateLocalKands();
-
-		List<Lajk> lajkovi = lajkService.listAll();
-
-		for (Lajk lajk : lajkovi){
-			Student stud = lajk.getLajkId().getStudent();
-			Oglas oglas1 = stud.getOglas();
-			Oglas oglas2 = lajk.getLajkId().getOglas();
-
-			if (kandidatService.josNisuKandidat(oglas1, oglas2)){
-				kandidatService.stvoriKand(oglas1, oglas2);
-			}
-		}
-	}
-
 
 	@Override
 	public void parFun() {
@@ -116,6 +90,9 @@ public class MatchingServiceImpl implements MatchingService {
 				Par par = new Par (oglas1, oglas2);
 				parService.save(par);
 			}
+
+			//note: trenutno, broj parova koje moze imati jedan oglas je 3 jer
+			// kandidatService.odgovaraIizTopN gleda top 3 oglasa sortirano po bliskosti i ne radi duplikate
 
 			//ako nekom kandidatu naseg kandidata odgovaramo mi, imamo lanac
 			Oglas oglasA = oglas1;
@@ -142,12 +119,38 @@ public class MatchingServiceImpl implements MatchingService {
 			}
 
 		}
-
 	}
+
+
+	//student u medjuvremenu lajka kandidate (ili bilo koji oglas)
+
+
+	@Override
+	public void lajkFun() {
+		//poziva se uz metodu iz LajkControllera. Stvara kandidata ako je student ocjenio oglas koji mu inicijalno
+		// nije ponudjen kao par pa nije mogao biti u topN pa niti postati par
+
+
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
+
+		List<Lajk> lajkovi = lajkService.listAll();
+
+		for (Lajk lajk : lajkovi){
+			Student stud = lajk.getLajkId().getStudent();
+			Oglas oglas1 = stud.getOglas();
+			Oglas oglas2 = lajk.getLajkId().getOglas();
+
+			if (lajk.getOcjena() > 0 && kandidatService.josNisuKandidat(oglas1, oglas2)){
+				kandidatService.stvoriKand(oglas1, oglas2);
+			}
+		}
+	}
+
 
 	@Override
 	public void matchFun() {
-		//po tablici 'par' i ovisno o obostranoj ocjeni para "rezervira" najbolje ocjenjeni par
+		//iterira po parovima i ovisno o obostranoj ocjeni rezervira najbolje ocjenjeni
 
 		//force update kandidata unutar svakog oglasa
 		kandidatService.updateLocalKands();
@@ -162,7 +165,7 @@ public class MatchingServiceImpl implements MatchingService {
 				.collect(Collectors.toList());
 
 		/*
-		//todo: prilagodi update controller/service
+		//todo: prilagodi update controller/service za:
 		spremanje ocjene u kandidat:
 		klasa kandidat ne razlikuje "originalni" oglas i "kandidat" oglas usprkos imenima varijabli
 		zbog toga se moramo interno dogovoriti kako pridruzujemo ocjene
@@ -175,6 +178,7 @@ public class MatchingServiceImpl implements MatchingService {
 
 		/*
 		//VERZIJA ZA IZVLACENJE OCJENA IZ KANDIDATA
+
 		//izvlacenje ocjena iz kandidata u 2D dict [{oglasOcjenjivac, oglasOcjenjeni}] = ocjena
 		//prvo iteriramo po oglasima a ne kandidatima kako bi polje ocjena bilo sortirano po vremenu stvaranja oglasa
 		//tj tko prije stvori oglas taj ima vecu prednost u matchanju
@@ -211,6 +215,7 @@ public class MatchingServiceImpl implements MatchingService {
 		*/
 
 		//VERZIJA ZA IZVLACENJE OCJENA IZ LAJKA
+
 		//iteriramo po oglasima a ne lajkovima kako bi polje ocjena bilo sortirano po vremenu stvaranja oglasa
 		//tj tko prije stvori oglas taj ima vecu prednost u matchanju
 		//zato je polje oglasi sortirano po datumu objave
@@ -254,14 +259,21 @@ public class MatchingServiceImpl implements MatchingService {
 
 				Integer obostranaOcjena;
 				//ako bilo koji od studenata nije ocjenio par
-				if (ocjena1Optional.isEmpty() ||ocjena2Optional.isEmpty()){
+				if (ocjena1Optional.isEmpty() || ocjena2Optional.isEmpty()){
 					obostranaOcjena = -1;
 				}
 				else{
 					Integer ocjena1 = ocjena1Optional.get();
 					Integer ocjena2 = ocjena2Optional.get();
-					obostranaOcjena = parService.ObostranaOcjena(ocjena1, ocjena2);
+
+					if (ocjena1 == 0 || ocjena2 == 0){
+						obostranaOcjena = 0;
+					}
+					else {
+						obostranaOcjena = parService.ObostranaOcjena(ocjena1, ocjena2);
+					}
 				}
+
 				obostraneOcjene.put(par, obostranaOcjena);
 
 			} else {
@@ -297,7 +309,13 @@ public class MatchingServiceImpl implements MatchingService {
 						Integer ocjenaBC = ocjenaBCOptional.get();
 						Integer ocjenaCA = ocjenaCAOptional.get();
 
-						trostranaOcjena = parService.TrostranaOcjena(ocjenaAB, ocjenaBC, ocjenaCA);
+						if (ocjenaAB == 0 || ocjenaBC == 0 || ocjenaCA == 0){
+							trostranaOcjena = 0;
+						}
+						else {
+							trostranaOcjena = parService.TrostranaOcjena(ocjenaAB, ocjenaBC, ocjenaCA);
+						}
+
 					}
 					List<Par> lanacParovi = parService.pripadniParoviLanca(par.getOglas1());
 					for (Par parLanca : lanacParovi){
@@ -317,18 +335,18 @@ public class MatchingServiceImpl implements MatchingService {
 			Optional<Par> konacniParOptional = parovi
 					.stream()
 					.filter(parSa -> parService.parSadrziOglas(parSa, oglasI))
-					.filter(parAl -> parService.ifObaAKTIVAN(parAl)) //t ako su stanja oba oglasa == AKTIVAN
+					.filter(parIg -> parIg.getIgnore() != true) //par nije ponisten
+					.filter(parVa -> obostraneOcjene.getOrDefault(parVa, -1) > 0) //ocjena > 0
+					.filter(parAl -> parService.ifObaAKTIVAN(parAl)) //stanja oba oglasa == AKTIVAN
 					.sorted(Comparator.comparing(parSr -> obostraneOcjene.getOrDefault(parSr, -1)))
 					.findFirst();
 
 			konacniParOptional.ifPresent(
 					(konacniPar) ->
 					{
-						//Par par = parovi.get(konacniPar.getIdPar()); //get radi sa indeksom da doi
 						Par par = konacniPar;
 						if (par.getLanac() == false){
 							//nema lanca
-							//parService.save(par);
 							parService.rezervirajOglasePara(par);
 						}
 						else {
@@ -357,7 +375,7 @@ public class MatchingServiceImpl implements MatchingService {
 	@Override
 	public void confirmFun() {
 		//Cita rezultat konacnih potvrda para i:
-		//ako su oba studenta prihvatila (par.done = true) oznacuje oglas.status=POTVRDEN i salje mail u SC
+		//ako su oba studenta prihvatila (par.prihvatioPrvi/Drugi = true) oznacuje oglas.status=POTVRDEN
 		//ako oba studenta nisu prihvatila (par.ignore = true): oznacuje kandidat i par sa ignore (vise
 		// se ne spajaju/gledaju)
 
@@ -388,8 +406,8 @@ public class MatchingServiceImpl implements MatchingService {
 		kandidatService.updateLocalKands();
 
 		if (parService.ifObaCEKA(par)){
-			//oba studenta su prihvatila par (ignore != false) i oglas nije u medjuvremenu zauzet (oba == AKTIVAN)
-			if (par.getIgnore() == false && parService.obaStudPrihvatila(par) == true){
+			//oba studenta su prihvatila par (ignore != false) i oglas nije u medjuvremenu ponisten (oba == CEKA)
+			if (par.getIgnore() == false && parService.obaStudPrihvatila(par) == true && parService.ifObaCEKA(par)){
 				par.setDone(true);
 				parService.save(par);
 
@@ -403,8 +421,6 @@ public class MatchingServiceImpl implements MatchingService {
 				//for par in parovi if done!=true setIgnore(true)
 				parService.ponistiParoveOglasa(par.getOglas1());
 				parService.ponistiParoveOglasa(par.getOglas2());
-
-				//MailService.PotvrdaZamjenePara(par);
 			}
 
 			//barem jedan od studenata nije prihvatio par
@@ -421,9 +437,9 @@ public class MatchingServiceImpl implements MatchingService {
 	}
 
 	public void ponistiParIKandidat(Par par) {
-		par.setIgnore(true);
-		parService.save(par);
+		ponistiPar(par);
 
+		//ponistavanje povezanog kandidata
 		Optional<Kandidat> kandidatOptional = par.getOglas1().getKandidati()
 				.stream()
 				.filter(kand -> kand.getIdOglas() == par.getOglas1().getId()
@@ -434,6 +450,42 @@ public class MatchingServiceImpl implements MatchingService {
 			kandidat.setIgnore(true);
 			kandidatService.save(kandidat);
 		});
+	}
+
+	public void ponistiPar(Par par) {
+		//ponistavanje odbijenog para
+		par.setIgnore(true);
+		parService.save(par);
+
+		//ciscenje konacnog para iz oglasa
+		Oglas oglas1 = par.getOglas1();
+		Oglas oglas2 = par.getOglas2();
+
+		if (oglas1.getKandidati() == par){
+			oglas1.setKonacniPar(null);
+			oglasService.save(oglas1);
+		}
+
+		if (oglas2.getKandidati() == par){
+			oglas2.setKonacniPar(null);
+			oglasService.save(oglas2);
+		}
+
+	}
+
+
+	public void resetirajOglas(UUID oglasId) {
+		Optional<Oglas> oglasOpt = oglasService.findById(String.valueOf(oglasId));
+
+		if (oglasOpt.isPresent()){
+			Oglas oglas = oglasOpt.get();
+			oglas.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
+
+			kandidatService.ponistiKandidateOglasa(oglas);
+			parService.ponistiParoveOglasa(oglas);
+
+			oglasService.save(oglas);
+		}
 	}
 
 

@@ -1,13 +1,12 @@
 package progi.projekt.service.impl;
 
 import org.springframework.stereotype.Service;
-import progi.projekt.model.Lajk;
-import progi.projekt.model.LajkId;
-import progi.projekt.model.Oglas;
-import progi.projekt.model.Student;
+import progi.projekt.model.*;
 import progi.projekt.repository.LajkRepository;
 import progi.projekt.security.exception.SavingException;
 import progi.projekt.service.LajkService;
+import progi.projekt.service.MatchingService;
+import progi.projekt.service.ParService;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +15,13 @@ import java.util.Optional;
 public class LajkServiceImpl implements LajkService {
 
     private LajkRepository lajkRepository;
+    private MatchingService matchingService;
+    private ParService parService;
 
-    public LajkServiceImpl(LajkRepository lajkRepository) {
+    public LajkServiceImpl(LajkRepository lajkRepository, MatchingService matchingService, ParService parService) {
         this.lajkRepository = lajkRepository;
+        this.matchingService = matchingService;
+        this.parService = parService;
     }
 
     @Override
@@ -62,6 +65,13 @@ public class LajkServiceImpl implements LajkService {
     @Override
     public Lajk update(Lajk l) {
         try {
+            Optional<Par> pripradniPar = parService.pripadniParOglasa(l.getLajkId().getOglas());
+            pripradniPar.ifPresent(par -> {
+                matchingService.ponistiPar(par);
+            });
+
+            matchingService.lajkFun();
+
             return lajkRepository.saveAndFlush(l);
         } catch (Exception e) {
             //lajkRepo baca exceptione koje mu proslijedi baza (e)?
@@ -71,12 +81,19 @@ public class LajkServiceImpl implements LajkService {
 
     @Override
     public Lajk delete(Lajk lajk) throws SavingException {
+
+        Optional<Par> pripradniPar = parService.pripadniParOglasa(lajk.getLajkId().getOglas());
+        pripradniPar.ifPresent(par -> {
+            matchingService.ponistiPar(par);
+        });
+
         lajkRepository.delete(lajk);
         return null;
     }
 
     @Override
     public void save(Lajk lajk) {
+        matchingService.lajkFun();
         lajkRepository.save(lajk);
     }
 }

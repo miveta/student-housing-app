@@ -35,6 +35,18 @@ public class Oglas {
     @JoinColumn(name = "id_soba")
     private Soba soba;
 
+    public Par getKonacniPar() {
+        return konacniPar;
+    }
+
+    public void setKonacniPar(Par konacniPar) {
+        this.konacniPar = konacniPar;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_konacni_par")
+    private Par konacniPar;
+
     @OneToOne
     @JoinColumn(name = "id_trazeni_uvjeti")
     private TrazeniUvjeti trazeniUvjeti;

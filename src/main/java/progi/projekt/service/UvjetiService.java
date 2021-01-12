@@ -6,7 +6,9 @@ import progi.projekt.model.TrazeniUvjeti;
 import java.util.UUID;
 
 public interface UvjetiService {
-	 TrazeniUvjeti findByIdOglas(UUID id);
+	TrazeniUvjeti update(TrazeniUvjeti uvjeti);
+
+	TrazeniUvjeti findByIdOglas(UUID id);
 
 	 Integer izracunajBliskost(Soba soba, TrazeniUvjeti uvjeti);
 

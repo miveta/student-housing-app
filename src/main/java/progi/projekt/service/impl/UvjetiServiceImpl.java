@@ -7,6 +7,8 @@ import progi.projekt.model.TrazeniUvjeti;
 import progi.projekt.model.enums.BrojKrevetaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 import progi.projekt.repository.OglasRepository;
+import progi.projekt.repository.UvjetiRepository;
+import progi.projekt.service.MatchingService;
 import progi.projekt.service.UvjetiService;
 
 import java.util.Optional;
@@ -15,10 +17,21 @@ import java.util.UUID;
 @Service
 public class UvjetiServiceImpl implements UvjetiService {
     private final OglasRepository oglasRepository;
+    private UvjetiRepository uvjetiRepo;
+    private MatchingService matchingService;
 
 
-    public UvjetiServiceImpl(OglasRepository oglasRepository) {
+    public UvjetiServiceImpl(OglasRepository oglasRepository, UvjetiRepository uvjetiRepo, MatchingService matchingService) {
         this.oglasRepository = oglasRepository;
+        this.uvjetiRepo = uvjetiRepo;
+        this.matchingService = matchingService;
+    }
+
+    @Override
+    public TrazeniUvjeti update(TrazeniUvjeti uvjeti) {
+        matchingService.resetirajOglas(uvjeti.getOglas().getId());
+        uvjetiRepo.save(uvjeti);
+        return null;
     }
 
     @Override
