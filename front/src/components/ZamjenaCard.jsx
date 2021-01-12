@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import * as cookie from "react-cookies";
-import {Button, ButtonGroup, Col, FormLabel, Row} from "react-bootstrap";
+import {Button, Col, Row} from "react-bootstrap";
 import ZamjenaPrikazPara from "./ZamjenaPrikazPara";
 
 
@@ -112,10 +112,10 @@ class ZamjenaCard extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Button variant="primary" onClick={this.click(true)} >
+                    <Button className={"yes"} onClick={this.click(true)}>
                         Odobri
                     </Button>
-                    <Button variant="danger" onClick={this.click(false)}>
+                    <Button className={"no"} onClick={this.click(false)}>
                         Odbij
                     </Button>
                 </Row>

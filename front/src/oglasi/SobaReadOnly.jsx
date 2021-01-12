@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Col, Form} from "react-bootstrap";
+import {Col, Form, Row} from "react-bootstrap";
 
 class SobaReadOnly extends Component {
     constructor(props) {
@@ -9,9 +9,9 @@ class SobaReadOnly extends Component {
     }
 
     render() {
-        return (
-            <Form>
-                <h3> {this.title} </h3>
+
+        let prvaSkupina = (
+            <>
                 <Form.Group>
                     <Form.Label> Dom </Form.Label>
                     <Form.Control readOnly name="dom" value={this.soba.paviljon.nazivDom}/>
@@ -31,6 +31,12 @@ class SobaReadOnly extends Component {
                         </Col>
                     </Form.Row>
                 </Form.Group>
+            </>
+        )
+
+
+        let drugaSkupina = (
+            <>
                 <Form.Group>
                     <Form.Row>
                         <Col>
@@ -48,6 +54,26 @@ class SobaReadOnly extends Component {
                     <Form.Control name="komentar" readOnly rows="2" as={"textarea"}
                                   defaultValue={this.soba.komentar}/>
                 </Form.Group>
+            </>
+        )
+        return (
+            <Form>
+                <h3> {this.title} </h3>
+
+                {this.props.horizontal ?
+                    <Row>
+                        <Col>
+                            {prvaSkupina}
+                        </Col>
+                        <Col>
+                            {drugaSkupina}
+                        </Col>
+                    </Row>
+                    :
+                    <>
+                        {prvaSkupina}{drugaSkupina}
+                    </>}
+
             </Form>
         )
     }

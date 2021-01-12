@@ -57,13 +57,12 @@ function TrazimSobu(props) {
     }
 
 
-
     function onSubmit(e) {
         e.preventDefault();
 
         let body = {
             studentUsername: user.korisnickoIme,
-            domovi: uvjeti["domovi"],
+            domId: uvjeti["domovi"],
             paviljoni: uvjeti["paviljoni"],
             katovi: uvjeti["katovi"],
             brojKreveta: uvjeti["brojKreveta"],
@@ -71,7 +70,6 @@ function TrazimSobu(props) {
         }
         props.submitUvjeti(body);
         setChange(false)
-
     }
 
 
@@ -139,7 +137,7 @@ function TrazimSobu(props) {
 
             {
                 grad.domovi.map(dom => (
-                    <Row key={dom.id+1}>
+                    <Row key={dom.id + 1}>
                         <Col key={dom.id}>
                             <Form.Label>Dom</Form.Label>
                             <Form.Check

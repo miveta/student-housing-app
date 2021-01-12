@@ -111,53 +111,84 @@ class Soba extends Component {
 
             <Form onSubmit={this.onSubmit} className={"innerForm"}>
                 <h3> Nudim sobu </h3>
-                <Form.Group>
+                {/*<Form.Group>
                     <Form.Label> Dom </Form.Label>
                     <Form.Control as="select" name="dom" onChange={this.onChange} value={this.state.dom}>
                         {this.props.grad.domovi.map(dom => (
                             <option id={dom.id}>{dom.naziv}</option>
                         ))}
                     </Form.Control>
-                </Form.Group>
+                </Form.Group>*/}
 
-                <Form.Group>
-                    <Form.Row>
-                        <Col xs={9}>
-                            <Form.Label> Paviljon </Form.Label>
-                            <Form.Control as="select" name="paviljon" onChange={this.onChange}
-                                          value={this.state.paviljon && this.state.paviljon.naziv}>
-                                {
-
-                                    this.props.grad.domovi.filter(
-                                        dom => dom.naziv === this.state.dom
-                                    ).map(dom =>
-                                        dom.paviljoni.map(paviljon => (
-                                            <option id={paviljon.id}>{paviljon.naziv}</option>
-                                        ))
-                                    )
-                                }
+                <Form.Row>
+                    <Col xs={7}>
+                        <Form.Group>
+                            <Form.Label> Dom </Form.Label>
+                            <Form.Control as="select" name="dom" onChange={this.onChange} value={this.state.dom}>
+                                {this.props.grad.domovi.map(dom => (
+                                    <option id={dom.id}>{dom.naziv}</option>
+                                ))}
                             </Form.Control>
-                            {this.state.paviljon !== undefined && this.state.paviljon.kategorija !== null &&
-                            <Form.Text className={"textMuted"}>
-                                Ovo je paviljon {this.state.paviljon.kategorija} kategorije.
-                            </Form.Text>
-                            }
-                        </Col>
-                        <Col>
-                            <Form.Group>
-                                <Form.Label> Kat </Form.Label>
-                                <Form.Control name="kat" type="number" min={0}
-                                              onChange={this.onChange}
-                                              max={this.state.paviljon === undefined ? 0 : this.state.paviljon.brojKatova}
-                                              disabled={this.state.paviljon === undefined}
-                                              defaultValue={this.state.kat}/>
-                            </Form.Group>
-                        </Col>
-                    </Form.Row>
-                </Form.Group>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Row>
+                                <Col xs={9}>
+                                    <Form.Label> Paviljon </Form.Label>
+                                    <Form.Control as="select" name="paviljon" onChange={this.onChange}
+                                                  value={this.state.paviljon && this.state.paviljon.naziv}>
+                                        {
+
+                                            this.props.grad.domovi.filter(
+                                                dom => dom.naziv === this.state.dom
+                                            ).map(dom =>
+                                                dom.paviljoni.map(paviljon => (
+                                                    <option id={paviljon.id}>{paviljon.naziv}</option>
+                                                ))
+                                            )
+                                        }
+                                    </Form.Control>
+                                    {this.state.paviljon !== undefined && this.state.paviljon.kategorija !== null &&
+                                    <Form.Text className={"textMuted"}>
+                                        Ovo je paviljon {this.state.paviljon.kategorija} kategorije.
+                                    </Form.Text>
+                                    }
+                                </Col>
+                                <Col>
+                                    <Form.Label> Kat </Form.Label>
+                                    <Form.Control name="kat" type="number" min={0}
+                                                  onChange={this.onChange}
+                                                  max={this.state.paviljon === undefined ? 0 : this.state.paviljon.brojKatova}
+                                                  disabled={this.state.paviljon === undefined}
+                                                  defaultValue={this.state.kat}/>
+                                </Col>
+                            </Form.Row>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group>
+                            <Form.Label> Broj kreveta </Form.Label>
+                            <Form.Control as="select" name="brojKreveta"
+                                          onChange={this.onChange} value={this.capitalize(this.state.brojKreveta)}>
+                                {this.props.brojKreveta.map(broj => (
+                                    <option>{broj.name}</option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label> Tip kupaonice </Form.Label>
+                            <Form.Control as="select" name="tipKupaonice"
+                                          value={this.capitalize(this.state.tipKupaonice)}
+                                          onChange={this.onChange}>
+                                {this.props.tipKupaonice.map(tip => (
+                                    <option>{tip.name}</option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+                    </Col>
+                </Form.Row>
 
 
-                <Form.Group>
+                {/*<Form.Group>
                     <Form.Row>
                         <Col>
                             <Form.Label> Broj kreveta </Form.Label>
@@ -179,7 +210,7 @@ class Soba extends Component {
                             </Form.Control>
                         </Col>
                     </Form.Row>
-                </Form.Group>
+                </Form.Group>*/}
                 <Form.Group>
                     <Form.Label> Komentar </Form.Label>
                     <Form.Control name="komentar" as="textarea" rows="3" onChange={this.onChange}

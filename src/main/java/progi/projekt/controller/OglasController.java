@@ -49,6 +49,11 @@ public class OglasController {
         return ResponseEntity.ok(new OglasDTO(oglas));
     }
 
+    @GetMapping("/getparovi")
+    public ResponseEntity<?> getOglasParovi(@RequestParam(value = "oglas_id") String oglasId) {
+        Oglas oglas = oglasService.findById(oglasId).get();
+        return ResponseEntity.ok(new OglasDTO(oglas));
+    }
 
     @GetMapping(value = "/arhivirani")
     public List<OglasDTO> arhivirani(@RequestParam(value = "student_username") String username) {

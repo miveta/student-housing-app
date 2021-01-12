@@ -55,36 +55,46 @@ export default class OglasiPage extends Component {
 
     render() {
         return (
-            <div className="middle">
-                <Tab.Container id="left-tabs-example" defaultActiveKey="first" className={"left-tabs"}>
-                    <Row>
-                        <Col sm={2}>
-                            <Nav variant="pills" className="flex-column">
-                                <Nav.Item>
-                                    <Nav.Link eventKey="first">Aktivni oglas</Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="second"> Arhivirani oglasi</Nav.Link>
-                                </Nav.Item>
+
+            <Tab.Container id="left-tabs-example" defaultActiveKey="first" className={"tabs"}>
+                <Row className={"tabs"}>
+                    <Col sm={3} className={"left"}>
+                        <Nav variant="pills" className="navigation flex-column" fill={true}>
+                            <Nav.Item>
+                                <Nav.Link eventKey="aktivni" block>Aktivni oglas</Nav.Link>
+                                <Nav variant="pills" className="navigation flex-column" fill={true}>
+                                    <Nav.Item>
+                                        <Nav.Link eventKey="nudim" block>Nudim sobu</Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item>
+                                        <Nav.Link eventKey="trazim" block>Tražim sobu</Nav.Link>
+                                    </Nav.Item>
+                                </Nav>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="second" block> Arhivirani oglasi</Nav.Link>
+                            </Nav.Item>
 
 
-                            </Nav>
-                        </Col>
-                        <Col>
-                            <Tab.Content>
-                                <Tab.Pane eventKey="first">
-                                    <MojOglas onArhiviraj={this.onArhiviraj}/>
-                                </Tab.Pane>
+                        </Nav>
+                    </Col>
+                    <Col className={"middle"}>
+                        <Tab.Content>
+                            <Tab.Pane eventKey="aktivni">
+                                <MojOglas onArhiviraj={this.onArhiviraj}/>
+                            </Tab.Pane>
 
-                                <Tab.Pane eventKey="second">
-                                    <ArhiviraniOglasiList onAktiviraj={this.onAktiviraj}/>
-                                </Tab.Pane>
+                            <Tab.Pane eventKey="second">
+                                <ArhiviraniOglasiList onAktiviraj={this.onAktiviraj}/>
+                            </Tab.Pane>
 
-                            </Tab.Content>
-                        </Col>
-                    </Row>
-                </Tab.Container>
-            </div>
+                        </Tab.Content>
+                    </Col>
+                    <Col sm={3} className={"right"}/>
+
+                </Row>
+            </Tab.Container>
+
         )
     }
 }

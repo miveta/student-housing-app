@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import * as cookie from "react-cookies";
+import ParCard from "./ParCard";
 
 export default class ParoviList extends Component {
     constructor(props) {
@@ -28,6 +29,20 @@ export default class ParoviList extends Component {
 
     render() {
         console.log(this.state)
-        return (<div></div>)
+        return (
+            <div>
+                <h3>Najbolji kandidat! :)</h3>
+                {
+                    this.state.parovi.map(par =>
+                        <div>
+                            <ParCard
+                                id={par.id}
+                                key={par.id}
+                                par={par}
+                                user={this.state.user}/>
+                        </div>
+                    )
+                }
+            </div>)
     }
 }

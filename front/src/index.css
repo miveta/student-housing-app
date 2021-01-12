@@ -12,6 +12,42 @@ body {
     background: linear-gradient(to right, #f64f59, #c471ed, #12c2e9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
+.tabs {
+    flex-grow: 1;
+}
+
+.navigation {
+    background: #ffffff;
+    margin: 30px;
+    padding: 15px;
+    box-shadow: 0 5px 5px rgba(34, 35, 58, 0.2);
+    border-radius: 15px;
+}
+
+.left {
+    background: #12c2e9; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #f64f59, #c471ed, #12c2e9); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #f64f59, #c471ed, #12c2e9);
+}
+
+.right {
+    background: #12c2e9; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #f64f59, #c471ed, #12c2e9); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #f64f59, #c471ed, #12c2e9);
+}
+
+.rightbar {
+    box-sizing: content-box;
+    flex: 1;
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    background: #F9F7F9;
+    box-shadow: 10px 14px 80px rgba(34, 35, 58, 0.2);
+    padding: 40px 55px 45px 55px;
+}
+
+
 .dropdown-toggle:after {
     visibility: hidden
 }
@@ -19,6 +55,17 @@ body {
 body, html, .App, #root {
     width: 100%;
     height: 100%;
+}
+
+.btn-primary.no {
+    background-color: #f64f59;
+    border-color: #f64f59;
+}
+
+
+.btn-primary.yes {
+    background-color: #12c2e9;
+    border-color: #12c2e9;
 }
 
 .App {
@@ -48,6 +95,7 @@ body, html, .App, #root {
 }
 
 .innerForm {
+    margin: 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -70,14 +118,12 @@ body, html, .App, #root {
     border-radius: 15px;
 }
 
-.sidebar {
-}
 
 .middle {
+    min-height: 100%;
     box-sizing: content-box;
     flex: 1;
     width: 80%;
-    margin: auto;
     overflow: hidden;
     background: #F9F7F9;
     box-shadow: 10px 14px 80px rgba(34, 35, 58, 0.2);
