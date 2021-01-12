@@ -1,5 +1,6 @@
 package progi.projekt.service.impl;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import progi.projekt.model.*;
 import progi.projekt.model.enums.StatusOglasaEnum;
@@ -20,9 +21,9 @@ public class MatchingServiceImpl implements MatchingService {
 	public MatchingServiceImpl(
 			StudentService studentService,
 			OglasService oglasService,
-			KandidatService kandidatService,
+			@Lazy KandidatService kandidatService,
 			ParService parService,
-			LajkService lajkService) {
+			@Lazy LajkService lajkService) {
 		this.studentService = studentService;
 		this.oglasService = oglasService;
 		this.kandidatService = kandidatService;
@@ -137,7 +138,7 @@ public class MatchingServiceImpl implements MatchingService {
 
 		for (Lajk lajk : lajkovi){
 			Student stud = lajk.getLajkId().getStudent();
-			Oglas oglas1 = stud.getOglas();
+			Oglas oglas1 = stud.getAktivniOglas();
 			Oglas oglas2 = lajk.getLajkId().getOglas();
 
 			if (lajk.getOcjena() > 0 && kandidatService.josNisuKandidat(oglas1, oglas2)){
@@ -296,7 +297,7 @@ public class MatchingServiceImpl implements MatchingService {
 					Integer trostranaOcjena;
 
 					//ako bilo koji od studenata nije ocjenio par
-					if (ocjenaABOptional.isEmpty() ||
+					if (	ocjenaABOptional.isEmpty() ||
 							ocjenaBCOptional.isEmpty() ||
 							ocjenaCAOptional.isEmpty()) {
 						trostranaOcjena = -1;
