@@ -13,8 +13,12 @@ public class OglasDTO {
     private Date objavljen;
     private StatusOglasaEnum status;
     private String student;
+    private String studentJmbag;
+    private String studentEmail;
     private SobaDTO soba;
     private UvjetiDTO uvjeti;
+
+
 
     public OglasDTO(Oglas oglas) {
         this.id = oglas.getId();
@@ -22,6 +26,8 @@ public class OglasDTO {
         this.objavljen = oglas.getObjavljen();
         this.status = oglas.getStatusOglasa();
         this.student = oglas.getStudent().getKorisnickoIme();
+        this.studentJmbag = oglas.getStudent().getJmbag();
+        this.studentEmail = oglas.getStudent().getEmail();
         this.soba = new SobaDTO(oglas.getSoba());
         this.uvjeti = new UvjetiDTO(oglas.getTrazeniUvjeti());
     }
@@ -73,6 +79,14 @@ public class OglasDTO {
     public void setStudent(String student) {
         this.student = student;
     }
+
+    public String getStudentJmbag() { return studentJmbag; }
+
+    public void setStudentJmbag(String studentJmbag) { this.studentJmbag = studentJmbag; }
+
+    public String getStudentEmail() { return studentEmail; }
+
+    public void setStudentEmail(String studentEmail) { this.studentEmail = studentEmail; }
 
     public SobaDTO getSoba() {
         return soba;

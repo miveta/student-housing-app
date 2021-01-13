@@ -229,7 +229,7 @@ public class OglasController {
     }
 
 
-    @GetMapping(value = "/listParoviWithFlags")
+    /*@GetMapping(value = "/listParoviWithFlags")
     public List<ParDTO> listParoviWithFlags(@RequestParam Boolean ignore, Boolean done, Boolean odobren) {
         //note: napravio sam ParDTO jer ako stavim Par u listu, toString je beskonacan jer oglas ima referencu na
         // studenta koji opet ima referencu na oglas. Ista stvar sa domovima
@@ -261,7 +261,52 @@ public class OglasController {
         }
 
         return parovi;
+    }*/
+
+    @GetMapping(value = "/listParoviWithFlags")
+    public ResponseEntity<?>/*List<ParDTO>*/ listParoviWithFlags(/*@RequestParam(value = "ignore") Boolean ignore,
+											@RequestParam(value = "done") Boolean done,
+											@RequestParam(value = "odobren") Boolean odobren*/) {
+        //note: napravio sam ParDTO jer ako stavim Par u listu, toString je beskonacan jer oglas ima referencu na
+        // studenta koji opet ima referencu na oglas. Ista stvar sa domovima
+        // - holik
+
+		/*List<Oglas> oglasi = oglasService.listAll();
+
+		//force update oglasa unutar svakog studenta
+		List<Student> studenti = studentService.listAll();
+		for (Oglas oglas : oglasi){
+			for (Student stud : studenti){
+				if (stud.getId() == oglas.getStudent().getId()){
+					stud.setAktivniOglas(oglas);
+					studentService.save(stud);
+				}
+			}
+		}
+
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
+
+		ArrayList<ParDTO> parovi = new ArrayList<>();
+
+		for (Par par : parService.listAll()){
+				if (par.getIgnore() == ignore && par.getDone() == done && par.getOdobren() == odobren){
+					ParDTO parDTO = new ParDTO(par);
+					parovi.add(parDTO);
+				}
+		}*/
+
+        List<ParDTO> parovi = new ArrayList<>();
+        List<OglasDTO> oglasi = oglasService.listAll().stream().map(OglasDTO::new).collect(Collectors.toList());
+        OglasDTO oglasdto1 = oglasi.get(0);
+        Oglas oglas1 = oglasService.findById(oglasdto1.getId().toString()).get();
+        OglasDTO oglasdto2 =  oglasi.get(1);
+        Oglas oglas2 = oglasService.findById(oglasdto2.getId().toString()).get();
+
+        parovi.add(new ParDTO(new Par(oglas1, oglas2, true,false, false)));
+        return ResponseEntity.ok(parovi);
     }
+
 
 /*    @PostMapping(value = "/updateParSC", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateParSC(@RequestParam(value = "par_id") String parId,
