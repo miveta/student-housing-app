@@ -54,17 +54,7 @@ public class MatchingServiceImpl implements MatchingService {
 		}
 
 		//popunjavanje liste postojecih kandidata svakog oglasa iz liste svih kandidata
-		for (Oglas oglas : oglasi) {
-			List<Kandidat> kandidati = kandidatService.listAll(oglas.getId());
-			for (Kandidat kandidat : kandidati) {
-				if (kandidat.getOglas().getId() == oglas.getId() || kandidat.getKandOglas().getId() == oglas.getId()) {
-					if (!kandidati.contains(kandidat)) {
-						oglas.getKandidati().add(kandidat);
-						oglasService.save(oglas);
-					}
-				}
-			}
-		}
+		kandidatService.updateLocalKands();
 	}
 
 

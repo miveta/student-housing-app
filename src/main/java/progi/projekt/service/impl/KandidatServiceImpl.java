@@ -38,6 +38,11 @@ public class KandidatServiceImpl implements KandidatService {
 		return kandidatRepo.findAllByOglas(oglas.get());
 	}
 
+	@Override
+	public List<Kandidat> listAll() {
+		return kandidatRepo.findAll();
+	}
+
 	public void stvoriKand(Oglas oglas1, Oglas oglas2) {
 //		System.out.print("oglas1 initial kandidati count: " + oglas1.getKandidati().stream().count() + "\n");
 //		System.out.print("oglas2 initial kandidati count: " + oglas2.getKandidati().stream().count() + "\n");
@@ -53,6 +58,10 @@ public class KandidatServiceImpl implements KandidatService {
 
 		Kandidat kand = new Kandidat(oglas1, oglas2, bliskost, stvoren, false);
 
+		if (!kandidatRepo.findAll().contains(kand)){
+			save(kand);
+		}
+
 		oglas1.getKandidati().add(kand);
 		oglasService.save(oglas1); //TODO: fix ovo, pa makniti updateLocalKands()
 
@@ -63,11 +72,6 @@ public class KandidatServiceImpl implements KandidatService {
 //		System.out.print("oglas1 kandidati count: " + oglas1.getKandidati().stream().count() + "\n");
 //		System.out.print("oglas2 kandidati count: " + oglas2.getKandidati().stream().count() + "\n");
 
-
-
-		if (!kandidatRepo.findAll().contains(kand)){
-			save(kand);
-		}
 
 	}
 

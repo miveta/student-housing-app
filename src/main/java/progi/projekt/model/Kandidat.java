@@ -59,14 +59,17 @@ public class Kandidat {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Kandidat kandidat = (Kandidat) o;
-		//todo: popraviti (ovo i dalje dodaje duplikat kandidata)
-		return Objects.equals(oglas, kandidat.oglas) &&
-				Objects.equals(kandOglas, kandidat.kandOglas) &&
-				Objects.equals(oglas, kandidat.kandOglas) &&
-				Objects.equals(kandOglas, kandidat.oglas) &&
-				Objects.equals(bliskost, kandidat.bliskost) &&
-				Objects.equals(stvoren, kandidat.stvoren);
+		Kandidat kand1 = this;
+		Kandidat kand2 = (Kandidat) o;
+
+		if (kand1.getOglas().getId() == kand2.getOglas().getId() && kand1.getKandOglas().getId() == kand2.getKandOglas().getId()){
+			return true;
+		}
+
+		if (kand1.getKandOglas().getId() == kand2.getOglas().getId() && kand1.getOglas().getId() == kand2.getKandOglas().getId()){
+			return true;
+		}
+		return false;
 	}
 
 	@Override
