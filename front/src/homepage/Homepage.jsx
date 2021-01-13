@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import OglasList from "../oglasi/homepage/OglasList";
 import cookie from "react-cookies";
-import {Col, Nav, Row, Tab} from "react-bootstrap";
+import {Button, Col, Jumbotron, Nav, Navbar, NavDropdown, Row, Tab} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
 
 class Homepage extends Component {
@@ -50,7 +50,7 @@ class Homepage extends Component {
 
     render() {
         return (
-            <div className="middle">
+            <div className="middleHomepage">
                 <Tab.Container id="left-tabs-example" defaultActiveKey="first" className={"left-tabs"}>
                     <Row>
                         <Col sm={2}>

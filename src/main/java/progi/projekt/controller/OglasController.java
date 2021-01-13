@@ -26,14 +26,16 @@ public class OglasController {
     private StudentService studentService;
     private ParService parService;
     private ZaposlenikSCService zaposlenikSCService;
+    private MatchingService matchingService;
 
-    public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService, ParService parService, ZaposlenikSCService zaposlenikSCService) {
+    public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService, ParService parService, ZaposlenikSCService zaposlenikSCService, MatchingService matchingService) {
         this.oglasService = oglasService;
         this.lajkService = lajkService;
         this.kandidatService = kandidatService;
         this.studentService = studentService;
         this.parService = parService;
         this.zaposlenikSCService = zaposlenikSCService;
+        this.matchingService = matchingService;
     }
 
     @GetMapping("/list")
@@ -230,7 +232,7 @@ public class OglasController {
     }
 
 
-    @GetMapping(value = "/listParoviWithFlags")
+    /*@GetMapping(value = "/listParoviWithFlags")
     public List<ParDTO> listParoviWithFlags(@RequestParam Boolean ignore, Boolean done, Boolean odobren) {
         List<Oglas> oglasi = oglasService.listAll();
 
@@ -250,7 +252,52 @@ public class OglasController {
         }
 
         return parovi;
+    }*/
+
+    @GetMapping(value = "/listParoviWithFlags")
+    public ResponseEntity<?>/*List<ParDTO>*/ listParoviWithFlags(/*@RequestParam(value = "ignore") Boolean ignore,
+											@RequestParam(value = "done") Boolean done,
+											@RequestParam(value = "odobren") Boolean odobren*/) {
+        //note: napravio sam ParDTO jer ako stavim Par u listu, toString je beskonacan jer oglas ima referencu na
+        // studenta koji opet ima referencu na oglas. Ista stvar sa domovima
+        // - holik
+
+		/*List<Oglas> oglasi = oglasService.listAll();
+
+		//force update oglasa unutar svakog studenta
+		List<Student> studenti = studentService.listAll();
+		for (Oglas oglas : oglasi){
+			for (Student stud : studenti){
+				if (stud.getId() == oglas.getStudent().getId()){
+					stud.setAktivniOglas(oglas);
+					studentService.save(stud);
+				}
+			}
+		}
+
+		//force update kandidata unutar svakog oglasa
+		kandidatService.updateLocalKands();
+
+		ArrayList<ParDTO> parovi = new ArrayList<>();
+
+		for (Par par : parService.listAll()){
+				if (par.getIgnore() == ignore && par.getDone() == done && par.getOdobren() == odobren){
+					ParDTO parDTO = new ParDTO(par);
+					parovi.add(parDTO);
+				}
+		}*/
+
+        List<ParDTO> parovi = new ArrayList<>();
+        List<OglasDTO> oglasi = oglasService.listAll().stream().map(OglasDTO::new).collect(Collectors.toList());
+        OglasDTO oglasdto1 = oglasi.get(0);
+        Oglas oglas1 = oglasService.findById(oglasdto1.getId().toString()).get();
+        OglasDTO oglasdto2 =  oglasi.get(1);
+        Oglas oglas2 = oglasService.findById(oglasdto2.getId().toString()).get();
+
+        parovi.add(new ParDTO(new Par(oglas1, oglas2, true,false, false)));
+        return ResponseEntity.ok(parovi);
     }
+
 
     public void updateOglasInStudents(List<Oglas> oglasi) {
         //force update oglasa unutar svakog studenta
@@ -278,8 +325,32 @@ public class OglasController {
     @PostMapping("/updatePar")
     public ResponseEntity<?> updatePar(@RequestParam(value = "par_id") String parId,
                                        @RequestParam(value = "odobren") Boolean odobren,
-                                       @RequestParam(value = "zaposlenikKorisnickoIme") String username) {
-        return null;
+                                       @RequestParam(value = "student_username") String username) {
+
+        kandidatService.updateLocalKands();
+
+        Optional<Par> optionalPar = parService.find(Long.parseLong(parId));
+        if (optionalPar.isEmpty()) return ResponseEntity.badRequest().body("Ne postoji par s tim id-em!");
+
+        Par par = optionalPar.get();
+
+        boolean prvi = par.getOglas1().getStudent().getKorisnickoIme().equals(username);
+        boolean drugi = par.getOglas2().getStudent().getKorisnickoIme().equals(username);
+
+        if (prvi && drugi || !prvi && !drugi) return ResponseEntity.badRequest().body("!");
+
+        if (odobren == false) par.setIgnore(true);
+        else {
+            if (prvi) par.setPrihvatioPrvi(true);
+            if (drugi) par.setPrihvatioDrugi(true);
+
+            if (par.getPrihvatioPrvi() != null && par.getPrihvatioDrugi() != null)
+                par.setDone(par.getPrihvatioPrvi() && par.getPrihvatioDrugi());
+        }
+
+        parService.update(par);
+        matchingService.confirmFun();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/updateParSC")
@@ -295,7 +366,7 @@ public class OglasController {
         //force update kandidata unutar svakog oglasa
         kandidatService.updateLocalKands();
 
-        Optional<Par> parOpt = parService.find(Integer.parseInt(parId));
+        Optional<Par> parOpt = parService.find(Long.parseLong(parId));
         Optional<ZaposlenikSC> zaposelnikOpt = zaposlenikSCService.findBykorisnickoIme(username);
 
         if (parOpt.isPresent() && zaposelnikOpt.isPresent()) {

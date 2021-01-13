@@ -8,11 +8,10 @@ class HomepageSC extends Component {
         super(props);
         this.state = {
             user: cookie.load('principal'),
-            upiti: []
+            upiti: [],
+            odobreniUpiti: []
         };
-    }
 
-    componentDidMount() {
         const options = {
             method: 'GET',
             headers: {
@@ -20,8 +19,7 @@ class HomepageSC extends Component {
             }
         };
 
-        //dodati podršku za back
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/listParoviWithFlags`, options)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/listParoviWithFlags?ignore=${false}&done=${true}&odobren=${false}`, options)
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(body => {
@@ -30,38 +28,49 @@ class HomepageSC extends Component {
                     }).catch(error => console.log(error))
                 }
             });
+
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/listParoviWithFlags?ignore=${false}&done=${true}&odobren=${true}`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    response.json().then(body => {
+                        this.setState({odobreniUpiti: body})
+                        console.log(this.state.odobreniUpiti)
+                    }).catch(error => console.log(error))
+                }
+            });
     }
 
-    render() {
+    /*getOdobreniUpiti(){
 
+        this.state.upiti.forEach(u => {
+            if(u.odobren)
+                this.state.odobreniUpiti.add(u);
+        })
+    }*/
+
+    render() {
         return(
             <div className="middle">
-                <Tab.Container id="left-tabs-example" defaultActiveKey="first" className={"left-tabs"}>
+                <Tab.Container id="left-tabs-example" defaultActiveKey="sviUpiti" className={"left-tabs"}>
                     <Row>
                         <Col sm={2}>
                             <Nav variant="pills" className="flex-column">
                                 <Nav.Item>
-                                    <Nav.Link eventKey="first">Svi upiti</Nav.Link>
+                                    <Nav.Link eventKey="sviUpiti">Svi upiti</Nav.Link>
                                 </Nav.Item>
-                                {
-                                    this.state.user && <Nav.Item>
-                                        <Nav.Link eventKey="second">Potvrđeni upiti</Nav.Link>
-                                    </Nav.Item>
-                                }
-
+                                <Nav.Item>
+                                    <Nav.Link eventKey="odobreniUpiti">Odobreni upiti</Nav.Link>
+                                </Nav.Item>
                             </Nav>
                         </Col>
                         <Col>
                             <Tab.Content>
-                                <Tab.Pane eventKey="first">
+                                <Tab.Pane eventKey="sviUpiti">
                                     <ZamjenaList upiti={this.state.upiti}/>
                                 </Tab.Pane>
-                                {
-                                    this.state.user &&
-                                    <Tab.Pane eventKey="second">
-                                        <ZamjenaList/>
-                                    </Tab.Pane>
-                                }
+                                <Tab.Pane eventKey="odobreniUpiti">
+                                    <ZamjenaList upiti={this.state.odobreniUpiti}/>
+                                </Tab.Pane>
                             </Tab.Content>
                         </Col>
                     </Row>
