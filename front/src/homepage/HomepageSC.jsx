@@ -19,25 +19,21 @@ class HomepageSC extends Component {
             }
         };
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/listParoviWithFlags?ignore=${false}&done=${true}&odobren=${false}`, options)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/listParoviWithFlags?done=${true}`, options)
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(body => {
                         this.setState({upiti: body})
-                        console.log(this.state.upiti)
+                        console.log(body)
+                        let odobreni = this.state.upiti.filter(upit => upit.odobren === true)
+
+                        console.log(odobreni)
+                        this.setState({odobreniUpiti: odobreni})
                     }).catch(error => console.log(error))
                 }
             });
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/listParoviWithFlags?ignore=${false}&done=${true}&odobren=${true}`, options)
-            .then(response => {
-                if (response.status === 200) {
-                    response.json().then(body => {
-                        this.setState({odobreniUpiti: body})
-                        console.log(this.state.odobreniUpiti)
-                    }).catch(error => console.log(error))
-                }
-            });
+
     }
 
     /*getOdobreniUpiti(){

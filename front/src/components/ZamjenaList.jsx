@@ -15,8 +15,7 @@ class ZamjenaList extends Component{
             myComponent = this.props.upiti.map(upit =>
                 <div className={"innerForm"}>
                     <ZamjenaCard key={upit.id}
-                                 oglas1={upit.oglas1}
-                                 oglas2={upit.oglas2}/>
+                                 par={upit}/>
                 </div>
                 )
         } else {
