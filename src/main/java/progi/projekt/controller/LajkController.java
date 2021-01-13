@@ -8,6 +8,7 @@ import progi.projekt.model.LajkId;
 import progi.projekt.model.Oglas;
 import progi.projekt.model.Student;
 import progi.projekt.service.LajkService;
+import progi.projekt.service.MatchingService;
 import progi.projekt.service.OglasService;
 import progi.projekt.service.StudentService;
 
@@ -18,6 +19,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/lajk")
 public class LajkController {
+
+	private static final int MILISEC_IZMEDJU_POZIVA = 2 * 1000; //5 s
+
+	@Autowired
+	private MatchingService matchingService;
 
 	@Autowired
 	private LajkService lajkService;
@@ -67,6 +73,20 @@ public class LajkController {
 
 
 		Lajk updatedLajk = lajkService.update(lajk);
+
+
+		Thread kandidatiThread = new Thread(() -> {
+			matchingService.lajkFun();
+			try {
+				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+			} catch (InterruptedException e) {
+				System.err.println("Scheduled matching execution interrupted");
+			}
+			matchingService.matchFun();
+		});
+		kandidatiThread.start();
+
+
 
 		return ResponseEntity.ok(updatedLajk);
 	}

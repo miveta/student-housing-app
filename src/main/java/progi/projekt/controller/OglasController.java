@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @CrossOrigin
 @RequestMapping("/oglas")
 public class OglasController {
-
+    private static final int MILISEC_IZMEDJU_POZIVA = 2 * 1000; //5 s
 
     private OglasService oglasService;
     private LajkService lajkService;
@@ -76,6 +76,8 @@ public class OglasController {
         student.setSoba(null);
         studentService.save(student);
 
+        matchingService.resetirajOglas(aktivniOglas.getId());
+
         aktivniOglas.setStatusOglasa(StatusOglasaEnum.ARHIVIRAN);
         oglasService.save(aktivniOglas);
 
@@ -105,6 +107,24 @@ public class OglasController {
 
         arhiviraniOglas.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
         oglasService.save(arhiviraniOglas);
+
+        Thread kandidatiThread = new Thread(() -> {
+            matchingService.resetirajOglas(arhiviraniOglas.getId());
+            try {
+                Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+            } catch (InterruptedException e) {
+                System.err.println("Scheduled matching execution interrupted");
+            }
+            matchingService.kandidatiFun();
+            try {
+                Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+            } catch (InterruptedException e) {
+                System.err.println("Scheduled matching execution interrupted");
+            }
+            matchingService.parFun();
+        });
+        kandidatiThread.start();
+
         return ResponseEntity.ok(new OglasDTO(arhiviraniOglas));
     }
 
@@ -129,6 +149,7 @@ public class OglasController {
         return oglasKandidati.stream().map(OglasDTO::new).collect(Collectors.toList());
     }
 
+    //http://localhost:8080/oglas/listKandidati?oglas_id=cba3fff8-3568-4142-84f5-7490945b657c
     @GetMapping(value = "/listKandidati")
     public ArrayList<KandidatDTO> listKandidati(@RequestParam(value = "oglas_id") String oglasId) {
         //force update oglasa unutar svakog studenta
@@ -192,7 +213,7 @@ public class OglasController {
         return new ArrayList<>();
     }
 
-
+    //http://localhost:8080/oglas/listParovi?student_username=stud1
     @GetMapping(value = "/listParovi")
     public List<ParDTO> listParovi(@RequestParam(value = "student_username") String username) {
         //note: napravio sam ParDTO jer ako stavim Par u listu, toString je beskonacan jer oglas ima referencu na
@@ -231,7 +252,7 @@ public class OglasController {
         return paroviOglasa;
     }
 
-
+    //http://localhost:8080/oglas/listParoviWithFlags?done=false&ignore=false
     /*@GetMapping(value = "/listParoviWithFlags")
     public List<ParDTO> listParoviWithFlags(@RequestParam Boolean ignore, Boolean done, Boolean odobren) {
         List<Oglas> oglasi = oglasService.listAll();
@@ -320,6 +341,7 @@ public class OglasController {
         return ResponseEntity.ok(null);
     }*/
 
+    //http://localhost:8080/oglas/updatePar?par_id=35&odobren=true&zaposlenikKorisnickoIme=stef567
     @PostMapping("/updatePar")
     public ResponseEntity<?> updatePar(@RequestParam(value = "par_id") String parId,
                                        @RequestParam(value = "odobren") Boolean odobren,

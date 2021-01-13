@@ -72,8 +72,6 @@ public class LajkServiceImpl implements LajkService {
                 matchingService.ponistiPar(par);
             });
 
-            matchingService.lajkFun();
-
             return lajkRepository.saveAndFlush(l);
         } catch (Exception e) {
             //lajkRepo baca exceptione koje mu proslijedi baza (e)?
@@ -97,7 +95,17 @@ public class LajkServiceImpl implements LajkService {
 
     @Override
     public void save(Lajk lajk) {
-        matchingService.lajkFun();
         lajkRepository.save(lajk);
+    }
+
+    @Override
+    public void ponistiLajkoveOglasa(Oglas oglas) {
+        List<Lajk> lajkovi = listAll();
+
+        for (Lajk lajk : lajkovi){
+            if (lajk.getLajkId().getStudent().equals(oglas.getStudent())){
+                delete(lajk);
+            }
+        }
     }
 }

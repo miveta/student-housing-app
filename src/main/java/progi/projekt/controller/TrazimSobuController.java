@@ -22,11 +22,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/trazimSobu")
 public class TrazimSobuController {
 
+    private static final int MILISEC_IZMEDJU_POZIVA = 2 * 1000; //5 s
+
     private StudentService studentService;
     private TrazimSobuService trazimSobuService;
     private UtilService utilService;
     private SobaService sobaService;
     private OglasService oglasService;
+    private MatchingService matchingService;
 
     public TrazimSobuController(StudentService studentService, TrazimSobuService trazimSobuService, UtilService utilService, SobaService sobaService, OglasService oglasService) {
         this.studentService = studentService;
@@ -109,6 +112,19 @@ public class TrazimSobuController {
         trazeniUvjeti.setTipKupaonice(tipKupaonice);
 
         trazimSobuService.update(trazeniUvjeti);
+
+
+        Thread kandidatiThread = new Thread(() -> {
+            matchingService.kandidatiFun();
+            try {
+                Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+            } catch (InterruptedException e) {
+                System.err.println("Scheduled matching execution interrupted");
+            }
+            matchingService.matchFun();
+        });
+        kandidatiThread.start();
+
 
         return ResponseEntity.ok(trazimSobuForm);
     }

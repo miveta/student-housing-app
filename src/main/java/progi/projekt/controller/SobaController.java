@@ -25,13 +25,15 @@ public class SobaController {
     private OglasService oglasService;
     private StudentService studentService;
     private final TrazimSobuService trazimSobuService;
+    private MatchingService matchingService;
 
-    public SobaController(SobaService sobaService, UtilService utilService, OglasService oglasService, StudentService studentService, TrazimSobuService trazimSobuService) {
+    public SobaController(SobaService sobaService, UtilService utilService, OglasService oglasService, StudentService studentService, TrazimSobuService trazimSobuService, MatchingService matchingService) {
         this.sobaService = sobaService;
         this.utilService = utilService;
         this.oglasService = oglasService;
         this.studentService = studentService;
         this.trazimSobuService = trazimSobuService;
+        this.matchingService = matchingService;
     }
 
     @GetMapping("/gradovi")
@@ -82,12 +84,20 @@ public class SobaController {
         studentService.update(student);
 
         Optional<Oglas> optionalOglas = oglasService.findByStudentAndStatus(student, StatusOglasaEnum.AKTIVAN);
-        if (optionalOglas.isEmpty()) {
-            TrazeniUvjeti trazeniUvjeti = new TrazeniUvjeti();
-            trazeniUvjeti.setGrad(student.getGrad());
-            trazimSobuService.update(trazeniUvjeti);
-            oglasService.spremiOglas(student, student.getSoba(), trazeniUvjeti);
-        }
+        optionalOglas.ifPresentOrElse(
+                (oglas) ->
+                {
+                    matchingService.resetirajOglas(oglas.getId());
+                },
+                () ->
+                //if (optionalOglas.isEmpty()) {
+                {
+
+                    TrazeniUvjeti trazeniUvjeti = new TrazeniUvjeti();
+                    trazeniUvjeti.setGrad(student.getGrad());
+                    trazimSobuService.update(trazeniUvjeti);
+                    oglasService.spremiOglas(student, student.getSoba(), trazeniUvjeti);
+                });
 
         return ResponseEntity.ok(new SobaDTO(soba));
     }

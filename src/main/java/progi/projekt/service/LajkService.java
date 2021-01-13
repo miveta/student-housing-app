@@ -23,4 +23,6 @@ public interface LajkService {
     Lajk delete(Lajk l);
 
 	void save(Lajk lajk);
+
+	void ponistiLajkoveOglasa(Oglas oglas);
 }

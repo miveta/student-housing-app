@@ -510,7 +510,10 @@ public class MatchingServiceImpl implements MatchingService {
 			oglas.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
 
 			kandidatService.ponistiKandidateOglasa(oglas);
+			lajkService.ponistiLajkoveOglasa(oglas);
 			parService.ponistiParoveOglasa(oglas);
+
+			resetKandsDebug();
 
 			oglasService.save(oglas);
 		}
