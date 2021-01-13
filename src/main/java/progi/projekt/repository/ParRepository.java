@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface ParRepository extends JpaRepository<Par, Long> {
 	LinkedList<Par> findAllByOglas1OrOglas2(Oglas oglas1, Oglas oglas2);
 
-	Optional<Par> findByIdPar(Integer idPar);
+    Optional<Par> findByIdPar(Long idPar);
 }

@@ -26,14 +26,16 @@ public class OglasController {
     private StudentService studentService;
     private ParService parService;
     private ZaposlenikSCService zaposlenikSCService;
+    private MatchingService matchingService;
 
-    public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService, ParService parService, ZaposlenikSCService zaposlenikSCService) {
+    public OglasController(OglasService oglasService, LajkService lajkService, KandidatService kandidatService, StudentService studentService, ParService parService, ZaposlenikSCService zaposlenikSCService, MatchingService matchingService) {
         this.oglasService = oglasService;
         this.lajkService = lajkService;
         this.kandidatService = kandidatService;
         this.studentService = studentService;
         this.parService = parService;
         this.zaposlenikSCService = zaposlenikSCService;
+        this.matchingService = matchingService;
     }
 
     @GetMapping("/list")
@@ -321,8 +323,32 @@ public class OglasController {
     @PostMapping("/updatePar")
     public ResponseEntity<?> updatePar(@RequestParam(value = "par_id") String parId,
                                        @RequestParam(value = "odobren") Boolean odobren,
-                                       @RequestParam(value = "zaposlenikKorisnickoIme") String username) {
-        return null;
+                                       @RequestParam(value = "student_username") String username) {
+
+        kandidatService.updateLocalKands();
+
+        Optional<Par> optionalPar = parService.find(Long.parseLong(parId));
+        if (optionalPar.isEmpty()) return ResponseEntity.badRequest().body("Ne postoji par s tim id-em!");
+
+        Par par = optionalPar.get();
+
+        boolean prvi = par.getOglas1().getStudent().getKorisnickoIme().equals(username);
+        boolean drugi = par.getOglas2().getStudent().getKorisnickoIme().equals(username);
+
+        if (prvi && drugi || !prvi && !drugi) return ResponseEntity.badRequest().body("!");
+
+        if (odobren == false) par.setIgnore(true);
+        else {
+            if (prvi) par.setPrihvatioPrvi(true);
+            if (drugi) par.setPrihvatioDrugi(true);
+
+            if (par.getPrihvatioPrvi() != null && par.getPrihvatioDrugi() != null)
+                par.setDone(par.getPrihvatioPrvi() && par.getPrihvatioDrugi());
+        }
+
+        parService.update(par);
+        matchingService.confirmFun();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/updateParSC")
@@ -330,7 +356,7 @@ public class OglasController {
                                          @RequestParam(value = "odobren") Boolean odobren,
                                          @RequestParam(value = "zaposlenikKorisnickoIme") String username) {
 
-        List<Oglas> oglasi = oglasService.listAll();
+/*        List<Oglas> oglasi = oglasService.listAll();
 
         //force update oglasa unutar svakog studenta
         List<Student> studenti = studentService.listAll();
@@ -341,12 +367,12 @@ public class OglasController {
                     studentService.save(stud);
                 }
             }
-        }
+        }*/
 
         //force update kandidata unutar svakog oglasa
         kandidatService.updateLocalKands();
 
-        Optional<Par> parOpt = parService.find(Integer.parseInt(parId));
+        Optional<Par> parOpt = parService.find(Long.parseLong(parId));
         Optional<ZaposlenikSC> zaposelnikOpt = zaposlenikSCService.findBykorisnickoIme(username);
 
         if (parOpt.isPresent() && zaposelnikOpt.isPresent()) {

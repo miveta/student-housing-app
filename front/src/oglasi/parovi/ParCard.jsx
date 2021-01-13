@@ -11,12 +11,30 @@ export default class ParCard extends Component {
         this.oglas = props.par.oglas1.student === props.user.korisnickoIme ? props.par.oglas2 : props.par.oglas1
     }
 
-    onPrihvati = () => {
+    onUpdatePar = (potvrdeno) => {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        };
 
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/updatePar?par_id=${this.par.parID}&odobren=${potvrdeno}&student_username=${this.props.user.korisnickoIme}`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                }
+            }).then(json => {
+            console.log(json)
+        }).catch(e => console.log("korisnik nema oglase?"))
+    }
+
+    onPrihvati = () => {
+        this.onUpdatePar(true)
     }
 
     onOdbij = () => {
-
+        this.onUpdatePar(false)
     }
 
     render() {
@@ -27,10 +45,10 @@ export default class ParCard extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        <Button className={"yes"} block>Prihvati</Button>
+                        <Button className={"yes"} block onClick={this.onPrihvati}>Prihvati</Button>
                     </Col>
                     <Col>
-                        <Button className={"no"} block>Odbij</Button>
+                        <Button className={"no"} block onClick={this.onOdbij}>Odbij</Button>
                     </Col>
                 </Row>
                 <br/>

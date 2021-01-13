@@ -27,6 +27,7 @@ export default class ParoviList extends Component {
         }).catch(e => console.log("korisnik nema oglase?"))
     }
 
+
     render() {
         console.log(this.state)
         return (

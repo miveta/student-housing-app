@@ -12,7 +12,7 @@ public interface ParService {
 
 	List<Par> listAll(Oglas oglas);
 
-	Optional<Par> find(Integer idPar);
+	Optional<Par> find(Long idPar);
 
 	Integer ObostranaOcjena(Integer ocjena1, Integer ocjena2);
 
@@ -25,6 +25,8 @@ public interface ParService {
 	void vratiOglaseParaNaAKTIVAN(Par par);
 
 	void save(Par par);
+
+	void update(Par par);
 
 	boolean ifObaAKTIVAN(Par par);
 

@@ -39,7 +39,7 @@ public class ParServiceImpl implements ParService {
 	}
 
 	@Override
-	public Optional<Par> find(Integer idPar) {
+	public Optional<Par> find(Long idPar) {
 		return parRepo.findByIdPar(idPar);
 	}
 
@@ -121,6 +121,11 @@ public class ParServiceImpl implements ParService {
 			}
 		}
 		if (par.getOglas1() == par.getOglas2()) return;
+		parRepo.save(par);
+	}
+
+	@Override
+	public void update(Par par) {
 		parRepo.save(par);
 	}
 

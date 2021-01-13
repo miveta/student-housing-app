@@ -4,7 +4,7 @@ import progi.projekt.model.Par;
 import progi.projekt.model.ZaposlenikSC;
 
 public class ParDTO {
-    private int parID;
+    private long parID;
     private OglasDTO oglas1;
     private OglasDTO oglas2;
     private Boolean done;
@@ -24,11 +24,11 @@ public class ParDTO {
         this.zaposlenikSC = par.getZaposlenikSC();
     }
 
-    public int getParID() {
+    public long getParID() {
         return parID;
     }
 
-    public void setParID(int parID) {
+    public void setParID(long parID) {
         this.parID = parID;
     }
 
