@@ -540,21 +540,21 @@
 			Kontroleri također pozivaju servise. Servisi obavljaju logiku aplikacije te za to koriste podatke iz razreda Model. Kontroleri i servisi pozivaju Repozitorij. To su sučelja koja nasljeđuju sučelje JpaRepository koje ima ugrađene metode za dohvat i spremanje podataka u bazu. Na slici 4.6. prikazan je dio Security. Razrede iz dijela Security pozivaju kontroleri za autentikaciju podataka.
 		
 			\begin{figure}[H]
-				\includegraphics[scale=0.35]{dijagrami/model.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.25]{dijagrami/classDiagramModel.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagrami razreda - dio Model}
 				\label{fig:model}
 			\end{figure}
 		
 			\begin{figure}[H]
-				\includegraphics[scale=0.4]{dijagrami/controller.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.11]{dijagrami/classDiagramCSR.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagrami razreda - dio Kontroler, Servis i Repozitorij}
 				\label{fig:controller}
 			\end{figure}
 		
 			\begin{figure}[H]
-				\includegraphics[scale=0.4]{dijagrami/security.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.4]{dijagrami/classDiagramSecurity.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagrami razreda - dio Security}
 				\label{fig:security}
@@ -565,9 +565,11 @@
 		\section{Dijagram stanja}
 		
 		
-		Dijagram stanja ponašajni je UML dijagram koji opisuje dinamično ponašanje nekog dijela sustava prikazom konačnog broja stanja objekata te prijelaze između stanja koji su potaknuti događajima. Na dijagramu na slici 4.7 prikazan je dijagram stanja za prijavljenog korisnika. Kada se korisnik prijavi (ili registrira) prikazuje mu se početna stranica na kojoj su mu vidljivi svi oglasi i oglasi koji odgovaraju njegovim kriterijima, ako ih je postavio. Za svaki oglas korisnik može vidjeti dodatne informacije o sobi. Klikom na "Profil" prikazuju se svi podaci. Korisnik te podatke može ažurirati (osim podatka JMBAG te korisničkog imena). Također može izbrisati svoj profil. Klikom na ikonu zvona korisnik u padajućem izborniku može vidjeti nepročitane i pročitane obavijesti (ili poruku da nema obavijesti). Ako korisnik prethodno nije unio podatke o svojoj sobi, klikom na "Oglasi" prikazuje mu se forma za ponudu sobe u kojoj upisuje podatke o svojoj sobi. Nakon potvrde unosa prikazuje mu se i dodatna forma za traženje sobe u kojoj navodi tražene kriterije. Ako je korisnik već bio unio informacije o svojoj sobi, klikom na "Oglasi" odmah mu se prikazuju obje forme. Također, korisnik može mijenjati podatke i o svojoj sobi i o traženim kriterijima. Promjene se spremaju klikom na "Spremi promjene" na formama.
+		Dijagram stanja ponašajni je UML dijagram koji opisuje dinamično ponašanje nekog dijela sustava prikazom konačnog broja stanja objekata te prijelaze između stanja koji su potaknuti događajima. Na dijagramu na slici 4.7 prikazan je dijagram stanja za prijavljenog korisnika. Kada se korisnik prijavi (ili registrira) prikazuje mu se početna stranica na kojoj su mu vidljivi svi oglasi i oglasi koji odgovaraju njegovim kriterijima, ako ih je postavio. Za svaki oglas korisnik može vidjeti dodatne informacije o sobi koja se nudi. Klikom na "Profil" prikazuju se svi korisnički podaci. Korisnik te podatke može ažurirati (osim podatka JMBAG te korisničkog imena). Također može izbrisati svoj profil. Klikom na ikonu zvona korisnik u padajućem izborniku može vidjeti nepročitane i pročitane obavijesti (ili poruku da nema obavijesti). Ako korisnik prethodno nije unio podatke o svojoj sobi, klikom na "Oglasi" prikazuje mu se forma za ponudu sobe u kojoj upisuje podatke o svojoj sobi. Nakon potvrde unosa prikazuju mu se dvije forme, 'Nudim sobu' i 'Tražim sobu'. U formi za ponudu sobe automatski su uneseni podaci o sobi korisnika, a u formi za traženje sobe korisnik može postaviti željene kriterije. Podaci i o sobi i o kriterijima mogu se promijeniti klikom na "Spremi promjene". Sa stranice Oglasi korisnik klikom na "Kandidati" može vidjeti najbolje kandidate za zamjenu, klikom na "Provedene zamjene" može vidjeti sve prošle  zamjene dok mu se klikom na "Arhivirani oglasi" prikazuju pretohodno arhivirani oglasi. Ako trenutno ne postoji aktivan oglas, korisnik može aktivirati jedan od arhiviranih oglasa klikom na "Aktiviraj". 
+		
+		
 		\begin{figure}[H]
-			\includegraphics[scale=0.4]{dijagrami/dijagramStanja} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\includegraphics[scale=0.3]{dijagrami/dijagramStanja1} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 			\centering
 			\caption{Dijagram stanja}
 			\label{fig:dijagramStanja}
@@ -577,6 +579,8 @@
 		\eject 
 		
 		\section{Dijagram aktivnosti}
+		
+		Dijagram aktivnosti ponašajni je UML dijagram kojim se modelira upravljački i podatkovni tok. Kod modeliranja toka upravljanja koristi se \textit{pull} način djelovanja - novi korak slijedni nakon završenog prethodnog. Na dijagramu na slici 4.8 prikazana je aktivnost predaje oglasa koji predaje korisnik koji prethodno nije unio podatke o svojoj sobi. Korisnik se prijavljuje u sustav, odabire stranicu 'Oglasi' te u formu upisuje podatke o svojoj sobi. Nakon toga prikazuje mu se forma za unos željenih kriterija. Korisnikov oglas se pohranjuje te sustav pronalazi odgovarajuće oglase i prikazuje ih korisniku na početnoj stranici.
 		
 		\begin{figure}[H]
 			\includegraphics[scale=0.4]{dijagrami/dijagramAktivnosti} %veličina slike u odnosu na originalnu datoteku i pozicija slike
@@ -588,7 +592,7 @@
 		\eject
 		\section{Dijagram komponenti}
 		
-		
+		Dijagram komponenti strukturni je UML dijagram koji prikazuje organizaciju i međuovisnosti između implementacijskih komponenata i odnos programske potpore prema okolini. Na dijagramu na slici 4.9 prikazana su sučelja i komponente koje čine arhitekturu web aplikacije i poveznice među njima. Arhitektura je organizirana kroz dva sučelja, za \textit{frontend} i \textit{backend} dio aplikacije. Datoteke za \textit{frontend} dio poslužuju se preko sučelja za dohvat HTML, CSS i JS datoteka, a koja će se datoteka poslužiti odlučuje Router na temelju URL-a upita. Komponenta REST API definirana je sučeljem za dohvat JSON podataka, a služi za povezivanje \textit{frontend} i \textit{backend} dijela. JPA komponenta služi za transformaciju podataka između relacijskih baza i objekata u Javi. Podaci iz baze dalje se prosljeđuju u DTO obliku. Na temelju akcija korisnika komponenta React-view komunicira s web aplikacijom i ažurira prikaz. 
 		
 		\begin{figure}[H]
 			\includegraphics[scale=0.4]{dijagrami/dijagramKomponenti} %veličina slike u odnosu na originalnu datoteku i pozicija slike
