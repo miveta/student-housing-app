@@ -7,9 +7,9 @@
 			 
 			 Za razvojno okruženje korišten je \underline{IntelliJ IDEA} \footnote{https://www.jetbrains.com/idea/}, integrirano razvojno okruženje (IDE) koje je razvila tvrtka JetBrains. Ponajviše je namijenjeno za Javu, no podržava i mnogo drugih programskih jezika kao što su Kotlin, Scala, Python i drugi. Koristi se za razvoj, modeliranje i \textit{deployment} web i mobilnih aplikacija. 
 			 
-			 Za izradu web aplikacije korišten je radni okvir \underline{Spring Boot} \footnote{https://spring.io/projects/spring-boot} uz arhitekturni stil \underline{Rest API} \footnote{https://restfulapi.net/} koji se bazira na HTTP protokolu. Spring Boot je specijalizacija radnog okvira Spring a omogućuje jednostavnije i brže oblikovanje web aplikacija tako što u svojoj automatskoj konfiguraciji više uobičajenih dijelova web aplikacije već ima podešeno. Od programskih jezika koriste se objektno orijentirani jezik \underline{Java} \footnote{https://www.java.com/en/} za izradu \textit{backend} sloja aplikacije te skriptni programski jezik \underline{JavaScript} \footnote{https://www.javascript.com/} te knjižnica \underline{React} \footnote{https://reactjs.org/}  za izradu \textit{frontend} sloja. Knjižnicu React razvija tvrtka Facebook a pisana je u jeziku JavaScript i sadrži mnogo paketa te je tako fleksibilna za različite aplikacije. 
+			 Za izradu web aplikacije korišten je radni okvir \underline{Spring Boot} \footnote{https://spring.io/projects/spring-boot} uz arhitekturni stil \underline{Rest API} \footnote{https://restfulapi.net/} koji se bazira na HTTP protokolu. Spring Boot je specijalizacija radnog okvira Spring a omogućuje jednostavnije i brže oblikovanje web aplikacija tako što u svojoj automatskoj konfiguraciji neke uobičajene dijelove web aplikacije već ima podešeno, kao na primjer pokretanje Apache Tomcat poslužitelja. Od programskih jezika koriste se objektno orijentirani jezik \underline{Java} \footnote{https://www.java.com/en/} za izradu \textit{backend} sloja aplikacije te skriptni programski jezik \underline{JavaScript} \footnote{https://www.javascript.com/} te knjižnica \underline{React} \footnote{https://reactjs.org/}  za izradu \textit{frontend} sloja. Uz Javu smo koristili \underline{Apache Maven} \footnote{https://maven.apache.org/}, \textit{open source} alat za tehničko upravljanje Java projektima. Knjižnicu React razvija tvrtka Facebook a pisana je u jeziku JavaScript i sadrži mnogo paketa te je tako fleksibilna za različite aplikacije. 
 			 
-			 Za rad s bazom podataka korišten je sustav za upravljanje bazom podataka \underline{PostgreSQL} \footnote{https://www.postgresql.org/} te alat za mapiranje podataka između relacijske baze i objekata u Javi \underline{Hibernate ORM} \footnote{https://hibernate.org/orm/}, koji implementira standard Java Persistance API.)
+			 Za rad s bazom podataka korišten je sustav za upravljanje bazom podataka \underline{PostgreSQL} \footnote{https://www.postgresql.org/} te alat za mapiranje podataka između relacijske baze i objekata u Javi \underline{Hibernate ORM} \footnote{https://hibernate.org/orm/}. Hibernate implementira standard Java Persistance API te nudi anotacije koje služe za lakši rad s entitetima.
 			
 			
 			\eject 
@@ -29,14 +29,250 @@
 			
 			\subsection{Ispitivanje sustava}
 			
-			 \textit{Potrebno je provesti i opisati ispitivanje sustava koristeći radni okvir Selenium\footnote{\url{https://www.seleniumhq.org/}}. Razraditi \textbf{minimalno 4 ispitna slučaja} u kojima će se ispitati redovni slučajevi, rubni uvjeti te poziv funkcionalnosti koja nije implementirana/izaziva pogrešku kako bi se vidjelo na koji način sustav reagira kada nešto nije u potpunosti ostvareno. Ispitni slučaj se treba sastojati od ulaza (npr. korisničko ime i lozinka), očekivanog izlaza ili rezultata, koraka ispitivanja i dobivenog izlaza ili rezultata.\\ }
-			 
-			 \textit{Izradu ispitnih slučajeva pomoću radnog okvira Selenium moguće je provesti pomoću jednog od sljedeća dva alata:}
-			 \begin{itemize}
-			 	\item \textit{dodatak za preglednik \textbf{Selenium IDE} - snimanje korisnikovih akcija radi automatskog ponavljanja ispita	}
-			 	\item \textit{\textbf{Selenium WebDriver} - podrška za pisanje ispita u jezicima Java, C\#, PHP koristeći posebno programsko sučelje.}
-			 \end{itemize}
-		 	\textit{Detalji o korištenju alata Selenium bit će prikazani na posebnom predavanju tijekom semestra.}
+		 	
+		 	\noindent \underbar{\textbf{Ispitni slučaj: UC2 - Registracija, osnovni tijek}}
+		 	\begin{packed_item}
+		 		
+		 	\item  \textbf{Ulaz:}
+		 		
+		 		\item[] \begin{packed_enum}
+		 			
+		 			\item Korisnik otvara stranicu za registraciju
+		 			\item Korisnik unosi svoje podatke
+		 			\item Korisnik pritišće tipku "Registriraj se"
+		 			
+		 		\end{packed_enum}
+	 		
+	 		\item \textbf{Očekivani rezultat:}
+	 			
+	 				\item[] \begin{packed_enum}
+	 				
+	 				\item Korisnik se uspješno registrirao
+	 				\item Korisnik je preusmjeren na početnu stranicu
+	 				
+	 			\end{packed_enum}		
+ 			
+ 			\item \textbf{Rezultat:} 
+ 			
+ 					\item[] \begin{packed_enum}
+ 						
+ 						\item Korisnik je registriran i preusmjeren na početnu stranicu
+ 						
+ 					\end{packed_enum}	
+ 				
+ 							
+		 		
+		 	\end{packed_item}
+	 	
+	 		\begin{figure}[H]		
+	 			\begin{figure}[H]
+	 				\begin{subfigure}{0.5\textwidth}
+	 					\centering
+	 					\includegraphics[scale=0.7]{slike/test1.png}
+	 					\caption{Prvi ispitni slučaj: provedeni test}
+	 					\label{fig:prviIspitniSlucajTest}
+	 				\end{subfigure}%			
+	 			\end{figure}
+	 		\end{figure}
+	 	
+	 		
+ 		
+ 			\noindent \underbar{\textbf{Ispitni slučaj: UC2 - Registracija, odstupanje}}
+ 			\begin{packed_item}
+ 				
+ 				\item  \textbf{Ulaz:}
+ 				
+ 				\item[] \begin{packed_enum}
+ 					
+ 					\item Korisnik otvara stranicu za registraciju
+ 					\item Korisnik unosi podatke i izabire korisničko ime koje već postoji
+ 					\item Korisnik pritišće tipku "Registriraj se"
+ 					
+ 				\end{packed_enum}
+ 				
+ 				\item \textbf{Očekivani rezultat:}
+ 				
+ 				\item[] \begin{packed_enum}
+ 					
+ 					\item Sustav vraća korisnika na stranicu za registraciju s upisanim podacima i porukom o pogrešci
+ 					
+ 				\end{packed_enum}		
+ 				
+ 				\item \textbf{Rezultat:} 
+ 				
+ 				\item[] \begin{packed_enum}
+ 					
+ 					\item Registracija nije uspješna i korisnik je vraćen na stranicu za registraciju s upisanim podacima i porukom o pogrešci
+ 					
+ 				\end{packed_enum}
+ 					
+ 				
+ 			\end{packed_item}
+ 		
+ 		
+ 			\begin{figure}[H]
+ 				\centering
+ 				\begin{subfigure}{.5\textwidth}
+ 					\centering
+ 					\includegraphics[scale=0.3]{slike/test2Ekran.png}
+ 					\caption{Drugi ispitni slučaj: rezultat}
+ 					\label{fig:drugiIspitniSlucaj}
+ 				\end{subfigure}%
+ 				\begin{subfigure}{.5\textwidth}
+ 					\centering
+ 					\includegraphics[scale=0.5]{slike/test2.png}
+ 					\caption{Drugi ispitni slučaj: provedeni test}
+ 					\label{fig:drugiIspitniSlucajTest}%
+ 				\end{subfigure}
+ 			\end{figure}
+ 			
+ 			\noindent \underbar{\textbf{Ispitni slučaj: UC3 - Prijava u sustav, osnovni tijek}}
+ 			\begin{packed_item}
+ 				
+ 				\item  \textbf{Ulaz:}
+ 				
+ 				\item[] \begin{packed_enum}
+ 					
+ 					\item Korisnik otvara stranicu za prijavu
+ 					\item Korisnik unosi svoje podatke
+ 					\item Korisnik pritišće tipku "Prijavi se"
+ 					
+ 				\end{packed_enum}
+ 				
+ 				\item \textbf{Očekivani rezultat:}
+ 				
+ 				\item[] \begin{packed_enum}
+ 					
+ 					\item Korisnik se uspješno prijavio
+ 					\item Korisnik je preusmjeren na početnu stranicu
+ 					
+ 				\end{packed_enum}		
+ 				
+ 				\item \textbf{Rezultat:} 
+ 				
+ 					\begin{packed_enum}
+ 						
+ 						\item Korisnik je prijavljen i preusmjeren na početnu stranicu
+ 						
+ 					\end{packed_enum}
+ 						
+ 				
+ 			\end{packed_item}
+ 			
+ 			\begin{figure}[H]
+ 				\begin{subfigure}{0.5\textwidth}
+ 					\centering
+ 					\includegraphics[scale=0.7]{slike/test3.png}
+ 					\caption{Treći ispitni slučaj: provedeni test}
+ 					\label{fig:treciIspitniSlucajTest}
+ 				\end{subfigure}%
+ 			
+ 			\end{figure}
+ 		
+ 		\noindent \underbar{\textbf{Ispitni slučaj: UC3 - Prijava u sustav, odstupanje}}
+ 		\begin{packed_item}
+ 			
+ 			\item  \textbf{Ulaz:}
+ 			
+ 			\item[] \begin{packed_enum}
+ 				
+ 				\item Korisnik otvara stranicu za prijavu
+ 				\item Korisnik unosi korisničko ime koje ne postoji
+ 				\item Korisnik pritišće tipku "Prijavi se"
+ 				
+ 			\end{packed_enum}
+ 			
+ 			\item \textbf{Očekivani rezultat:}
+ 			
+ 			\item[] \begin{packed_enum}
+ 				
+ 				\item Sustav javlja poruku o pogrešci
+ 				\item Prijava nije uspješna
+ 				
+ 			\end{packed_enum}		
+ 			
+ 			\item \textbf{Rezultat:} 
+ 			
+ 			\begin{packed_enum}
+ 				
+ 				\item Sustav javlja poruku o nepostojanju korisničkog imena
+ 				\item Prijava nije uspješna
+ 				
+ 			\end{packed_enum}
+ 			
+ 			
+ 		\end{packed_item}
+ 	
+ 	
+ 		
+ 			\begin{figure}[H]
+ 			\centering
+ 			\begin{subfigure}{.5\textwidth}
+ 				\centering
+ 				\includegraphics[scale=0.4]{slike/test4Ekran.png}
+ 				\caption{Četvrti ispitni slučaj: rezultat}
+ 				\label{fig:cetvrtiIspitniSlucaj}
+ 			\end{subfigure}%
+ 			\begin{subfigure}{.5\textwidth}
+ 				\centering
+ 				\includegraphics[scale=0.7]{slike/test4.png}
+ 				\caption{Četvrti ispitni slučaj: provedeni test}
+ 				\label{fig:cetvrtiIspitniSlucajTest}%
+ 			\end{subfigure}
+ 		\end{figure}
+ 	
+ 		\noindent \underbar{\textbf{Ispitni slučaj: UC13 - Promjena profila, osnovni tijek}}
+ 		\begin{packed_item}
+ 			
+ 			\item  \textbf{Ulaz:}
+ 			
+ 			\item[] \begin{packed_enum}
+ 				
+ 				\item Korisnik otvara stranicu profila
+ 				\item Korisnik pritišće tipku 'Uredi'
+ 				\item Korisnik mijenja svoje podatke
+ 				\item Korisnik pritišće tipku "Ažuriraj podatke"
+ 				
+ 			\end{packed_enum}
+ 			
+ 			\item \textbf{Očekivani rezultat:}
+ 			
+ 			\item[] \begin{packed_enum}
+ 				
+ 				\item Ažurirani podaci vidljivi su na stranici profila
+ 				
+ 			\end{packed_enum}		
+ 			
+ 			\item \textbf{Rezultat:} 
+ 			
+ 			\begin{packed_enum}
+ 				
+ 				\item Ažurirani podaci vidljivi su na stranici profila
+ 				
+ 			\end{packed_enum}
+ 			
+ 			
+ 		\end{packed_item}
+ 	
+ 	\begin{figure}[H]
+ 		\centering
+ 		\begin{subfigure}{.5\textwidth}
+ 			\centering
+ 			\includegraphics[scale=1.5]{slike/test5Ekran.png}
+ 			\caption{Peti ispitni slučaj: rezultat}
+ 			\label{fig:petiIspitniSlucaj}
+ 		\end{subfigure}%
+ 		\begin{subfigure}{.5\textwidth}
+ 			\centering
+ 			\includegraphics[scale=0.7]{slike/test5.png}
+ 			\caption{Peti ispitni slučaj: provedeni test}
+ 			\label{fig:petiIspitniSlucajTest}%
+ 		\end{subfigure}
+ 	\end{figure}
+ 		
+ 		
+ 		
+ 		\eject 
 			
 			\eject 
 		
@@ -46,7 +282,7 @@
 			Dijagram razmještaja statički je UML dijagram koji prikazuje i opisuje topologiju sustava te programsku potporu za implementaciju sustava. Korisnik, to jest klijent na svom osobnom računalu koristi web preglednik za pristup web aplikaciji. Na poslužiteljskom računalu nalazi se Tomcat web poslužitelj te PostgreSQL poslužitelj baze podataka. Komunikacija između klijenta i poslužitelja odvija se preko protokola aplikacijskog sloja HTTP.
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.5]{dijagrami/dijagramRazmještaja} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.4]{dijagrami/dijagramRazmjestaja1} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagram razmještaja}
 				\label{fig:dijagramRazmjestaja}
