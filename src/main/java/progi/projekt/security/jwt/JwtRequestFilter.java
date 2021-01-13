@@ -29,7 +29,7 @@ import java.io.IOException;
 //3. napraviti novi header Authorization=Bearer {$jwt}
 //note: sada vise Content-Type header i body nisu potrebni
 
-@Component
+//@Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
