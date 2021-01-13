@@ -1,6 +1,5 @@
 package progi.projekt.controller;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.KandidatDTO;
@@ -193,20 +192,6 @@ public class OglasController {
         // studenta koji opet ima referencu na oglas. Ista stvar sa domovima
         // - holik
 
-        /*List<Oglas> oglasi = oglasService.listAll();
-
-
-        //force update oglasa unutar svakog studenta
-        List<Student> studenti = studentService.listAll();
-        for (Oglas oglas : oglasi) {
-            for (Student stud : studenti) {
-                if (stud.getId() == oglas.getStudent().getId()) {
-                    stud.setAktivniOglas(oglas);
-                    studentService.save(stud);
-                }
-            }
-        }*/
-
         //force update kandidata unutar svakog oglasa
         kandidatService.updateLocalKands();
 
@@ -278,7 +263,7 @@ public class OglasController {
         return parovi;
     }
 
-    @PostMapping(value = "/updateParSC", consumes = MediaType.APPLICATION_JSON_VALUE)
+/*    @PostMapping(value = "/updateParSC", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateParSC(@RequestParam(value = "par_id") String parId,
                                          @RequestParam(value = "odobren") Boolean odobren,
                                          @RequestParam(value = "zaposlenikKorisnickoIme") String username) {
@@ -286,12 +271,19 @@ public class OglasController {
 
 
         return ResponseEntity.ok(null);
-    }
+    }*/
 
-    @PostMapping(value = "/updatePar")
+    @PostMapping("/updatePar")
     public ResponseEntity<?> updatePar(@RequestParam(value = "par_id") String parId,
                                        @RequestParam(value = "odobren") Boolean odobren,
                                        @RequestParam(value = "zaposlenikKorisnickoIme") String username) {
+        return null;
+    }
+
+    @PostMapping(value = "/updateParSC")
+    public ResponseEntity<?> updateParSc(@RequestParam(value = "par_id") String parId,
+                                         @RequestParam(value = "odobren") Boolean odobren,
+                                         @RequestParam(value = "zaposlenikKorisnickoIme") String username) {
 
         List<Oglas> oglasi = oglasService.listAll();
 

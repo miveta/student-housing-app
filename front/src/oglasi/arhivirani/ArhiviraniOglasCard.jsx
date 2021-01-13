@@ -17,7 +17,6 @@ class ArhiviraniOglasCard extends Component {
     }
 
     render() {
-        console.log(this)
         return (
             <Row>
                 <Col>

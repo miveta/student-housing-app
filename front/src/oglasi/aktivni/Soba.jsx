@@ -88,7 +88,6 @@ class Soba extends Component {
         }).catch(e => console.log(e))
     }
 
-    // todo vrati ono gdje je submit disabled dok god se ne naprave promjene
     render() {
         if (this.props.grad.domovi.length !== 0) {
             let dom = this.props.grad.domovi[0]
@@ -111,14 +110,6 @@ class Soba extends Component {
 
             <Form onSubmit={this.onSubmit} className={"innerForm"}>
                 <h3> Nudim sobu </h3>
-                {/*<Form.Group>
-                    <Form.Label> Dom </Form.Label>
-                    <Form.Control as="select" name="dom" onChange={this.onChange} value={this.state.dom}>
-                        {this.props.grad.domovi.map(dom => (
-                            <option id={dom.id}>{dom.naziv}</option>
-                        ))}
-                    </Form.Control>
-                </Form.Group>*/}
 
                 <Form.Row>
                     <Col xs={7}>
@@ -186,31 +177,6 @@ class Soba extends Component {
                         </Form.Group>
                     </Col>
                 </Form.Row>
-
-
-                {/*<Form.Group>
-                    <Form.Row>
-                        <Col>
-                            <Form.Label> Broj kreveta </Form.Label>
-                            <Form.Control as="select" name="brojKreveta"
-                                          onChange={this.onChange} value={this.capitalize(this.state.brojKreveta)}>
-                                {this.props.brojKreveta.map(broj => (
-                                    <option>{broj.name}</option>
-                                ))}
-                            </Form.Control>
-                        </Col>
-                        <Col>
-                            <Form.Label> Tip kupaonice </Form.Label>
-                            <Form.Control as="select" name="tipKupaonice"
-                                          value={this.capitalize(this.state.tipKupaonice)}
-                                          onChange={this.onChange}>
-                                {this.props.tipKupaonice.map(tip => (
-                                    <option>{tip.name}</option>
-                                ))}
-                            </Form.Control>
-                        </Col>
-                    </Form.Row>
-                </Form.Group>*/}
                 <Form.Group>
                     <Form.Label> Komentar </Form.Label>
                     <Form.Control name="komentar" as="textarea" rows="3" onChange={this.onChange}
@@ -219,6 +185,14 @@ class Soba extends Component {
 
                 <Button type="submit" variant="dark" size="lg" block disabled={!this.state.change}> Spremi
                     promjene </Button>
+
+                {this.state.id === "" &&
+                <Form.Group>
+                    <Form.Text>
+                        Kako biste predali oglas unesite podatke o sobi koju trenutno imate i
+                        kliknite na 'Spremi promjene'. Tada ćete moći definirati kakvu sobu tražite :)
+                    </Form.Text>
+                </Form.Group>}
             </Form>
 
         )

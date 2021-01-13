@@ -3,7 +3,6 @@ import TrazimSobu from "./TrazimSobu";
 import Soba from "./Soba";
 import cookie from "react-cookies";
 import {Button} from "react-bootstrap";
-import ParoviList from "../parovi/ParoviList";
 
 export default class MojOglas extends Component {
     brojKreveta = [
@@ -161,23 +160,21 @@ export default class MojOglas extends Component {
         console.log(this.state)
         return (
             <div>
-
+                {
+                    this.state.soba.id !== '' &&
+                    <Button onClick={this.props.onArhiviraj} disabled={this.state.soba.id === ""} block>Arhiviraj
+                        oglas</Button>
+                }
 
                 <Soba grad={this.state.grad} soba={this.state.soba} submitSoba={this.submitSoba}
-                              brojKreveta={this.brojKreveta} tipKupaonice={this.tipKupaonice}/>
+                      brojKreveta={this.brojKreveta} tipKupaonice={this.tipKupaonice}/>
 
-                        {
-                            this.state.soba.id === '' ?
-                                <p>definirajte prvo svoju sobu</p>
-                                :
-                                <TrazimSobu grad={this.state.grad} uvjeti={this.state.uvjeti}
-                                            brojKreveta={this.brojKreveta} tipKupaonice={this.tipKupaonice}
-                                            submitUvjeti={this.submitUvjeti}/>
-                        }
-
-                <Button onClick={this.props.onArhiviraj} disabled={this.state.soba.id === ""}>Arhiviraj oglas</Button>
-
-                <ParoviList/>
+                {
+                    this.state.soba.id !== '' &&
+                    <TrazimSobu grad={this.state.grad} uvjeti={this.state.uvjeti}
+                                brojKreveta={this.brojKreveta} tipKupaonice={this.tipKupaonice}
+                                submitUvjeti={this.submitUvjeti}/>
+                }
             </div>
         )
     }

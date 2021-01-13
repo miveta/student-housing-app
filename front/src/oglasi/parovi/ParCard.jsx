@@ -33,6 +33,10 @@ export default class ParCard extends Component {
                         <Button className={"no"} block>Odbij</Button>
                     </Col>
                 </Row>
+                <br/>
+                <Row>
+                    Kada jednom prihvatite ili odbijete zamjenu ne možete više promijeniti svoj izbor!
+                </Row>
             </div>
         )
     }

@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
-import {Col, Nav, Row, Tab} from "react-bootstrap";
+import {Col, Dropdown, NavLink, Row, Tab} from "react-bootstrap";
 import MojOglas from "../oglasi/aktivni/MojOglas";
 import ArhiviraniOglasiList from "../oglasi/arhivirani/ArhiviraniOglasiList";
 import * as cookie from "react-cookies";
+import NavItem from "react-bootstrap/NavItem";
+import ParoviList from "../oglasi/parovi/ParoviList";
+import * as Swal from "sweetalert2";
 
 export default class OglasiPage extends Component {
     constructor(props) {
@@ -26,12 +29,18 @@ export default class OglasiPage extends Component {
         fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/aktiviraj?student_username=${self.state.user.korisnickoIme}&oglas_id=${oglasId}`, options)
             .then(response => {
                 if (response.status === 200) {
-                    return response.json()
+                    window.location.reload();
+                } else if (response.status === 400) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Možete imati samo jedan aktivan oglas!',
+                        type: 'error',
+                        toast: true,
+                        confirmButtonColor: '#12c2e9',
+                        confirmButtonText: 'Ok',
+                    })
                 }
-            }).then(json => {
-            window.location.reload();
-        }).catch(e => console.log("korisnik jos nema sobu"))
-
+            }).catch(e => console.log("korisnik jos nema sobu"))
     }
 
     onArhiviraj = () => {
@@ -55,36 +64,38 @@ export default class OglasiPage extends Component {
 
     render() {
         return (
-
-            <Tab.Container id="left-tabs-example" defaultActiveKey="first" className={"tabs"}>
+            <Tab.Container id="left-tabs-example" defaultActiveKey="mojOglas" className={"tabs"}>
                 <Row className={"tabs"}>
                     <Col sm={3} className={"left"}>
-                        <Nav variant="pills" className="navigation flex-column" fill={true}>
-                            <Nav.Item>
-                                <Nav.Link eventKey="aktivni" block>Aktivni oglas</Nav.Link>
-                                <Nav variant="pills" className="navigation flex-column" fill={true}>
-                                    <Nav.Item>
-                                        <Nav.Link eventKey="nudim" block>Nudim sobu</Nav.Link>
-                                    </Nav.Item>
-                                    <Nav.Item>
-                                        <Nav.Link eventKey="trazim" block>Tražim sobu</Nav.Link>
-                                    </Nav.Item>
-                                </Nav>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="second" block> Arhivirani oglasi</Nav.Link>
-                            </Nav.Item>
-
-
-                        </Nav>
+                        <Dropdown as={NavItem} className={"navigation"}>
+                            <Dropdown.Header as={"h2"}>Tvoj aktivni oglas</Dropdown.Header>
+                            <Dropdown.Item as={NavLink} eventKey="mojOglas" block>
+                                Moj oglas
+                            </Dropdown.Item>
+                            <Dropdown.Item as={NavLink} eventKey="kandidati" block>
+                                Kandidati
+                            </Dropdown.Item>
+                            <Dropdown.Divider/>
+                            <Dropdown.Item as={NavLink} eventKey="arhivirani" block>
+                                Arhivirani oglasi
+                            </Dropdown.Item>
+                            <Dropdown.Divider/>
+                            <Dropdown.Item as={NavLink} eventKey="provedeni" block>
+                                Provedene zamjene
+                            </Dropdown.Item>
+                        </Dropdown>
                     </Col>
                     <Col className={"middle"}>
                         <Tab.Content>
-                            <Tab.Pane eventKey="aktivni">
+                            <Tab.Pane eventKey="mojOglas">
                                 <MojOglas onArhiviraj={this.onArhiviraj}/>
                             </Tab.Pane>
 
-                            <Tab.Pane eventKey="second">
+                            <Tab.Pane eventKey="kandidati">
+                                <ParoviList/>
+                            </Tab.Pane>
+
+                            <Tab.Pane eventKey="arhivirani">
                                 <ArhiviraniOglasiList onAktiviraj={this.onAktiviraj}/>
                             </Tab.Pane>
 

@@ -32,7 +32,7 @@ class ArhiviraniOglasiList extends Component {
             <div>
                 {
                     this.state.oglasi.map(oglas =>
-                        <div className={"card"}>
+                        <div className={"innerForm"}>
                             <ArhiviraniOglasCard
                                 onAktiviraj={this.props.onAktiviraj}
                                 id={oglas.id}
