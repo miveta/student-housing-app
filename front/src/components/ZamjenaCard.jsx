@@ -1,23 +1,23 @@
 import React, {Component} from "react";
 import * as cookie from "react-cookies";
 import {Button, Col, Form, Row} from "react-bootstrap";
-import ZamjenaPrikazPara from "./ZamjenaPrikazPara";
 import SobaReadOnly from "../oglasi/SobaReadOnly";
 
 
 class ZamjenaCard extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props)
+
         this.state = {
             user: cookie.load('principal'),
-            odobren: props.odobren,
-            parId: props.parId,
-            oglas1: props.oglas1,
-            oglas2: props.oglas2,
-            soba1: props.oglas1.soba,
-            soba2: props.oglas2.soba
+            odobren: props.par.odobren,
+            parId: props.par.parID,
+            oglas1: props.par.oglas1,
+            oglas2: props.par.oglas2,
+            soba1: props.par.oglas1.soba,
+            soba2: props.par.oglas2.soba
         }
+
     }
 
     click = (b) => {
@@ -28,8 +28,9 @@ class ZamjenaCard extends Component {
                 'Access-Control-Allow-Origin': '*'
             }
         };
-        console.log(b)
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/updateParSC?par_id=${this.state.parId}&odobren=${b}&zaposlenikKorisnickoIme=${this.state.user.korisnickoIme}`, options)
+
+        let self = this
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/updateParSC?par_id=${self.state.parId}&odobren=${b}&zaposlenikKorisnickoIme=${self.state.user.korisnickoIme}`, options)
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(body => {
@@ -43,7 +44,6 @@ class ZamjenaCard extends Component {
     }
 
     render() {
-        console.log(this.state.soba1)
         return (
 
             <Row>
