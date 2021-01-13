@@ -129,60 +129,65 @@ public class OglasController {
 
     @GetMapping(value = "/listKandidati")
     public ArrayList<KandidatDTO> listKandidati(@RequestParam(value = "oglas_id") String oglasId) {
-        List<Oglas> oglasi = oglasService.listAll();
-
         //force update oglasa unutar svakog studenta
-        List<Student> studenti = studentService.listAll();
-        for (Oglas oglas : oglasi) {
-            for (Student stud : studenti) {
-                if (stud.getId() == oglas.getStudent().getId()) {
-                    stud.setAktivniOglas(oglas);
-                    studentService.save(stud);
-                }
-            }
-        }
+        //updateOglasInStudents(oglasi);
 
         //force update kandidata unutar svakog oglasa
         kandidatService.updateLocalKands();
 
-
         Optional<Oglas> oglasOpt = oglasService.findById(oglasId.toString());
-        ArrayList<KandidatDTO> kandidatiDTO = new ArrayList<>();
+
 
         if (oglasOpt.isPresent()) {
             Oglas oglas = oglasService.findById(oglasId).get();
-
+            ArrayList<KandidatDTO> kandidatiDTO = new ArrayList<>();
             List<Lajk> lajkovi = lajkService.listAll();
-            for (Lajk lajk : lajkovi) {
-                if (lajk.getLajkId().getOglas().equals(oglas)) {
-                    Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
-                    Oglas drugiOglas = lajk.getLajkId().getStudent().getAktivniOglas();
 
-                    Optional<Kandidat> tmpOpt = kandidatService.kandidatParaOglasa(oglas, drugiOglas);
-                    if (tmpOpt.isPresent()) {
-                        Kandidat tmp = tmpOpt.get();
-                        KandidatDTO tmpDTO = new KandidatDTO(tmp);
+            Long brojOcjenaPredanogOglasa =
+                    lajkovi.stream().filter(lajk -> lajk.getLajkId().getOglas().getId() == oglas.getId()).count();
 
-                        ocjenaOptional.ifPresentOrElse(
-                                (ocjena) ->
-                                {
-                                    tmpDTO.setKandOcjena(ocjena);
-                                },
-                                () ->
-                                {
-                                    //ako ocjena jos nije unesena upisujemo -1
-                                    tmpDTO.setKandOcjena(-1);
-                                });
 
-                        kandidatiDTO.add(tmpDTO);
+            for (Kandidat kand : oglas.getKandidati()){
+
+                KandidatDTO tmpDTO = new KandidatDTO(kand);
+
+                if (brojOcjenaPredanogOglasa > 0){
+                    for (Lajk lajk : lajkovi) {
+                        if (lajk.getLajkId().getOglas().equals(oglas)) {
+                            Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
+                            Oglas drugiOglas = lajk.getLajkId().getStudent().getAktivniOglas();
+
+                            Optional<Kandidat> tmpOpt = kandidatService.kandidatParaOglasa(oglas, drugiOglas);
+                            if (tmpOpt.isPresent()) {
+                                Kandidat tmp = tmpOpt.get();
+
+                                ocjenaOptional.ifPresentOrElse(
+                                        (ocjena) ->
+                                        {
+                                            //KandOcjena je ocjena koju je kandidat dao nasem oglasu
+                                            tmpDTO.setKandOcjena(ocjena);
+                                        },
+                                        () ->
+                                        {
+                                            //ako ocjena jos nije unesena upisujemo -1
+                                            tmpDTO.setKandOcjena(-1);
+                                        });
+                            }
+                        }
                     }
 
+                } else {
+                    tmpDTO.setKandOcjena(-1);
                 }
+
+                kandidatiDTO.add(tmpDTO);
             }
+
+            return kandidatiDTO;
         }
 
 
-        return kandidatiDTO;
+        return new ArrayList<>();
     }
 
 
@@ -231,22 +236,10 @@ public class OglasController {
 
     @GetMapping(value = "/listParoviWithFlags")
     public List<ParDTO> listParoviWithFlags(@RequestParam Boolean ignore, Boolean done, Boolean odobren) {
-        //note: napravio sam ParDTO jer ako stavim Par u listu, toString je beskonacan jer oglas ima referencu na
-        // studenta koji opet ima referencu na oglas. Ista stvar sa domovima
-        // - holik
-
         List<Oglas> oglasi = oglasService.listAll();
 
         //force update oglasa unutar svakog studenta
-        List<Student> studenti = studentService.listAll();
-        for (Oglas oglas : oglasi) {
-            for (Student stud : studenti) {
-                if (stud.getId() == oglas.getStudent().getId()) {
-                    stud.setAktivniOglas(oglas);
-                    studentService.save(stud);
-                }
-            }
-        }
+        //updateOglasInStudents(oglasi);
 
         //force update kandidata unutar svakog oglasa
         kandidatService.updateLocalKands();
@@ -261,6 +254,19 @@ public class OglasController {
         }
 
         return parovi;
+    }
+
+    public void updateOglasInStudents(List<Oglas> oglasi) {
+        //force update oglasa unutar svakog studenta
+        List<Student> studenti = studentService.listAll();
+        for (Oglas oglas : oglasi) {
+            for (Student stud : studenti) {
+                if (stud.getId() == oglas.getStudent().getId()) {
+                    stud.setAktivniOglas(oglas);
+                    studentService.save(stud);
+                }
+            }
+        }
     }
 
 /*    @PostMapping(value = "/updateParSC", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -288,15 +294,7 @@ public class OglasController {
         List<Oglas> oglasi = oglasService.listAll();
 
         //force update oglasa unutar svakog studenta
-        List<Student> studenti = studentService.listAll();
-        for (Oglas oglas : oglasi) {
-            for (Student stud : studenti) {
-                if (stud.getId() == oglas.getStudent().getId()) {
-                    stud.setAktivniOglas(oglas);
-                    studentService.save(stud);
-                }
-            }
-        }
+        //updateOglasInStudents(oglasi);
 
         //force update kandidata unutar svakog oglasa
         kandidatService.updateLocalKands();
