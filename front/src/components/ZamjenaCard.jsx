@@ -63,7 +63,7 @@ class ZamjenaCard extends Component {
                     </Form.Group>
                     {!this.state.odobren && <Button className="no" onClick={() => this.click(false)} block>Odbij</Button>}
                 </Col>
-                {this.state.odobren && <Button variant="dark" disabled={true} block>Potvrdio pero</Button>}
+                {this.state.odobren && <Button variant="dark" disabled={true} block>this.props.par.zaposlenikSC.korisnickoIme</Button>}
             </Row>
         )
     }
