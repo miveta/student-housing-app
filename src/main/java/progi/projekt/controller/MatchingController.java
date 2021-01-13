@@ -4,10 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import progi.projekt.model.Kandidat;
+import progi.projekt.model.Oglas;
 import progi.projekt.model.Par;
 import progi.projekt.service.KandidatService;
 import progi.projekt.service.MatchingService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 ///Kontroler koji stvara i azurira listu kandidatnih soba/veza, listu valjanih parova i odgovarajuce oglase
@@ -40,6 +43,11 @@ public class MatchingController {
 		} catch (Exception e){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
+	}
+
+	@GetMapping("/kandidatiClearDebug")
+	public void resetKandsDebug(){
+		matchingService.resetKandsDebug();
 	}
 
 

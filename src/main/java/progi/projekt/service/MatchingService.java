@@ -8,6 +8,9 @@ import java.util.UUID;
 public interface MatchingService {
 	void kandidatiFun();
 	void lajkFun();
+
+	void resetKandsDebug();
+
 	void parFun();
 	void matchFun();
 	void confirmFun();

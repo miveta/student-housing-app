@@ -209,12 +209,9 @@ public class OglasController {
 
         Oglas oglas = student.getAktivniOglas();
 
-        Optional<Par> parOpt = parService.pripadniParOglasa(oglas);
-        if (parOpt.isPresent()) {
-            Par par = parOpt.get();
-
-            ArrayList<ParDTO> paroviOglasa = new ArrayList<>();
-
+        List<Par> parovi = parService.pripadniParoviOglasa(oglas);
+        ArrayList<ParDTO> paroviOglasa = new ArrayList<>();
+        for (Par par : parovi) {
             if (par.getLanac() == false) {
                 //nije lanac
                 ParDTO parDTO = new ParDTO(par);
@@ -227,10 +224,9 @@ public class OglasController {
                     paroviOglasa.add(parDTO);
                 }
             }
-            return paroviOglasa;
-        }
 
-        return new ArrayList<>();
+        }
+        return paroviOglasa;
     }
 
 

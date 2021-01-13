@@ -35,7 +35,9 @@ public class KandidatServiceImpl implements KandidatService {
 	public List<Kandidat> listAll(UUID oglasUuid) {
 		//updateLocalKands(); //fun fact, ovo radi inf loop
 		var oglas = oglasService.findById(oglasUuid.toString());
-		return kandidatRepo.findAllByOglas(oglas.get());
+		return kandidatRepo.findAllByOglasOrKandOglas(oglas.get(), oglas.get());
+
+
 	}
 
 	@Override
@@ -123,7 +125,8 @@ public class KandidatServiceImpl implements KandidatService {
 		List<Kandidat> top3kand = oglas.getKandidati()
 				.stream()
 				.filter(kand -> kand.getIgnore() != null && kand.getIgnore() != true)
-                .filter(kand2 -> kand2.getOglas().getId() != oglas.getId())
+                //.filter(kand2 -> kand2.getOglas().getId() != oglas.getId()) //krivo?
+				.filter(kand2 -> kand2.getOglas().getId() != kand2.getKandOglas().getId()) //tocno?
 				.sorted(compareByBlskThenStvrn)
 				.limit(N)
 				.collect(Collectors.toList());
@@ -227,7 +230,8 @@ public class KandidatServiceImpl implements KandidatService {
 		for (Oglas oglas : oglasi){
             List<Kandidat> kandidati = listAll(oglas.getId());
 			for (Kandidat kandidat : kandidati){
-				if (kandidat.getOglas().getId() == oglas.getId() || kandidat.getKandOglas().getId() == oglas.getId()) {
+				if (	kandidat.getOglas().getId().equals(oglas.getId()) ||
+						kandidat.getKandOglas().getId().equals(oglas.getId())) {
 					if (!oglas.getKandidati().contains(kandidat)) {
 						oglas.getKandidati().add(kandidat);
 						oglasService.save(oglas);

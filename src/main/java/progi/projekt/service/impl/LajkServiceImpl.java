@@ -65,7 +65,9 @@ public class LajkServiceImpl implements LajkService {
     @Override
     public Lajk update(Lajk l) {
         try {
-            Optional<Par> pripradniPar = parService.pripadniParOglasa(l.getLajkId().getOglas());
+            Oglas oglas1 = l.getLajkId().getOglas();
+            Oglas oglas2 = l.getLajkId().getStudent().getAktivniOglas();
+            Optional<Par> pripradniPar = parService.pripadniParDvaOglasa(oglas1, oglas2);
             pripradniPar.ifPresent(par -> {
                 matchingService.ponistiPar(par);
             });
@@ -82,7 +84,9 @@ public class LajkServiceImpl implements LajkService {
     @Override
     public Lajk delete(Lajk lajk) throws SavingException {
 
-        Optional<Par> pripradniPar = parService.pripadniParOglasa(lajk.getLajkId().getOglas());
+        Oglas oglas1 = lajk.getLajkId().getOglas();
+        Oglas oglas2 = lajk.getLajkId().getStudent().getAktivniOglas();
+        Optional<Par> pripradniPar = parService.pripadniParDvaOglasa(oglas1, oglas2);
         pripradniPar.ifPresent(par -> {
             matchingService.ponistiPar(par);
         });
