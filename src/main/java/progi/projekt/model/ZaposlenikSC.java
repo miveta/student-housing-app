@@ -101,6 +101,9 @@ public class ZaposlenikSC implements Korisnik {
         return "zaposlenikSC";
     }
 
+    @Override
+    public Grad getGrad() { return getZaposlenSC().getGrad(); }
+
     public void setEmail(String email) {
         this.email = email;
     }

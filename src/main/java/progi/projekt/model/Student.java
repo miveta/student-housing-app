@@ -183,9 +183,8 @@ public class Student implements Serializable, Korisnik {
         this.oglasi = oglasi;
     }
 
-    public Grad getGrad() {
-        return grad;
-    }
+    @Override
+    public Grad getGrad() { return grad; }
 
     public void setGrad(Grad grad) {
         this.grad = grad;

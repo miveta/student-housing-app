@@ -17,8 +17,7 @@ public class OglasDTO {
     private String studentEmail;
     private SobaDTO soba;
     private UvjetiDTO uvjeti;
-
-
+    private GradDTO grad;
 
     public OglasDTO(Oglas oglas) {
         this.id = oglas.getId();
@@ -30,6 +29,7 @@ public class OglasDTO {
         this.studentEmail = oglas.getStudent().getEmail();
         this.soba = new SobaDTO(oglas.getSoba());
         this.uvjeti = new UvjetiDTO(oglas.getTrazeniUvjeti());
+        this.grad = new GradDTO(oglas.getStudent().getGrad());
     }
 
     public UUID getId() {
@@ -103,4 +103,8 @@ public class OglasDTO {
     public void setUvjeti(UvjetiDTO uvjeti) {
         this.uvjeti = uvjeti;
     }
+
+    public GradDTO getGrad() { return grad; }
+
+    public void setGrad(GradDTO grad) { this.grad = grad; }
 }

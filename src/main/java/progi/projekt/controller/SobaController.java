@@ -97,6 +97,7 @@ public class SobaController {
                     trazeniUvjeti.setGrad(student.getGrad());
                     trazimSobuService.update(trazeniUvjeti);
                     oglasService.spremiOglas(student, student.getSoba(), trazeniUvjeti);
+                    matchingService.kandidatiFun();
                 });
 
         return ResponseEntity.ok(new SobaDTO(soba));

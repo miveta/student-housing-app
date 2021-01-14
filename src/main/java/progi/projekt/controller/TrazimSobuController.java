@@ -123,7 +123,13 @@ public class TrazimSobuController {
             }
             matchingService.matchFun();
         });
-        kandidatiThread.start();
+        final boolean THREADS = false;
+        if (THREADS){
+            kandidatiThread.start();
+        } else {
+            matchingService.kandidatiFun();
+            matchingService.matchFun();
+        }
 
 
         return ResponseEntity.ok(trazimSobuForm);

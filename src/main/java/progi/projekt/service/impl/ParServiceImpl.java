@@ -15,6 +15,7 @@ import progi.projekt.service.ParService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ParServiceImpl implements ParService {
@@ -125,8 +126,11 @@ public class ParServiceImpl implements ParService {
 		for (Par parTmp : parovi){
 			if (par.getLanac() == false){
 				//ako nije lanac, nema duplikata
-				if (parTmp.getOglas1() == par.getOglas1() && parTmp.getOglas2() == par.getOglas2()) return false;
-				if (parTmp.getOglas1() == par.getOglas2() && parTmp.getOglas2() == par.getOglas1()) return false;
+				if (parTmp.getIgnore() != true){
+					if (parTmp.getOglas1() == par.getOglas1() && parTmp.getOglas2() == par.getOglas2()) return false;
+					if (parTmp.getOglas1() == par.getOglas2() && parTmp.getOglas2() == par.getOglas1()) return false;
+				}
+
 			} else {
 				//ako je lanac, 1 duplikat je u redu
 				List<Par> lanac = pripadniParoviLanca(par.getOglas1());
@@ -134,7 +138,8 @@ public class ParServiceImpl implements ParService {
 				boolean exitFlag = false;
 				if (lanac.size() == 3 && lanacTmp.size() == 3){
 					for (int i = 0; i<3; i++){
-						if (lanac.get(i) == lanacTmp.get(i) && exitFlag == false) exitFlag = true;
+						if (lanacTmp.get(i).getIgnore() != true && lanac.get(i) == lanacTmp.get(i) && exitFlag == false)
+							exitFlag = true;
 						else if (lanac.get(i) == lanacTmp.get(i) && exitFlag == true) return false;
 					}
 				}
@@ -181,14 +186,17 @@ public class ParServiceImpl implements ParService {
 		for (Par parC : paroviC){
 			if 		(parSadrziOglas(parC, par.getOglas2()) &&
 					!parSadrziOglas(parC, par.getOglas1()) &&
-					par.getLanac() == true
+					par.getLanac() == true &&
+					par.getIgnore() == false
 			){
 				if (parC.getOglas1() == par.getOglas2()){
 					oglas3Opt = Optional.ofNullable(parC.getOglas2());
 				} else {
 					oglas3Opt = Optional.ofNullable(parC.getOglas1());
 				}
-				oglas3Opt.ifPresent(oglas -> oglasiC.add(oglas));
+				oglas3Opt.ifPresent(oglas -> {
+					if (!oglasiC.contains(oglas)) oglasiC.add(oglas);
+				});
 			}
 		}
 		return oglasiC;
@@ -199,32 +207,64 @@ public class ParServiceImpl implements ParService {
 	public List<Oglas> pripadniOglasiLanca(Oglas oglasA) {
 		List<Oglas> lanacOglasi = new ArrayList<>();
 		try{
-			List<Par> paroviAB = pripadniParoviOglasa(oglasA);
+			List<Par> paroviAB = pripadniParoviOglasa(oglasA)
+					.stream()
+					.filter(par -> par.getIgnore() != true)
+					.collect(Collectors.toList());
+
 			List<Oglas> oglasi2 = new ArrayList<>();;
-			for (Par parAB : paroviAB){
-				if (parAB.getLanac() == true && parAB.getOglas1() == oglasA){
+			for (Par parAB : paroviAB) {
+				if (parAB.getLanac() == true && parAB.getOglas1() == oglasA) {
 					oglasi2.add(parAB.getOglas2());
 				} else {
 					oglasi2.add(parAB.getOglas1());
 				}
-				for (Oglas oglasB : oglasi2){
-					List<Par> paroviBC = pripadniParoviOglasa(oglasB);
+			}
 
-					for (Par parBC : paroviBC){
-						if (parBC.getLanac() == true && parBC.getOglas1() == oglasB){
-							List<Oglas> oglasiC = pronadjiTreciOglasIzLanca(parBC);
+			for (Oglas oglasB : oglasi2){
+				List<Par> paroviBC = pripadniParoviOglasa(oglasB)
+						.stream()
+						.filter(par -> !parSadrziOglas(par, oglasA))
+						.filter(parLn -> parLn.getLanac() == true)
+						.filter(parIg -> parIg.getIgnore() == true)
+						.collect(Collectors.toList());
 
-							for (Oglas oglasC : oglasiC){
+				for (Par parBC : paroviBC){
+					if (parBC.getIgnore() != true && parBC.getLanac() == true && parBC.getOglas1() == oglasB){
+//						List<Oglas> oglasiC = pronadjiTreciOglasIzLanca(parBC)
+//								.stream()
+//								.filter(oglasC -> !oglasC.getId().equals(oglasA.getId()))
+//								.collect(Collectors.toList());
+//
+//						for (Oglas oglasC : oglasiC){
+//							lanacOglasi.add(oglasA);
+//							lanacOglasi.add(oglasB);
+//							lanacOglasi.add(oglasC);
+//						}
+
+						List<Par> paroviCA = pripadniParoviOglasa(parBC.getOglas2())
+								.stream()
+								.filter(par -> par.getOglas2() == oglasA)
+								.filter(parLn -> parLn.getLanac() == true)
+								.filter(parIg -> parIg.getIgnore() == true)
+								.collect(Collectors.toList());
+
+						for (Par parCA : paroviCA){
+							Oglas oglasC = parCA.getOglas1();
+							if (!lanacOglasi.contains(oglasB) && !lanacOglasi.contains(oglasC)){
 								lanacOglasi.add(oglasA);
 								lanacOglasi.add(oglasB);
 								lanacOglasi.add(oglasC);
 							}
 						}
 					}
-
+					//todo: provjeriti krsi li ovo matching
+					return lanacOglasi;
 				}
 
 			}
+
+
 
 
 		} catch (Exception e){
@@ -296,12 +336,12 @@ public class ParServiceImpl implements ParService {
 		List<Par> paroviC = listAll();
 		for (Par parC : paroviC){
 			if (!parC.getLanac()) {
-				if (parSadrziOglas(parC, oglas)){
+				if (parSadrziOglas(parC, oglas) && parC.getIgnore() != true){
 					parovi.add(parC);
 				}
 			}
 			else {
-				if (parC.getOglas1() == oglas){
+				if (parC.getOglas1() == oglas && parC.getIgnore() != true){
 					parovi.add(parC);
 				}
 			}
@@ -354,7 +394,7 @@ public class ParServiceImpl implements ParService {
 	public boolean josNisuPar(Oglas oglas, Oglas kand) {
 		List<Par> parovi = pripadniParoviOglasa(oglas);
 		for (Par par: parovi){
-			if (parSadrziOglas(par, kand) && par.getLanac() == false) return false;
+			if (par.getIgnore() != true && parSadrziOglas(par, kand) && par.getLanac() == false) return false;
 		}
 
 		return true;

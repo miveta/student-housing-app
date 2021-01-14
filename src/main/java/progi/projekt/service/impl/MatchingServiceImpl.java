@@ -33,7 +33,8 @@ public class MatchingServiceImpl implements MatchingService {
 		this.lajkService = lajkService;
 	}
 
-
+	//ako ce opet javljat "The dependencies of some of the beans in the application context form a cycle"
+	//pogledati https://www.baeldung.com/circular-dependencies-in-spring
 
 	@Override
 	public void kandidatiFun() {
@@ -327,9 +328,9 @@ public class MatchingServiceImpl implements MatchingService {
 					Integer trostranaOcjena;
 
 					//ako bilo koji od studenata nije ocjenio par
-					if (	ocjenaABOptional.isEmpty() ||
-							ocjenaBCOptional.isEmpty() ||
-							ocjenaCAOptional.isEmpty()) {
+					if (	ocjenaABOptional.isEmpty() || ocjenaABOptional.get().equals(-1) ||
+							ocjenaBCOptional.isEmpty() || ocjenaBCOptional.get().equals(-1) ||
+							ocjenaCAOptional.isEmpty() || ocjenaCAOptional.get().equals(-1))  {
 						trostranaOcjena = -1;
 					} else {
 						Integer ocjenaAB = ocjenaABOptional.get();
@@ -368,10 +369,11 @@ public class MatchingServiceImpl implements MatchingService {
 					(konacniPar) ->
 					{
 						Par par = konacniPar;
-						if (par.getLanac() == false) {
+						final boolean SKIP_IZRADU_PAROVA = true;
+						if (par.getLanac() == false && !SKIP_IZRADU_PAROVA) {
 							//nema lanca
 							parService.rezervirajOglasePara(par);
-						} else {
+						} else if (par.getLanac() == true) {
 							//lanac
 							List<Oglas> lanci = parService.pripadniOglasiLanca(par.getOglas1());
 							for(int k = lanci.size()/3;k>0;k--){
@@ -453,6 +455,8 @@ public class MatchingServiceImpl implements MatchingService {
 			else /* par.getIgnore() == true) */ {
 				ponistiParIKandidat(par);
 				parService.vratiOglaseParaNaAKTIVAN(par);
+				parFun();
+				matchFun();
 			}
 		} else {
 			//jedan od oglasa je u medjuvremenu obrisan/ponisten
@@ -514,6 +518,8 @@ public class MatchingServiceImpl implements MatchingService {
 			parService.ponistiParoveOglasa(oglas);
 
 			resetKandsDebug();
+
+			oglas.setKonacniPar(null);
 
 			oglasService.save(oglas);
 		}

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import OglasList from "../oglasi/homepage/OglasList";
 import cookie from "react-cookies";
-import {Button, Col, Jumbotron, Nav, Navbar, NavDropdown, Row, Tab} from "react-bootstrap";
+import {Col,Nav, Row, Tab} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
 
 class Homepage extends Component {
@@ -32,8 +32,6 @@ class Homepage extends Component {
                     ).catch(error => console.log(error))
                 }
             });
-
-        console.log(this)
 
         if (this.state.user !== undefined) {
             fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/kandidati/student?student_username=${this.state.user.korisnickoIme}`, options)
@@ -70,12 +68,13 @@ class Homepage extends Component {
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
                                     <OglasList oglasi={this.state.oglasi}
-                                               isLoggedIn={this.props.isLoggedIn}/>
+                                               isLoggedIn={this.props.isLoggedIn}
+                                               user={this.state.user}/>
                                 </Tab.Pane>
                                 {
                                     this.state.user &&
                                     <Tab.Pane eventKey="second">
-                                        <OglasList oglasi={this.state.kandOglasi} isLoggedIn={this.props.isLoggedIn}/>
+                                        <OglasList oglasi={this.state.kandOglasi} isLoggedIn={this.props.isLoggedIn} user={this.state.user}/>
                                     </Tab.Pane>
                                 }
                             </Tab.Content>
