@@ -8,6 +8,7 @@ import progi.projekt.service.LajkService;
 import progi.projekt.service.MatchingService;
 import progi.projekt.service.ObavijestService;
 import progi.projekt.service.ParService;
+import progi.projekt.service.ObavijestService;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +20,9 @@ public class LajkServiceImpl implements LajkService {
     private MatchingService matchingService;
     private ParService parService;
     private ObavijestService obavijestService;
+    private ObavijestService obavijestService;
 
-    public LajkServiceImpl(LajkRepository lajkRepository, MatchingService matchingService, ParService parService, ObavijestService obavijestService) {
+    public LajkServiceImpl(LajkRepository lajkRepository) {
         this.lajkRepository = lajkRepository;
         this.matchingService = matchingService;
         this.parService = parService;
@@ -72,6 +74,8 @@ public class LajkServiceImpl implements LajkService {
             Optional<Par> pripradniPar = parService.pripadniParDvaOglasa(oglas1, oglas2);
             pripradniPar.ifPresent(par -> matchingService.ponistiPar(par));
 
+            if(l.getOcjena() != 4)
+                obavijestService.notifyLiked(l.getLajkId().getOglas(), l.getLajkId().getStudent());
             return lajkRepository.saveAndFlush(l);
         } catch (Exception e) {
             //lajkRepo baca exceptione koje mu proslijedi baza (e)?
