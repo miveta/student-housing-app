@@ -40,7 +40,7 @@ public class OglasController {
 
     @GetMapping("/list")
     public List<OglasDTO> listOglas() {
-        return oglasService.listAll().stream().map(OglasDTO::new).collect(Collectors.toList());
+        return oglasService.listAll().stream().filter(o -> o.getStatusOglasa() == StatusOglasaEnum.AKTIVAN || o.getStatusOglasa() == StatusOglasaEnum.CEKA).map(OglasDTO::new).collect(Collectors.toList());
     }
 
 

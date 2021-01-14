@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import OglasList from "../oglasi/homepage/OglasList";
 import cookie from "react-cookies";
-import {Col,Nav, Row, Tab} from "react-bootstrap";
+import {Col, Dropdown, NavItem, NavLink, Row, Tab} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
 
 class Homepage extends Component {
@@ -10,7 +10,9 @@ class Homepage extends Component {
         this.state = {
             user: cookie.load('principal'),
             oglasi: [],
-            kandOglasi: []
+            kandOglasi: [],
+            gradovi: [],
+            grad: null
         };
 
         if (cookie.load('role') === 'zaposlenikSC') props.history.push("/homepagesc")
@@ -44,44 +46,73 @@ class Homepage extends Component {
                 });
         }
 
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/soba/gradovi`, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                } else {
+                    console.log(response.status)
+                }
+            }).then(json => {
+            this.setState({gradovi: json})
+            if (!this.state.user && json.length >= 1) this.setState({grad: json[0].naziv})
+        })
     }
+
+    onChange = (event) => {
+        const {name, id} = event.target;
+        this.setState(state => ({...state, [name]: id}))
+    };
 
     render() {
         return (
-            <div className="middleHomepage">
-                <Tab.Container id="left-tabs-example" defaultActiveKey="first" className={"left-tabs"}>
-                    <Row>
-                        <Col sm={2}>
-                            <Nav variant="pills" className="flex-column">
-                                <Nav.Item>
-                                    <Nav.Link eventKey="first">Svi oglasi</Nav.Link>
-                                </Nav.Item>
-                                {
-                                    this.state.user && <Nav.Item>
-                                        <Nav.Link eventKey="second">Preporučeni oglasi</Nav.Link>
-                                    </Nav.Item>
+            <Tab.Container id="left-tabs-example" defaultActiveKey="first" className={"tabs"}>
+                <Row className={"tabs"}>
+                    <Col sm={2} className={"left"} style={{minWidth: '280px'}}>
+                        {
+                            this.state.user ?
+                                <Dropdown as={NavItem} className={"navigation"} style={{minWidth: '200px'}}>
+                                    <Dropdown.Item as={NavLink} eventKey="first" block>Svi oglasi</Dropdown.Item>
+                                    <Dropdown.Item as={NavLink} eventKey="second" block>Preporučeni
+                                        oglasi</Dropdown.Item>
+                                </Dropdown>
+                                :
+                                <Dropdown as={NavItem} className={"navigation"}>
+                                    {this.state.gradovi.map(grad => (
+                                        <Dropdown.Item id={grad.naziv} name={"grad"} onClick={this.onChange}
+                                                       eventKey={"first"}>
+                                            {grad.naziv}
+                                        </Dropdown.Item>
+                                    ))}
+                                </Dropdown>
+                        }
+                    </Col>
+
+                    <Col className={"middle"}>
+                        <Tab.Content>
+                            <Tab.Pane eventKey="first">
+                                {!this.state.user ? this.state.grad &&
+                                    <h3>{this.state.grad}</h3>
+                                    :
+                                    <h3> Sve dostupne sobe u vašem gradu </h3>
                                 }
 
-                            </Nav>
-                        </Col>
-                        <Col>
-                            <Tab.Content>
-                                <Tab.Pane eventKey="first">
-                                    <OglasList oglasi={this.state.oglasi}
-                                               isLoggedIn={this.props.isLoggedIn}
-                                               user={this.state.user}/>
+                                <OglasList oglasi={this.state.oglasi}
+                                           grad={this.state.user ? this.state.user.grad : this.state.grad}
+                                           jmbag={this.state.user ? this.state.user.jmbag : null}/>
+                            </Tab.Pane>
+                            {
+                                this.state.user &&
+                                <Tab.Pane eventKey="second">
+                                    <h3> Sobe koje vam najbolje odgovaraju</h3>
+                                    <OglasList oglasi={this.state.kandOglasi} isLoggedIn={this.props.isLoggedIn}
+                                               user={this.state.user.jmbag}/>
                                 </Tab.Pane>
-                                {
-                                    this.state.user &&
-                                    <Tab.Pane eventKey="second">
-                                        <OglasList oglasi={this.state.kandOglasi} isLoggedIn={this.props.isLoggedIn} user={this.state.user}/>
-                                    </Tab.Pane>
-                                }
-                            </Tab.Content>
-                        </Col>
-                    </Row>
-                </Tab.Container>
-            </div>
+                            }
+                        </Tab.Content>
+                    </Col>
+                </Row>
+            </Tab.Container>
         )
     }
 }

@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/soba")
 public class SobaController {
-
     private SobaService sobaService;
     private UtilService utilService;
     private OglasService oglasService;
@@ -59,16 +58,21 @@ public class SobaController {
 
     @PostMapping(value = "/spremi", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveSoba(@RequestBody SobaForm sobaForm) {
-        Optional<Soba> optionalSoba = sobaService.getByStudentUsername(sobaForm.getStudentUsername());
+        Optional<Student> optionalStudent = studentService.findByKorisnickoIme(sobaForm.getStudentUsername());
+        if(optionalStudent.isEmpty()) return ResponseEntity.badRequest().build();
+
+        Student student = optionalStudent.get();
+        Oglas oglas = student.getAktivniOglas();
+
 
         Soba soba;
-        if (optionalSoba.isEmpty()) {
+        if (oglas == null) {
             soba = new Soba();
             soba = sobaService.setFromStudentUsernameAndPaviljonId(soba, sobaForm.getStudentUsername(), sobaForm.getIdPaviljon());
 
             if (soba == null) return ResponseEntity.badRequest().build();
         } else {
-            soba = optionalSoba.get();
+            soba = oglas.getSoba();
         }
 
         sobaForm.fromSobaForm(soba);
@@ -78,16 +82,15 @@ public class SobaController {
         if (paviljonId == null) return ResponseEntity.badRequest().build();
         if (!soba.getPaviljon().getId().equals(UUID.fromString(paviljonId))) sobaService.setPaviljon(soba, paviljonId);
 
-        Optional<Student> optionalStudent = studentService.findByKorisnickoIme(sobaForm.getStudentUsername());
-        Student student = optionalStudent.get();
+
         student.setSoba(soba);
         studentService.update(student);
 
         Optional<Oglas> optionalOglas = oglasService.findByStudentAndStatus(student, StatusOglasaEnum.AKTIVAN);
         optionalOglas.ifPresentOrElse(
-                (oglas) ->
+                (o) ->
                 {
-                    matchingService.resetirajOglas(oglas.getId());
+                    matchingService.resetirajOglas(o.getId());
                 },
                 () ->
                 //if (optionalOglas.isEmpty()) {

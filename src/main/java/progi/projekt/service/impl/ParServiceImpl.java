@@ -25,7 +25,7 @@ public class ParServiceImpl implements ParService {
 	private OglasRepository oglasRepo;
 	private ObavijestService obavijestService;
 
-	public ParServiceImpl(ParRepository parRepo, @Lazy KandidatService kandidatService, OglasRepository oglasRepo) {
+	public ParServiceImpl(ParRepository parRepo, @Lazy KandidatService kandidatService, OglasRepository oglasRepo, ObavijestService obavijestService) {
 		this.parRepo = parRepo;
 		this.kandidatService = kandidatService;
 		this.oglasRepo = oglasRepo;

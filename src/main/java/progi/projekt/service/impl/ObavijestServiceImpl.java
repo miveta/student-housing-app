@@ -90,6 +90,12 @@ public class ObavijestServiceImpl implements ObavijestService {
         obavijest.setTekst(student.getIme() + " " + student.getPrezime() + " je lajkao vašu sobu!");
         obavijestRepository.save(obavijest);
 
+        students.forEach(s -> {
+            if(s.getObavijesti() == null) s.setObavijesti(new ArrayList<>());
+            s.getObavijesti().add(obavijest);
+            studentService.save(s);
+        });
+
         //Posalji mail ako je ukljuceno automatsko slanje
         if (student.isObavijestiNaMail()) {
             SimpleMailMessage msg = new SimpleMailMessage();
@@ -107,12 +113,18 @@ public class ObavijestServiceImpl implements ObavijestService {
         obavijest.setVrijeme(new Date(System.currentTimeMillis()));
         obavijest.setProcitana(false);
         obavijest.setOglas(oglasZamjene);
-        ArrayList<Student> student = new ArrayList<>();
-        student.add(oglasZamijenjenog.getStudent());
-        obavijest.setStudent(student);
+        ArrayList<Student> students = new ArrayList<>();
+        students.add(oglasZamijenjenog.getStudent());
+        obavijest.setStudent(students);
         obavijest.setTekst("Čekate zamjenu sobe sa " + oglasZamjene.getStudent().getIme() + " " +
                 oglasZamjene.getStudent().getPrezime() + "!");
         obavijestRepository.save(obavijest);
+
+        students.forEach(s -> {
+            if(s.getObavijesti() == null) s.setObavijesti(new ArrayList<>());
+            s.getObavijesti().add(obavijest);
+            studentService.save(s);
+        });
 
         //Posalji mail ako je ukljuceno automatsko slanje
         if (oglasZamijenjenog.getStudent().isObavijestiNaMail()) {
@@ -130,12 +142,18 @@ public class ObavijestServiceImpl implements ObavijestService {
         obavijest.setVrijeme(new Date(System.currentTimeMillis()));
         obavijest.setProcitana(false);
         obavijest.setOglas(oglasZamjene);
-        ArrayList<Student> student = new ArrayList<>();
-        student.add(oglasZamijenjenog.getStudent());
-        obavijest.setStudent(student);
+        ArrayList<Student> students = new ArrayList<>();
+        students.add(oglasZamijenjenog.getStudent());
+        obavijest.setStudent(students);
         obavijest.setTekst("Vaša soba je uspješno zamijenjena sa sobom " + oglasZamjene.getStudent().getIme() + " " +
                 oglasZamjene.getStudent().getPrezime() + "!");
         obavijestRepository.save(obavijest);
+
+        students.forEach(s -> {
+            if(s.getObavijesti() == null) s.setObavijesti(new ArrayList<>());
+            s.getObavijesti().add(obavijest);
+            studentService.save(s);
+        });
 
         //Posalji mail ako je ukljuceno automatsko slanje
         if (oglasZamijenjenog.getStudent().isObavijestiNaMail()) {

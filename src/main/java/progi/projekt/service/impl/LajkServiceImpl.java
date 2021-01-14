@@ -8,7 +8,6 @@ import progi.projekt.service.LajkService;
 import progi.projekt.service.MatchingService;
 import progi.projekt.service.ObavijestService;
 import progi.projekt.service.ParService;
-import progi.projekt.service.ObavijestService;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +19,12 @@ public class LajkServiceImpl implements LajkService {
     private MatchingService matchingService;
     private ParService parService;
     private ObavijestService obavijestService;
-    private ObavijestService obavijestService;
 
-    public LajkServiceImpl(LajkRepository lajkRepository) {
+    public LajkServiceImpl(LajkRepository lajkRepository, MatchingService matchingService, ParService parService, ObavijestService obavijestService) {
         this.lajkRepository = lajkRepository;
         this.matchingService = matchingService;
         this.parService = parService;
+
         this.obavijestService = obavijestService;
     }
 

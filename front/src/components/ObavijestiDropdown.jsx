@@ -64,6 +64,7 @@ class ObavijestiDropdown extends Component {
                                   console.log("Disconnected");
                               }}
                               onMessage={(msg) => {
+                                  console.log(msg)
                                   this.setState({obavijesti: msg})
                               }}
                               ref={(client) => {
@@ -87,14 +88,14 @@ class ObavijestiDropdown extends Component {
                             this.state.obavijesti.length > 0 ?
                                 <>
                                     {this.state.obavijesti.map((redak, index) => (
-                                        <LinkContainer to={`/oglas/id=${redak.oglas.id}` || "/"}
+                                        <LinkContainer to={`/oglas/id=${redak.oglasId}` || "/"}
                                                        key={index}
                                                        activeClassName=""
                                                        style={{
                                                            'borderRight': !redak.procitana ? '10px solid #33B5E7' : '',
                                                            /*'backgroundColor': '#ffffff',*/
                                                        }}>
-                                            <Dropdown.Item href={`/oglas/id=${redak.oglas.id}`}
+                                            <Dropdown.Item href={`/oglas/id=${redak.oglasId}`}
                                                            onClick={() => this.procitajObavijest(redak)}>
                                                 {redak.tekst}
                                             </Dropdown.Item>

@@ -10,7 +10,7 @@ public class ObavijestDTO {
     private String tekst;
     private boolean procitana;
     private Date vrijeme;
-    private OglasDTO oglas;
+    private UUID oglasId;
 
     public ObavijestDTO(Obavijest obavijest) {
         this.id = obavijest.getId();
@@ -18,7 +18,7 @@ public class ObavijestDTO {
         this.procitana = obavijest.isProcitana();
         this.vrijeme = obavijest.getVrijeme();
         if (obavijest.getOglas() != null)
-            this.oglas = new OglasDTO(obavijest.getOglas());
+            this.oglasId = obavijest.getOglas().getId();
     }
 
     public UUID getId() {
@@ -53,11 +53,11 @@ public class ObavijestDTO {
         this.vrijeme = vrijeme;
     }
 
-    public OglasDTO getOglas() {
-        return oglas;
+    public UUID getOglasId() {
+        return oglasId;
     }
 
-    public void setOglas(OglasDTO oglas) {
-        this.oglas = oglas;
+    public void setOglasId(UUID oglasId) {
+        this.oglasId = oglasId;
     }
 }
