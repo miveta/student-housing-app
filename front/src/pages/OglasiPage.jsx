@@ -17,7 +17,7 @@ export default class OglasiPage extends Component {
     }
 
     onAktiviraj = (oglasId) => {
-        let self = this
+        let self = this;
 
         let options = {
             method: 'POST',
@@ -40,11 +40,11 @@ export default class OglasiPage extends Component {
                         confirmButtonText: 'Ok',
                     })
                 }
-            }).catch(e => console.log("korisnik jos nema sobu"))
-    }
+            }).catch(() => console.log("korisnik jos nema sobu"))
+    };
 
     onArhiviraj = () => {
-        let self = this
+        let self = this;
         let options = {
             method: 'POST',
             headers: {
@@ -57,10 +57,10 @@ export default class OglasiPage extends Component {
                 if (response.status === 200) {
                     return response.json()
                 }
-            }).then(json => {
+            }).then(() => {
             window.location.reload();
-        }).catch(e => console.log("korisnik jos nema sobu"))
-    }
+        }).catch(() => console.log("korisnik jos nema sobu"))
+    };
 
     render() {
         return (
@@ -73,7 +73,7 @@ export default class OglasiPage extends Component {
                                 Moj oglas
                             </Dropdown.Item>
                             <Dropdown.Item as={NavLink} eventKey="kandidati" block>
-                                Kandidati
+                                Najbolji kandidat
                             </Dropdown.Item>
                             <Dropdown.Divider/>
                             <Dropdown.Item as={NavLink} eventKey="arhivirani" block>

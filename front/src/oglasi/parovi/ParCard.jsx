@@ -5,9 +5,11 @@ import {Button, Col, Row} from "react-bootstrap";
 export default class ParCard extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            par: props.par
+        };
 
-        this.par = props.par
+        this.par = props.par;
         this.oglas = props.par.oglas1.student === props.user.korisnickoIme ? props.par.oglas2 : props.par.oglas1
     }
 
@@ -26,16 +28,16 @@ export default class ParCard extends Component {
                 }
             }).then(json => {
             console.log(json)
-        }).catch(e => console.log("korisnik nema oglase?"))
-    }
+        }).catch(() => console.log("korisnik nema oglase?"))
+    };
 
     onPrihvati = () => {
         this.onUpdatePar(true)
-    }
+    };
 
     onOdbij = () => {
         this.onUpdatePar(false)
-    }
+    };
 
     render() {
         return (

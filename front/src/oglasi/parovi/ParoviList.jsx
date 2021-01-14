@@ -8,7 +8,7 @@ export default class ParoviList extends Component {
         this.state = {
             parovi: [],
             user: cookie.load('principal')
-        }
+        };
 
         const options = {
             method: 'GET',
@@ -24,26 +24,26 @@ export default class ParoviList extends Component {
                 }
             }).then(json => {
             this.setState({parovi: json})
-        }).catch(e => console.log("korisnik nema oglase?"))
+        }).catch(() => console.log("korisnik nema oglase?"))
     }
 
 
     render() {
-        console.log(this.state)
         return (
             <div>
                 <h3>Najbolji kandidat! :)</h3>
-                {
-                    this.state.parovi.map(par =>
-                        <div>
-                            <ParCard
-                                id={par.id}
-                                key={par.id}
-                                par={par}
-                                user={this.state.user}/>
-                        </div>
-                    )
+                {this.state.parovi.length === 1 ?
+                    <div>
+                        <ParCard
+                            id={this.state.parovi[0].id}
+                            key={this.state.parovi[0].id}
+                            par={this.state.parovi[0]}
+                            user={this.state.user}/>
+                    </div>
+
+                    : <p>vise od jednog {this.state.parovi.length}</p>
                 }
+
             </div>)
     }
 }

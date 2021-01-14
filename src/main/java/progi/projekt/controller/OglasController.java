@@ -158,59 +158,54 @@ public class OglasController {
         //force update kandidata unutar svakog oglasa
         kandidatService.updateLocalKands();
 
-        Optional<Oglas> oglasOpt = oglasService.findById(oglasId.toString());
+        Optional<Oglas> oglasOpt = oglasService.findById(oglasId);
+
+        if (oglasOpt.isEmpty()) return new ArrayList<>();
 
 
-        if (oglasOpt.isPresent()) {
-            Oglas oglas = oglasService.findById(oglasId).get();
-            ArrayList<KandidatDTO> kandidatiDTO = new ArrayList<>();
-            List<Lajk> lajkovi = lajkService.listAll();
+        Oglas oglas = oglasOpt.get();
+        ArrayList<KandidatDTO> kandidatiDTO = new ArrayList<>();
+        List<Lajk> lajkovi = lajkService.listAll();
 
-            Long brojOcjenaPredanogOglasa =
-                    lajkovi.stream().filter(lajk -> lajk.getLajkId().getOglas().getId() == oglas.getId()).count();
+        long brojOcjenaPredanogOglasa =
+                lajkovi.stream().filter(lajk -> lajk.getLajkId().getOglas().getId() == oglas.getId()).count();
 
 
-            for (Kandidat kand : oglas.getKandidati()){
+        for (Kandidat kand : oglas.getKandidati()) {
 
-                KandidatDTO tmpDTO = new KandidatDTO(kand);
+            KandidatDTO tmpDTO = new KandidatDTO(kand);
 
-                if (brojOcjenaPredanogOglasa > 0){
-                    for (Lajk lajk : lajkovi) {
-                        if (lajk.getLajkId().getOglas().equals(oglas)) {
-                            Optional<Integer> ocjenaOptional = Optional.ofNullable(lajk.getOcjena());
-                            Oglas drugiOglas = lajk.getLajkId().getStudent().getAktivniOglas();
+            if (brojOcjenaPredanogOglasa > 0) {
+                for (Lajk lajk : lajkovi) {
+                    if (lajk.getLajkId().getOglas().equals(oglas)) {
+                        Optional<Integer> ocjenaOptional = Optional.of(lajk.getOcjena());
+                        Oglas drugiOglas = lajk.getLajkId().getStudent().getAktivniOglas();
 
-                            Optional<Kandidat> tmpOpt = kandidatService.kandidatParaOglasa(oglas, drugiOglas);
-                            if (tmpOpt.isPresent()) {
-                                Kandidat tmp = tmpOpt.get();
+                        Optional<Kandidat> tmpOpt = kandidatService.kandidatParaOglasa(oglas, drugiOglas);
+                        if (tmpOpt.isPresent()) {
+                            Kandidat tmp = tmpOpt.get();
 
-                                ocjenaOptional.ifPresentOrElse(
-                                        (ocjena) ->
-                                        {
-                                            //KandOcjena je ocjena koju je kandidat dao nasem oglasu
-                                            tmpDTO.setKandOcjena(ocjena);
-                                        },
-                                        () ->
-                                        {
-                                            //ako ocjena jos nije unesena upisujemo -1
-                                            tmpDTO.setKandOcjena(-1);
-                                        });
-                            }
+                            //KandOcjena je ocjena koju je kandidat dao nasem oglasu
+                            ocjenaOptional.ifPresentOrElse(
+                                    tmpDTO::setKandOcjena,
+                                    () ->
+                                    {
+                                        //ako ocjena jos nije unesena upisujemo -1
+                                        tmpDTO.setKandOcjena(-1);
+                                    });
                         }
                     }
-
-                } else {
-                    tmpDTO.setKandOcjena(-1);
                 }
 
-                kandidatiDTO.add(tmpDTO);
+            } else {
+                tmpDTO.setKandOcjena(-1);
             }
 
-            return kandidatiDTO;
+            kandidatiDTO.add(tmpDTO);
         }
 
+        return kandidatiDTO;
 
-        return new ArrayList<>();
     }
 
     //http://localhost:8080/oglas/listParovi?student_username=stud1
@@ -227,15 +222,14 @@ public class OglasController {
         if (optionalStudent.isEmpty()) return new ArrayList<>();
 
         Student student = optionalStudent.get();
-        if (student.getAktivniOglas() == null) return new ArrayList<>();
+        Oglas oglas = student.getCekaOglas();
 
-
-        Oglas oglas = student.getAktivniOglas();
+        if (oglas == null) return new ArrayList<>();
 
         List<Par> parovi = parService.pripadniParoviOglasa(oglas);
         ArrayList<ParDTO> paroviOglasa = new ArrayList<>();
         for (Par par : parovi) {
-            if (par.getLanac() == false) {
+            if (!par.getLanac()) {
                 //nije lanac
                 ParDTO parDTO = new ParDTO(par);
                 paroviOglasa.add(parDTO);
@@ -252,47 +246,11 @@ public class OglasController {
         return paroviOglasa;
     }
 
-    //http://localhost:8080/oglas/listParoviWithFlags?done=false&ignore=false
-    /*@GetMapping(value = "/listParoviWithFlags")
-    public List<ParDTO> listParoviWithFlags(@RequestParam Boolean ignore, Boolean done, Boolean odobren) {
-        List<Oglas> oglasi = oglasService.listAll();
-
-        //force update oglasa unutar svakog studenta
-        //updateOglasInStudents(oglasi);
-
-        //force update kandidata unutar svakog oglasa
-        kandidatService.updateLocalKands();
-
-        ArrayList<ParDTO> parovi = new ArrayList<>();
-
-        for (Par par : parService.listAll()) {
-            if (par.getIgnore() == ignore && par.getDone() == done && par.getOdobren() == odobren) {
-                ParDTO parDTO = new ParDTO(par);
-                parovi.add(parDTO);
-            }
-        }
-
-        return parovi;
-    }*/
-
     @GetMapping(value = "/listParoviWithFlags")
     public List<ParDTO> listParoviWithFlags(@RequestParam(value = "done") Boolean done) {
         //note: napravio sam ParDTO jer ako stavim Par u listu, toString je beskonacan jer oglas ima referencu na
         // studenta koji opet ima referencu na oglas. Ista stvar sa domovima
         // - holik
-
-/*		List<Oglas> oglasi = oglasService.listAll();
-
-		//force update oglasa unutar svakog studenta
-		List<Student> studenti = studentService.listAll();
-		for (Oglas oglas : oglasi){
-			for (Student stud : studenti){
-				if (stud.getId() == oglas.getStudent().getId()){
-					stud.setAktivniOglas(oglas);
-					studentService.save(stud);
-				}
-			}
-		}*/
 
         //force update kandidata unutar svakog oglasa
         kandidatService.updateLocalKands();
@@ -305,15 +263,6 @@ public class OglasController {
                 parovi.add(parDTO);
             }
         }
-
-/*        List<ParDTO> parovi = new ArrayList<>();
-        List<OglasDTO> oglasi = oglasService.listAll().stream().map(OglasDTO::new).collect(Collectors.toList());
-        OglasDTO oglasdto1 = oglasi.get(0);
-        Oglas oglas1 = oglasService.findById(oglasdto1.getId().toString()).get();
-        OglasDTO oglasdto2 =  oglasi.get(1);
-        Oglas oglas2 = oglasService.findById(oglasdto2.getId().toString()).get();*/
-
-        //parovi.add(new ParDTO(new Par(oglas1, oglas2, true,false, false)));
         return parovi;
     }
 
@@ -330,16 +279,6 @@ public class OglasController {
             }
         }
     }
-
-/*    @PostMapping(value = "/updateParSC", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateParSC(@RequestParam(value = "par_id") String parId,
-                                         @RequestParam(value = "odobren") Boolean odobren,
-                                         @RequestParam(value = "zaposlenikKorisnickoIme") String username) {
-        ZaposlenikSC zaposlenikSC = zaposlenikSCService.findBykorisnickoIme(username).get();
-
-
-        return ResponseEntity.ok(null);
-    }*/
 
     //http://localhost:8080/oglas/updatePar?par_id=35&odobren=true&zaposlenikKorisnickoIme=stef567
     @PostMapping("/updatePar")
@@ -359,7 +298,7 @@ public class OglasController {
 
         if (prvi && drugi || !prvi && !drugi) return ResponseEntity.badRequest().body("!");
 
-        if (odobren == false) par.setIgnore(true);
+        if (!odobren) par.setIgnore(true);
         else {
             if (prvi) par.setPrihvatioPrvi(true);
             if (drugi) par.setPrihvatioDrugi(true);

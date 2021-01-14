@@ -23,12 +23,9 @@ class HomepageSC extends Component {
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(body => {
-                        this.setState({upiti: body})
-                        console.log(body)
-                        let odobreni = this.state.upiti.filter(upit => upit.odobren === true)
-
-                        console.log(odobreni)
-                        this.setState({odobreniUpiti: odobreni})
+                        this.setState({upiti: body});
+                        let odobreni = this.state.upiti.filter(upit => upit.odobren === true);
+                        this.setState({odobreniUpiti: odobreni});
                     }).catch(error => console.log(error))
                 }
             });
@@ -46,7 +43,7 @@ class HomepageSC extends Component {
 
     render() {
         return(
-            <div className="middle">
+            <div className="middleHomepage">
                 <Tab.Container id="left-tabs-example" defaultActiveKey="sviUpiti" className={"left-tabs"}>
                     <Row>
                         <Col sm={2}>

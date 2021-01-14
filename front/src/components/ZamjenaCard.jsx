@@ -29,19 +29,17 @@ class ZamjenaCard extends Component {
             }
         };
 
-        let self = this
+        let self = this;
         fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/updateParSC?par_id=${self.state.parId}&odobren=${b}&zaposlenikKorisnickoIme=${self.state.user.korisnickoIme}`, options)
             .then(response => {
                 if (response.status === 200) {
-                    response.json().then(body => {
-                    });
                 } else {
                     response.text().then(body => {
                         console.log(body);
                     });
                 }
             }).catch(error => console.log(error));
-    }
+    };
 
     render() {
         return (
@@ -53,17 +51,20 @@ class ZamjenaCard extends Component {
                         <Form.Label> E-mail </Form.Label>
                         <Form.Control readOnly name="email" value={this.state.oglas1.studentEmail}/>
                     </Form.Group>
-                    {!this.state.odobren && <Button className="yes" onClick={() => this.click(true)} block>Odobri</Button>}
+                    {!this.state.odobren &&
+                    <Button className="yes" onClick={() => this.click(true)} block>Odobri</Button>}
                 </Col>
                 <Col>
-                    <SobaReadOnly soba ={this.state.soba2} title={this.state.oglas2.studentJmbag}/>
+                    <SobaReadOnly soba={this.state.soba2} title={this.state.oglas2.studentJmbag}/>
                     <Form.Group>
                         <Form.Label> E-mail </Form.Label>
                         <Form.Control readOnly name="email" value={this.state.oglas2.studentEmail}/>
                     </Form.Group>
-                    {!this.state.odobren && <Button className="no" onClick={() => this.click(false)} block>Odbij</Button>}
+                    {!this.state.odobren &&
+                    <Button className="no" onClick={() => this.click(false)} block>Odbij</Button>}
                 </Col>
-                {this.state.odobren && <Button variant="dark" disabled={true} block>this.props.par.zaposlenikSC.korisnickoIme</Button>}
+                {this.state.odobren && <Button variant="dark" disabled={true}
+                                               block>Potvrdio {this.props.par.zaposlenikSC.korisnickoIme}</Button>}
             </Row>
         )
     }

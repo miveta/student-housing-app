@@ -54,6 +54,19 @@ public class Student implements Serializable, Korisnik {
     private Soba soba;
 
 
+    public Oglas getCekaOglas() {
+        Set<Oglas> oglasi = getOglasi();
+
+        if (oglasi == null) return null;
+
+        oglasi = oglasi.stream().filter(o -> o.getStatusOglasa().equals(StatusOglasaEnum.CEKA)).collect(Collectors.toSet());
+        if (oglasi.isEmpty()) return null;
+
+        if (oglasi.size() > 1) throw new IllegalArgumentException("user smije imat samo jedan aktivan oglas");
+
+        return oglasi.iterator().next();
+    }
+
     public Oglas getAktivniOglas() {
         Set<Oglas> oglasi = getOglasi();
 
