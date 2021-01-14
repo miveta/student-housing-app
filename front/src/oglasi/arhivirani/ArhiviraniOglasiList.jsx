@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import ArhiviraniOglasCard from "./ArhiviraniOglasCard";
 import * as cookie from "react-cookies";
+import {makeid} from "../../components/makeId";
 
 class ArhiviraniOglasiList extends Component {
     constructor(props) {
         super(props)
         this.state = {
             oglasi: [],
-            user: cookie.load('principal')
+            user: cookie.load('principal'),
+            key: makeid(5)
         }
 
         const options = {

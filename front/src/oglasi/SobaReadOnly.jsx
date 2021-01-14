@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Col, Form, Row} from "react-bootstrap";
+import {makeid} from "../components/makeId";
 
 class SobaReadOnly extends Component {
     constructor(props) {
         super(props)
         this.soba = props.soba
         this.title = props.title
+        this.key = makeid(5)
     }
 
     render() {

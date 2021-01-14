@@ -3,6 +3,7 @@ import {Card} from "react-bootstrap";
 import cookie from "react-cookies";
 import Lajkovi from "../components/Lajkovi";
 import SobaReadOnly from "../oglasi/SobaReadOnly";
+import {makeid} from "../components/makeId";
 
 class Oglas extends Component {
      constructor(props) {
@@ -12,7 +13,8 @@ class Oglas extends Component {
             oglas: '',
             isLoggedIn: cookie.load('isAuth'),
             soba: '',
-            paviljon: ''
+            paviljon: '',
+            key: makeid(5)
         }
 
          //substring da maknemo id= i dobijemo čisti oglasId

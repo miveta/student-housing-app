@@ -46,7 +46,6 @@ public class MatchingServiceImpl implements MatchingService {
 		//stvaranje novih kandidata
 		for (Oglas oglas1 : oglasi) {
 			for (Oglas oglas2 : oglasi) {
-				//todo: maknuti naslov == null kada se poprave oglasi u database fillu
 				if (oglas1 != oglas2 && ignoreNullNasloveDEBUG(oglas1, oglas2)) {
 					if (kandidatService.odgovaraju(oglas1, oglas2) && kandidatService.josNisuKandidat(oglas1, oglas2)) {
 						kandidatService.stvoriKand(oglas1, oglas2);
@@ -198,7 +197,6 @@ public class MatchingServiceImpl implements MatchingService {
 				.collect(Collectors.toList());
 
 		/*
-		//todo: prilagodi update controller/service za:
 		spremanje ocjene u kandidat:
 		klasa kandidat ne razlikuje "originalni" oglas i "kandidat" oglas usprkos imenima varijabli
 		zbog toga se moramo interno dogovoriti kako pridruzujemo ocjene
@@ -369,7 +367,7 @@ public class MatchingServiceImpl implements MatchingService {
 					(konacniPar) ->
 					{
 						Par par = konacniPar;
-						final boolean SKIP_IZRADU_PAROVA = true;
+						final boolean SKIP_IZRADU_PAROVA = false;
 						if (par.getLanac() == false && !SKIP_IZRADU_PAROVA) {
 							//nema lanca
 							parService.rezervirajOglasePara(par);
@@ -451,7 +449,6 @@ public class MatchingServiceImpl implements MatchingService {
 			}
 
 			//barem jedan od studenata nije prihvatio par
-			//todo za obavijestiService: odbijanjem para treba odraditi par.setIgnore(true)
 			else /* par.getIgnore() == true) */ {
 				ponistiParIKandidat(par);
 				parService.vratiOglaseParaNaAKTIVAN(par);

@@ -7,13 +7,15 @@ import SockJsClient from "react-stomp";
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import DropdownToggle from "react-bootstrap/DropdownToggle";
 import * as cookie from "react-cookies";
+import {makeid} from "./makeId";
 
 class ObavijestiDropdown extends Component {
     constructor(props) {
         super(props)
         this.state = {
             obavijesti: [],
-            user: cookie.load("principal")
+            user: cookie.load("principal"),
+            key: makeid(5)
         }
     }
 

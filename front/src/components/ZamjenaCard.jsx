@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import * as cookie from "react-cookies";
 import {Button, Col, Form, Row} from "react-bootstrap";
 import SobaReadOnly from "../oglasi/SobaReadOnly";
+import {makeid} from "./makeId";
 
 
 class ZamjenaCard extends Component {
@@ -15,7 +16,8 @@ class ZamjenaCard extends Component {
             oglas1: props.par.oglas1,
             oglas2: props.par.oglas2,
             soba1: props.par.oglas1.soba,
-            soba2: props.par.oglas2.soba
+            soba2: props.par.oglas2.soba,
+            key: makeid(5)
         }
 
     }

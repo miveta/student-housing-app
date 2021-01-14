@@ -12,10 +12,6 @@ public class Kandidat {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID idKandidat;
 
-	//TODO: kaj je ovo?
-	//@Column(name = "id_oglas", nullable = false)
-	//private UUID idOglas;
-
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_oglas")
 	private Oglas oglas;

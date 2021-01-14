@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {Col, Dropdown, DropdownButton, Form, ListGroup} from "react-bootstrap";
+import {makeid} from "../components/makeId";
 
 class TrazimSobuReadOnly extends Component {
     constructor(props) {
         super(props);
         this.uvjeti = props.uvjeti
+        this.key = makeid(5)
     }
 
     style = {
