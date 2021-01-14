@@ -378,7 +378,8 @@ public class MatchingServiceImpl implements MatchingService {
 							//lanac
 							List<Oglas> lanci = parService.pripadniOglasiLanca(par.getOglas1());
 							for(int k = lanci.size()/3;k>0;k--){
-								Optional<Par> par2Opt = parService.pripadniParAB(lanci.get(3*k-1), lanci.get(3*k));
+								Optional<Par> par2Opt =
+										parService.pripadniParAB(lanci.get(3*k-2), lanci.get(3*k-1));
 
 
 								if (par2Opt.isPresent()) {

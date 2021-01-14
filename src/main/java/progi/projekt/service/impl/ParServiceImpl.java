@@ -226,7 +226,7 @@ public class ParServiceImpl implements ParService {
 						.stream()
 						.filter(par -> !parSadrziOglas(par, oglasA))
 						.filter(parLn -> parLn.getLanac() == true)
-						.filter(parIg -> parIg.getIgnore() == true)
+						.filter(parIg -> parIg.getIgnore() != true)
 						.collect(Collectors.toList());
 
 				for (Par parBC : paroviBC){
@@ -246,7 +246,7 @@ public class ParServiceImpl implements ParService {
 								.stream()
 								.filter(par -> par.getOglas2() == oglasA)
 								.filter(parLn -> parLn.getLanac() == true)
-								.filter(parIg -> parIg.getIgnore() == true)
+								.filter(parIg -> parIg.getIgnore() != true)
 								.collect(Collectors.toList());
 
 						for (Par parCA : paroviCA){
