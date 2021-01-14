@@ -6,6 +6,7 @@ import progi.projekt.repository.LajkRepository;
 import progi.projekt.security.exception.SavingException;
 import progi.projekt.service.LajkService;
 import progi.projekt.service.MatchingService;
+import progi.projekt.service.ObavijestService;
 import progi.projekt.service.ParService;
 
 import java.util.List;
@@ -17,11 +18,13 @@ public class LajkServiceImpl implements LajkService {
     private LajkRepository lajkRepository;
     private MatchingService matchingService;
     private ParService parService;
+    private ObavijestService obavijestService;
 
-    public LajkServiceImpl(LajkRepository lajkRepository, MatchingService matchingService, ParService parService) {
+    public LajkServiceImpl(LajkRepository lajkRepository, MatchingService matchingService, ParService parService, ObavijestService obavijestService) {
         this.lajkRepository = lajkRepository;
         this.matchingService = matchingService;
         this.parService = parService;
+        this.obavijestService = obavijestService;
     }
 
     @Override
@@ -32,8 +35,7 @@ public class LajkServiceImpl implements LajkService {
     @Override
     public Optional<Lajk> findLajk(LajkId lajkId) {
         try {
-            Optional<Lajk> lajk = lajkRepository.findById(lajkId);
-            return lajk;
+            return lajkRepository.findById(lajkId);
         } catch (Exception e) {
             //lajkRepo baca exceptione koje mu proslijedi baza (e)?
             String originalMessage = e.getMessage();
@@ -68,9 +70,7 @@ public class LajkServiceImpl implements LajkService {
             Oglas oglas1 = l.getLajkId().getOglas();
             Oglas oglas2 = l.getLajkId().getStudent().getAktivniOglas();
             Optional<Par> pripradniPar = parService.pripadniParDvaOglasa(oglas1, oglas2);
-            pripradniPar.ifPresent(par -> {
-                matchingService.ponistiPar(par);
-            });
+            pripradniPar.ifPresent(par -> matchingService.ponistiPar(par));
 
             return lajkRepository.saveAndFlush(l);
         } catch (Exception e) {
@@ -85,9 +85,7 @@ public class LajkServiceImpl implements LajkService {
         Oglas oglas1 = lajk.getLajkId().getOglas();
         Oglas oglas2 = lajk.getLajkId().getStudent().getAktivniOglas();
         Optional<Par> pripradniPar = parService.pripadniParDvaOglasa(oglas1, oglas2);
-        pripradniPar.ifPresent(par -> {
-            matchingService.ponistiPar(par);
-        });
+        pripradniPar.ifPresent(par -> matchingService.ponistiPar(par));
 
         lajkRepository.delete(lajk);
         return null;

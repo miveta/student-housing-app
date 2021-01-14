@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Card, Col, Figure, Form, Image, ListGroup, Row} from "react-bootstrap";
+import {Card} from "react-bootstrap";
 import cookie from "react-cookies";
 import Lajkovi from "../components/Lajkovi";
 import SobaReadOnly from "../oglasi/SobaReadOnly";
@@ -31,6 +31,7 @@ class Oglas extends Component {
                      response.json().then(body => {
                          /*nisam ovo znala ljepše a da radi paviljon tj. da nije undefined*/
                          this.setState({oglas: body})
+                         if (body.student === this.state.user.korisnickoIme) props.history.push("/oglasi")
                          this.setState({soba: this.state.oglas.soba})
                          this.setState({paviljon: this.state.soba.paviljon})
                      }).catch(error => console.log(error))

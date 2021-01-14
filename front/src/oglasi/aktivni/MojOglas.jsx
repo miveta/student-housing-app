@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import TrazimSobu from "./TrazimSobu";
 import Soba from "./Soba";
 import cookie from "react-cookies";
-import {Button} from "react-bootstrap";
+import {Button, Row} from "react-bootstrap";
 
 export default class MojOglas extends Component {
     brojKreveta = [
@@ -10,11 +10,11 @@ export default class MojOglas extends Component {
         {name: "Dvokrevetna", value: "DVOKREVETNA"},
         {name: "Trokrevetna", value: "JEDNOKREVETNA"},
         {name: "Višekrevetna", value: "VIŠEKREVETNA"}
-    ]
+    ];
     tipKupaonice = [
         {name: "Privatna", value: "PRIVATNA"},
         {name: "Dijeljena", value: "DIJELJENA"},
-    ]
+    ];
 
     constructor(props) {
         super(props);
@@ -42,7 +42,7 @@ export default class MojOglas extends Component {
             },
             kandidati: [],
             changed: false
-        }
+        };
 
         let options = {
             method: 'GET',
@@ -59,7 +59,7 @@ export default class MojOglas extends Component {
             }).then(json => {
             this.state.soba = {...json};
             this.state.changed = true
-        }).catch(e => console.log("korisnik jos nema sobu"))
+        }).catch(() => console.log("korisnik jos nema sobu"));
 
 
         fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/grad?user=${this.state.user.korisnickoIme}`, options)
@@ -72,7 +72,7 @@ export default class MojOglas extends Component {
             }).then(json => {
             this.setState({grad: {...json}});
             //console.log(json)
-        }).catch(e => console.log(e))
+        }).catch(e => console.log(e));
 
         fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/zadano?user=${this.state.user.korisnickoIme}`, options)
             .then(response => {
@@ -100,7 +100,6 @@ export default class MojOglas extends Component {
             komentar: soba.komentar
         };
 
-        console.log(body)
 
         const options = {
             method: 'POST',
@@ -120,7 +119,7 @@ export default class MojOglas extends Component {
             }).then(json => {
             self.setState({...json})
         })
-    }
+    };
 
     submitUvjeti = (uvjeti) => {
         let self = this;
@@ -135,7 +134,7 @@ export default class MojOglas extends Component {
 
         };
 
-        console.log(body)
+
         const options = {
             method: 'POST',
             headers: {
@@ -154,16 +153,17 @@ export default class MojOglas extends Component {
             }).then(json => {
             self.setState({...json})
         })
-    }
+    };
 
     render() {
-        console.log(this.state)
         return (
             <div>
                 {
                     this.state.soba.id !== '' &&
-                    <Button onClick={this.props.onArhiviraj} disabled={this.state.soba.id === ""} block>Arhiviraj
-                        oglas</Button>
+                    <Row style={{padding: "0px 30px",}}>
+                        <Button className="yes margin" onClick={this.props.onArhiviraj}
+                                disabled={this.state.soba.id === ""} block>Arhiviraj
+                            oglas</Button></Row>
                 }
 
                 <Soba grad={this.state.grad} soba={this.state.soba} submitSoba={this.submitSoba}

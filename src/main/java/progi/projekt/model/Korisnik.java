@@ -14,4 +14,7 @@ public interface Korisnik {
     String getEmail();
 
     String getTipKorisnika();
+
+    Grad getGrad();
+
 }

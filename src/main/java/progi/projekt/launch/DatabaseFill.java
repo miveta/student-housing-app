@@ -454,8 +454,8 @@ public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> 
 
                 //ASSIGN STATUS TO OGLAS
                 oglasIvica.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
-                oglasMarko.setStatusOglasa(StatusOglasaEnum.POTVRDEN);
-                oglasPero.setStatusOglasa(StatusOglasaEnum.IZVEDEN);
+                oglasMarko.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
+                oglasPero.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
 
                 //ASSIGN STUDENT TO OGLAS
                 oglasIvica.setStudent(ivica);
