@@ -1,19 +1,27 @@
 package progi.projekt.service;
 
-import progi.projekt.model.Obavijest;
 import progi.projekt.model.Oglas;
 import progi.projekt.model.Student;
-import progi.projekt.repository.ObavijestRepository;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 public interface ObavijestService {
-    List<Obavijest> listAll();
+    //Stvara obavijest/i ako se soba promijeni i ne pase vise tom korisniku/ima
+    void notifyRoomConstraintsNoLongerValid(List<Student> studenti, Oglas oglas);
 
-    ObavijestRepository getRepo();
+    //Daje obavijest svima koji su lajkali taj oglas da se soba promjenila
+    void notifyRoomConstraintsChanged(Oglas oglas);
 
-    Optional<List<Obavijest>> findByStudent(Student student);
+    //Slanje obavijesti da ti je netko lajkao sobu
+    void notifyLiked(Oglas oglas, Student student);
 
-    Optional<List<Obavijest>> findByOglas(Oglas oglas);
+    //Obavijest potvrde zamjene -- prvi oglas predstavlja studenta kojem je konfirmirana zamijena, a drugi
+    //je oglas koji mu je dan na zamijenu
+    void notifyExchanged(Oglas oglasZamijenjenog, Oglas oglasZamjene);
+
+    //Isto kao i notifyExchanged, samo ovo daje obavijest da se potvrda ceka
+    void notifyWaiting(Oglas oglasZamijenjenog, Oglas oglasZamjene);
+
+    boolean oznaciProcitana(UUID id);
 }

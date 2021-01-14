@@ -5,26 +5,18 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {withRouter} from "react-router-dom";
 
+
 function TrazimSobu(props) {
     const user = cookie.load('principal');
     const [grad, setGrad] = React.useState(props.grad);
 
-    const [uvjeti] = React.useState({dom: [], paviljon: [], kat: [], tipKupaonice: [], brojKreveta: [], komentar: ''});
-    const katovi = ['1', '2', '3', '4'];
+    const [uvjeti] = React.useState(props.uvjeti);
+    const kat = [1, 2, 3, 4];
 
-    const kreveti = [
-        {name: "Jednokrevetna", value: "JEDNOKREVETNA"},
-        {name: "Dvokrevetna", value: "DVOKREVETNA"},
-        {name: "Trokrevetna", value: "JEDNOKREVETNA"},
-        {name: "Nebitno", value: "NEBITNO"}
-    ]
-    const kupaonice = [
-        {name: "Privatna", value: "PRIVATNA"},
-        {name: "Zajednicka", value: "ZAJEDNICKA"},
-        {name: "Nebitno", value: "NEBITNO"}
-    ]
+    const [change, setChange] = React.useState(false);
 
     function onChangeDom(event) {
+        console.log(uvjeti);
         const {name, value} = event.target;
 
         setGrad(prevState => ({
@@ -52,6 +44,8 @@ function TrazimSobu(props) {
     }
 
     function onChange(event) {
+        setChange(true)
+
         const {name, value} = event.target;
         const ids = uvjeti[name].map(el => el.id);
 
@@ -63,52 +57,37 @@ function TrazimSobu(props) {
         }
     }
 
+
     function onSubmit(e) {
         e.preventDefault();
 
         let body = {
             studentUsername: user.korisnickoIme,
-            domId: uvjeti["dom"],
-            paviljoni: uvjeti["paviljon"],
-            katovi: uvjeti["kat"],
+            domId: uvjeti["domovi"],
+            paviljoni: uvjeti["paviljoni"],
+            katovi: uvjeti["katovi"],
             brojKreveta: uvjeti["brojKreveta"],
-            tipKupaonice: uvjeti["tipKupaonice"]
+            tipKupaonice: uvjeti["tipKupaonice"],
         }
-
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify(body)
-        };
-
-
-        return fetch(`${process.env.REACT_APP_BACKEND_URL}/trazimSobu/uvjetiIveta`, options)
-            .then(response => {
-                if (response.status === 200) {
-                    //props.history.push("/")
-                } else {
-                    console.log(response.status)
-                }
-            });
-
+        props.submitUvjeti(body);
+        setChange(false)
     }
 
 
+    console.log(grad)
     return (
 
         <Form onSubmit={onSubmit} disabled className={"innerForm"}>
             <h3>Tražim sobu</h3>
             <Form.Group>
                 <Form.Label>Kat</Form.Label>
-                <Row>
-                    {katovi.map((p, index) => (
-                        <Col xs={1}>
+                <Row key={1}>
+                    {kat.map((p, index) => (
+                        <Col xs={1} key={index}>
                             <Form.Check
+                                defaultChecked={uvjeti.katovi && uvjeti.katovi.includes(p)}
                                 onChange={onChange}
-                                name="kat"
+                                name="katovi"
                                 key={index}
                                 type="checkbox"
                                 id={index}
@@ -121,10 +100,11 @@ function TrazimSobu(props) {
             </Form.Group>
             <Form.Group>
                 <Form.Label>Broj kreveta</Form.Label>
-                <Row>
-                    {kreveti.map((p, index) => (
-                        <Col>
+                <Row key={2}>
+                    {props.brojKreveta.map((p, index) => (
+                        <Col key={index}>
                             <Form.Check
+                                defaultChecked={uvjeti.brojKreveta && uvjeti.brojKreveta.includes(p.value)}
                                 onChange={onChange}
                                 name="brojKreveta"
                                 key={index}
@@ -139,10 +119,11 @@ function TrazimSobu(props) {
             </Form.Group>
             <Form.Group>
                 <Form.Label>Tip kupaonice</Form.Label>
-                <Row>
-                    {kupaonice.map((p, index) => (
-                        <Col xs={3}>
+                <Row key={3}>
+                    {props.tipKupaonice.map((p, index) => (
+                        <Col xs={3} key={index}>
                             <Form.Check
+                                defaultChecked={uvjeti.tipKupaonice && uvjeti.tipKupaonice.includes(p.value)}
                                 onChange={onChange}
                                 name="tipKupaonice"
                                 key={index}
@@ -157,29 +138,31 @@ function TrazimSobu(props) {
 
             {
                 grad.domovi.map(dom => (
-                    <Row>
+                    <Row key={dom.id}>
                         <Col>
                             <Form.Label>Dom</Form.Label>
                             <Form.Check
+                                defaultChecked={uvjeti.domovi && uvjeti.domovi.includes(dom.id)}
                                 onChange={onChangeDom}
                                 key={dom.id}
                                 type="checkbox"
                                 id={dom.id}
-                                name="dom"
+                                name="domovi"
                                 value={dom.id}
                                 label={dom.naziv}
                             />
+                            {console.log(uvjeti.domovi.includes(dom.id))}
                         </Col>
                         {
-                            dom.checked &&
-                            <Col>
+                            ((uvjeti.domovi && uvjeti.domovi.includes(dom.id)) || dom.checked) &&
+                            <Col key={dom.naziv}>
                                 <Form.Group>
                                     <Form.Label>Paviljoni u domu {dom.naziv}</Form.Label>
-                                    {console.log(dom.paviljoni)}
                                     {dom.paviljoni.map(p => (
                                         <Form.Check
+                                            defaultChecked={uvjeti.paviljoni && uvjeti.paviljoni.includes(p.id)}
                                             onChange={onChange}
-                                            name="paviljon"
+                                            name="paviljoni"
                                             key={p.id}
                                             type="checkbox"
                                             id={p.id}
@@ -193,7 +176,7 @@ function TrazimSobu(props) {
                     </Row>
                 ))
             }
-            <Button type="submit" variant="dark" size="lg" block> Spremi promjene </Button>
+            <Button type="submit" variant="dark" size="lg" block disabled={!change}> Spremi promjene </Button>
         </Form>
 
     )

@@ -12,6 +12,10 @@ public interface ParService {
 
 	List<Par> listAll(Oglas oglas);
 
+	Optional<Par> find(Long idPar);
+
+	void ponistiPar(Par par);
+
 	Integer ObostranaOcjena(Integer ocjena1, Integer ocjena2);
 
 	boolean parSadrziOglas(Par par, Oglas oglas);
@@ -22,7 +26,9 @@ public interface ParService {
 
 	void vratiOglaseParaNaAKTIVAN(Par par);
 
-	void save(Par par);
+	boolean save(Par par);
+
+	void update(Par par);
 
 	boolean ifObaAKTIVAN(Par par);
 
@@ -30,17 +36,25 @@ public interface ParService {
 
 	Integer TrostranaOcjena(Integer ocjenaAB, Integer ocjenaBC, Integer ocjenaCA);
 
-	Optional<Oglas> pronadjiTreciOglasIzLanca(Par par);
+	List<Oglas> pronadjiTreciOglasIzLanca(Par par);
 
 	List<Oglas> pripadniOglasiLanca(Oglas oglas1);
 
 	List<Par> pripadniParoviLanca(Oglas oglas1);
 
-	Optional<Par> pripadniParOglasa(Oglas oglas);
+	Optional<Par> pripadniParDvaOglasa(Oglas oglas1, Oglas oglas2);
+
+	List<Par> pripadniParoviOglasa(Oglas oglas);
 
 	Optional<Par> pripadniParAB(Oglas oglasA, Oglas oglasB);
 
 	Optional<Kandidat> pripadniKandidatPara(Par par);
 
 	void ponistiParoveOglasa(Oglas oglas);
+
+	boolean obaStudPrihvatila(Par par);
+
+	boolean josNisuPar(Oglas oglas, Oglas kand);
+
+	boolean josNisuLanac(Oglas oglas, Oglas kand);
 }

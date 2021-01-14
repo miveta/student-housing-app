@@ -1,10 +1,13 @@
 package progi.projekt.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import progi.projekt.model.enums.StatusOglasaEnum;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Student implements Serializable, Korisnik {
@@ -35,12 +38,12 @@ public class Student implements Serializable, Korisnik {
     @Column(nullable = false, name = "obavijesti_na_mail")
     private boolean obavijestiNaMail;
 
-    @ManyToMany(targetEntity = Obavijest.class, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Obavijest.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Obavijest> obavijesti;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "oglas")
-    private Oglas oglas;
+    @OneToMany(mappedBy = "student")
+    private Set<Oglas> oglasi;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_grad")
@@ -49,6 +52,45 @@ public class Student implements Serializable, Korisnik {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_soba")
     private Soba soba;
+
+
+    public Oglas getCekaOglas() {
+        Set<Oglas> oglasi = getOglasi();
+
+        if (oglasi == null) return null;
+
+        oglasi = oglasi.stream().filter(o -> o.getStatusOglasa().equals(StatusOglasaEnum.CEKA)).collect(Collectors.toSet());
+        if (oglasi.isEmpty()) return null;
+
+        if (oglasi.size() > 1) throw new IllegalArgumentException("user smije imat samo jedan aktivan oglas");
+
+        return oglasi.iterator().next();
+    }
+
+    public Oglas getAktivniOglas() {
+        Set<Oglas> oglasi = getOglasi();
+
+        if (oglasi == null) return null;
+
+        oglasi = oglasi.stream().filter(o -> o.getStatusOglasa().equals(StatusOglasaEnum.AKTIVAN)).collect(Collectors.toSet());
+        if (oglasi.isEmpty()) return null;
+
+        if (oglasi.size() > 1) throw new IllegalArgumentException("user smije imat samo jedan aktivan oglas");
+
+        return oglasi.iterator().next();
+    }
+
+    public void setAktivniOglas(Oglas noviOglas) {
+        if (!noviOglas.getStatusOglasa().equals(StatusOglasaEnum.AKTIVAN))
+            throw new IllegalArgumentException("aktivni oglas mora bit aktivan");
+        Oglas oglas = getAktivniOglas();
+
+        if (oglas != null && !noviOglas.getId().equals(oglas.getId()))
+            throw new IllegalArgumentException("user smije imat samo jedan aktivan oglas");
+
+        if (oglasi == null) oglasi = new HashSet<>();
+        oglasi.add(noviOglas);
+    }
 
     @Override
     public String getTipKorisnika() {
@@ -133,17 +175,16 @@ public class Student implements Serializable, Korisnik {
         this.obavijesti = obavijesti;
     }
 
-    public Oglas getOglas() {
-        return oglas;
+    public Set<Oglas> getOglasi() {
+        return oglasi;
     }
 
-    public void setOglas(Oglas oglas) {
-        this.oglas = oglas;
+    public void setOglasi(Set<Oglas> oglasi) {
+        this.oglasi = oglasi;
     }
 
-    public Grad getGrad() {
-        return grad;
-    }
+    @Override
+    public Grad getGrad() { return grad; }
 
     public void setGrad(Grad grad) {
         this.grad = grad;

@@ -6,10 +6,7 @@ import progi.projekt.model.Oglas;
 import progi.projekt.model.Soba;
 import progi.projekt.model.TrazeniUvjeti;
 import progi.projekt.repository.KandidatRepository;
-import progi.projekt.service.KandidatService;
-import progi.projekt.service.OglasService;
-import progi.projekt.service.SobaService;
-import progi.projekt.service.UvjetiService;
+import progi.projekt.service.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,29 +20,60 @@ public class KandidatServiceImpl implements KandidatService {
 	private SobaService sobaService;
 	private OglasService oglasService;
 	private UvjetiService uvjetiService;
+	private ParService parService;
 
-	public KandidatServiceImpl(KandidatRepository kandidatRepo, SobaService sobaService, OglasService oglasService, UvjetiService uvjetiService) {
+	public KandidatServiceImpl(KandidatRepository kandidatRepo, SobaService sobaService, OglasService oglasService, UvjetiService uvjetiService, ParService parService) {
 		this.kandidatRepo = kandidatRepo;
 		this.sobaService = sobaService;
 		this.oglasService = oglasService;
 		this.uvjetiService = uvjetiService;
+		this.parService = parService;
 	}
 
 	@Override
 	public List<Kandidat> listAll(UUID oglasUuid) {
+		//updateLocalKands(); //fun fact, ovo radi inf loop
 		var oglas = oglasService.findById(oglasUuid.toString());
-		return kandidatRepo.findAllByOglas(oglas.get());
+		return kandidatRepo.findAllByOglasOrKandOglas(oglas.get(), oglas.get());
+
+
+	}
+
+	@Override
+	public List<Kandidat> listAll() {
+		return kandidatRepo.findAll();
 	}
 
 	public void stvoriKand(Oglas oglas1, Oglas oglas2) {
+//		System.out.print("oglas1 initial kandidati count: " + oglas1.getKandidati().stream().count() + "\n");
+//		System.out.print("oglas2 initial kandidati count: " + oglas2.getKandidati().stream().count() + "\n");
+
+		//force update kandidata unutar svakog oglasa
+		updateLocalKands();
+
+//		System.out.print("oglas1 update kandidati count: " + oglas1.getKandidati().stream().count() + "\n");
+//		System.out.print("oglas2 update kandidati count: " + oglas2.getKandidati().stream().count() + "\n");
+
 		Integer bliskost = calculateScore(oglas1, oglas2);
 		java.sql.Date stvoren = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+
 		Kandidat kand = new Kandidat(oglas1, oglas2, bliskost, stvoren, false);
 
-		oglas1.getKandidati().add(kand); //je li ovo persista? je li potrebno?
-		//oglas2.getKandidati().add(kand);
+		if (!kandidatRepo.findAll().contains(kand)){
+			save(kand);
+		}
 
-		save(kand);
+		oglas1.getKandidati().add(kand);
+		oglasService.save(oglas1);
+
+		oglas2.getKandidati().add(kand);
+		oglasService.save(oglas2);
+
+
+//		System.out.print("oglas1 kandidati count: " + oglas1.getKandidati().stream().count() + "\n");
+//		System.out.print("oglas2 kandidati count: " + oglas2.getKandidati().stream().count() + "\n");
+
+
 	}
 
 	@Override
@@ -65,11 +93,13 @@ public class KandidatServiceImpl implements KandidatService {
 	public int odgovaraIizTopN(Oglas oglas) {
 		//ako nekom od topN kandidata ogovara nasa soba vrati topN indeks tog kandidata. Inace vrati -1
 
+		updateLocalKands();
+
 		List<Oglas> topN = topN(oglas);
 
 		int i = 0;
 		for (Oglas kand : topN) {
-			if (odgovaraju(oglas, kand)) {
+			if (odgovaraju(oglas, kand) && parService.josNisuPar(oglas, kand)) {
 				return i;
 			} else {
 				i++;
@@ -80,10 +110,11 @@ public class KandidatServiceImpl implements KandidatService {
 
 	@Override
 	public List<Oglas> topN(Oglas oglas) {
-		//primi oglas i vrati listu prvih N Oglasa kandidata sortirano po bliskosti
+		//primi oglas i vrati listu prvih N oglasa njegovih kandidata sortiranih po bliskosti pa datumu nastanka
+
+		updateLocalKands();
 
 		int N = SHORTLIST_VELICINA;
-		//todo: staviti poruku korisnicima da moraju ocjeniti barem N oglasa
 
 		Comparator<Kandidat> compareByBliskost = Comparator.comparing(Kandidat::getBliskost);
 		Comparator<Kandidat> compareByStvoren = Comparator.comparing(Kandidat::getStvoren);
@@ -91,14 +122,20 @@ public class KandidatServiceImpl implements KandidatService {
 
 		List<Kandidat> top3kand = oglas.getKandidati()
 				.stream()
-				.filter(kand -> kand.getIgnore() != true)
+				.filter(kand -> kand.getIgnore() != null && kand.getIgnore() != true)
+                //.filter(kand2 -> kand2.getOglas().getId() != oglas.getId()) //krivo?
+				.filter(kand2 -> kand2.getOglas().getId() != kand2.getKandOglas().getId()) //tocno?
 				.sorted(compareByBlskThenStvrn)
 				.limit(N)
 				.collect(Collectors.toList());
 
 		ArrayList<Oglas> top = new ArrayList<Oglas>();
 		for (Kandidat kand : top3kand) {
-			top.add(kand.getOglas());
+			if (kand.getOglas() == oglas){
+				top.add(kand.getKandOglas());
+			} else {
+				top.add(kand.getOglas());
+			}
 		}
 
 		return top;
@@ -107,6 +144,8 @@ public class KandidatServiceImpl implements KandidatService {
 	@Override
 	public Boolean josNisuKandidat(Oglas oglas1, Oglas oglas2) {
 		//vraca true ako dva oglasa nisu vec kandidat
+
+		updateLocalKands();
 
 		var kandidati1 = oglas1.getKandidati();
 		var kandidati2 = oglas2.getKandidati();
@@ -151,10 +190,11 @@ public class KandidatServiceImpl implements KandidatService {
 	public Optional<Kandidat> kandidatParaOglasa(Oglas oglas1, Oglas oglas2) {
 		Optional<Kandidat> kandidatOpt = Optional.empty();
 
-		for (Kandidat kand : listAll(oglas1.getId())) {
+		updateLocalKands();
+
+		for (Kandidat kand : oglas1.getKandidati()) {
 			if (kandSadrziOglas(kand, oglas2)) {
-				kandidatOpt = Optional.ofNullable(kand);
-				break;
+				return Optional.ofNullable(kand);
 			}
 		}
 
@@ -166,19 +206,40 @@ public class KandidatServiceImpl implements KandidatService {
 	 * Vraca True ako predani kandidat sadrzi predani oglas
 	 */
 	public Boolean kandSadrziOglas(Kandidat kand, Oglas oglas) {
-		return kand.getOglas() == oglas || kand.getKandOglas() == oglas;
+		return kand.getOglas().equals(oglas) || kand.getKandOglas().equals(oglas);
 	}
 
 	@Override
 	public void ponistiKandidateOglasa(Oglas oglas) {
+		updateLocalKands();
 		List<Kandidat> kandidati = listAll(oglas.getId());
 		for (Kandidat kand : kandidati) {
-			kand.setIgnore(true);
-			save(kand);
+			if (kandSadrziOglas(kand, oglas)){
+				kand.setIgnore(true);
+				save(kand);
+			}
+		}
+	}
+
+	@Override
+	public void updateLocalKands() {
+		List<Oglas> oglasi = oglasService.listAll();
+		for (Oglas oglas : oglasi){
+            List<Kandidat> kandidati = listAll(oglas.getId());
+			for (Kandidat kandidat : kandidati){
+				if (	kandidat.getOglas().getId().equals(oglas.getId()) ||
+						kandidat.getKandOglas().getId().equals(oglas.getId())) {
+					if (!oglas.getKandidati().contains(kandidat)) {
+						oglas.getKandidati().add(kandidat);
+						oglasService.save(oglas);
+					}
+				}
+			}
 		}
 	}
 
 	public Boolean sobaMatchesUvjet(Soba soba, TrazeniUvjeti uvjeti) {
+		updateLocalKands();
 		return uvjetiService.sobaMatchesUvjet(soba, uvjeti);
 	}
 }

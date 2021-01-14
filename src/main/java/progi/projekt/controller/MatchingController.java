@@ -4,36 +4,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import progi.projekt.model.Kandidat;
+import progi.projekt.model.Oglas;
 import progi.projekt.model.Par;
 import progi.projekt.service.KandidatService;
 import progi.projekt.service.MatchingService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 ///Kontroler koji stvara i azurira listu kandidatnih soba/veza, listu valjanih parova i odgovarajuce oglase
-
-/*todo: napravit pozivanje:
-	kandidatiRun, matchRun svakih 5 min?
-	lajkRun + parRun, confirmRun, confirmSCRun svakih 30 min?
- */
 
 @RestController
 @RequestMapping("/match")
 public class MatchingController {
 	private final MatchingService matchingService;
-	private final KandidatService kandidatService;
-	private KandidatService oglasService;
 
 
-	public MatchingController(
-			MatchingService matchingService,
-			KandidatService kandidatService,
-			KandidatService oglasService
-			)
+	public MatchingController(MatchingService matchingService)
 	{
 		this.matchingService = matchingService;
-		this.kandidatService = kandidatService;
-		this.oglasService = oglasService;
 	}
 
 
@@ -53,6 +43,11 @@ public class MatchingController {
 		} catch (Exception e){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
+	}
+
+	@GetMapping("/kandidatiClearDebug")
+	public void resetKandsDebug(){
+		matchingService.resetKandsDebug();
 	}
 
 
@@ -105,8 +100,10 @@ public class MatchingController {
 	@GetMapping("/confirmRun")
 	public ResponseEntity<?> confirmRun() {
 		//Cita rezultat konacnih potvrda para i:
-		//ako su oba studenta prihvatila: oznacuje par.done = true, oglas.status=POTVRDEN i salje mail u SC
-		//ako oba studenta nisu prihvatila: oznacuje oba entiteta kandidat i par sa ignore (vise se ne spajaju/gledaju)
+		//ako su oba studenta prihvatila oznacuje par.done = true, oglas.status=POTVRDEN, postavlja ignore=true u sve
+		// ostale parove i kandidate i salje mail u SC
+		//ako oba studenta nisu prihvatila (par.ignore = true): oznacuje kandidat sa ignore (vise
+		// se ne spajaju/gledaju)
 
 		//tj, ako je lanac=true onda gledamo 3 oglasa, ne samo 2
 
@@ -119,26 +116,14 @@ public class MatchingController {
 	}
 
 
-	@PostMapping(value = "/confirmSCRun", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> confirmSCRun(@RequestBody List<Par> izvedeni) {
-		//Prolazi po predanoj listi 'izvedeni' i oznacava oglase nevednih parova kao IZVEDEN
 
-		try {
-			matchingService.confirmSCFun(izvedeni);
-			return ResponseEntity.ok("Navedeni potvrdjeni oglasi oznaceni kao IZVEDENI");
-
-		} catch (Exception e){
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
-	}
-
-	@GetMapping(value = "/confirmSCDebugRun")
-	public ResponseEntity<?> confirmSCDebugRun() {
-		//debug verzija koja sve oglase oznacava kao IZVEDEN
+	@GetMapping(value = "/confirmSCRun")
+	public ResponseEntity<?> confirmSCRun() {
+		//sve oglase ciji par.odobren=true oznacava kao IZVEDEN, a one sa par.dobren=false kao ODBIJEN
 
 		try {
 			matchingService.confirmSCFun();
-			return ResponseEntity.ok("Navedeni potvrdjeni oglasi oznaceni kao IZVEDENI");
+			return ResponseEntity.ok("Potvrdjeni oglasi oznaceni kao IZVEDEN, ostali kao ODBIJEN");
 
 		} catch (Exception e){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface KandidatRepository extends JpaRepository<Kandidat, Long> {
 	//List<Kandidat> findAllByIdKandidat(UUID oglasUuid);
-	List<Kandidat> findAllByOglas(Oglas oglas);
+	List<Kandidat> findAllByOglasOrKandOglas(Oglas oglas, Oglas kand);
 }

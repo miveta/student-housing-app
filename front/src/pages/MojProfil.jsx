@@ -6,12 +6,14 @@ import {withRouter} from 'react-router-dom';
 import Row from "react-bootstrap/Row";
 
 
+
 class MojProfil extends Component {
     user;
     constructor(props) {
         super(props)
         this.user = cookie.load('principal');
     }
+
 
     state = {
         isOpen: false

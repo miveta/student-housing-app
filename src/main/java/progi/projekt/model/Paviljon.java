@@ -23,7 +23,7 @@ public class Paviljon implements Serializable {
     private Dom dom;
 
 
-    @ManyToMany(mappedBy = "paviljoni")
+    @ManyToMany(mappedBy = "paviljoni", cascade = CascadeType.ALL)
     private Set<TrazeniUvjeti> trazeni_uvjeti;
 
     @OneToMany(mappedBy = "paviljon", cascade = CascadeType.ALL)

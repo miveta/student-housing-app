@@ -4,6 +4,7 @@ import {Link, Redirect} from "react-router-dom";
 import MdEye from 'react-ionicons/lib/MdEye';
 import MdEyeOff from 'react-ionicons/lib/MdEyeOff'
 
+
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -12,7 +13,7 @@ class Login extends Component {
             username: '',
             password: '',
             error: '',
-            type: 'password'
+            type: 'password',
         };
         this.showHide = this.showHide.bind(this);
     }
@@ -24,6 +25,7 @@ class Login extends Component {
             type: this.state.type === 'input' ? 'password' : 'input'
         })
     }
+
     onChange = (event) => {
         const {name, value} = event.target;
         this.setState(state => ({...state, [name]: value}))

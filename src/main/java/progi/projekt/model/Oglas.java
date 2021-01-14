@@ -24,7 +24,10 @@ public class Oglas {
     @OneToMany(mappedBy = "oglas", cascade = CascadeType.ALL)
     private List<Obavijest> obavijesti;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    //@OneToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "id_student")
+    //@OneToOne(mappedBy = "oglas")
+    @ManyToOne
     @JoinColumn(name = "id_student")
     private Student student;
 
@@ -34,6 +37,18 @@ public class Oglas {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_soba")
     private Soba soba;
+
+    public Par getKonacniPar() {
+        return konacniPar;
+    }
+
+    public void setKonacniPar(Par konacniPar) {
+        this.konacniPar = konacniPar;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_konacni_par")
+    private Par konacniPar;
 
     @OneToOne
     @JoinColumn(name = "id_trazeni_uvjeti")

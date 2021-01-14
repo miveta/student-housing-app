@@ -8,10 +8,10 @@ class Lajkovi extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: cookie.load('principal'),
+            user: props.user,
             oglas: '',
             isLoggedIn: cookie.load('isAuth'),
-            ocjena: ''
+            ocjena: '',
         }
     }
 
@@ -22,7 +22,7 @@ class Lajkovi extends Component {
         {name: '❌', value: '4', description: 'Nemoj više prikazivati'},
     ];
 
-    async componentDidMount() {
+   componentDidMount() {
         let self = this;
 
         let user = self.state.user;
@@ -55,7 +55,7 @@ class Lajkovi extends Component {
                 }
             };
 
-            await fetch(`${process.env.REACT_APP_BACKEND_URL}/lajk/ocjena?student_username=${this.state.user.korisnickoIme}&oglas_id=${self.props.oglasId}`, optionsLajk)
+            fetch(`${process.env.REACT_APP_BACKEND_URL}/lajk/ocjena?student_username=${this.state.user.korisnickoIme}&oglas_id=${self.props.oglasId}`, optionsLajk)
                 .then(response => {
                     response.text().then(body => {
                         self.setState({ocjena: body})
@@ -116,9 +116,8 @@ class Lajkovi extends Component {
     }
 
     render() {
-
         return (
-            <div className={"likes"}>
+            <div className={"likes"} hidden={!this.state.user}>
                 <ButtonGroup size="sm" toggle>
                     {this.ocjene.map((like, idx) => (
                         <Tooltip title={like.description}>
@@ -127,7 +126,6 @@ class Lajkovi extends Component {
                                 type="radio"
                                 variant="outline-light"
                                 value={like.value}
-                                disabled={!this.state.isLoggedIn}
                                 checked={this.state.ocjena === like.value}
                                 onChange={(e) => this.change(e)}
                             >

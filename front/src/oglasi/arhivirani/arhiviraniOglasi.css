@@ -1,0 +1,19 @@
+.readonly > .dropdown-menu.show {
+    display: block;
+    width: 100%;
+}
+
+
+.readonly > .dropdown-toggle {
+    flex-direction: row;
+    align-items: flex-start;
+    background: #e9ecef;
+    border: 1px solid #ced4da;
+    width: 100%;
+    display: grid
+}
+
+.card {
+    padding: 20px;
+    margin-bottom: 10px;
+}

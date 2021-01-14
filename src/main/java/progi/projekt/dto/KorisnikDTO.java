@@ -16,6 +16,8 @@ public class KorisnikDTO {
     private String prezime;
     private boolean obavijestiNaMail;
     private String email;
+    private String tipKorisnika;
+    private String grad;
 
     public KorisnikDTO(Korisnik korisnik) {
         this.jmbag = korisnik.getJmbag();
@@ -24,6 +26,8 @@ public class KorisnikDTO {
         this.prezime = korisnik.getPrezime();
         this.obavijestiNaMail = korisnik.isObavijestiNaMail();
         this.email = korisnik.getEmail();
+        this.tipKorisnika = korisnik.getTipKorisnika();
+        this.grad = korisnik.getGrad().getNaziv();
     }
 
     public String getJmbag() {
@@ -72,5 +76,21 @@ public class KorisnikDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTipKorisnika() {
+        return tipKorisnika;
+    }
+
+    public void setTipKorisnika(String tipKorisnika) {
+        this.tipKorisnika = tipKorisnika;
+    }
+
+    public String getGrad() {
+        return grad;
+    }
+
+    public void setGrad(String grad) {
+        this.grad = grad;
     }
 }

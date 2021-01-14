@@ -4,6 +4,7 @@ import {Link, Redirect} from "react-router-dom";
 import MdEye from "react-ionicons/lib/MdEye";
 import MdEyeOff from "react-ionicons/lib/MdEyeOff";
 
+
 class Register extends Component {
     constructor(props) {
         super(props);
@@ -17,7 +18,7 @@ class Register extends Component {
             error: '',
             redirect: false,
             type: 'password',
-            gradovi: []
+            gradovi: [],
         };
         this.showHide = this.showHide.bind(this);
 
@@ -118,12 +119,12 @@ class Register extends Component {
                         <Form.Label> Prezime </Form.Label>
                         <Form.Control name="prezime" type="text" placeholder={this.state.prezime}
                                       onChange={this.onChange} required
-                                      maxLength="10" minLength="10"/>
+                                      />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label> JMBAG </Form.Label>
                         <Form.Control name="jmbag" type="text" placeholder={this.state.jmbag} onChange={this.onChange}
-                                      required/>
+                                      required maxLength="10" minLength="10"/>
                         <Form.Text className={"textMuted"}>
                             JMBAG se sastoji od 10 znamenki!
                         </Form.Text>

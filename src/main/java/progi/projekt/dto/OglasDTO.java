@@ -10,10 +10,14 @@ public class OglasDTO {
     private UUID id;
     private String naslov;
     private String opis;
-    private int godina;
     private Date objavljen;
     private StatusOglasaEnum status;
     private String student;
+    private String studentJmbag;
+    private String studentEmail;
+    private SobaDTO soba;
+    private UvjetiDTO uvjeti;
+    private String grad;
 
     public OglasDTO(Oglas oglas) {
         this.id = oglas.getId();
@@ -21,6 +25,11 @@ public class OglasDTO {
         this.objavljen = oglas.getObjavljen();
         this.status = oglas.getStatusOglasa();
         this.student = oglas.getStudent().getKorisnickoIme();
+        this.studentJmbag = oglas.getStudent().getJmbag();
+        this.studentEmail = oglas.getStudent().getEmail();
+        this.soba = new SobaDTO(oglas.getSoba());
+        this.uvjeti = new UvjetiDTO(oglas.getTrazeniUvjeti());
+        this.grad = oglas.getStudent().getGrad().getNaziv();
     }
 
     public UUID getId() {
@@ -47,14 +56,6 @@ public class OglasDTO {
         this.opis = opis;
     }
 
-    public int getGodina() {
-        return godina;
-    }
-
-    public void setGodina(int godina) {
-        this.godina = godina;
-    }
-
     public Date getObjavljen() {
         return objavljen;
     }
@@ -77,5 +78,37 @@ public class OglasDTO {
 
     public void setStudent(String student) {
         this.student = student;
+    }
+
+    public String getStudentJmbag() { return studentJmbag; }
+
+    public void setStudentJmbag(String studentJmbag) { this.studentJmbag = studentJmbag; }
+
+    public String getStudentEmail() { return studentEmail; }
+
+    public void setStudentEmail(String studentEmail) { this.studentEmail = studentEmail; }
+
+    public SobaDTO getSoba() {
+        return soba;
+    }
+
+    public void setSoba(SobaDTO soba) {
+        this.soba = soba;
+    }
+
+    public UvjetiDTO getUvjeti() {
+        return uvjeti;
+    }
+
+    public void setUvjeti(UvjetiDTO uvjeti) {
+        this.uvjeti = uvjeti;
+    }
+
+    public String getGrad() {
+        return grad;
+    }
+
+    public void setGrad(String grad) {
+        this.grad = grad;
     }
 }

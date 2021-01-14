@@ -37,7 +37,6 @@ public class OglasServiceImpl implements OglasService {
         oglasRepository.save(oglas);
     }
 
-
     public Optional<Oglas> findById(String oglasId) {
         try {
             return oglasRepository.findById(UUID.fromString(oglasId));
@@ -46,7 +45,6 @@ public class OglasServiceImpl implements OglasService {
             return Optional.empty();
         }
     }
-
 
     public Optional<Oglas> findByStudent(Student student) {
         return oglasRepository.findByStudent(student);
@@ -57,7 +55,6 @@ public class OglasServiceImpl implements OglasService {
         return oglasRepository.findByStudentAndStatusOglasa(student, statusOglasa);
     }
 
-
     public Optional<Oglas> findByStudentJmbag(String jmbag) {
         Optional<Student> optionalStudent = studentService.findByJmbag(jmbag);
         if (optionalStudent.isEmpty()) return Optional.empty();
@@ -67,7 +64,6 @@ public class OglasServiceImpl implements OglasService {
     }
 
     public Optional<Oglas> findBySoba(Soba soba) {
-
         return oglasRepository.findBySoba(soba);
     }
 
@@ -83,6 +79,7 @@ public class OglasServiceImpl implements OglasService {
         Oglas oglas;
         if (optionalOglas.isEmpty()) {
             oglas = new Oglas();
+            oglas.setStatusOglasa(StatusOglasaEnum.AKTIVAN);
             oglas.setStudent(student);
         } else oglas = optionalOglas.get();
 
@@ -91,6 +88,8 @@ public class OglasServiceImpl implements OglasService {
         oglas.setObjavljen(Date.valueOf(LocalDate.now()));
 
         oglas = oglasRepository.save(oglas);
+        student.setAktivniOglas(oglas);
+        studentService.save(student);
         return oglas;
     }
 

@@ -1,15 +1,12 @@
 package progi.projekt.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.model.Lajk;
 import progi.projekt.model.LajkId;
 import progi.projekt.model.Oglas;
 import progi.projekt.model.Student;
-import progi.projekt.service.LajkService;
-import progi.projekt.service.OglasService;
-import progi.projekt.service.StudentService;
+import progi.projekt.service.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,21 +16,29 @@ import java.util.Optional;
 @RequestMapping("/lajk")
 public class LajkController {
 
-	@Autowired
+	private static final int MILISEC_IZMEDJU_POZIVA = 2 * 1000; //5 s
+
+	private MatchingService matchingService;
 	private LajkService lajkService;
-
-	@Autowired
 	private StudentService studentService;
-
-	@Autowired
 	private OglasService oglasService;
+	private ObavijestService obavijestService;
+
+	public LajkController(MatchingService matchingService, LajkService lajkService, StudentService studentService, OglasService oglasService, ObavijestService obavijestService) {
+		this.matchingService = matchingService;
+		this.lajkService = lajkService;
+		this.studentService = studentService;
+		this.oglasService = oglasService;
+		this.obavijestService = obavijestService;
+	}
 
 	@GetMapping
 	public List<Lajk> listLajks() {
 		return lajkService.listAll();
 	}
 
-    @GetMapping(value = "/ocjena")
+
+	@GetMapping(value = "/ocjena")
     public String ocjena(@RequestParam(value = "student_username") String studentUsername,
                          @RequestParam(value = "oglas_id") String oglasId) {
         Optional<Student> studentOpt = studentService.findByKorisnickoIme(studentUsername);
@@ -44,11 +49,7 @@ public class LajkController {
 		LajkId lajkId = new LajkId(studentOpt.get(), oglasOpt.get());
 		Optional<Lajk> lajkOpt = lajkService.findLajk(lajkId); // zapravo nije bilo potrebno, i da ga nađe trenutno nam ne treba postojeća ocjena
 
-		if (lajkOpt.isPresent()) {
-			return String.valueOf(lajkOpt.get().getOcjena());
-		} else {
-			return "";
-		}
+		return lajkOpt.map(lajk -> String.valueOf(lajk.getOcjena())).orElse("");
 	}
 
 	@PutMapping(value = "/update")
@@ -65,8 +66,26 @@ public class LajkController {
 		lajk.setLajkId(lajkId);
 		lajk.setOcjena(ocjena);
 
-
 		Lajk updatedLajk = lajkService.update(lajk);
+
+		Thread kandidatiThread = new Thread(() -> {
+			matchingService.lajkFun();
+			try {
+				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+			} catch (InterruptedException e) {
+				System.err.println("Scheduled matching execution interrupted");
+			}
+			//ne poziva se odmah nakon lajka da se korisnik ne matcha sa prvim oglasom kojeg lajka
+			//matchingService.matchFun();
+		});
+		final boolean THREADS = false;
+		if (THREADS){
+			kandidatiThread.start();
+		} else {
+			matchingService.lajkFun();
+			//ne poziva se odmah nakon lajka da se korisnik ne matcha sa prvim oglasom kojeg lajka
+			//matchingService.matchFun();
+		}
 
 		return ResponseEntity.ok(updatedLajk);
 	}

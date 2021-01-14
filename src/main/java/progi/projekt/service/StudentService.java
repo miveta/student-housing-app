@@ -2,7 +2,9 @@ package progi.projekt.service;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import progi.projekt.model.Obavijest;
+import progi.projekt.model.Oglas;
 import progi.projekt.model.Student;
+import progi.projekt.model.enums.StatusOglasaEnum;
 import progi.projekt.security.exception.SavingException;
 
 import java.util.List;
@@ -33,4 +35,10 @@ public interface StudentService {
     Student delete(Student student) throws SavingException;
 
     List<Obavijest> getObavijest(String username);
+
+    boolean arhiviraj(String username, String oglasId);
+
+	void save(Student stud);
+
+    List<Oglas> oglasi(String username, StatusOglasaEnum statusOglasa);
 }

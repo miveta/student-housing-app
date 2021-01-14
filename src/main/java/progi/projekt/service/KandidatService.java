@@ -10,6 +10,8 @@ import java.util.UUID;
 public interface KandidatService {
 	List<Kandidat> listAll(UUID oglasUuid);
 
+	List<Kandidat> listAll();
+
 	void stvoriKand(Oglas oglas1, Oglas oglas2);
 
 	Boolean odgovaraju (Oglas oglas1, Oglas oglas2);
@@ -29,4 +31,6 @@ public interface KandidatService {
 	Boolean kandSadrziOglas(Kandidat kand, Oglas oglas);
 
 	void ponistiKandidateOglasa(Oglas oglas);
+
+    void updateLocalKands();
 }

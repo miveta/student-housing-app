@@ -8,14 +8,25 @@ import java.util.UUID;
 public class PaviljonDTO {
     private UUID id;
     private String naziv;
+    private String nazivDom;
     private OznakeKategorijaEnum kategorija;
     private int brojKatova;
 
-    public PaviljonDTO(Paviljon paviljon){
+    public PaviljonDTO(Paviljon paviljon) {
+        if (paviljon == null) return;
         this.id = paviljon.getId();
         this.naziv = paviljon.getNaziv();
+        if (paviljon.getDom() != null) this.nazivDom = paviljon.getDom().getNaziv();
         this.kategorija = paviljon.getKategorija();
         this.brojKatova = paviljon.getBrojKatova();
+    }
+
+    public String getNazivDom() {
+        return nazivDom;
+    }
+
+    public void setNazivDom(String nazivDom) {
+        this.nazivDom = nazivDom;
     }
 
     public int getBrojKatova() {

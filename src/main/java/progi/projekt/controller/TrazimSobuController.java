@@ -4,10 +4,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import progi.projekt.dto.DomDTO;
+import progi.projekt.dto.UvjetiDTO;
 import progi.projekt.forms.TrazimSobuForm;
 import progi.projekt.model.*;
 import progi.projekt.model.enums.BrojKrevetaEnum;
-import progi.projekt.model.enums.StatusOglasaEnum;
 import progi.projekt.model.enums.TipKupaoniceEnum;
 import progi.projekt.service.*;
 
@@ -22,27 +22,45 @@ import java.util.stream.Collectors;
 @RequestMapping("/trazimSobu")
 public class TrazimSobuController {
 
+    private static final int MILISEC_IZMEDJU_POZIVA = 2 * 1000; //5 s
+
     private StudentService studentService;
     private TrazimSobuService trazimSobuService;
     private UtilService utilService;
     private SobaService sobaService;
     private OglasService oglasService;
+    private MatchingService matchingService;
 
-    public TrazimSobuController(StudentService studentService, TrazimSobuService trazimSobuService, UtilService utilService, SobaService sobaService, OglasService oglasService) {
+    public TrazimSobuController(StudentService studentService, TrazimSobuService trazimSobuService, UtilService utilService, SobaService sobaService, OglasService oglasService, MatchingService matchingService) {
         this.studentService = studentService;
         this.trazimSobuService = trazimSobuService;
         this.utilService = utilService;
         this.sobaService = sobaService;
         this.oglasService = oglasService;
+        this.matchingService = matchingService;
     }
 
     @GetMapping("/domovi")
     public Set<DomDTO> getDomovi(@RequestParam(value = "user") String username) {
         Set<Dom> domovi = trazimSobuService.findAllDom(username);
-        return domovi.stream().map(DomDTO::new).collect(Collectors.toSet());
+        return domovi.stream().map(DomDTO::new).sorted().collect(Collectors.toSet());
 
     }
 
+    @GetMapping("/zadano")
+    public ResponseEntity<?> zadano(@RequestParam(value = "user") String username) {
+        Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
+        if (optionalStudent.isEmpty())
+            return ResponseEntity.badRequest().body("Student s tim korisničkim imenom ne postoji!");
+        Student student = optionalStudent.get();
+
+        Oglas aktivniOglas = student.getAktivniOglas();
+        if (aktivniOglas == null)
+            return ResponseEntity.ok(null);
+
+        if (aktivniOglas.getTrazeniUvjeti() == null) return null;
+        else return ResponseEntity.ok(new UvjetiDTO(aktivniOglas.getTrazeniUvjeti()));
+    }
 
     @PostMapping(value = "/uvjetiIveta", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uvjeti(@RequestBody TrazimSobuForm trazimSobuForm) {
@@ -54,8 +72,8 @@ public class TrazimSobuController {
 
         TrazeniUvjeti trazeniUvjeti = null;
 
-        if (student.getOglas() != null) {
-            trazeniUvjeti = student.getOglas().getTrazeniUvjeti();
+        if (student.getAktivniOglas() != null) {
+            trazeniUvjeti = student.getAktivniOglas().getTrazeniUvjeti();
         }
 
         if (trazeniUvjeti == null)
@@ -94,14 +112,27 @@ public class TrazimSobuController {
         Set<TipKupaoniceEnum> tipKupaonice = new HashSet<>(Arrays.asList(trazimSobuForm.getTipKupaonice()));
         trazeniUvjeti.setTipKupaonice(tipKupaonice);
 
-
         trazimSobuService.update(trazeniUvjeti);
 
-        Optional<Oglas> optionalOglas = oglasService.findByStudentAndStatus(student, StatusOglasaEnum.AKTIVAN);
-        if (optionalOglas.isEmpty()) {
-            oglasService.spremiOglas(student, student.getSoba(), trazeniUvjeti);
+
+        Thread kandidatiThread = new Thread(() -> {
+            matchingService.kandidatiFun();
+            try {
+                Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+            } catch (InterruptedException e) {
+                System.err.println("Scheduled matching execution interrupted");
+            }
+            matchingService.matchFun();
+        });
+        final boolean THREADS = false;
+        if (THREADS){
+            kandidatiThread.start();
+        } else {
+            matchingService.kandidatiFun();
+            matchingService.matchFun();
         }
 
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok(trazimSobuForm);
     }
 }
