@@ -10,6 +10,8 @@
 			 Za izradu web aplikacije korišten je radni okvir \underline{Spring Boot} \footnote{https://spring.io/projects/spring-boot} uz arhitekturni stil \underline{Rest API} \footnote{https://restfulapi.net/} koji se bazira na HTTP protokolu. Spring Boot je specijalizacija radnog okvira Spring a omogućuje jednostavnije i brže oblikovanje web aplikacija tako što u svojoj automatskoj konfiguraciji neke uobičajene dijelove web aplikacije već ima podešeno, kao na primjer pokretanje Apache Tomcat poslužitelja. Od programskih jezika koriste se objektno orijentirani jezik \underline{Java} \footnote{https://www.java.com/en/} za izradu \textit{backend} sloja aplikacije te skriptni programski jezik \underline{JavaScript} \footnote{https://www.javascript.com/} te knjižnica \underline{React} \footnote{https://reactjs.org/}  za izradu \textit{frontend} sloja. Uz Javu smo koristili \underline{Apache Maven} \footnote{https://maven.apache.org/}, \textit{open source} alat za tehničko upravljanje Java projektima. Knjižnicu React razvija tvrtka Facebook a pisana je u jeziku JavaScript i sadrži mnogo paketa te je tako fleksibilna za različite aplikacije. 
 			 
 			 Za rad s bazom podataka korišten je sustav za upravljanje bazom podataka \underline{PostgreSQL} \footnote{https://www.postgresql.org/} te alat za mapiranje podataka između relacijske baze i objekata u Javi \underline{Hibernate ORM} \footnote{https://hibernate.org/orm/}. Hibernate implementira standard Java Persistance API te nudi anotacije koje služe za lakši rad s entitetima.
+			 
+			 Baza podataka nalazi se na poslužitelju \underline{Heroku} \footnote{https://www.heroku.com/}
 			
 			
 			\eject 
@@ -293,12 +295,141 @@
 		
 		\section{Upute za puštanje u pogon}
 		
-			\textbf{\textit{dio 2. revizije}}\\
 		
-			 \textit{U ovom poglavlju potrebno je dati upute za puštanje u pogon (engl. deployment) ostvarene aplikacije. Na primjer, za web aplikacije, opisati postupak kojim se od izvornog kôda dolazi do potpuno postavljene baze podataka i poslužitelja koji odgovara na upite korisnika. Za mobilnu aplikaciju, postupak kojim se aplikacija izgradi, te postavi na neku od trgovina. Za stolnu (engl. desktop) aplikaciju, postupak kojim se aplikacija instalira na računalo. Ukoliko mobilne i stolne aplikacije komuniciraju s poslužiteljem i/ili bazom podataka, opisati i postupak njihovog postavljanja. Pri izradi uputa preporučuje se \textbf{naglasiti korake instalacije uporabom natuknica} te koristiti što je više moguće \textbf{slike ekrana} (engl. screenshots) kako bi upute bile jasne i jednostavne za slijediti.}
+			\textbf{Git}
+			\\Ako sustav Git nije instaliran, potrebno je preuzeti instalacijski paket s poveznice \href{https://git-scm.com/downloads}{https://git-scm.com/downloads}.
+			\begin{packed_item}
+				\item Instalacija
+				\begin{packed_enum}
+					\item Pokrenuti preuzeti instalacijski program čime se otvara čarobnjak za konfiguraciju
+					\item Odabrati direktorij za instalaciju
+					\item Ostaviti zadane izabrane komponente
+					\item Za path varijablu odabrati \textit{Git from the command line and also from 3-rd party software}
+					\item Odabrati \textit{Use the OpenSSL library}
+					\item Odabrati \textit{Checkout windows-style, commit Unix-style line endings } (za operacijski sustav Windows)
+					\item Odabrati \textit{Use Windows' default console window}
+					\item Odabrati \textit{Default (fast-forward or merge)}
+					\item Ostaviti zadane dodatne postavke
+					\item Pritisnuti \textit{Install}
+				\end{packed_enum}
+				\item Konfiguracija
+				\\Detalji konfiguracije mogu se proučiti na stranici \href{https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup}{First-Time Git Setup}
+			\end{packed_item}
+			\
+			\textbf{Apache Maven}
+			\\Ako alat Apache Maven nije instaliran, potrebno je preuzeti instalacijski paket s poveznice 	\href{https://maven.apache.org/download.cgi}{https://maven.apache.org/download.cgi}
+				\begin{packed_enum}
+					\item Preuzeti \textit{Binary zip archive}
+					\item Raspakirati distribuciju arhive u željeni direktorij
+					\item U Windows Start upisati i odabrati \textit{Uređivanje varijabli okruženja sustava} (\textit{Edit the system environment variables}) 
+					\item Odabrati \textit{Varijable okruženja} (\textit{Environment variables})
+					\item U PATH sistemsku varijablu dodati bin direktorij stvorenog apache-maven direktorija
+					\item U naredbenom retku naredbom \texttt{mvn -v} provjeriti uspješnost instalacije
+				\end{packed_enum}
+			\begin{figure}[H]
+				\includegraphics[scale=0.5]{slike/maven} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Ispravna instalacija}
+				\label{fig:mavenIspravnaInstalacija}
+			\end{figure}
+			\
+			\textbf{Heroku klijent}
+			\\Na stranici \href{https://www.heroku.com/}{https://www.heroku.com/} potrebno je napraviti korisnički račun. Nakon toga treba preuzeti instalacijski paket s poveznice \url{https://devcenter.heroku.com/articles/heroku-cli}.
+				\begin{packed_enum}
+					\item Pokrenuti preuzeti instalacijski program čime se otvara čarobnjak za konfiguraciju
+					\item Ostaviti zadane komponente
+					\item Odabrati direktorij za instalaciju
+					\item U naredbenom retku naredbom \texttt{heroku version} provjeriti uspješnost instalacije
+				\end{packed_enum}
+			\
+			\textbf{Postupak puštanja u pogon}
+				\begin{packed_item}
+					\item Stvaranje Heroku servera za backend dio
+					\begin{packed_enum}
+						\item U naredbenom retku upisati \texttt{heroku login} i ulogirati se
+						\item Upisati \texttt{heroku create <NAME-OF-APP>}
+					\end{packed_enum}
+				\end{packed_item}
 			
+				\begin{packed_item}
+					\item Stvaranje baze
+					\begin{packed_enum}
+						\item Otvoriti stranicu \href{https://www.heroku.com/}{https://www.heroku.com/} 
+						\item Kliknuti na NAME-OF-APP server
+						\item Kliknuti na \textit{Resources}
+						\item Odabrati \textit{Find more add-ons}
+						\item Pronaći i odabrati \textit{Heroku POSTGRES}, odabrati plan \textit{Hobby Dev - Free}
+					\end{packed_enum}
+				\end{packed_item}
 			
-			 \textit{Dovršenu aplikaciju potrebno je pokrenuti na javno dostupnom poslužitelju. Studentima se preporuča korištenje neke od sljedećih besplatnih usluga: \href{https://aws.amazon.com/}{Amazon AWS}, \href{https://azure.microsoft.com/en-us/}{Microsoft Azure} ili \href{https://www.heroku.com/}{Heroku}. Mobilne aplikacije trebaju biti objavljene na F-Droid, Google Play ili Amazon App trgovini.}
+				\begin{packed_item}
+					\item Konfiguracija backenda
+					\begin{packed_enum}
+						\item Kliknuti na NAME-OF-APP server
+						\item Kliknuti na \textit{Resources}
+						\item Kliknuti na \textit{Heroku POSTGRES}
+						\item Kliknuti na \textit{Settings} i \textit{View Credentials}
+						\item U projektnom direktoriju otvoriti \texttt{src/main/resources/application.properties}
+						\item U datotetci podesiti podatke s View Credentials:
+							\begin{packed_item}
+								\item \texttt{spring.datasource.url=jdbc:postgresql://<Host>}
+								\item \texttt{spring.datasource.username=<User>}
+								\item \texttt{spring.datasource.password=<Password>}
+							\end{packed_item}
+					\end{packed_enum}
+				\end{packed_item}
 			
+					\begin{packed_item}
+					\item Puštanje backenda u pogon
+					\begin{packed_enum}
+						\item U projektnom direktoriju otvoriti datotetku \texttt{pom.xml}
+						\item U datoteku dodati \textit{Maven Plugin Configuration}
+							\begin{verbatim}
+							<plugin>
+								<groupId>com.heroku.sdk</groupId>
+								<artifactId>heroku-maven-plugin</artifactId>
+								<version>3.0.3</version>
+								<configuration>
+								   <appName><NAME-OF-APP>-backend</appName>
+								   <includeTarget>false</includeTarget>
+								   <includes>
+								     <include>target/${project.build.finalName}.jar</include>
+								   </includes>
+								<jdkVersion>${java.version}</jdkVersion>
+								<processTypes>
+								   <web>java $JAVA_OPTS -jar target/${project.build.finalName}.jar</web>
+								</processTypes>
+								</configuration>
+							</plugin>
+							\end{verbatim}
+						\item U naredbenom retku pozicionirati se u \textit{root} backenda projekta
+						\item U naredbeni redak upisati \texttt{mvn clean heroku:deploy}
+					\end{packed_enum}
+				\end{packed_item}
 			
+					\begin{packed_item}
+					\item Stvaranje Heroku servera za frontend dio
+					\begin{packed_enum}
+						\item U naredbenom retku upisati \texttt{heroku login} i ulogirati se
+						\item Upisati \texttt{heroku create <NAME-OF-FRONTEND-APP> --buildpack \url{https://github.com/mars/create-react-app-buildpack.git}}
+						\item Stvoriti prazan direktorij
+						\item U naredbenom retku pozicionirati se u stvoreni direktorij i ipisati \texttt{git init}
+						\item U naredbenom retku upisati \texttt{heroku git:remote -a <NAME-OF-FRONTEND-APP>}
+						\item U direktorij kopirati \textit{root} frontenda projekta
+						\item U naredbenom retku upisati \texttt{git add.}
+						\item U naredbenom retku upisati \texttt{git commit -m "Initital commit"}
+						\item U naredbenom retku upisati \texttt{git push heroku master}
+					\end{packed_enum}
+					\begin{packed_item}
+						\item Napomena: Za puštanje u pogon frontend dijela u \textit{rootu} front direktorija projekta treba se nalaziti datotetka \textit{static.json} u kojoj treba biti: \begin{verbatim}
+							{
+							   "root": "build/",
+							   "clean_urls": false,
+							   "routes": {
+							      "/**": "index.html"
+							   }
+							}
+						\end{verbatim}
+					\end{packed_item}
+				\end{packed_item}
 			\eject 
