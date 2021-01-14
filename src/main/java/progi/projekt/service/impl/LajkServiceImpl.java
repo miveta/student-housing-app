@@ -75,7 +75,7 @@ public class LajkServiceImpl implements LajkService {
 
             if(l.getOcjena() != 4)
                 obavijestService.notifyLiked(l.getLajkId().getOglas(), l.getLajkId().getStudent());
-            return lajkRepository.saveAndFlush(l);
+            return lajkRepository.save(l);
         } catch (Exception e) {
             //lajkRepo baca exceptione koje mu proslijedi baza (e)?
             throw new SavingException("Exception while saving lajk. Original message: '" + e.getMessage() + "'");

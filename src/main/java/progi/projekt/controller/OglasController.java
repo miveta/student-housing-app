@@ -48,8 +48,9 @@ public class OglasController {
 
     @GetMapping("/getoglas")
     public ResponseEntity<?> getOglas(@RequestParam(value = "oglas_id") String oglasId) {
-        Oglas oglas = oglasService.findById(oglasId).get();
-        return ResponseEntity.ok(new OglasDTO(oglas));
+        Optional<Oglas> optionalOglas = oglasService.findById(oglasId);
+        if(optionalOglas.isPresent()) return ResponseEntity.ok(new OglasDTO(optionalOglas.get()));
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/getparovi")

@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import cookie from 'react-cookies';
 import {withRouter} from 'react-router-dom';
 import Row from "react-bootstrap/Row";
-import {makeid} from "../components/makeId";
+
 
 
 class MojProfil extends Component {
@@ -14,7 +14,6 @@ class MojProfil extends Component {
         this.user = cookie.load('principal');
     }
 
-    key = makeid(5)
 
     state = {
         isOpen: false

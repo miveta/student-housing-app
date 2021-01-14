@@ -13,7 +13,8 @@ function OglasList(props) {
                 oglasi.length >= 1 ?
                     oglasi.map(oglas =>
                         <OglasCard key={oglas.id}
-                                   oglas={oglas}/>
+                                   oglas={oglas}
+                        mail={oglas.studentMail}/>
                     )
                     :
                     <p>Trenutno nema takvih soba :(</p>

@@ -4,13 +4,12 @@ import * as Swal from "sweetalert2";
 import {withRouter} from 'react-router-dom';
 import ObavijestiDropdown from "../components/ObavijestiDropdown";
 import cookie from "react-cookies";
-import {makeid} from "../components/makeId";
+
 
 
 class Header extends Component {
     constructor(props) {
         super(props);
-        this.key = makeid(5);
         this.state = {
             user: cookie.load('principal')
         }

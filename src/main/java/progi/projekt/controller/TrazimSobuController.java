@@ -31,12 +31,13 @@ public class TrazimSobuController {
     private OglasService oglasService;
     private MatchingService matchingService;
 
-    public TrazimSobuController(StudentService studentService, TrazimSobuService trazimSobuService, UtilService utilService, SobaService sobaService, OglasService oglasService) {
+    public TrazimSobuController(StudentService studentService, TrazimSobuService trazimSobuService, UtilService utilService, SobaService sobaService, OglasService oglasService, MatchingService matchingService) {
         this.studentService = studentService;
         this.trazimSobuService = trazimSobuService;
         this.utilService = utilService;
         this.sobaService = sobaService;
         this.oglasService = oglasService;
+        this.matchingService = matchingService;
     }
 
     @GetMapping("/domovi")

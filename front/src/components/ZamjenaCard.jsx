@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import * as cookie from "react-cookies";
 import {Button, Col, Form, Row} from "react-bootstrap";
 import SobaReadOnly from "../oglasi/SobaReadOnly";
-import {makeid} from "./makeId";
+
 
 
 class ZamjenaCard extends Component {

@@ -3,7 +3,7 @@ import {Button, Col, Form} from 'react-bootstrap';
 import {Link, Redirect} from "react-router-dom";
 import MdEye from "react-ionicons/lib/MdEye";
 import MdEyeOff from "react-ionicons/lib/MdEyeOff";
-import {makeid} from "../components/makeId";
+
 
 class Register extends Component {
     constructor(props) {
@@ -19,7 +19,6 @@ class Register extends Component {
             redirect: false,
             type: 'password',
             gradovi: [],
-            key: makeid(5)
         };
         this.showHide = this.showHide.bind(this);
 

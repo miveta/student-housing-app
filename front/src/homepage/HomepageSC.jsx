@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import cookie from "react-cookies";
 import {Col, Nav, Row, Tab} from "react-bootstrap";
 import ZamjenaList from "../components/ZamjenaList";
-import {makeid} from "../components/makeId";
+
 
 class HomepageSC extends Component {
     constructor(props) {
@@ -11,7 +11,6 @@ class HomepageSC extends Component {
             user: cookie.load('principal'),
             upiti: [],
             odobreniUpiti: [],
-            key: makeid(5)
         };
 
         const options = {

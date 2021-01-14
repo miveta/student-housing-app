@@ -87,19 +87,20 @@ public class ObavijestServiceImpl implements ObavijestService {
         ArrayList<Student> students = new ArrayList<>();
         students.add(oglas.getStudent());
         obavijest.setStudent(students);
-        obavijest.setTekst(student.getIme() + " " + student.getPrezime() + " je lajkao vašu sobu!");
-        obavijestRepository.save(obavijest);
+        obavijest.setTekst(student.getIme() + " " + student.getPrezime() + " je lajkao/la Vašu sobu!");
+        obavijest = obavijestRepository.save(obavijest);
 
-        students.forEach(s -> {
+        Obavijest finalObavijest = obavijest;
+        for (Student s : students) {
             if(s.getObavijesti() == null) s.setObavijesti(new ArrayList<>());
-            s.getObavijesti().add(obavijest);
+            s.getObavijesti().add(finalObavijest);
             studentService.save(s);
-        });
+        }
 
         //Posalji mail ako je ukljuceno automatsko slanje
         if (student.isObavijestiNaMail()) {
             SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setSubject("Netko je lajkao vašu sobu");
+            msg.setSubject("Netko je lajkao/la Vašu sobu");
             msg.setText(obavijest.getTekst());
             msg.setTo(student.getEmail());
             javaMailSender.send(msg);

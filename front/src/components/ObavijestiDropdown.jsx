@@ -7,7 +7,7 @@ import SockJsClient from "react-stomp";
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import DropdownToggle from "react-bootstrap/DropdownToggle";
 import * as cookie from "react-cookies";
-import {makeid} from "./makeId";
+
 
 class ObavijestiDropdown extends Component {
     constructor(props) {
@@ -15,7 +15,7 @@ class ObavijestiDropdown extends Component {
         this.state = {
             obavijesti: [],
             user: cookie.load("principal"),
-            key: makeid(5)
+
         }
     }
 
@@ -66,7 +66,6 @@ class ObavijestiDropdown extends Component {
                                   console.log("Disconnected");
                               }}
                               onMessage={(msg) => {
-                                  console.log(msg)
                                   this.setState({obavijesti: msg})
                               }}
                               ref={(client) => {

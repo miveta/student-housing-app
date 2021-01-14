@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import * as cookie from "react-cookies";
 import ParCard from "./ParCard";
-import {makeid} from "../../components/makeId";
+
 
 export default class ParoviList extends Component {
     constructor(props) {
@@ -10,8 +10,6 @@ export default class ParoviList extends Component {
             parovi: [],
             user: cookie.load('principal')
         };
-
-        this.key = makeid(5)
 
         const options = {
             method: 'GET',

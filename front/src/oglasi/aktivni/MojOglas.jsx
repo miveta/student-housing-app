@@ -24,7 +24,6 @@ export default class MojOglas extends Component {
                 id: '',
                 naziv: '',
                 domovi: [],
-                key: makeid(5)
             },
             soba: {
                 id: '',
@@ -32,31 +31,18 @@ export default class MojOglas extends Component {
                 kat: '',
                 komentar: '',
                 paviljon: undefined,
-                tipKupaonice: 'Privatna',
-                key: makeid(5)
+                tipKupaonice: 'Privatna'
             },
             uvjeti: {
                 domovi: [],
                 paviljoni: [],
                 katovi: [],
                 brojKreveta: [],
-                tipKupaonice: [],
-                key: makeid(5)
+                tipKupaonice: []
             },
             kandidati: [],
-            changed: false,
-            key: makeid(5)
+            changed: false
         };
-
-        function makeid(length) {
-            var result           = '';
-            var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            var charactersLength = characters.length;
-            for ( var i = 0; i < length; i++ ) {
-                result += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-            return result;
-        }
 
 
         let options = {

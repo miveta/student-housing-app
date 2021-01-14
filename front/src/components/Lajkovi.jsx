@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import cookie from "react-cookies";
 import {Button, ButtonGroup, ToggleButton} from "react-bootstrap";
 import Tooltip from "@material-ui/core/Tooltip";
-import {makeid} from "./makeId";
 
 
 class Lajkovi extends Component {
@@ -13,7 +12,6 @@ class Lajkovi extends Component {
             oglas: '',
             isLoggedIn: cookie.load('isAuth'),
             ocjena: '',
-            key: makeid(5)
         }
     }
 
@@ -24,7 +22,7 @@ class Lajkovi extends Component {
         {name: '❌', value: '4', description: 'Nemoj više prikazivati'},
     ];
 
-    async componentDidMount() {
+   componentDidMount() {
         let self = this;
 
         let user = self.state.user;
@@ -57,7 +55,7 @@ class Lajkovi extends Component {
                 }
             };
 
-            await fetch(`${process.env.REACT_APP_BACKEND_URL}/lajk/ocjena?student_username=${this.state.user.korisnickoIme}&oglas_id=${self.props.oglasId}`, optionsLajk)
+            fetch(`${process.env.REACT_APP_BACKEND_URL}/lajk/ocjena?student_username=${this.state.user.korisnickoIme}&oglas_id=${self.props.oglasId}`, optionsLajk)
                 .then(response => {
                     response.text().then(body => {
                         self.setState({ocjena: body})

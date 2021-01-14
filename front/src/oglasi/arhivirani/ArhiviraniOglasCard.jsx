@@ -4,14 +4,13 @@ import Row from "react-bootstrap/Row";
 import './arhiviraniOglasi.css'
 import SobaReadOnly from "../SobaReadOnly";
 import TrazimSobuReadOnly from "../TrazimSobuReadOnly";
-import {makeid} from "../../components/makeId";
+
 
 class ArhiviraniOglasCard extends Component {
     constructor(props) {
         super(props)
         this.soba = props.oglas.soba
         this.uvjeti = props.oglas.uvjeti
-        this.key = makeid(5)
     }
 
     onAktiviraj = () => {

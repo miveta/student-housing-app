@@ -4,7 +4,7 @@ import cookie from "react-cookies";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {withRouter} from "react-router-dom";
-import { makeid } from '../../components/makeId';
+
 
 function TrazimSobu(props) {
     const user = cookie.load('principal');
@@ -68,14 +68,13 @@ function TrazimSobu(props) {
             katovi: uvjeti["katovi"],
             brojKreveta: uvjeti["brojKreveta"],
             tipKupaonice: uvjeti["tipKupaonice"],
-            key: makeid(5)
         }
         props.submitUvjeti(body);
         setChange(false)
     }
 
 
-    console.log(uvjeti)
+    console.log(grad)
     return (
 
         <Form onSubmit={onSubmit} disabled className={"innerForm"}>
@@ -139,8 +138,8 @@ function TrazimSobu(props) {
 
             {
                 grad.domovi.map(dom => (
-                    <Row key={dom.id + 1}>
-                        <Col key={dom.id}>
+                    <Row key={dom.id}>
+                        <Col>
                             <Form.Label>Dom</Form.Label>
                             <Form.Check
                                 defaultChecked={uvjeti.domovi && uvjeti.domovi.includes(dom.id)}
@@ -152,6 +151,7 @@ function TrazimSobu(props) {
                                 value={dom.id}
                                 label={dom.naziv}
                             />
+                            {console.log(uvjeti.domovi.includes(dom.id))}
                         </Col>
                         {
                             ((uvjeti.domovi && uvjeti.domovi.includes(dom.id)) || dom.checked) &&
