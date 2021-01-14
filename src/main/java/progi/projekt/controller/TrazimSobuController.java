@@ -129,7 +129,7 @@ public class TrazimSobuController {
             kandidatiThread.start();
         } else {
             matchingService.kandidatiFun();
-            matchingService.matchFun();
+            matchingService.parFun();
         }
 
 
