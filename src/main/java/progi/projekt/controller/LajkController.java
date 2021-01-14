@@ -83,6 +83,8 @@ public class LajkController {
 			kandidatiThread.start();
 		} else {
 			matchingService.lajkFun();
+			matchingService.kandidatiFun();
+			matchingService.parFun();
 			//ne poziva se odmah nakon lajka da se korisnik ne matcha sa prvim oglasom kojeg lajka
 			//matchingService.matchFun();
 		}

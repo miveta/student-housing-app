@@ -226,6 +226,8 @@ public class OglasController {
         //force update kandidata unutar svakog oglasa
         kandidatService.updateLocalKands();
 
+        matchingService.matchFun();
+
         Optional<Student> optionalStudent = studentService.findByKorisnickoIme(username);
         if (optionalStudent.isEmpty()) return new ArrayList<>();
 

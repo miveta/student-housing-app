@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class MatchingServiceImpl implements MatchingService {
-	private final boolean NULL_DEBUG = true;
+	private final boolean NULL_DEBUG = false; //true samo za debug
 
 	private final StudentService studentService;
 	private final OglasService oglasService;
@@ -253,23 +253,26 @@ public class MatchingServiceImpl implements MatchingService {
 		for (Oglas oglas1 : oglasi) {
 			UUID studentID = oglas1.getStudent().getId();
 			for (Oglas oglas2 : oglasi) {
-				Optional<Lajk> lajkOpt = lajkService.findLajkDvaOglasa(oglas1, oglas2);
+				if (!oglas1.getId().equals(oglas2.getId())){
+					Optional<Lajk> lajkOpt = lajkService.findLajkDvaOglasa(oglas1, oglas2);
 
-				UUID id1 = oglas1.getId();
-				UUID id2 = oglas2.getId();
-				Key key = new Key(id1, id2);
+					UUID id1 = oglas1.getId();
+					UUID id2 = oglas2.getId();
+					Key key = new Key(id1, id2);
 
-				lajkOpt.ifPresentOrElse(
-						(lajk) ->
-						{
-							Integer ocjena = lajk.getOcjena();
-							ocjene.put(key, ocjena);
-						},
-						() ->
-						{
-							//ako ocjena jos nije unesena u rjecnik upisujemo -1
-							ocjene.put(key, -1);
-						});
+					lajkOpt.ifPresentOrElse(
+							(lajk) ->
+							{
+								Integer ocjena = lajk.getOcjena();
+								ocjene.put(key, ocjena);
+							},
+							() ->
+							{
+								//ako ocjena jos nije unesena u rjecnik upisujemo -1
+								ocjene.put(key, -1);
+							});
+				}
+
 
 			}
 
