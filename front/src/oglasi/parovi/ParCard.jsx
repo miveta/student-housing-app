@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import SobaReadOnly from "../SobaReadOnly";
 import {Button, Col, Row} from "react-bootstrap";
-import {makeid} from "../../components/makeId";
 
 export default class ParCard extends Component {
     constructor(props) {
@@ -11,11 +10,11 @@ export default class ParCard extends Component {
         };
 
         this.par = props.par;
-        this.key = makeid(5)
         this.oglas = props.par.oglas1.student === props.user.korisnickoIme ? props.par.oglas2 : props.par.oglas1
     }
 
     onUpdatePar = (potvrdeno) => {
+        let self = this
         const options = {
             method: 'POST',
             headers: {
@@ -29,7 +28,7 @@ export default class ParCard extends Component {
                     return response.json()
                 }
             }).then(json => {
-            console.log(json)
+            self.setState(json)
         }).catch(() => console.log("korisnik nema oglase?"))
     };
 

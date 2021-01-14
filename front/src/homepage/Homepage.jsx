@@ -105,8 +105,10 @@ class Homepage extends Component {
                                 this.state.user &&
                                 <Tab.Pane eventKey="second">
                                     <h3> Sobe koje vam najbolje odgovaraju</h3>
-                                    <OglasList oglasi={this.state.kandOglasi} isLoggedIn={this.props.isLoggedIn}
-                                               user={this.state.user.jmbag}/>
+                                    <OglasList oglasi={this.state.oglasi}
+                                               grad={this.state.user ? this.state.user.grad : this.state.grad}
+                                               jmbag={this.state.user ? this.state.user.jmbag : null}
+                                    />
                                 </Tab.Pane>
                             }
                         </Tab.Content>

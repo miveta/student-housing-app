@@ -8,7 +8,6 @@ import {makeid} from "./makeId";
 class ZamjenaCard extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             user: cookie.load('principal'),
             odobren: props.par.odobren,
@@ -17,9 +16,7 @@ class ZamjenaCard extends Component {
             oglas2: props.par.oglas2,
             soba1: props.par.oglas1.soba,
             soba2: props.par.oglas2.soba,
-            key: makeid(5)
         }
-
     }
 
     click = (b) => {

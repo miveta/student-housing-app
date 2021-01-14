@@ -82,6 +82,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student createStudent(Student student) throws SavingException {
         try {
+            student.setObavijestiNaMail(true);
             return studentRepository.saveAndFlush(student);
         } catch (Exception e) {
             //studentRepo baca exceptione koje mu proslijedi baza (e)?

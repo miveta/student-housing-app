@@ -40,7 +40,9 @@ public class OglasController {
 
     @GetMapping("/list")
     public List<OglasDTO> listOglas() {
-        return oglasService.listAll().stream().filter(o -> o.getStatusOglasa() == StatusOglasaEnum.AKTIVAN || o.getStatusOglasa() == StatusOglasaEnum.CEKA).map(OglasDTO::new).collect(Collectors.toList());
+        List<Oglas> oglasi = oglasService.listAll();
+        oglasi = oglasi.stream().filter(o -> o.getStatusOglasa() == StatusOglasaEnum.AKTIVAN || o.getStatusOglasa() == StatusOglasaEnum.CEKA).collect(Collectors.toList());
+        return oglasi.stream().map(OglasDTO::new).collect(Collectors.toList());
     }
 
 
@@ -316,7 +318,7 @@ public class OglasController {
 
         parService.update(par);
         matchingService.confirmFun();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(par);
     }
 
     @PostMapping(value = "/updateParSC")
