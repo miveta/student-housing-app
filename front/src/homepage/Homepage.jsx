@@ -3,6 +3,7 @@ import OglasList from "../oglasi/homepage/OglasList";
 import cookie from "react-cookies";
 import {Col,Nav, Row, Tab} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
+import {makeid} from "../components/makeId";
 
 class Homepage extends Component {
     constructor(props) {
@@ -10,7 +11,8 @@ class Homepage extends Component {
         this.state = {
             user: cookie.load('principal'),
             oglasi: [],
-            kandOglasi: []
+            kandOglasi: [],
+            key: makeid(5)
         };
 
         if (cookie.load('role') === 'zaposlenikSC') props.history.push("/homepagesc")

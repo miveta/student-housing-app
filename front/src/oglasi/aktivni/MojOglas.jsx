@@ -6,14 +6,14 @@ import {Button, Row} from "react-bootstrap";
 
 export default class MojOglas extends Component {
     brojKreveta = [
-        {name: "Jednokrevetna", value: "JEDNOKREVETNA"},
-        {name: "Dvokrevetna", value: "DVOKREVETNA"},
-        {name: "Trokrevetna", value: "JEDNOKREVETNA"},
-        {name: "Višekrevetna", value: "VIŠEKREVETNA"}
+        {name: "Jednokrevetna", value: "JEDNOKREVETNA", key: "kr1"},
+        {name: "Dvokrevetna", value: "DVOKREVETNA", key: "kr2"},
+        {name: "Trokrevetna", value: "JEDNOKREVETNA", key: "kr3"},
+        {name: "Višekrevetna", value: "VIŠEKREVETNA", key: "kr4"}
     ];
     tipKupaonice = [
-        {name: "Privatna", value: "PRIVATNA"},
-        {name: "Dijeljena", value: "DIJELJENA"},
+        {name: "Privatna", value: "PRIVATNA", key: "ku1"},
+        {name: "Dijeljena", value: "DIJELJENA", key: "kr2"},
     ];
 
     constructor(props) {
@@ -23,7 +23,8 @@ export default class MojOglas extends Component {
             grad: {
                 id: '',
                 naziv: '',
-                domovi: []
+                domovi: [],
+                key: makeid(5)
             },
             soba: {
                 id: '',
@@ -31,18 +32,32 @@ export default class MojOglas extends Component {
                 kat: '',
                 komentar: '',
                 paviljon: undefined,
-                tipKupaonice: 'Privatna'
+                tipKupaonice: 'Privatna',
+                key: makeid(5)
             },
             uvjeti: {
                 domovi: [],
                 paviljoni: [],
                 katovi: [],
                 brojKreveta: [],
-                tipKupaonice: []
+                tipKupaonice: [],
+                key: makeid(5)
             },
             kandidati: [],
-            changed: false
+            changed: false,
+            key: makeid(5)
         };
+
+        function makeid(length) {
+            var result           = '';
+            var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for ( var i = 0; i < length; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+
 
         let options = {
             method: 'GET',

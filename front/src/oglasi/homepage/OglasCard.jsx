@@ -5,12 +5,14 @@ import * as cookie from "react-cookies";
 import {Nav} from "react-bootstrap";
 import {TextField} from "@material-ui/core";
 import {TextFormat} from "@material-ui/icons";
+import {makeid} from "../../components/makeId";
 
 class OglasCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: cookie.load('principal')
+            user: cookie.load('principal'),
+            key: makeid(5)
         }
     }
 

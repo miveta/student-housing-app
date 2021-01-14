@@ -13,6 +13,7 @@ import UrediProfil from "./components/UrediProfil";
 import Oglas from "./pages/Oglas";
 import HomepageSC from "./homepage/HomepageSC";
 import OglasiPage from "./pages/OglasiPage";
+import {makeid} from "./components/makeId";
 
 const PrivateRoute = ({component: Component, ...rest}) => (
     <Route
@@ -70,7 +71,8 @@ class App extends Component {
         super(props);
         this.state = {
             authenticated: cookie.load('isAuth') === 'true',
-            user: cookie.load("principal")
+            user: cookie.load("principal"),
+            key: makeid(5)
         }
     }
 

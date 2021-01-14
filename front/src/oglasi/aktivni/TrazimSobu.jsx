@@ -4,6 +4,7 @@ import cookie from "react-cookies";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {withRouter} from "react-router-dom";
+import { makeid } from '../../components/makeId';
 
 function TrazimSobu(props) {
     const user = cookie.load('principal');
@@ -66,7 +67,8 @@ function TrazimSobu(props) {
             paviljoni: uvjeti["paviljoni"],
             katovi: uvjeti["katovi"],
             brojKreveta: uvjeti["brojKreveta"],
-            tipKupaonice: uvjeti["tipKupaonice"]
+            tipKupaonice: uvjeti["tipKupaonice"],
+            key: makeid(5)
         }
         props.submitUvjeti(body);
         setChange(false)

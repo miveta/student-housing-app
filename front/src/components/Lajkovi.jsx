@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import cookie from "react-cookies";
 import {Button, ButtonGroup, ToggleButton} from "react-bootstrap";
 import Tooltip from "@material-ui/core/Tooltip";
+import {makeid} from "./makeId";
 
 
 class Lajkovi extends Component {
@@ -11,7 +12,8 @@ class Lajkovi extends Component {
             user: props.user,
             oglas: '',
             isLoggedIn: cookie.load('isAuth'),
-            ocjena: ''
+            ocjena: '',
+            key: makeid(5)
         }
     }
 

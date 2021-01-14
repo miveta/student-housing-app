@@ -1,12 +1,14 @@
 import React, {Component} from "react";
 import {Col, Form, Row} from "react-bootstrap";
 import cookie from "react-cookies";
+import {makeid} from "./makeId";
 
 class ZamjenaPrikazPara extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            soba: ''
+            soba: '',
+            key: makeid(5)
         }
     }
 

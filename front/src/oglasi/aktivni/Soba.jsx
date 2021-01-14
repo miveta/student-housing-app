@@ -1,10 +1,12 @@
 import React, {Component} from "react";
 import {Button, Col, Form} from 'react-bootstrap';
 import cookie from "react-cookies";
+import { makeid } from "../../components/makeId";
 
 class Soba extends Component {
     user;
     grad = this.props.grad
+    key = makeid(5)
 
     constructor(props) {
         super(props);
@@ -18,7 +20,8 @@ class Soba extends Component {
             kat: '',
             komentar: '',
             paviljon: undefined,
-            tipKupaonice: 'Privatna'
+            tipKupaonice: 'Privatna',
+            key: makeid(5)
         };
 
 
@@ -43,6 +46,7 @@ class Soba extends Component {
             let dom = self.props.grad.domovi.filter(d => d.naziv === value)[0]
             self.setState({paviljon: dom.paviljoni[0]})
             self.setState({paviljoni: dom.paviljoni})
+            self.setState({key: makeid(5)})
         } else if (name == "paviljon") {
             let paviljon = self.state.paviljoni.filter(p => p.naziv === value)[0]
             self.setState({paviljon: paviljon})
