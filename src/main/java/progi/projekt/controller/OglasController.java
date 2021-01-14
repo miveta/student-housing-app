@@ -49,7 +49,7 @@ public class OglasController {
     @GetMapping("/getoglas")
     public ResponseEntity<?> getOglas(@RequestParam(value = "oglas_id") String oglasId) {
         Optional<Oglas> optionalOglas = oglasService.findById(oglasId);
-        if(optionalOglas.isPresent()) return ResponseEntity.ok(new OglasDTO(optionalOglas.get()));
+        if (optionalOglas.isPresent()) return ResponseEntity.ok(new OglasDTO(optionalOglas.get()));
         return ResponseEntity.ok().build();
     }
 
@@ -127,7 +127,7 @@ public class OglasController {
             matchingService.parFun();
         });
         final boolean THREADS = false;
-        if (THREADS){
+        if (THREADS) {
             kandidatiThread.start();
         } else {
             matchingService.resetirajOglas(arhiviraniOglas.getId());
@@ -159,7 +159,6 @@ public class OglasController {
         return oglasKandidati.stream().map(OglasDTO::new).collect(Collectors.toList());
     }
 
-    //http://localhost:8080/oglas/listKandidati?oglas_id=cba3fff8-3568-4142-84f5-7490945b657c
     @GetMapping(value = "/listKandidati")
     public ArrayList<KandidatDTO> listKandidati(@RequestParam(value = "oglas_id") String oglasId) {
         //force update oglasa unutar svakog studenta
@@ -218,7 +217,6 @@ public class OglasController {
 
     }
 
-    //http://localhost:8080/oglas/listParovi?student_username=stud1
     @GetMapping(value = "/listParovi")
     public List<ParDTO> listParovi(@RequestParam(value = "student_username") String username) {
         //note: napravio sam ParDTO jer ako stavim Par u listu, toString je beskonacan jer oglas ima referencu na
@@ -251,8 +249,9 @@ public class OglasController {
                     paroviOglasa.add(parDTO);
                 }
             }
-
         }
+
+
         return paroviOglasa;
     }
 
@@ -277,22 +276,9 @@ public class OglasController {
     }
 
 
-    public void updateOglasInStudents(List<Oglas> oglasi) {
-        //force update oglasa unutar svakog studenta
-        List<Student> studenti = studentService.listAll();
-        for (Oglas oglas : oglasi) {
-            for (Student stud : studenti) {
-                if (stud.getId() == oglas.getStudent().getId()) {
-                    stud.setAktivniOglas(oglas);
-                    studentService.save(stud);
-                }
-            }
-        }
-    }
-
-    //http://localhost:8080/oglas/updatePar?par_id=35&odobren=true&zaposlenikKorisnickoIme=stef567
     @PostMapping("/updatePar")
     public ResponseEntity<?> updatePar(@RequestParam(value = "par_id") String parId,
+                                       @RequestParam(value = "par2_id") String par2Id,
                                        @RequestParam(value = "odobren") Boolean odobren,
                                        @RequestParam(value = "student_username") String username) {
 
@@ -303,10 +289,24 @@ public class OglasController {
 
         Par par = optionalPar.get();
 
+        if (!updatePar(par, username, odobren)) return ResponseEntity.badRequest().body("Ne postoji par s tim id-em!");
+
+        if (!par2Id.equals("null")) {
+            optionalPar = parService.find(Long.parseLong(par2Id));
+            if (optionalPar.isEmpty()) return ResponseEntity.badRequest().body("Ne postoji par s tim id-em!");
+            par = optionalPar.get();
+            if (!updatePar(par, username, odobren)) return ResponseEntity.badRequest().body("Ne postoji par s tim id-em!");
+        }
+
+        matchingService.confirmFun();
+        return ResponseEntity.ok(par);
+    }
+
+    private boolean updatePar(Par par, String username, Boolean odobren) {
         boolean prvi = par.getOglas1().getStudent().getKorisnickoIme().equals(username);
         boolean drugi = par.getOglas2().getStudent().getKorisnickoIme().equals(username);
 
-        if (prvi && drugi || !prvi && !drugi) return ResponseEntity.badRequest().body("!");
+        if (prvi && drugi || !prvi && !drugi) return false;
 
         if (!odobren) par.setIgnore(true);
         else {
@@ -318,8 +318,8 @@ public class OglasController {
         }
 
         parService.update(par);
-        matchingService.confirmFun();
-        return ResponseEntity.ok(par);
+
+        return true;
     }
 
     @PostMapping(value = "/updateParSC")

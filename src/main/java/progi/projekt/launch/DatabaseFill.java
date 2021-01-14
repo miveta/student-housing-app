@@ -22,8 +22,6 @@ import java.util.HashSet;
 public class DatabaseFill implements ApplicationListener<ContextRefreshedEvent> {
 
     private final PasswordEncoder pswdEncoder;
-
-    //TODO: kada su rjeseni database controlleri za umetanje, ovo bi bilo dobro izvest prek njih
     private final StudentRepository studentRepository;
     private final DomRepository domRepository;
     private final GradRepository gradRepository;

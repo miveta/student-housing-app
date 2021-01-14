@@ -92,19 +92,24 @@ public class ObavijestServiceImpl implements ObavijestService {
 
         Obavijest finalObavijest = obavijest;
         for (Student s : students) {
-            if(s.getObavijesti() == null) s.setObavijesti(new ArrayList<>());
+            if (s.getObavijesti() == null) s.setObavijesti(new ArrayList<>());
             s.getObavijesti().add(finalObavijest);
             studentService.save(s);
         }
 
-        //Posalji mail ako je ukljuceno automatsko slanje
-        if (student.isObavijestiNaMail()) {
-            SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setSubject("Netko je lajkao/la Vašu sobu");
-            msg.setText(obavijest.getTekst());
-            msg.setTo(student.getEmail());
-            javaMailSender.send(msg);
+        try {
+            //Posalji mail ako je ukljuceno automatsko slanje
+            if (student.isObavijestiNaMail()) {
+                SimpleMailMessage msg = new SimpleMailMessage();
+                msg.setSubject("Netko je lajkao/la Vašu sobu");
+                msg.setText(obavijest.getTekst());
+                msg.setTo(student.getEmail());
+                javaMailSender.send(msg);
+            }
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
         }
+
     }
 
     //todo: test obadva!!!
@@ -121,19 +126,23 @@ public class ObavijestServiceImpl implements ObavijestService {
                 oglasZamjene.getStudent().getPrezime() + "!");
         obavijestRepository.save(obavijest);
 
-        students.forEach(s -> {
-            if(s.getObavijesti() == null) s.setObavijesti(new ArrayList<>());
-            s.getObavijesti().add(obavijest);
-            studentService.save(s);
-        });
+        try {
+            students.forEach(s -> {
+                if (s.getObavijesti() == null) s.setObavijesti(new ArrayList<>());
+                s.getObavijesti().add(obavijest);
+                studentService.save(s);
+            });
 
-        //Posalji mail ako je ukljuceno automatsko slanje
-        if (oglasZamijenjenog.getStudent().isObavijestiNaMail()) {
-            SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setSubject("Zamjena sobe je u čekanju");
-            msg.setText(obavijest.getTekst());
-            msg.setTo(oglasZamijenjenog.getStudent().getEmail());
-            javaMailSender.send(msg);
+            //Posalji mail ako je ukljuceno automatsko slanje
+            if (oglasZamijenjenog.getStudent().isObavijestiNaMail()) {
+                SimpleMailMessage msg = new SimpleMailMessage();
+                msg.setSubject("Zamjena sobe je u čekanju");
+                msg.setText(obavijest.getTekst());
+                msg.setTo(oglasZamijenjenog.getStudent().getEmail());
+                javaMailSender.send(msg);
+            }
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
         }
     }
 
@@ -150,19 +159,23 @@ public class ObavijestServiceImpl implements ObavijestService {
                 oglasZamjene.getStudent().getPrezime() + "!");
         obavijestRepository.save(obavijest);
 
-        students.forEach(s -> {
-            if(s.getObavijesti() == null) s.setObavijesti(new ArrayList<>());
-            s.getObavijesti().add(obavijest);
-            studentService.save(s);
-        });
+        try {
+            students.forEach(s -> {
+                if (s.getObavijesti() == null) s.setObavijesti(new ArrayList<>());
+                s.getObavijesti().add(obavijest);
+                studentService.save(s);
+            });
 
-        //Posalji mail ako je ukljuceno automatsko slanje
-        if (oglasZamijenjenog.getStudent().isObavijestiNaMail()) {
-            SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setSubject("Zamjena sobe je potvrđena");
-            msg.setText(obavijest.getTekst());
-            msg.setTo(oglasZamijenjenog.getStudent().getEmail());
-            javaMailSender.send(msg);
+            //Posalji mail ako je ukljuceno automatsko slanje
+            if (oglasZamijenjenog.getStudent().isObavijestiNaMail()) {
+                SimpleMailMessage msg = new SimpleMailMessage();
+                msg.setSubject("Zamjena sobe je potvrđena");
+                msg.setText(obavijest.getTekst());
+                msg.setTo(oglasZamijenjenog.getStudent().getEmail());
+                javaMailSender.send(msg);
+            }
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
         }
     }
 
