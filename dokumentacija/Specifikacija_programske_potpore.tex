@@ -23,7 +23,7 @@
 	\begin{packed_enum}
 		
 		\item vidjeti sve oglase
-		\item se registrirati, za stvaranje korisničkog računa potrebni su: ime, prezime,korisničko ime, lozinka, e-mail, JMBAG
+		\item se registrirati, za stvaranje korisničkog računa potrebni su: ime, prezime,korisničko ime, lozinka, e-mail, JMBAG, grad u kojem studira
 		
 	\end{packed_enum}
 	
@@ -46,6 +46,7 @@
 			\item 1-sviđa mi se
 			\item 2-sviđa mi se jako
 			\item 3-to je to
+			\item Ne prikazuj više ovaj oglas
 			
 		\end{packed_enum}
 		
@@ -95,7 +96,7 @@
 \noindent \underbar{\textbf{UC1 -Pregled oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Neregistrirani korisnik
+	\item \textbf{Glavni sudionik: }Neprijavljeni korisnik
 	\item  \textbf{Cilj:}Pregledati oglase soba
 	\item  \textbf{Sudionici:} baza podataka
 	\item  \textbf{Preduvjet:} 
@@ -123,7 +124,7 @@
 	
 	\item[] \begin{packed_enum}
 		
-		\item Korisnik pritišće tipku "Registriraj se"
+		\item Korisnik pritišće tipku "Registracija"
 		\item Sustav otvara stranicu za registraciju
 		\item Korisnik unosi potrebne podatke
 		\item Sustav provjerava ispravnost podataka
@@ -183,7 +184,7 @@
 \noindent \underbar{\textbf{UC4 -Objavljivanje oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
 	\item  \textbf{Cilj:}Objaviti oglas
 	\item  \textbf{Sudionici:} baza podataka,poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav
@@ -203,7 +204,7 @@
 \noindent \underbar{\textbf{UC5 -Pregled mogućih zamjena }}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
 	\item  \textbf{Cilj:}Pregledati ponuđene moguće zamjene koje odgovaraju kriterijima korisnika
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen i ima aktivan oglas
@@ -236,7 +237,7 @@
 \noindent \underbar{\textbf{UC7 -Lajkanje oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
 	\item  \textbf{Cilj:}"Lajkati" oglase soba koje korisnika zanimaju
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen, ima aktivan oglas i barem jedan oglas odgovara njegovim kriterijima
@@ -253,7 +254,7 @@
 \noindent \underbar{\textbf{UC8 -Mjenjanje Lajka}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
 	\item  \textbf{Cilj:}Promijeniti razinu "lajka" ili maknuti lajk
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen, ima aktivan oglas,barem jedan oglas odgovara njegovim kriterijima
@@ -271,7 +272,7 @@
 \noindent \underbar{\textbf{UC9 -Pregled mojih oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
 	\item  \textbf{Cilj:}Vidjeti sve svoje oglase
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen i ima oglas
@@ -288,7 +289,7 @@
 \noindent \underbar{\textbf{UC10 -Uređivanje oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
 	\item  \textbf{Cilj:}Urediti već postojeći oglas
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen i ima aktivan oglas
@@ -311,7 +312,7 @@
 \noindent \underbar{\textbf{UC11 -Brisanje oglasa}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
 	\item  \textbf{Cilj:}Izbrisati oglas
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen i ima oglas
@@ -330,7 +331,7 @@
 \noindent \underbar{\textbf{UC12 -Pregled profila}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
 	\item  \textbf{Cilj:}Vidjeti svoje osobne podatke
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen
@@ -368,7 +369,7 @@
 \noindent \underbar{\textbf{UC14 -Brisanje profila}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Registrirani korisnik
+	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
 	\item  \textbf{Cilj:}Vidjeti svoje osobne podatke
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen
@@ -387,7 +388,7 @@
 \noindent \underbar{\textbf{UC15 -Potvrđivanje zamjene}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: }Registrirani  korisnik
+	\item \textbf{Glavni sudionik: }Prijavljeni korisnik
 	\item  \textbf{Cilj:}Potvrditi zamjenu sobe
 	\item  \textbf{Sudionici:} baza podataka, poslužitelj
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen, sve uključene strane su "lajkale" oglas
@@ -513,9 +514,6 @@
 	\item Nadogradnja sustava ne smije narušavati postojeće funkcionalnosti sustava
 	\item Aplikacija treba biti izvedena kao web aplikacija prilagođena (engl. responsive) mobilnom uređaju
 \end{packed_enum}
-
-
-
 
 
 
