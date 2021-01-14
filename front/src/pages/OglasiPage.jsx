@@ -73,7 +73,7 @@ export default class OglasiPage extends Component {
                                 Moj oglas
                             </Dropdown.Item>
                             <Dropdown.Item as={NavLink} eventKey="kandidati" block>
-                                Najbolji kandidat
+                                Najbolji kandidati
                             </Dropdown.Item>
                             <Dropdown.Divider/>
                             <Dropdown.Item as={NavLink} eventKey="arhivirani" block>

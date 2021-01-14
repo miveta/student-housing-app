@@ -536,7 +536,7 @@
 			
 		\section{Dijagram razreda}
 		
-			Na slikama su prikazani razredi backenda. Na slici 4.4. prikazani su razredi Modela. Modeli opisuju entitete u bazi podataka. Na slici 4.5. prikazani su dijelovi Kontroler, Servis i Repozitorij. Kontroler AuthController manipulira s KorisnikDTO što je \textit{Data transfer object}(DTO) kojeg šaljemo na frontend kako bi mogli pamtiti trenutnog korisnika. Varijable KorsnikDTOa su dohvaćene metodama iz razreda Model.
+			Na slikama su prikazani razredi backend dijela. Na slici 4.4. prikazani su razredi Modela. Modeli opisuju entitete u bazi podataka. Na slici 4.5. prikazani su dijelovi Kontroler, Servis i Repozitorij. Kontroler AuthController manipulira s KorisnikDTO što je \textit{Data transfer object}(DTO) kojeg šaljemo na frontend kako bismo mogli pamtiti trenutnog korisnika. Varijable KorsnikDTOa dohvaćene su metodama iz razreda Model.
 			Kontroleri također pozivaju servise. Servisi obavljaju logiku aplikacije te za to koriste podatke iz razreda Model. Kontroleri i servisi pozivaju Repozitorij. To su sučelja koja nasljeđuju sučelje JpaRepository koje ima ugrađene metode za dohvat i spremanje podataka u bazu. Na slici 4.6. prikazan je dio Security. Razrede iz dijela Security pozivaju kontroleri za autentikaciju podataka.
 		
 			\begin{figure}[H]

@@ -22,7 +22,7 @@ export default class ParCard extends Component {
             }
         };
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/updatePar?par_id=${this.par.parID}&odobren=${potvrdeno}&student_username=${this.props.user.korisnickoIme}`, options)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/oglas/updatePar?par_id=${this.par.parID}&par2_id=${null}&odobren=${potvrdeno}&student_username=${this.props.user.korisnickoIme}`, options)
             .then(response => {
                 if (response.status === 200) {
                     return response.json()
@@ -44,14 +44,14 @@ export default class ParCard extends Component {
         return (
             <div className={"innerForm"}>
                 <Row>
-                    <SobaReadOnly horizontal={true} soba={this.oglas.soba}/>
+                    <SobaReadOnly horizontal={true} title={this.oglas.student} soba={this.oglas.soba}/>
                 </Row>
                 <Row>
                     <Col>
-                        <Button className={"yes"} block onClick={this.onPrihvati}>Prihvati</Button>
+                        <Button disabled={this.props.postojiPotvrden} className={"yes"} block onClick={this.onPrihvati}>Prihvati</Button>
                     </Col>
                     <Col>
-                        <Button className={"no"} block onClick={this.onOdbij}>Odbij</Button>
+                        <Button disabled={this.props.postojiPotvrden} className={"no"} block onClick={this.onOdbij}>Odbij</Button>
                     </Col>
                 </Row>
                 <br/>

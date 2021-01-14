@@ -58,7 +58,7 @@ class SobaReadOnly extends Component {
             </>
         )
         return (
-            <Form>
+            <Form onClick={this.props.onClick}>
                 <h3> {this.title} </h3>
 
                 {this.props.horizontal ?

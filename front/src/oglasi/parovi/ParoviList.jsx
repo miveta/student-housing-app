@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import * as cookie from "react-cookies";
 import ParCard from "./ParCard";
+import LanacCard from "./LanacCard";
 
 
 export default class ParoviList extends Component {
@@ -8,7 +9,9 @@ export default class ParoviList extends Component {
         super(props);
         this.state = {
             parovi: [],
-            user: cookie.load('principal')
+            lanci: [],
+            user: cookie.load('principal'),
+            postojiPotvrden: false
         };
 
         const options = {
@@ -24,27 +27,55 @@ export default class ParoviList extends Component {
                     return response.json()
                 }
             }).then(json => {
-            this.setState({parovi: json})
+            let parovi = json.filter(par => !par.lanac)
+            this.setState({parovi: parovi})
+
+            let lanci = json.filter(par => par.lanac)
+            this.setState({lanci: lanci})
+
+            json.filter(par => {
+                let prvi = par.oglas1.student === this.state.user.korisnickoIme
+                if((prvi && par.potvrdioPrvi) || (!prvi && par.potvrdioDrugi)) this.setState({postojiPotvrden: true})
+            })
+
         }).catch(() => console.log("korisnik nema oglase?"))
     }
 
 
     render() {
+        let lanciOglasi = []
+        for (let i = 0; i < this.state.lanci.length; i += 2) {
+            let lanac = {
+                par1: this.state.lanci[i],
+                par2: this.state.lanci[i + 1]
+            }
+
+            lanciOglasi.push(lanac)
+        }
         return (
             <div>
-                <h3>Najbolji kandidat! :)</h3>
-                {this.state.parovi.length === 1 ?
-                    <div>
-                        <ParCard
-                            id={this.state.parovi[0].id}
-                            key={this.state.parovi[0].id}
-                            par={this.state.parovi[0]}
-                            user={this.state.user}/>
-                    </div>
+                <h3>Najbolji kandidati za Vaš oglas!</h3>
+                {this.state.parovi.map(par => (<div>
+                    <ParCard
+                        par={par}
+                        user={this.state.user}
+                    postojiPotvrden={this.state.postojiPotvrden}/>
+                </div>))
 
-                    : <p>vise od jednog {this.state.parovi.length}</p>
                 }
 
-            </div>)
+                {
+                    lanciOglasi.map(lanac => (
+                        <div>
+                            <LanacCard
+                                par1={lanac.par1}
+                                par2={lanac.par2}
+                                user={this.state.user}
+                                postojiPotvrden={this.state.postojiPotvrden}/>
+                        </div>
+                    ))
+                }
+            </div>
+        )
     }
 }

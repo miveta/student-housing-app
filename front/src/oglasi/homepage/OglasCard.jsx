@@ -1,9 +1,8 @@
 import React, {Component} from "react";
-import {Link} from "react-router-dom";
 import Lajkovi from "../../components/Lajkovi";
 import * as cookie from "react-cookies";
 import SobaReadOnly from "../SobaReadOnly";
-import {Form} from "react-bootstrap";
+import {withRouter} from "react-router-dom";
 
 class OglasCard extends Component {
     constructor(props) {
@@ -13,20 +12,27 @@ class OglasCard extends Component {
         }
     }
 
+
+    onClick = (e) => {
+        console.log(e.target.className)
+        console.log(e.target.className.includes("btn"))
+        this.props.history.push(`/oglas/id=${this.props.oglas.id}`)
+    }
+
+
     render() {
         let oglas = this.props.oglas;
         return (
-            <a href={`/oglas/id=${oglas.id}`}>
-                <div className={"Card"}>
-                    <SobaReadOnly soba={oglas.soba} title={oglas.student}/>
+            <div className={"Card"}>
+                <SobaReadOnly soba={oglas.soba} title={oglas.student} onClick={this.onClick}/>
 
-                    <br/>
-                    <Lajkovi oglasId={oglas.id} user={this.state.user}/>
-                </div>
-            </a>
+                <br/>
+                <Lajkovi id="lajkovi" oglasId={oglas.id} user={this.state.user}/>
+
+            </div>
         )
     }
 
 }
 
-export default OglasCard;
+export default withRouter(OglasCard);

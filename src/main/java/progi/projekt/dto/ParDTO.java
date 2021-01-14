@@ -7,6 +7,8 @@ public class ParDTO {
     private long parID;
     private OglasDTO oglas1;
     private OglasDTO oglas2;
+    private Boolean potvrdioPrvi;
+    private Boolean potvrdioDrugi;
     private Boolean done;
     private Boolean lanac;
     private Boolean ignore;
@@ -22,6 +24,8 @@ public class ParDTO {
         this.ignore = par.getIgnore();
         this.odobren = par.getOdobren();
         this.zaposlenikSC = par.getZaposlenikSC();
+        this.potvrdioDrugi = par.getPrihvatioDrugi();
+        this.potvrdioPrvi = par.getPrihvatioPrvi();
     }
 
     public long getParID() {
@@ -86,5 +90,21 @@ public class ParDTO {
 
     public void setZaposlenikSC(ZaposlenikSC zaposlenikSC) {
         this.zaposlenikSC = zaposlenikSC;
+    }
+
+    public Boolean getPotvrdioPrvi() {
+        return potvrdioPrvi;
+    }
+
+    public void setPotvrdioPrvi(Boolean potvrdioPrvi) {
+        this.potvrdioPrvi = potvrdioPrvi;
+    }
+
+    public Boolean getPotvrdioDrugi() {
+        return potvrdioDrugi;
+    }
+
+    public void setPotvrdioDrugi(Boolean potvrdioDrugi) {
+        this.potvrdioDrugi = potvrdioDrugi;
     }
 }

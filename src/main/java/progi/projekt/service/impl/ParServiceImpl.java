@@ -79,7 +79,7 @@ public class ParServiceImpl implements ParService {
 			oglasRepo.save(oglas2);
 
 			//todo: obavijesti
-			//oglas1.obavijestiService.dodajPotvrdiZamjenuObavijest(par);
+			obavijestService.notifyWaiting(oglas1, oglas2);
 		} else {
 			oglas1.setStatusOglasa(StatusOglasaEnum.CEKA);
 			oglas1.setKonacniPar(par);
@@ -87,7 +87,7 @@ public class ParServiceImpl implements ParService {
 			oglasRepo.save(oglas1);
 
 			//todo: obavijesti
-			//oglas1.obavijestiService.dodajPotvrdiZamjenuObavijest(oglas1);
+			obavijestService.notifyWaiting(oglas1, oglas2);
 		}
 	}
 
@@ -105,8 +105,7 @@ public class ParServiceImpl implements ParService {
 		//par.setCeka(true);
 
 		//todo: obavijesti
-		//oglas1.obavijestiService.dodajPotvrdiZamjenuObavijest();
-		//oglas2.obavijestiService.dodajPotvrdiZamjenuObavijest();
+		obavijestService.notifyWaiting(oglas1, oglas2);
 	}
 
 	@Override
