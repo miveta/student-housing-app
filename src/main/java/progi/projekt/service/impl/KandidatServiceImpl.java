@@ -65,7 +65,7 @@ public class KandidatServiceImpl implements KandidatService {
 		}
 
 		oglas1.getKandidati().add(kand);
-		oglasService.save(oglas1); //TODO: fix ovo, pa makniti updateLocalKands()
+		oglasService.save(oglas1);
 
 		oglas2.getKandidati().add(kand);
 		oglasService.save(oglas2);
@@ -116,7 +116,6 @@ public class KandidatServiceImpl implements KandidatService {
 		updateLocalKands();
 
 		int N = SHORTLIST_VELICINA;
-		//todo: staviti poruku korisnicima da moraju ocjeniti barem N oglasa
 
 		Comparator<Kandidat> compareByBliskost = Comparator.comparing(Kandidat::getBliskost);
 		Comparator<Kandidat> compareByStvoren = Comparator.comparing(Kandidat::getStvoren);
