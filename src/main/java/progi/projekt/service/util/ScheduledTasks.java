@@ -21,34 +21,46 @@ public class ScheduledTasks {
 		if (ENABLE_SCHEDULER){
 			System.out.println("Running scheduled matching execution");
 
-			try {
-				Thread kandidatiThread = new Thread(() -> matchingService.kandidatiFun());
-				kandidatiThread.start();
-				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+			final boolean THREADS = false;
+			if (THREADS){
+				try {
+					Thread kandidatiThread = new Thread(() -> matchingService.kandidatiFun());
+					kandidatiThread.start();
+					Thread.sleep(MILISEC_IZMEDJU_POZIVA);
 
-				Thread parThread = new Thread(() -> matchingService.parFun());
-				parThread.start();
-				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+					Thread parThread = new Thread(() -> matchingService.parFun());
+					parThread.start();
+					Thread.sleep(MILISEC_IZMEDJU_POZIVA);
 
-				Thread lajkThread = new Thread(() -> matchingService.lajkFun());
-				lajkThread.start();
-				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+					Thread lajkThread = new Thread(() -> matchingService.lajkFun());
+					lajkThread.start();
+					Thread.sleep(MILISEC_IZMEDJU_POZIVA);
 
-				Thread matchThread = new Thread(() -> matchingService.matchFun());
-				matchThread.start();
-				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+					Thread matchThread = new Thread(() -> matchingService.matchFun());
+					matchThread.start();
+					Thread.sleep(MILISEC_IZMEDJU_POZIVA);
 
-				Thread confirmThread = new Thread(() -> matchingService.confirmFun());
-				confirmThread.start();
-				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+					Thread confirmThread = new Thread(() -> matchingService.confirmFun());
+					confirmThread.start();
+					Thread.sleep(MILISEC_IZMEDJU_POZIVA);
 
-				Thread confirmSCThread = new Thread(() -> matchingService.confirmSCFun());
-				confirmSCThread.start();
-				Thread.sleep(MILISEC_IZMEDJU_POZIVA);
+					Thread confirmSCThread = new Thread(() -> matchingService.confirmSCFun());
+					confirmSCThread.start();
+					Thread.sleep(MILISEC_IZMEDJU_POZIVA);
 
-			} catch (InterruptedException e) {
-				System.err.println("Scheduled matching execution interrupted");
+				} catch (InterruptedException e) {
+					System.err.println("Scheduled matching execution interrupted");
+				}
+			} else {
+				matchingService.kandidatiFun();
+				matchingService.parFun();
+				matchingService.lajkFun();
+				matchingService.matchFun();
+				matchingService.confirmFun();
+				matchingService.confirmSCFun();
 			}
+
+
 		}
 	}
 }

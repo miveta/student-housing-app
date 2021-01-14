@@ -82,9 +82,17 @@ public class LajkController {
 			} catch (InterruptedException e) {
 				System.err.println("Scheduled matching execution interrupted");
 			}
-			matchingService.matchFun();
+			//ne poziva se odmah nakon lajka da se korisnik ne matcha sa prvim oglasom kojeg lajka
+			//matchingService.matchFun();
 		});
-		kandidatiThread.start();
+		final boolean THREADS = false;
+		if (THREADS){
+			kandidatiThread.start();
+		} else {
+			matchingService.lajkFun();
+			//ne poziva se odmah nakon lajka da se korisnik ne matcha sa prvim oglasom kojeg lajka
+			//matchingService.matchFun();
+		}
 
 
 

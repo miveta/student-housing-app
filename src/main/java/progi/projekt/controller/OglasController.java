@@ -123,7 +123,14 @@ public class OglasController {
             }
             matchingService.parFun();
         });
-        kandidatiThread.start();
+        final boolean THREADS = false;
+        if (THREADS){
+            kandidatiThread.start();
+        } else {
+            matchingService.resetirajOglas(arhiviraniOglas.getId());
+            matchingService.kandidatiFun();
+            matchingService.parFun();
+        }
 
         return ResponseEntity.ok(new OglasDTO(arhiviraniOglas));
     }
